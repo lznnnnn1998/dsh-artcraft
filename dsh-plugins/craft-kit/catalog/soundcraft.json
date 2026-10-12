@@ -1,0 +1,1862 @@
+[
+ {
+  "id": "session.new",
+  "label": "New... File"
+ },
+ {
+  "id": "session.open",
+  "label": "Open Session... File"
+ },
+ {
+  "id": "session.close",
+  "label": "Close Session File"
+ },
+ {
+  "id": "session.save",
+  "label": "Save Session File"
+ },
+ {
+  "id": "session.save_as",
+  "label": "Save Session As... File"
+ },
+ {
+  "id": "session.save_copy",
+  "label": "Save Session Copy In... File"
+ },
+ {
+  "id": "session.save_template",
+  "label": "Save As Template... File"
+ },
+ {
+  "id": "session.revert",
+  "label": "Revert Session to Saved... File"
+ },
+ {
+  "id": "file.import_audio",
+  "label": "Audio... File > Import"
+ },
+ {
+  "id": "file.import_midi",
+  "label": "MIDI... File > Import"
+ },
+ {
+  "id": "file.import_video",
+  "label": "Video... File > Import"
+ },
+ {
+  "id": "file.bounce_mix",
+  "label": "Bounce Mix... File"
+ },
+ {
+  "id": "file.bounce_stems",
+  "label": "Bounce Stems..."
+ },
+ {
+  "id": "file.export_midi",
+  "label": "MIDI... File > Export"
+ },
+ {
+  "id": "file.export_session_text",
+  "label": "Session Info as Text... File > Export"
+ },
+ {
+  "id": "file.export_clips",
+  "label": "Export Clips as Files..."
+ },
+ {
+  "id": "file.export_sibelius",
+  "label": "Sibelius... File > Export"
+ },
+ {
+  "id": "file.send_to_sibelius",
+  "label": "Sibelius File > Send To..."
+ },
+ {
+  "id": "file.print_score",
+  "label": "Print Score... File"
+ },
+ {
+  "id": "file.score_setup",
+  "label": "Score Setup... File"
+ },
+ {
+  "id": "file.export_clip_groups",
+  "label": "Export Clip Groups..."
+ },
+ {
+  "id": "file.import_clip_groups",
+  "label": "Clip Groups... File > Import"
+ },
+ {
+  "id": "file.get_info",
+  "label": "Get Info... File"
+ },
+ {
+  "id": "app.quit",
+  "label": "Quit"
+ },
+ {
+  "id": "edit.undo",
+  "label": "Undo Edit"
+ },
+ {
+  "id": "edit.redo",
+  "label": "Redo Edit"
+ },
+ {
+  "id": "edit.restore_last_selection",
+  "label": "Restore Last Selection Edit"
+ },
+ {
+  "id": "edit.cut",
+  "label": "Cut Edit"
+ },
+ {
+  "id": "edit.copy",
+  "label": "Copy Edit"
+ },
+ {
+  "id": "edit.paste",
+  "label": "Paste Edit"
+ },
+ {
+  "id": "edit.clear",
+  "label": "Clear Edit"
+ },
+ {
+  "id": "edit.cut_clip_gain",
+  "label": "Clip Gain Edit > Cut Special"
+ },
+ {
+  "id": "edit.clear_clip_gain",
+  "label": "Clip Gain Edit > Clear Special"
+ },
+ {
+  "id": "edit.cut_all_automation",
+  "label": "All Automation Edit > Cut Special"
+ },
+ {
+  "id": "edit.clear_all_automation",
+  "label": "All Automation Edit > Clear Special"
+ },
+ {
+  "id": "edit.clear_pan_automation",
+  "label": "Pan Automation Edit > Clear Special"
+ },
+ {
+  "id": "edit.clear_plugin_automation",
+  "label": "Plugin Automation Edit > Clear Special"
+ },
+ {
+  "id": "edit.paste_repeat_to_fill",
+  "label": "Repeat to Fill Selection Edit > Paste Special"
+ },
+ {
+  "id": "edit.select_all",
+  "label": "Select All Edit"
+ },
+ {
+  "id": "edit.select",
+  "label": "Set Edit Selection"
+ },
+ {
+  "id": "edit.select_none",
+  "label": "Deselect All"
+ },
+ {
+  "id": "edit.selection_to_timeline",
+  "label": "Change Timeline to Match Edit Edit > Selection"
+ },
+ {
+  "id": "edit.timeline_to_selection",
+  "label": "Change Edit to Match Timeline Edit > Selection"
+ },
+ {
+  "id": "edit.move_selection_left",
+  "label": "Move Edit Left Edit > Selection"
+ },
+ {
+  "id": "edit.move_selection_right",
+  "label": "Move Edit Right Edit > Selection"
+ },
+ {
+  "id": "edit.halve_selection",
+  "label": "Halve Edit Edit > Selection"
+ },
+ {
+  "id": "edit.double_selection",
+  "label": "Double Edit Edit > Selection"
+ },
+ {
+  "id": "edit.extend_selection_up",
+  "label": "Extend Edit Up Edit > Selection"
+ },
+ {
+  "id": "edit.extend_selection_down",
+  "label": "Extend Edit Down Edit > Selection"
+ },
+ {
+  "id": "edit.remove_selection_top",
+  "label": "Remove Edit from Top Edit > Selection"
+ },
+ {
+  "id": "edit.remove_selection_bottom",
+  "label": "Remove Edit from Bottom Edit > Selection"
+ },
+ {
+  "id": "edit.duplicate",
+  "label": "Duplicate Edit"
+ },
+ {
+  "id": "edit.repeat",
+  "label": "Repeat... Edit"
+ },
+ {
+  "id": "edit.shift",
+  "label": "Shift... Edit"
+ },
+ {
+  "id": "edit.insert_silence",
+  "label": "Insert Silence Edit"
+ },
+ {
+  "id": "edit.separate",
+  "label": "At Selection Edit > Separate"
+ },
+ {
+  "id": "edit.separate_on_grid",
+  "label": "On Grid Edit > Separate"
+ },
+ {
+  "id": "edit.separate_at_transients",
+  "label": "At Transients Edit > Separate"
+ },
+ {
+  "id": "edit.heal",
+  "label": "Heal Separation Edit"
+ },
+ {
+  "id": "edit.trim_to_selection",
+  "label": "To Selection Edit > Trim"
+ },
+ {
+  "id": "edit.trim_start_to_insertion",
+  "label": "Start to Insertion Edit > Trim"
+ },
+ {
+  "id": "edit.trim_end_to_insertion",
+  "label": "End to Insertion Edit > Trim"
+ },
+ {
+  "id": "edit.trim_to_file_boundaries",
+  "label": "To File Boundaries Edit > Trim"
+ },
+ {
+  "id": "edit.trim_to_fill_selection",
+  "label": "To Fill Selection Edit > Trim"
+ },
+ {
+  "id": "edit.mute_clips",
+  "label": "Mute Edit"
+ },
+ {
+  "id": "edit.copy_to_new_playlist",
+  "label": "New Playlist Edit > Copy Selection to..."
+ },
+ {
+  "id": "edit.strip_silence",
+  "label": "Strip Silence Edit"
+ },
+ {
+  "id": "edit.fades_create",
+  "label": "Create... Edit > Fades"
+ },
+ {
+  "id": "edit.fades_delete",
+  "label": "Delete Edit > Fades"
+ },
+ {
+  "id": "edit.fade_to_start",
+  "label": "Fade to Start Edit > Fades"
+ },
+ {
+  "id": "edit.fade_to_end",
+  "label": "Fade to End Edit > Fades"
+ },
+ {
+  "id": "edit.nudge",
+  "label": "Nudge"
+ },
+ {
+  "id": "edit.mode",
+  "label": "Edit Mode"
+ },
+ {
+  "id": "edit.tool",
+  "label": "Edit Tool"
+ },
+ {
+  "id": "edit.move_clips",
+  "label": "Move Clips"
+ },
+ {
+  "id": "edit.consolidate",
+  "label": "Consolidate Edit"
+ },
+ {
+  "id": "edit.cut_pan_automation",
+  "label": "Pan Automation Edit > Cut Special"
+ },
+ {
+  "id": "edit.cut_plugin_automation",
+  "label": "Plugin Automation Edit > Cut Special"
+ },
+ {
+  "id": "edit.copy_all_automation",
+  "label": "All Automation Edit > Copy Special"
+ },
+ {
+  "id": "edit.copy_pan_automation",
+  "label": "Pan Automation Edit > Copy Special"
+ },
+ {
+  "id": "edit.copy_plugin_automation",
+  "label": "Plugin Automation Edit > Copy Special"
+ },
+ {
+  "id": "edit.copy_clip_gain",
+  "label": "Clip Gain Edit > Copy Special"
+ },
+ {
+  "id": "edit.paste_clip_gain",
+  "label": "Paste Clip Gain"
+ },
+ {
+  "id": "edit.copy_clip_effects",
+  "label": "Clip Effects Edit > Copy Special"
+ },
+ {
+  "id": "edit.cut_clip_effects",
+  "label": "Clip Effects Edit > Cut Special"
+ },
+ {
+  "id": "edit.clear_clip_effects",
+  "label": "Clip Effects Edit > Clear Special"
+ },
+ {
+  "id": "edit.paste_clip_effects",
+  "label": "Paste Clip Effects"
+ },
+ {
+  "id": "edit.paste_merge_midi",
+  "label": "Merge MIDI Edit > Paste Special"
+ },
+ {
+  "id": "edit.paste_merge_markers",
+  "label": "Merge Markers Edit > Paste Special"
+ },
+ {
+  "id": "edit.paste_to_current_automation",
+  "label": "To Current Automation Type Edit > Paste Special"
+ },
+ {
+  "id": "edit.play_timeline",
+  "label": "Play Timeline Edit > Selection"
+ },
+ {
+  "id": "edit.duplicate_extend",
+  "label": "Duplicate and Extend Edit Edit > Selection"
+ },
+ {
+  "id": "edit.extend_up_to_members",
+  "label": "Extend Edit Up to Members Edit > Selection"
+ },
+ {
+  "id": "edit.extend_down_to_members",
+  "label": "Extend Edit Down to Members Edit > Selection"
+ },
+ {
+  "id": "edit.marker_lane_move_up",
+  "label": "Move Edit Selection To Marker Lane Above Edit > Selection"
+ },
+ {
+  "id": "edit.marker_lane_move_down",
+  "label": "Move Edit Selection To Marker Lane Below Edit > Selection"
+ },
+ {
+  "id": "edit.marker_lane_extend_up",
+  "label": "Extend Edit Selection To Marker Lane Above Edit > Selection"
+ },
+ {
+  "id": "edit.marker_lane_extend_down",
+  "label": "Extend Edit Selection To Marker Lane Below Edit > Selection"
+ },
+ {
+  "id": "edit.space_clips",
+  "label": "Space Clips… Edit"
+ },
+ {
+  "id": "edit.snap_next",
+  "label": "Next Edit > Snap to"
+ },
+ {
+  "id": "edit.snap_previous",
+  "label": "Previous Edit > Snap to"
+ },
+ {
+  "id": "edit.copy_to_target_playlist",
+  "label": "Target Playlist Edit > Copy Selection to..."
+ },
+ {
+  "id": "edit.copy_to_duplicate_playlist",
+  "label": "Duplicate of Main Playlist Edit > Copy Selection to..."
+ },
+ {
+  "id": "edit.move_to_target_playlist",
+  "label": "Target Playlist Edit > Move Selection to..."
+ },
+ {
+  "id": "edit.move_to_new_playlist",
+  "label": "New Playlist Edit > Move Selection to..."
+ },
+ {
+  "id": "edit.move_to_duplicate_playlist",
+  "label": "Duplicate of Main Playlist Edit > Move Selection to..."
+ },
+ {
+  "id": "edit.tce_to_timeline",
+  "label": "TCE Edit to Timeline Selection Edit"
+ },
+ {
+  "id": "edit.automation_trim_to_all",
+  "label": "Trim to All Enabled Edit > Automation"
+ },
+ {
+  "id": "edit.automation_glide_to_all",
+  "label": "Glide to All Enabled Edit > Automation"
+ },
+ {
+  "id": "edit.automation_glide_pan",
+  "label": "Glide Pan Only Edit > Automation"
+ },
+ {
+  "id": "view.zoom_in",
+  "label": "Zoom In"
+ },
+ {
+  "id": "view.zoom_out",
+  "label": "Zoom Out"
+ },
+ {
+  "id": "view.zoom_by",
+  "label": "Zoom By"
+ },
+ {
+  "id": "view.zoom_set",
+  "label": "Set Zoom"
+ },
+ {
+  "id": "view.zoom_preset",
+  "label": "Zoom Preset"
+ },
+ {
+  "id": "view.zoom_to_selection",
+  "label": "Zoom to Selection"
+ },
+ {
+  "id": "view.zoom_fit",
+  "label": "Fill Window With Session"
+ },
+ {
+  "id": "view.scroll",
+  "label": "Scroll Timeline"
+ },
+ {
+  "id": "view.waveform_zoom",
+  "label": "Waveform Zoom"
+ },
+ {
+  "id": "view.ruler",
+  "label": "Rulers View > Rulers"
+ },
+ {
+  "id": "view.main_counter",
+  "label": "Main Counter View > Main Counter"
+ },
+ {
+  "id": "view.sub_counter",
+  "label": "Sub Counter"
+ },
+ {
+  "id": "view.grid",
+  "label": "Grid Value"
+ },
+ {
+  "id": "view.grid_lines",
+  "label": "Show Grid Lines"
+ },
+ {
+  "id": "view.nudge",
+  "label": "Nudge Value"
+ },
+ {
+  "id": "track.new",
+  "label": "New... Track"
+ },
+ {
+  "id": "track.group",
+  "label": "Group... Track"
+ },
+ {
+  "id": "track.ungroup",
+  "label": "Delete Group"
+ },
+ {
+  "id": "track.group_toggle",
+  "label": "Toggle Group Active"
+ },
+ {
+  "id": "track.duplicate",
+  "label": "Duplicate... Track"
+ },
+ {
+  "id": "track.split_into_mono",
+  "label": "Split into Mono Track"
+ },
+ {
+  "id": "track.make_inactive",
+  "label": "Make Inactive Track"
+ },
+ {
+  "id": "track.move_to_new_folder",
+  "label": "Move to New Folder... Track"
+ },
+ {
+  "id": "track.change_width",
+  "label": "Change Track Width Track > Change Track Width"
+ },
+ {
+  "id": "track.delete",
+  "label": "Delete Track"
+ },
+ {
+  "id": "track.rename",
+  "label": "Rename Track"
+ },
+ {
+  "id": "track.comments",
+  "label": "Track Comments"
+ },
+ {
+  "id": "track.color",
+  "label": "Track Color"
+ },
+ {
+  "id": "track.height",
+  "label": "Track Height"
+ },
+ {
+  "id": "track.view",
+  "label": "Track View"
+ },
+ {
+  "id": "track.hide",
+  "label": "Hide Track"
+ },
+ {
+  "id": "track.pin",
+  "label": "Pin Track"
+ },
+ {
+  "id": "track.move",
+  "label": "Move Track"
+ },
+ {
+  "id": "track.freeze",
+  "label": "Freeze Track"
+ },
+ {
+  "id": "track.commit",
+  "label": "Commit... Track"
+ },
+ {
+  "id": "track.bounce",
+  "label": "Bounce... Track"
+ },
+ {
+  "id": "track.bypass_inserts",
+  "label": "All Track > Bypass Inserts"
+ },
+ {
+  "id": "track.mute_sends",
+  "label": "All Track > Mute Sends"
+ },
+ {
+  "id": "track.set_record_to_input_only",
+  "label": "Set Record Tracks to Input Only Track"
+ },
+ {
+  "id": "track.scroll_to",
+  "label": "Scroll to Track... Track"
+ },
+ {
+  "id": "track.clear_clip_indicators",
+  "label": "Clear All Clip Indicators Track"
+ },
+ {
+  "id": "track.clear_trim_automation",
+  "label": "Clear Trim Automation Track"
+ },
+ {
+  "id": "track.create_click",
+  "label": "Create Click Track Track"
+ },
+ {
+  "id": "track.playlist_new",
+  "label": "New Playlist"
+ },
+ {
+  "id": "track.playlist_duplicate",
+  "label": "Duplicate Playlist"
+ },
+ {
+  "id": "track.playlist_select",
+  "label": "Select Playlist"
+ },
+ {
+  "id": "track.playlist_delete_unused",
+  "label": "Delete Unused Playlists"
+ },
+ {
+  "id": "track.folder_toggle",
+  "label": "Open/Close Folder"
+ },
+ {
+  "id": "track.vca",
+  "label": "Assign to VCA"
+ },
+ {
+  "id": "track.playlist_promote",
+  "label": "Promote to Main Playlist"
+ },
+ {
+  "id": "track.input",
+  "label": "Track Input"
+ },
+ {
+  "id": "track.output",
+  "label": "Track Output"
+ },
+ {
+  "id": "track.timebase",
+  "label": "Track Timebase"
+ },
+ {
+  "id": "track.elastic",
+  "label": "Elastic Audio"
+ },
+ {
+  "id": "clip.edit_lock",
+  "label": "Edit Lock/Unlock Clip"
+ },
+ {
+  "id": "clip.time_lock",
+  "label": "Time Lock/Unlock Clip"
+ },
+ {
+  "id": "clip.send_to_back",
+  "label": "Send to Back Clip"
+ },
+ {
+  "id": "clip.bring_to_front",
+  "label": "Bring to Front Clip"
+ },
+ {
+  "id": "clip.rating",
+  "label": "Rating Clip > Rating"
+ },
+ {
+  "id": "clip.group",
+  "label": "Group Clip"
+ },
+ {
+  "id": "clip.ungroup",
+  "label": "Ungroup Clip"
+ },
+ {
+  "id": "clip.ungroup_all",
+  "label": "Ungroup All Clip"
+ },
+ {
+  "id": "clip.loop",
+  "label": "Loop... Clip"
+ },
+ {
+  "id": "clip.rename",
+  "label": "Rename... Clip"
+ },
+ {
+  "id": "clip.gain",
+  "label": "Clip Gain"
+ },
+ {
+  "id": "clip.gain_nudge_up",
+  "label": "Nudge Clip Gain Up"
+ },
+ {
+  "id": "clip.gain_nudge_down",
+  "label": "Nudge Clip Gain Down"
+ },
+ {
+  "id": "clip.gain_render",
+  "label": "Render Clip > Clip Gain"
+ },
+ {
+  "id": "clip.gain_bypass",
+  "label": "Bypass Clip > Clip Gain"
+ },
+ {
+  "id": "clip.identify_sync_point",
+  "label": "Identify Sync Point Clip"
+ },
+ {
+  "id": "clip.quantize_to_grid",
+  "label": "Quantize to Grid Clip"
+ },
+ {
+  "id": "clip.color",
+  "label": "Clip Color"
+ },
+ {
+  "id": "clip.elastic_properties",
+  "label": "Elastic Properties Clip"
+ },
+ {
+  "id": "clip.remove_warp",
+  "label": "Remove Warp Clip"
+ },
+ {
+  "id": "clip.place_source",
+  "label": "Place Audio File"
+ },
+ {
+  "id": "clip.capture",
+  "label": "Capture... Clip"
+ },
+ {
+  "id": "event.tempo",
+  "label": "Tempo Change"
+ },
+ {
+  "id": "event.tempo_remove",
+  "label": "Remove Tempo Change"
+ },
+ {
+  "id": "event.meter",
+  "label": "Change Meter... Event > Time Operations"
+ },
+ {
+  "id": "event.tempo_scale",
+  "label": "Scale... Event > Tempo Operations"
+ },
+ {
+  "id": "event.tempo_constant",
+  "label": "Constant... Event > Tempo Operations"
+ },
+ {
+  "id": "event.insert_time",
+  "label": "Insert Time... Event > Time Operations"
+ },
+ {
+  "id": "event.cut_time",
+  "label": "Cut Time... Event > Time Operations"
+ },
+ {
+  "id": "event.quantize",
+  "label": "Quantize... Event > MIDI Operations"
+ },
+ {
+  "id": "event.transpose",
+  "label": "Transpose... Event > MIDI Operations"
+ },
+ {
+  "id": "event.change_velocity",
+  "label": "Change Velocity... Event > MIDI Operations"
+ },
+ {
+  "id": "event.change_duration",
+  "label": "Change Duration... Event > MIDI Operations"
+ },
+ {
+  "id": "event.remove_duplicate_notes",
+  "label": "Remove Duplicate Notes Event"
+ },
+ {
+  "id": "event.add_key_change",
+  "label": "Add Key Change... Event"
+ },
+ {
+  "id": "event.renumber_bars",
+  "label": "Renumber Bars... Event"
+ },
+ {
+  "id": "event.all_notes_off",
+  "label": "All MIDI Notes Off Event"
+ },
+ {
+  "id": "event.midi_note",
+  "label": "Add MIDI Note"
+ },
+ {
+  "id": "markers.add",
+  "label": "New Memory Location"
+ },
+ {
+  "id": "markers.delete",
+  "label": "Delete Memory Location"
+ },
+ {
+  "id": "markers.edit",
+  "label": "Edit Memory Location"
+ },
+ {
+  "id": "markers.recall",
+  "label": "Recall Memory Location"
+ },
+ {
+  "id": "markers.next",
+  "label": "Go to Next Marker"
+ },
+ {
+  "id": "markers.previous",
+  "label": "Go to Previous Marker"
+ },
+ {
+  "id": "mix.volume",
+  "label": "Set Volume"
+ },
+ {
+  "id": "mix.pan",
+  "label": "Set Pan"
+ },
+ {
+  "id": "mix.mute",
+  "label": "Mute"
+ },
+ {
+  "id": "mix.solo",
+  "label": "Solo"
+ },
+ {
+  "id": "mix.solo_safe",
+  "label": "Solo Safe"
+ },
+ {
+  "id": "mix.clear_solos",
+  "label": "Clear All Solos"
+ },
+ {
+  "id": "mix.clear_mutes",
+  "label": "Clear All Mutes"
+ },
+ {
+  "id": "mix.record_arm",
+  "label": "Record Enable"
+ },
+ {
+  "id": "mix.input_monitor",
+  "label": "Input Monitoring"
+ },
+ {
+  "id": "mix.phase_invert",
+  "label": "Phase Invert"
+ },
+ {
+  "id": "mix.trim",
+  "label": "Input Trim"
+ },
+ {
+  "id": "mix.automation_mode",
+  "label": "Automation Mode"
+ },
+ {
+  "id": "mix.insert",
+  "label": "Insert Plugin"
+ },
+ {
+  "id": "mix.insert_remove",
+  "label": "Remove Insert"
+ },
+ {
+  "id": "mix.insert_bypass",
+  "label": "Bypass Insert"
+ },
+ {
+  "id": "mix.insert_param",
+  "label": "Set Plugin Parameter"
+ },
+ {
+  "id": "mix.insert_params",
+  "label": "Set Plugin Parameters"
+ },
+ {
+  "id": "mix.insert_move",
+  "label": "Move Insert"
+ },
+ {
+  "id": "mix.send",
+  "label": "Assign Send"
+ },
+ {
+  "id": "mix.send_remove",
+  "label": "Remove Send"
+ },
+ {
+  "id": "mix.send_level",
+  "label": "Send Level"
+ },
+ {
+  "id": "mix.new_bus",
+  "label": "New Bus"
+ },
+ {
+  "id": "automation.set_point",
+  "label": "Add Automation Breakpoint"
+ },
+ {
+  "id": "automation.write_range",
+  "label": "Write Automation"
+ },
+ {
+  "id": "automation.clear",
+  "label": "Clear Automation"
+ },
+ {
+  "id": "automation.thin",
+  "label": "Thin Edit > Automation"
+ },
+ {
+  "id": "automation.thin_all",
+  "label": "Thin All Edit > Automation"
+ },
+ {
+  "id": "automation.write_to_current",
+  "label": "Write to Current Edit > Automation"
+ },
+ {
+  "id": "automation.write_to_all",
+  "label": "Write to All Enabled Edit > Automation"
+ },
+ {
+  "id": "automation.volume_to_clip_gain",
+  "label": "Convert Volume Automation to Clip Gain Edit > Automation"
+ },
+ {
+  "id": "automation.clip_gain_to_volume",
+  "label": "Convert Clip Gain to Volume Automation Edit > Automation"
+ },
+ {
+  "id": "automation.copy_to_send",
+  "label": "Copy to Send... Edit > Automation"
+ },
+ {
+  "id": "options.loop_record",
+  "label": "Loop Record Options"
+ },
+ {
+  "id": "options.quickpunch",
+  "label": "QuickPunch Options"
+ },
+ {
+  "id": "options.pre_post_roll",
+  "label": "Pre/Post-Roll Options"
+ },
+ {
+  "id": "options.loop_playback",
+  "label": "Loop Playback Options"
+ },
+ {
+  "id": "options.link_timeline_edit",
+  "label": "Link Timeline and Edit Selection Options"
+ },
+ {
+  "id": "options.link_track_edit",
+  "label": "Link Track and Edit Selection Options"
+ },
+ {
+  "id": "options.insertion_follows_playback",
+  "label": "Insertion Follows Playback Options"
+ },
+ {
+  "id": "options.tab_to_transient",
+  "label": "Tab to Transient Options"
+ },
+ {
+  "id": "options.mirrored_midi",
+  "label": "Mirrored MIDI Editing Options"
+ },
+ {
+  "id": "options.automation_follows_edit",
+  "label": "Automation Follows Edit Options"
+ },
+ {
+  "id": "options.markers_follow_edit",
+  "label": "Markers Follow Edit Options"
+ },
+ {
+  "id": "options.layered_editing",
+  "label": "Layered Editing Options"
+ },
+ {
+  "id": "options.click",
+  "label": "Click Options"
+ },
+ {
+  "id": "options.countoff",
+  "label": "Count Off"
+ },
+ {
+  "id": "options.midi_merge",
+  "label": "MIDI Merge"
+ },
+ {
+  "id": "options.pre_fader_metering",
+  "label": "Pre-Fader Metering Options"
+ },
+ {
+  "id": "options.delay_compensation",
+  "label": "Delay Compensation Options"
+ },
+ {
+  "id": "options.destructive_record",
+  "label": "Destructive Record Options"
+ },
+ {
+  "id": "options.trackpunch",
+  "label": "TrackPunch Options"
+ },
+ {
+  "id": "options.scrolling",
+  "label": "Edit Window Scrolling Options > Edit Window Scrolling"
+ },
+ {
+  "id": "options.solo_mode",
+  "label": "Solo Mode Options > Solo Mode"
+ },
+ {
+  "id": "options.keyboard_focus",
+  "label": "Keyboard Focus"
+ },
+ {
+  "id": "options.pre_roll",
+  "label": "Pre-Roll Amount"
+ },
+ {
+  "id": "options.post_roll",
+  "label": "Post-Roll Amount"
+ },
+ {
+  "id": "setup.session",
+  "label": "Session Setup"
+ },
+ {
+  "id": "setup.preferences",
+  "label": "Preferences... Setup"
+ },
+ {
+  "id": "setup.reset_edit_state",
+  "label": "Reset Edit Settings"
+ },
+ {
+  "id": "transport.play",
+  "label": "Play"
+ },
+ {
+  "id": "transport.stop",
+  "label": "Stop"
+ },
+ {
+  "id": "transport.toggle",
+  "label": "Play/Stop"
+ },
+ {
+  "id": "transport.record",
+  "label": "Record"
+ },
+ {
+  "id": "transport.pause",
+  "label": "Pause"
+ },
+ {
+  "id": "transport.half_speed",
+  "label": "Half-Speed Playback"
+ },
+ {
+  "id": "transport.play_selection",
+  "label": "Play Edit Edit > Selection"
+ },
+ {
+  "id": "transport.rtz",
+  "label": "Return to Zero"
+ },
+ {
+  "id": "transport.go_to_end",
+  "label": "Go to End"
+ },
+ {
+  "id": "transport.rewind",
+  "label": "Rewind"
+ },
+ {
+  "id": "transport.fast_forward",
+  "label": "Fast Forward"
+ },
+ {
+  "id": "transport.locate",
+  "label": "Locate"
+ },
+ {
+  "id": "transport.status",
+  "label": "Transport Status"
+ },
+ {
+  "id": "session.inspect",
+  "label": "Inspect Session"
+ },
+ {
+  "id": "track.inspect",
+  "label": "Inspect Track"
+ },
+ {
+  "id": "clip.inspect",
+  "label": "Inspect Clip"
+ },
+ {
+  "id": "engine.commands",
+  "label": "List Commands"
+ },
+ {
+  "id": "engine.history",
+  "label": "Undo History Window"
+ },
+ {
+  "id": "engine.plugins",
+  "label": "List Plugins"
+ },
+ {
+  "id": "engine.parity",
+  "label": "Parity Report"
+ },
+ {
+  "id": "session.format_time",
+  "label": "Format Time"
+ },
+ {
+  "id": "session.audio_health",
+  "label": "Session Audio Health"
+ },
+ {
+  "id": "audiosuite.process",
+  "label": "AudioSuite Process"
+ },
+ {
+  "id": "edit.copy_audio_as_midi",
+  "label": "Audio as MIDI Edit > Copy Special"
+ },
+ {
+  "id": "midi.notes",
+  "label": "List MIDI Notes"
+ },
+ {
+  "id": "midi.new_clip",
+  "label": "New MIDI Clip"
+ },
+ {
+  "id": "midi.note_add",
+  "label": "Add Note"
+ },
+ {
+  "id": "midi.note_edit",
+  "label": "Edit Note"
+ },
+ {
+  "id": "midi.note_delete",
+  "label": "Delete Notes"
+ },
+ {
+  "id": "midi.notes_move",
+  "label": "Move Notes"
+ },
+ {
+  "id": "view.edit_comments",
+  "label": "Comments View > Edit Window Views"
+ },
+ {
+  "id": "view.edit_mic_preamps",
+  "label": "Mic Preamps View > Edit Window Views"
+ },
+ {
+  "id": "view.edit_instruments",
+  "label": "Instruments View > Edit Window Views"
+ },
+ {
+  "id": "view.edit_inserts_ae",
+  "label": "Inserts A-E View > Edit Window Views"
+ },
+ {
+  "id": "view.edit_inserts_fj",
+  "label": "Inserts F-J View > Edit Window Views"
+ },
+ {
+  "id": "view.edit_sends_ae",
+  "label": "Sends A-E View > Edit Window Views"
+ },
+ {
+  "id": "view.edit_sends_fj",
+  "label": "Sends F-J View > Edit Window Views"
+ },
+ {
+  "id": "view.edit_io",
+  "label": "I/O View > Edit Window Views"
+ },
+ {
+  "id": "view.edit_object",
+  "label": "Object View > Edit Window Views"
+ },
+ {
+  "id": "view.edit_realtime_properties",
+  "label": "Real-Time Properties View > Edit Window Views"
+ },
+ {
+  "id": "view.edit_track_color",
+  "label": "Track Color View > Edit Window Views"
+ },
+ {
+  "id": "view.edit_marker_controls",
+  "label": "Marker Controls View > Edit Window Views"
+ },
+ {
+  "id": "view.edit_pinned_tracks",
+  "label": "Pinned Tracks View > Edit Window Views"
+ },
+ {
+  "id": "view.edit_all",
+  "label": "All View > Edit Window Views"
+ },
+ {
+  "id": "view.edit_minimal",
+  "label": "Minimal View > Edit Window Views"
+ },
+ {
+  "id": "view.ruler_timecode2",
+  "label": "Timecode 2 View > Rulers"
+ },
+ {
+  "id": "view.ruler_markers2",
+  "label": "Markers 2 View > Rulers"
+ },
+ {
+  "id": "view.ruler_markers3",
+  "label": "Markers 3 View > Rulers"
+ },
+ {
+  "id": "view.ruler_markers4",
+  "label": "Markers 4 View > Rulers"
+ },
+ {
+  "id": "view.ruler_markers5",
+  "label": "Markers 5 View > Rulers"
+ },
+ {
+  "id": "view.ruler_all_markers",
+  "label": "All Marker Rulers View > Rulers"
+ },
+ {
+  "id": "view.ruler_all",
+  "label": "All View > Rulers"
+ },
+ {
+  "id": "view.ruler_minimal",
+  "label": "Minimal View > Rulers"
+ },
+ {
+  "id": "view.ruler_tempo_editor",
+  "label": "Tempo Editor View > Rulers > Tempo"
+ },
+ {
+  "id": "view.ruler_key_staff",
+  "label": "Key Signature Staff View > Rulers > Key Signature"
+ },
+ {
+  "id": "view.marker_track_lane",
+  "label": "Track Lane View > Marker Displays"
+ },
+ {
+  "id": "view.marker_ruler_lines",
+  "label": "Ruler Lines View > Marker Displays"
+ },
+ {
+  "id": "view.marker_folder_lines",
+  "label": "Folder Lines View > Marker Displays"
+ },
+ {
+  "id": "view.marker_ruler_lane_color",
+  "label": "Ruler Lane Color View > Marker Displays"
+ },
+ {
+  "id": "view.marker_track_lane_color",
+  "label": "Track Lane Color View > Marker Displays"
+ },
+ {
+  "id": "view.midi_input_display",
+  "label": "MIDI Input Display View > Other Displays"
+ },
+ {
+  "id": "view.midi_editor_clip_effects",
+  "label": "Clip Effects View > Other Displays > Lower Dock > MIDI Editor"
+ },
+ {
+  "id": "view.clip_sync_point",
+  "label": "Sync Point View > Clip"
+ },
+ {
+  "id": "view.clip_processing_state",
+  "label": "Processing State View > Clip"
+ },
+ {
+  "id": "view.clip_name",
+  "label": "Name View > Clip"
+ },
+ {
+  "id": "view.clip_channel_name",
+  "label": "Channel Name View > Clip"
+ },
+ {
+  "id": "view.clip_scene_take",
+  "label": "Scene And Take View > Clip"
+ },
+ {
+  "id": "view.clip_rating",
+  "label": "Rating View > Clip"
+ },
+ {
+  "id": "view.clip_overlap_shadows",
+  "label": "Overlap Shadows View > Clip"
+ },
+ {
+  "id": "view.clip_transparency",
+  "label": "Transparency View > Clip"
+ },
+ {
+  "id": "view.clip_overwrite_indicator",
+  "label": "Overwrite Indicator View > Clip"
+ },
+ {
+  "id": "view.clip_copy_move_indicators",
+  "label": "Copy/Move Indicators View > Clip"
+ },
+ {
+  "id": "view.clip_gain_line",
+  "label": "Clip Gain Line View > Clip"
+ },
+ {
+  "id": "view.clip_gain_info",
+  "label": "Clip Gain Info View > Clip"
+ },
+ {
+  "id": "view.clip_effects_status",
+  "label": "Clip Effects Status View > Clip"
+ },
+ {
+  "id": "view.clip_ara_note_overlay",
+  "label": "ARA Note Overlay View > Clip"
+ },
+ {
+  "id": "view.clip_time_current",
+  "label": "Current Time View > Clip"
+ },
+ {
+  "id": "view.clip_time_original",
+  "label": "Original Time Stamp View > Clip"
+ },
+ {
+  "id": "view.clip_time_user",
+  "label": "User Time Stamp View > Clip"
+ },
+ {
+  "id": "view.clip_time_none",
+  "label": "No Time View > Clip"
+ },
+ {
+  "id": "view.clip_all_channels",
+  "label": "Display on All Channels View > Clip"
+ },
+ {
+  "id": "view.waveform_peak",
+  "label": "Peak View > Waveforms"
+ },
+ {
+  "id": "view.waveform_power",
+  "label": "Power View > Waveforms"
+ },
+ {
+  "id": "view.waveform_rectified",
+  "label": "Rectified View > Waveforms"
+ },
+ {
+  "id": "view.waveform_outlines",
+  "label": "Outlines View > Waveforms"
+ },
+ {
+  "id": "view.waveform_overlapped_crossfades",
+  "label": "Overlapped Crossfades View > Waveforms"
+ },
+ {
+  "id": "view.automation_trim_playlist",
+  "label": "Trim Playlist View > Automation"
+ },
+ {
+  "id": "view.automation_composite_playlist",
+  "label": "Composite Playlist View > Automation"
+ },
+ {
+  "id": "view.expanded_sends_all",
+  "label": "All View > Expanded Sends"
+ },
+ {
+  "id": "view.expanded_sends_none",
+  "label": "None View > Expanded Sends"
+ },
+ {
+  "id": "view.expanded_send_a",
+  "label": "Send A View > Expanded Sends"
+ },
+ {
+  "id": "view.expanded_send_b",
+  "label": "Send B View > Expanded Sends"
+ },
+ {
+  "id": "view.expanded_send_c",
+  "label": "Send C View > Expanded Sends"
+ },
+ {
+  "id": "view.expanded_send_d",
+  "label": "Send D View > Expanded Sends"
+ },
+ {
+  "id": "view.expanded_send_e",
+  "label": "Send E View > Expanded Sends"
+ },
+ {
+  "id": "view.expanded_send_f",
+  "label": "Send F View > Expanded Sends"
+ },
+ {
+  "id": "view.expanded_send_g",
+  "label": "Send G View > Expanded Sends"
+ },
+ {
+  "id": "view.expanded_send_h",
+  "label": "Send H View > Expanded Sends"
+ },
+ {
+  "id": "view.expanded_send_i",
+  "label": "Send I View > Expanded Sends"
+ },
+ {
+  "id": "view.expanded_send_j",
+  "label": "Send J View > Expanded Sends"
+ },
+ {
+  "id": "view.track_number",
+  "label": "Track Number View"
+ },
+ {
+  "id": "view.track_transcription_lane",
+  "label": "Track Transcription Lane View"
+ },
+ {
+  "id": "view.dropped_video_frame_indicator",
+  "label": "Dropped Video Frame Indicator View"
+ },
+ {
+  "id": "view.transport_counters",
+  "label": "Counters View > Transport"
+ },
+ {
+  "id": "view.transport_midi_controls",
+  "label": "MIDI Controls View > Transport"
+ },
+ {
+  "id": "view.transport_synchronization",
+  "label": "Synchronization View > Transport"
+ },
+ {
+  "id": "view.transport_ableton_link",
+  "label": "Ableton Link View > Transport"
+ },
+ {
+  "id": "view.transport_output_meters",
+  "label": "Output Meters View > Transport"
+ },
+ {
+  "id": "view.transport_expanded",
+  "label": "Expanded View > Transport"
+ },
+ {
+  "id": "view.flags",
+  "label": "View Flags"
+ },
+ {
+  "id": "track.object",
+  "label": "Object / Bed"
+ },
+ {
+  "id": "track.convert_aux_to_folder",
+  "label": "Convert Aux to Routing Folder Track"
+ },
+ {
+  "id": "track.extract_midi",
+  "label": "Extract MIDI to New Track Track"
+ },
+ {
+  "id": "track.save_preset",
+  "label": "Save Track Preset... Track"
+ },
+ {
+  "id": "track.load_preset",
+  "label": "Load Track Preset"
+ },
+ {
+  "id": "track.bypass_inserts_ae",
+  "label": "Inserts A-E Track > Bypass Inserts"
+ },
+ {
+  "id": "track.bypass_inserts_fj",
+  "label": "Inserts F-J Track > Bypass Inserts"
+ },
+ {
+  "id": "track.bypass_eq",
+  "label": "EQ Track > Bypass Inserts"
+ },
+ {
+  "id": "track.bypass_dynamics",
+  "label": "Dynamics Track > Bypass Inserts"
+ },
+ {
+  "id": "track.bypass_reverb",
+  "label": "Reverb Track > Bypass Inserts"
+ },
+ {
+  "id": "track.bypass_delay",
+  "label": "Delay Track > Bypass Inserts"
+ },
+ {
+  "id": "track.bypass_modulation",
+  "label": "Modulation Track > Bypass Inserts"
+ },
+ {
+  "id": "track.mute_sends_ae",
+  "label": "Sends A-E Track > Mute Sends"
+ },
+ {
+  "id": "track.mute_sends_fj",
+  "label": "Sends F-J Track > Mute Sends"
+ },
+ {
+  "id": "track.write_midi_rtp",
+  "label": "Write MIDI Real-Time Properties Track"
+ },
+ {
+  "id": "track.trim_automation_write",
+  "label": "Write Trim Automation"
+ },
+ {
+  "id": "track.coalesce_trim",
+  "label": "Coalesce Trim Automation Track"
+ },
+ {
+  "id": "track.coalesce_vca",
+  "label": "Coalesce VCA Controller Automation Track"
+ },
+ {
+  "id": "track.designate_target_playlist",
+  "label": "Designate as Target Playlist Track"
+ },
+ {
+  "id": "track.show_target_playlist",
+  "label": "Show Target Playlist Track"
+ },
+ {
+  "id": "track.toggle_recent_playlist",
+  "label": "Toggle Recent Playlist Track"
+ },
+ {
+  "id": "clip.regroup",
+  "label": "Regroup Clip"
+ },
+ {
+  "id": "clip.unloop",
+  "label": "Unloop... Clip"
+ },
+ {
+  "id": "clip.effects_set",
+  "label": "Set Clip Effects"
+ },
+ {
+  "id": "clip.effects_bypass",
+  "label": "Bypass Clip > Clip Effects"
+ },
+ {
+  "id": "clip.effects_render",
+  "label": "Render Clip > Clip Effects"
+ },
+ {
+  "id": "clip.conform_to_tempo",
+  "label": "Conform to Tempo Clip"
+ },
+ {
+  "id": "clip.remove_pitch_shift",
+  "label": "Remove Pitch Shift Clip"
+ },
+ {
+  "id": "clip.clear",
+  "label": "Clear Clips"
+ },
+ {
+  "id": "event.time_ops_window",
+  "label": "Time Operations Window Event > Time Operations"
+ },
+ {
+  "id": "event.tempo_ops_window",
+  "label": "Tempo Operations Window Event > Tempo Operations"
+ },
+ {
+  "id": "event.midi_ops_window",
+  "label": "MIDI Operations Window Event > MIDI Operations"
+ },
+ {
+  "id": "event.move_song_start",
+  "label": "Move Song Start... Event > Time Operations"
+ },
+ {
+  "id": "event.tempo_linear",
+  "label": "Linear... Event > Tempo Operations"
+ },
+ {
+  "id": "event.tempo_parabolic",
+  "label": "Parabolic... Event > Tempo Operations"
+ },
+ {
+  "id": "event.tempo_s_curve",
+  "label": "S-Curve... Event > Tempo Operations"
+ },
+ {
+  "id": "event.tempo_stretch",
+  "label": "Stretch... Event > Tempo Operations"
+ },
+ {
+  "id": "event.select_split_notes",
+  "label": "Select/Split Notes... Event > MIDI Operations"
+ },
+ {
+  "id": "event.input_quantize",
+  "label": "Input Quantize... Event > MIDI Operations"
+ },
+ {
+  "id": "event.step_input",
+  "label": "Step Input... Event > MIDI Operations"
+ },
+ {
+  "id": "event.restore_performance",
+  "label": "Restore Performance... Event > MIDI Operations"
+ },
+ {
+  "id": "event.flatten_performance",
+  "label": "Flatten Performance... Event > MIDI Operations"
+ },
+ {
+  "id": "event.midi_track_offsets",
+  "label": "MIDI Track Offsets Event"
+ },
+ {
+  "id": "event.midi_rtp",
+  "label": "MIDI Real-Time Properties Event"
+ },
+ {
+  "id": "event.extract_chords",
+  "label": "Extract Chords from Selection Event"
+ },
+ {
+  "id": "event.beat_detective",
+  "label": "Beat Detective Event"
+ },
+ {
+  "id": "event.identify_beat",
+  "label": "Identify Beat... Event"
+ },
+ {
+  "id": "event.retrospective_record",
+  "label": "Retrospective Record Event"
+ },
+ {
+  "id": "options.destructive_punch",
+  "label": "DestructivePunch Options"
+ },
+ {
+  "id": "options.transport_online",
+  "label": "Transport Online Options"
+ },
+ {
+  "id": "options.dynamic_transport",
+  "label": "Dynamic Transport Options"
+ },
+ {
+  "id": "options.midi_thru",
+  "label": "MIDI Thru Options"
+ },
+ {
+  "id": "options.auto_spot_clips",
+  "label": "Auto-Spot Clips Options"
+ },
+ {
+  "id": "options.keyboard_lock",
+  "label": "Edit/Tool Mode Keyboard Lock Options"
+ },
+ {
+  "id": "options.calibration_mode",
+  "label": "Calibration Mode Options"
+ },
+ {
+  "id": "options.midi_live_mode",
+  "label": "MIDI Live Mode Options"
+ },
+ {
+  "id": "options.low_latency_monitoring",
+  "label": "Low Latency Monitoring Options"
+ },
+ {
+  "id": "options.prepare_dpe_tracks",
+  "label": "Prepare DPE Tracks Options"
+ },
+ {
+  "id": "setup.hardware",
+  "label": "Hardware... Setup"
+ },
+ {
+  "id": "setup.playback_engine",
+  "label": "Playback Engine... Setup"
+ },
+ {
+  "id": "setup.disk_allocation",
+  "label": "Disk Allocation... Setup"
+ },
+ {
+  "id": "setup.peripherals",
+  "label": "Peripherals... Setup"
+ },
+ {
+  "id": "setup.io",
+  "label": "I/O... Setup"
+ },
+ {
+  "id": "setup.current_timecode",
+  "label": "Current Timecode Position... Setup"
+ },
+ {
+  "id": "setup.current_feet_frames",
+  "label": "Current Feet+Frames Position... Setup"
+ },
+ {
+  "id": "setup.external_timecode_offset",
+  "label": "External Timecode Offset... Setup"
+ },
+ {
+  "id": "setup.video_sync_offset",
+  "label": "Video Sync Offset... Setup"
+ },
+ {
+  "id": "setup.click_countoff",
+  "label": "Click/Countoff... Setup"
+ },
+ {
+  "id": "setup.keyboard_shortcuts",
+  "label": "Keyboard Shortcuts... Setup"
+ },
+ {
+  "id": "setup.midi_studio",
+  "label": "MIDI Studio... Setup > MIDI"
+ },
+ {
+  "id": "setup.midi_beat_clock",
+  "label": "MIDI Beat Clock... Setup > MIDI"
+ },
+ {
+  "id": "setup.midi_input_filter",
+  "label": "MIDI Input Filter... Setup > MIDI"
+ },
+ {
+  "id": "setup.midi_input_devices",
+  "label": "MIDI Input Devices... Setup > MIDI"
+ },
+ {
+  "id": "setup.transcription_settings",
+  "label": "Transcription Settings... Setup"
+ },
+ {
+  "id": "file.import_session_data",
+  "label": "Session Data... File > Import"
+ },
+ {
+  "id": "engine.clap_plugins",
+  "label": "List CLAP Plugins"
+ },
+ {
+  "id": "engine.vst3_plugins",
+  "label": "List VST3 Plugins"
+ },
+ {
+  "id": "mix.surround_pan",
+  "label": "Set Surround Pan"
+ },
+ {
+  "id": "mix.send_surround_pan",
+  "label": "Set Send Surround Pan"
+ },
+ {
+  "id": "setup.main_format",
+  "label": "Main Output Format"
+ },
+ {
+  "id": "mix.insert_state",
+  "label": "Store Plugin State"
+ },
+ {
+  "id": "mix.instrument",
+  "label": "Set Instrument"
+ },
+ {
+  "id": "mix.instrument_param",
+  "label": "Set Instrument Parameter"
+ },
+ {
+  "id": "mix.sampler_load",
+  "label": "Load Sampler Sample"
+ },
+ {
+  "id": "mix.sampler_clear",
+  "label": "Clear Sampler Sample"
+ },
+ {
+  "id": "video.online",
+  "label": "Video Track Online Options"
+ },
+ {
+  "id": "video.offset",
+  "label": "Set Video Start"
+ },
+ {
+  "id": "video.list",
+  "label": "Movies"
+ }
+]

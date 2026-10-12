@@ -1,0 +1,31 @@
+{
+  "name": "@dsh-artcraft/plugin-designcraft",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "DSH plugin: drive DesignCraft (page and layout design) headlessly from the agent through its own CLI.",
+  "license": "MIT OR Apache-2.0",
+  "exports": {
+    ".": "./src/index.ts",
+    "./package.json": "./package.json"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "*",
+    "@deepseek-ai/dsh-tools": "*",
+    "@dsh-artcraft/craft-kit": "*"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/cordis": {
+      "optional": true
+    },
+    "@deepseek-ai/dsh-tools": {
+      "optional": true
+    },
+    "@dsh-artcraft/craft-kit": {
+      "optional": true
+    }
+  },
+  "scripts": {
+    "postinstall": "node ../../scripts/install-links.mjs"
+  }
+}

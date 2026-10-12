@@ -1,0 +1,4071 @@
+[
+ {
+  "id": "file.new",
+  "label": "Document…",
+  "params": "{preset?: \"Letter\"|\"A4\"|…, width?, height?, pages?, facingPages?, columns?, gutter?, margins?: number|{top,bottom,inside,outside}, bleed?, title?}",
+  "menu": [
+   "File",
+   "New"
+  ],
+  "shortcut": "Cmd+N",
+  "enabled": true
+ },
+ {
+  "id": "file.newSample",
+  "label": "Sample Document",
+  "params": "{} — a multi-page magazine sample",
+  "menu": [
+   "Help"
+  ],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "file.presets",
+  "label": "Document Presets",
+  "params": "{}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "file.open",
+  "label": "Open…",
+  "params": "{path} — .designcraft or .idml; the fonts in a `Document Fonts` folder beside it load first → {index, documentFonts: faces loaded, warnings: font files skipped}",
+  "menu": [
+   "File"
+  ],
+  "shortcut": "Cmd+O",
+  "enabled": true
+ },
+ {
+  "id": "file.openBytes",
+  "label": "Open Bytes",
+  "params": "{name, base64} — DesignCraft JSON or an IDML package",
+  "menu": [],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "file.save",
+  "label": "Save",
+  "params": "{path?}",
+  "menu": [
+   "File"
+  ],
+  "shortcut": "Cmd+S",
+  "enabled": false
+ },
+ {
+  "id": "file.saveAs",
+  "label": "Save As…",
+  "params": "{path}",
+  "menu": [
+   "File"
+  ],
+  "shortcut": "Cmd+Shift+S",
+  "enabled": false
+ },
+ {
+  "id": "file.saveACopy",
+  "label": "Save a Copy…",
+  "params": "{path} — writes the document without changing which file it is or its unsaved state",
+  "menu": [
+   "File"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "file.revert",
+  "label": "Revert",
+  "params": "{} — back to the last saved version (not undoable)",
+  "menu": [
+   "File"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "file.recovery.list",
+  "label": "Recovery Data",
+  "params": "{dir?} → [{uid, path, title, saved}] unsaved documents left by a crash (default: the session's recovery folder)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "file.recovery.save",
+  "label": "Save Recovery Data",
+  "params": "{dir?} — write every unsaved document to the recovery folder (the app does this on a timer)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "file.recovery.open",
+  "label": "Recover Documents",
+  "params": "{dir?} — reopen documents left in the recovery folder (unsaved)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "file.serialize",
+  "label": "Serialize",
+  "params": "{} → {base64, bytes} the .designcraft file",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "file.close",
+  "label": "Close",
+  "params": "{index?}",
+  "menu": [
+   "File"
+  ],
+  "shortcut": "Cmd+W",
+  "enabled": false
+ },
+ {
+  "id": "file.activate",
+  "label": "Activate Document",
+  "params": "{index}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "snippet.export",
+  "label": "Export Selection as Snippet",
+  "params": "{path?} — the selected items (with their stories, styles and images) as a .designcraft snippet; no path: {base64}",
+  "menu": [
+   "File",
+   "Export"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "place.styles",
+  "label": "Import Options: Styles",
+  "params": "{path | base64, name} → {paragraph: [name], character: [name], conflicts: [name]} — the styles a Word/RTF file brings (for styleMap / styleConflicts)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "snippet.place",
+  "label": "Place Snippet",
+  "params": "{path | base64, spread?, x?, y?} — items keep their positions unless x/y given (top-left)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "place.load",
+  "label": "Load Place Cursor",
+  "params": "{path | base64, name?} — load a graphic into the place cursor (then click/drag with the placeGun tool)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "place.drop",
+  "label": "Place Loaded Graphic",
+  "params": "{spread?, x, y, rect?: [x0,y0,x1,y1], frame?: id}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "file.place",
+  "label": "Place…",
+  "params": "{path?|base64?, name?, frame?: id (place into), spread?, x?, y?, width?, pdfPage?: n (1-based, Image Import Options), pdfCrop?: crop|trim|bleed|art|media, layoutPage?: n (IDML / .designcraft: that page's objects as a group)} — places an image (into the selected empty frame if any); text files (.txt, .docx, .rtf, .md) and Excel workbooks (.xlsx, as a table) go into the insertion point, the selected frame or a new frame on `page`/`rect` — {autoflow?: adds pages with threaded frames until the text fits, removeStyles?, styleMap?: {imported name: document style}, styleConflicts?: useExisting|redefine|autoRename}",
+  "menu": [
+   "File"
+  ],
+  "shortcut": "Cmd+D",
+  "enabled": false
+ },
+ {
+  "id": "file.exportIdml",
+  "label": "Export IDML…",
+  "params": "{path?, embedImages?: true} — writes an IDML package to `path`, or returns {base64} without a path",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "file.openIdml",
+  "label": "Open IDML",
+  "params": "{path | base64, name?} — opens an IDML package as a new document (linked images are read next to the file or from its Links/ folder; the fonts in a `Document Fonts` folder beside it load first) → {index, documentFonts, warnings}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "file.exportPdf",
+  "label": "Export PDF…",
+  "params": "{path?, pages?: \"1-3,5\" | [1,3] (1-based positions; default all), flatten?: high|medium|low|ppi (Transparency Flattener: spreads with transparency are rasterised), spreads?: bool, fullScreen?: bool, bookmarksPanel?: bool, pageLayout?: single|continuous|twoUp|twoUpCover|twoUpContinuous, view?: fitPage|fitWidth|actual, advanceSeconds?: number (interactive PDF), bleed?: bool (document bleed), marks?: bool | {crop?, bleed?, pageInfo?, weight?, offset?}, standard?: \"none\"|\"x4\"|\"a2b\", compressImages?: bool, tagged?: bool (structure tree: stories as paragraphs, figures with alt text), media?: bool (interactive: embed placed video and sound), title?, author?} → {path, bytes, pages, warnings} (no path: {base64, …})",
+  "menu": [
+   "File"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "file.exportEpub",
+  "label": "Export EPUB (Reflowable)…",
+  "params": "{path?, title?, author?, language?: \"en\", cover?: bool (the first page as the cover image), fixedLayout?: bool (pre-paginated: each page as an image with its text)} → {path, bytes} (no path: {base64, bytes})",
+  "menu": [
+   "File"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "file.exportFixedEpub",
+  "label": "Export EPUB (Fixed Layout)…",
+  "params": "{path?, title?, author?, language?} — pre-paginated EPUB → {path, bytes} (no path: {base64, bytes})",
+  "menu": [
+   "File"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "file.printBooklet",
+  "label": "Print Booklet…",
+  "params": "{path?, type?: saddleStitch|twoUpConsecutive, spaceBetween? (pt)} — printer spreads as PDF (pages imposed in booklet order) → {path, bytes, sheets} (no path: {base64, …})",
+  "menu": [
+   "File"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "file.exportHtml",
+  "label": "Export HTML…",
+  "params": "{path?, title?, language?} — one self-contained page (styles inline, images embedded), stories and graphics in reading order → {path, bytes} (no path: {text, bytes})",
+  "menu": [
+   "File"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "file.exportText",
+  "label": "Export Text…",
+  "params": "{path?, format?: \"txt\"|\"rtf\"|\"tagged\" (Tagged Text; default from the path, else txt), story?, frame?} — the story being edited or of the selected frame → {path, bytes} (no path: {text, bytes})",
+  "menu": [
+   "File"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "edit.undo",
+  "label": "Undo",
+  "params": "{}",
+  "menu": [
+   "Edit"
+  ],
+  "shortcut": "Cmd+Z",
+  "enabled": false
+ },
+ {
+  "id": "edit.redo",
+  "label": "Redo",
+  "params": "{}",
+  "menu": [
+   "Edit"
+  ],
+  "shortcut": "Cmd+Shift+Z",
+  "enabled": false
+ },
+ {
+  "id": "selection.set",
+  "label": "Select",
+  "params": "{ids: [id], add?: bool, content?: bool}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "selection.toggle",
+  "label": "Toggle Selection",
+  "params": "{id}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "edit.selectAll",
+  "label": "Select All",
+  "params": "{} — all items on the active spreads, or all text in the story",
+  "menu": [
+   "Edit"
+  ],
+  "shortcut": "Cmd+A",
+  "enabled": false
+ },
+ {
+  "id": "edit.deselectAll",
+  "label": "Deselect All",
+  "params": "{}",
+  "menu": [
+   "Edit"
+  ],
+  "shortcut": "Cmd+Shift+A",
+  "enabled": false
+ },
+ {
+  "id": "edit.clear",
+  "label": "Clear",
+  "params": "{ids?} — delete selected items (or the selected text)",
+  "menu": [
+   "Edit"
+  ],
+  "shortcut": "Delete",
+  "enabled": false
+ },
+ {
+  "id": "edit.copy",
+  "label": "Copy",
+  "params": "{} → {text} when text is selected (with formatting, footnotes, markers)",
+  "menu": [
+   "Edit"
+  ],
+  "shortcut": "Cmd+C",
+  "enabled": false
+ },
+ {
+  "id": "edit.cut",
+  "label": "Cut",
+  "params": "{}",
+  "menu": [
+   "Edit"
+  ],
+  "shortcut": "Cmd+X",
+  "enabled": false
+ },
+ {
+  "id": "edit.pasteWithoutFormatting",
+  "label": "Paste without Formatting",
+  "params": "{text?} — plain text at the insertion point, in the format there",
+  "menu": [
+   "Edit"
+  ],
+  "shortcut": "Cmd+Shift+V",
+  "enabled": false
+ },
+ {
+  "id": "edit.paste",
+  "label": "Paste",
+  "params": "{inPlace?: bool, text?: the system clipboard's text (pastes it unless it is what was copied here)}",
+  "menu": [
+   "Edit"
+  ],
+  "shortcut": "Cmd+V",
+  "enabled": false
+ },
+ {
+  "id": "edit.pasteInto",
+  "label": "Paste Into",
+  "params": "{id?} — the copied objects become the content of the selected frame (or `id`), clipped by it",
+  "menu": [
+   "Edit"
+  ],
+  "shortcut": "Cmd+Alt+V",
+  "enabled": false
+ },
+ {
+  "id": "edit.pasteInPlace",
+  "label": "Paste in Place",
+  "params": "{}",
+  "menu": [
+   "Edit"
+  ],
+  "shortcut": "Cmd+Alt+Shift+V",
+  "enabled": false
+ },
+ {
+  "id": "edit.duplicate",
+  "label": "Duplicate",
+  "params": "{}",
+  "menu": [
+   "Edit"
+  ],
+  "shortcut": "Cmd+Alt+Shift+D",
+  "enabled": false
+ },
+ {
+  "id": "endnote.insert",
+  "label": "Insert Endnote",
+  "params": "{text?} — a reference at the insertion point; the first one makes the endnote frame on a new last page → {story, id, frame}",
+  "menu": [
+   "Type"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "endnote.edit",
+  "label": "Edit Endnote",
+  "params": "{story, id, text}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "endnote.delete",
+  "label": "Delete Endnote",
+  "params": "{story, id} — removes the reference and its text",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "endnote.list",
+  "label": "Endnotes",
+  "params": "{} → [{story, id, number, text}] in numbering order",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "endnote.options",
+  "label": "Document Endnote Options…",
+  "params": "{style?: arabic|upperRoman|lowerRoman|upperLetters|lowerLetters, startAt?, prefix?, suffix?, heading?, headingStyle?, paraStyle?, separator?} → the options",
+  "menu": [
+   "Type"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "note.new",
+  "label": "New Note",
+  "params": "{text, author?} — at the insertion point → {story, id}",
+  "menu": [
+   "Type",
+   "Notes"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "note.edit",
+  "label": "Edit Note",
+  "params": "{story, id, text?, author?}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "note.delete",
+  "label": "Delete Note",
+  "params": "{story, id}",
+  "menu": [
+   "Type",
+   "Notes"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "note.convertToText",
+  "label": "Convert Note to Text",
+  "params": "{story, id} — the note's text replaces its anchor",
+  "menu": [
+   "Type",
+   "Notes"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "note.list",
+  "label": "Notes",
+  "params": "{} → [{story, id, at, author, text}] in story order",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "frame.create",
+  "label": "Create Frame",
+  "params": "{spread?, rect: [x0,y0,x1,y1] (spread coords), shape?: rectangle|ellipse|polygon, content?: graphic|text|unassigned, sides?: 6, text?: string, caret?: bool, vertical?: bool (text: a new vertical story)}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "line.create",
+  "label": "Create Line",
+  "params": "{spread?, a: [x,y], b: [x,y]}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "transform.move",
+  "label": "Move",
+  "params": "{dx, dy, copy?: bool, ids?, toSpread?}",
+  "menu": [
+   "Object",
+   "Transform"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "transform.resize",
+  "label": "Resize",
+  "params": "{from: rect, to: rect, content?: bool (scale content), distribute?: bool (Live Distribute: objects keep their size, their centres spread with the bounds), ids?}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "transform.rotate",
+  "label": "Rotate",
+  "params": "{angle (degrees, CCW), ids?}",
+  "menu": [
+   "Object",
+   "Transform"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "transform.scale",
+  "label": "Scale",
+  "params": "{sx, sy, ids?} (about the selection centre)",
+  "menu": [
+   "Object",
+   "Transform"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "transform.again",
+  "label": "Transform Again",
+  "params": "{individually?: bool, sequence?: bool, ids?} — repeat the last transform (or the whole sequence applied to this selection), on the selection as a whole or on each object about its own centre",
+  "menu": [
+   "Object",
+   "Transform Again"
+  ],
+  "shortcut": "Cmd+Alt+3",
+  "enabled": false
+ },
+ {
+  "id": "transform.clear",
+  "label": "Clear Transformations",
+  "params": "{ids?} — remove rotation, shear and scaling (the object keeps its centre)",
+  "menu": [
+   "Object",
+   "Transform"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "transform.shear",
+  "label": "Shear",
+  "params": "{angle (degrees), ids?}",
+  "menu": [
+   "Object",
+   "Transform"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.matchAttributes",
+  "label": "Apply Attributes (Eyedropper)",
+  "params": "{from: id, ids?} — copy fill, stroke, corners, opacity, effects, wrap",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "transform.flip",
+  "label": "Flip",
+  "params": "{axis: horizontal|vertical, ids?}",
+  "menu": [
+   "Object",
+   "Transform"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "transform.set",
+  "label": "Transform Panel",
+  "params": "{x?, y?, width?, height?, scaleX? (%), scaleY? (%), rotation? (°), shear? (°), ref?: 0..8, ids?} — reference-point based geometry; rotation and shear are absolute (Transformations are Totals decides whether nested objects measure them on the pasteboard)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "transform.info",
+  "label": "Transform Values",
+  "params": "{ids?} → {scaleX, scaleY (%), rotation, shear (°), content?: the same for a placed graphic} of the first target",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.arrange",
+  "label": "Arrange",
+  "params": "{to: front|forward|backward|back, ids?}",
+  "menu": [
+   "Object",
+   "Arrange"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.bringToFront",
+  "label": "Bring to Front",
+  "params": "{}",
+  "menu": [
+   "Object",
+   "Arrange"
+  ],
+  "shortcut": "Cmd+Shift+]",
+  "enabled": false
+ },
+ {
+  "id": "object.bringForward",
+  "label": "Bring Forward",
+  "params": "{}",
+  "menu": [
+   "Object",
+   "Arrange"
+  ],
+  "shortcut": "Cmd+]",
+  "enabled": false
+ },
+ {
+  "id": "object.sendBackward",
+  "label": "Send Backward",
+  "params": "{}",
+  "menu": [
+   "Object",
+   "Arrange"
+  ],
+  "shortcut": "Cmd+[",
+  "enabled": false
+ },
+ {
+  "id": "object.sendToBack",
+  "label": "Send to Back",
+  "params": "{}",
+  "menu": [
+   "Object",
+   "Arrange"
+  ],
+  "shortcut": "Cmd+Shift+[",
+  "enabled": false
+ },
+ {
+  "id": "object.group",
+  "label": "Group",
+  "params": "{ids?}",
+  "menu": [
+   "Object"
+  ],
+  "shortcut": "Cmd+G",
+  "enabled": false
+ },
+ {
+  "id": "object.ungroup",
+  "label": "Ungroup",
+  "params": "{ids?}",
+  "menu": [
+   "Object"
+  ],
+  "shortcut": "Cmd+Shift+G",
+  "enabled": false
+ },
+ {
+  "id": "object.lock",
+  "label": "Lock",
+  "params": "{ids?}",
+  "menu": [
+   "Object"
+  ],
+  "shortcut": "Cmd+L",
+  "enabled": false
+ },
+ {
+  "id": "object.unlockAll",
+  "label": "Unlock All on Spread",
+  "params": "{}",
+  "menu": [
+   "Object"
+  ],
+  "shortcut": "Cmd+Alt+L",
+  "enabled": false
+ },
+ {
+  "id": "object.hide",
+  "label": "Hide",
+  "params": "{ids?}",
+  "menu": [
+   "Object"
+  ],
+  "shortcut": "Cmd+3",
+  "enabled": false
+ },
+ {
+  "id": "object.showAll",
+  "label": "Show All on Spread",
+  "params": "{}",
+  "menu": [
+   "Object"
+  ],
+  "shortcut": "Cmd+Alt+3",
+  "enabled": false
+ },
+ {
+  "id": "object.setFlags",
+  "label": "Set Visibility / Lock",
+  "params": "{ids: [id], hidden?: bool, locked?: bool} — Layers panel eye/lock per object",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.fill",
+  "label": "Fill",
+  "params": "{swatch, tint?: 0..1, ids?}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.stroke",
+  "label": "Stroke",
+  "params": "{swatch?, tint?, weight?, align?: center|inside|outside, type?: {kind:…}, cap?: butt|round|projecting, join?: miter|round|bevel, miterLimit?, start?, end?: none|simple|simpleWide|triangle|triangleWide|barbed|curved|circle|circleSolid|square|squareSolid|bar, gapSwatch?, gapTint?, gapOverprint?: bool, ids?}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.opacity",
+  "label": "Opacity",
+  "params": "{opacity: 0..1, blend?: normal|multiply|…, ids?}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.dropShadow",
+  "label": "Drop Shadow",
+  "params": "{on?: bool, distance?, angle?, globalLight?: bool, opacity?, size?, spread? (%), color? (swatch), ids?}",
+  "menu": [
+   "Object",
+   "Effects"
+  ],
+  "shortcut": "Cmd+Alt+M",
+  "enabled": false
+ },
+ {
+  "id": "object.innerShadow",
+  "label": "Inner Shadow",
+  "params": "{on?: bool, distance?, angle?, globalLight?: bool, opacity?, size?, choke? (%), color?, ids?}",
+  "menu": [
+   "Object",
+   "Effects"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.outerGlow",
+  "label": "Outer Glow",
+  "params": "{on?: bool, opacity?, size?, spread? (%), color?, ids?}",
+  "menu": [
+   "Object",
+   "Effects"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.exportOptions",
+  "label": "Object Export Options…",
+  "params": "{ids?, artifact?: bool (tagged PDF decoration), rasterize?: bool (EPUB/HTML image), align?: left|center|right|\"\", pageBreakBefore?: bool, altText?}",
+  "menu": [
+   "Object"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.innerGlow",
+  "label": "Inner Glow",
+  "params": "{on?: bool, opacity?, size?, choke? (%), center?: bool (glow from the centre), color?, ids?}",
+  "menu": [
+   "Object",
+   "Effects"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.bevel",
+  "label": "Bevel and Emboss",
+  "params": "{on?: bool, size?, depth? (%), angle?, globalLight?: bool, highlight?, highlightOpacity?, shadow?, shadowOpacity?, ids?}",
+  "menu": [
+   "Object",
+   "Effects"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.satin",
+  "label": "Satin",
+  "params": "{on?: bool, opacity?, angle?, distance?, size?, invert?: bool, color?, ids?}",
+  "menu": [
+   "Object",
+   "Effects"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.directionalFeather",
+  "label": "Directional Feather",
+  "params": "{on?: bool, widths?: [top, left, bottom, right] | number, ids?}",
+  "menu": [
+   "Object",
+   "Effects"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.feather",
+  "label": "Basic Feather",
+  "params": "{width (0 = off), ids?}",
+  "menu": [
+   "Object",
+   "Effects"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.content",
+  "label": "Content",
+  "params": "{type: graphic|text|unassigned, ids?}",
+  "menu": [
+   "Object",
+   "Content"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.textFrameOptions",
+  "label": "Text Frame Options…",
+  "params": "{columns?, gutter?, inset?: number|[t,l,b,r] (null keeps that side), verticalJustification?: top|center|bottom|justify, firstBaseline?, autoSize?, ignoreWrap?, balanceColumns?, columnRule?: bool, columnRuleWeight? (pt), columnRuleColor? (swatch name), columnRuleTint? (0..1), columnRuleOffset? (pt, horizontal), columnRuleTopInset? (pt), columnRuleBottomInset? (pt), vertical?: bool (sets the story direction of the frames' stories, as Type ▸ Story Direction), ids?}",
+  "menu": [
+   "Object"
+  ],
+  "shortcut": "Cmd+B",
+  "enabled": false
+ },
+ {
+  "id": "object.cornerOptions",
+  "label": "Corner Options…",
+  "params": "{shape: none|rounded|inverseRounded|inset|bevel|fancy, size, ids?}",
+  "menu": [
+   "Object"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.textWrap",
+  "label": "Text Wrap",
+  "params": "{mode: none|boundingBox|contour|jumpObject|jumpToNextColumn, offset?: number|[t,l,b,r], invert?: bool, ids?}",
+  "menu": [
+   "Window"
+  ],
+  "shortcut": "Cmd+Alt+W",
+  "enabled": false
+ },
+ {
+  "id": "object.fit",
+  "label": "Fitting",
+  "params": "{mode: fillProportionally|fitProportionally|fitContentToFrame|centerContent|fitFrameToContent, ids?}",
+  "menu": [
+   "Object",
+   "Fitting"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.fittingOptions",
+  "label": "Frame Fitting Options…",
+  "params": "{autoFit?: bool, fitting?: none|fillProportionally|fitProportionally|fitContentToFrame|centerContent, align?: 0..8 (reference point, 4 = centre), crop?: n | [t, l, b, r] (negative adds space), ids?}",
+  "menu": [
+   "Object",
+   "Fitting"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.rename",
+  "label": "Rename",
+  "params": "{id, name}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "edit.stepAndRepeat",
+  "label": "Step and Repeat…",
+  "params": "{count?: 1..1000, dx?, dy?, rows?, columns?, ids?} — copies of the selection (or ids) offset by (dx, dy); with rows/columns, a grid of at most 1000 cells, and at most 1000 item copies including group contents",
+  "menu": [
+   "Edit"
+  ],
+  "shortcut": "Cmd+Alt+U",
+  "enabled": false
+ },
+ {
+  "id": "path.create",
+  "label": "Create Path",
+  "params": "{spread?, anchors: [{p:[x,y], in?:[x,y], out?:[x,y]}], closed?: bool}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "path.appendAnchor",
+  "label": "Add Anchor",
+  "params": "{id, anchor: {p, in?, out?}} (spread coords)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "path.close",
+  "label": "Close Path",
+  "params": "{id}",
+  "menu": [
+   "Object",
+   "Paths"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "path.moveAnchors",
+  "label": "Move Anchors",
+  "params": "{id, anchors: [[subpath, index]], dx, dy, handle?: in|out}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.align",
+  "label": "Align",
+  "params": "{edge: left|hcenter|right|top|vcenter|bottom, to?: selection|keyObject|margins|page|spread, ids?}",
+  "menu": [
+   "Window",
+   "Object & Layout",
+   "Align"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.distribute",
+  "label": "Distribute",
+  "params": "{axis: horizontal|vertical, by?: centers|spacing, spacing?: points, ids?}",
+  "menu": [
+   "Window",
+   "Object & Layout",
+   "Align"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "tool.polygonSettings",
+  "label": "Polygon Settings…",
+  "params": "{sides?: 3–100, starInset?: 0–100 (%)} → the settings new polygons use",
+  "menu": [],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "gap.move",
+  "label": "Move Gap",
+  "params": "{at: [x, y] (spread), delta | dx/dy, spread?} — Gap tool: the gap at `at` between objects (or an object and the page edge) moves by `delta`; the objects on both sides resize → {axis, changed}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "frame.grid",
+  "label": "Gridify",
+  "params": "{rect, cols, rows, gutter? (pt, 12), shape?, content?, spread?} — a grid of frames filling `rect` (frame tools: arrow keys while dragging)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.clippingPath",
+  "label": "Clipping Path…",
+  "params": "{type?: alpha|edges (default alpha), threshold?: 0–255 (alpha: opaque above; edges: darker than 255 − threshold counts; default 25), tolerance?: px (2), ids?} — traces the placed graphic and makes the outline the frame (Convert Clipping Path to Frame)",
+  "menu": [
+   "Object",
+   "Clipping Path"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.primaryTextFrame",
+  "label": "Primary Text Frame",
+  "params": "{on?: bool (default: toggle), ids?} — the selected text frame's story becomes the primary story (Smart Text Reflow adds and removes pages for it)",
+  "menu": [
+   "Object"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.attributes",
+  "label": "Attributes",
+  "params": "{overprintFill?, overprintStroke?, overprintGap?, nonprinting?: bool, ids?} — Attributes panel",
+  "menu": [
+   "Window",
+   "Output",
+   "Attributes"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.globalLight",
+  "label": "Global Light…",
+  "params": "{angle} — the light angle shared by shadows that use Global Light",
+  "menu": [
+   "Object",
+   "Effects"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.label",
+  "label": "Script Label",
+  "params": "{label, ids?} — free text scripts and agents can find objects by",
+  "menu": [
+   "Window",
+   "Utilities",
+   "Script Label"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.altText",
+  "label": "Object Export Options",
+  "params": "{text, ids?} — alternative text for tagged PDF and EPUB",
+  "menu": [
+   "Object"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.transparencyGroup",
+  "label": "Group Transparency",
+  "params": "{isolate?: bool, knockout?: bool, ids?} — Effects panel: Isolate Blending, Knockout Group",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.findByLabel",
+  "label": "Find by Script Label",
+  "params": "{label} → ids of objects whose label is `label`",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.setLayer",
+  "label": "Move to Layer",
+  "params": "{layer, ids?}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "path.addAnchor",
+  "label": "Add Anchor Point",
+  "params": "{id, at: [x,y] (spread coords; the nearest point on the path), tolerance?: pt (default 4)} → {subpath, anchor}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "path.deleteAnchor",
+  "label": "Delete Anchor Point",
+  "params": "{id, subpath, anchor} — removes the point (and the object when no path is left)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "path.convertAnchor",
+  "label": "Convert Direction Point",
+  "params": "{id, subpath, anchor, to?: [x,y] (spread coords: drag out symmetric handles to there), corner?: bool} — without `to`, a smooth point becomes a corner and a corner gets smooth handles",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "path.erase",
+  "label": "Erase",
+  "params": "{id, points: [[x,y], …] (spread coords: the Erase tool's drag), tolerance?: pt (default 4)} — removes the stretch of path the drag ran along",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "path.smooth",
+  "label": "Smooth",
+  "params": "{id, points: [[x,y], …] (spread coords), tolerance?: pt (default 4)} — re-fits the stretch the drag ran along with fewer, smoother anchors",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "article.list",
+  "label": "Articles",
+  "params": "{} → [{name, items, export}]",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "article.new",
+  "label": "New Article",
+  "params": "{name?, ids? (default: the selection)} → {name}",
+  "menu": [
+   "Window",
+   "Articles"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "article.add",
+  "label": "Add Selection to Article",
+  "params": "{name, ids? (default: the selection)} — appended in order",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "article.remove",
+  "label": "Remove from Article",
+  "params": "{name, ids}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "article.options",
+  "label": "Article Options",
+  "params": "{name, to?: new name, export?: bool, order?: [ids] (reorder)}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "article.delete",
+  "label": "Delete Article",
+  "params": "{name}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.makeCompoundPath",
+  "label": "Make Compound Path",
+  "params": "{ids?} — one path from the selected paths (the backmost object's look); paths inside others become holes → {id}",
+  "menu": [
+   "Object",
+   "Paths"
+  ],
+  "shortcut": "Cmd+8",
+  "enabled": false
+ },
+ {
+  "id": "object.releaseCompoundPath",
+  "label": "Release Compound Path",
+  "params": "{ids?} — each subpath becomes its own object → {ids}",
+  "menu": [
+   "Object",
+   "Paths"
+  ],
+  "shortcut": "Cmd+Alt+Shift+8",
+  "enabled": false
+ },
+ {
+  "id": "type.createOutlines",
+  "label": "Create Outlines",
+  "params": "{ids?} — text frames become compound paths of their glyphs (one per text colour, grouped when several) → {ids}",
+  "menu": [
+   "Type"
+  ],
+  "shortcut": "Cmd+Shift+O",
+  "enabled": false
+ },
+ {
+  "id": "object.pathfinder",
+  "label": "Pathfinder",
+  "params": "{op: add|subtract|intersect|exclude|minusBack, ids?} — combine the selected shapes into one (the backmost keeps its look; the frontmost for minusBack) → {id}",
+  "menu": [
+   "Object",
+   "Pathfinder"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.gradientFeather",
+  "label": "Gradient Feather",
+  "params": "{on?: true, radial?, angle?, start?: opacity 0–100 (100), end?: (0), from?: [x,y], to?: [x,y] (spread coords: the Gradient Feather tool's drag), ids?}",
+  "menu": [
+   "Object",
+   "Effects"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "path.split",
+  "label": "Split Path",
+  "params": "{id, at: [x,y] (spread coords; the nearest point on the path)} — Scissors: an open path becomes two, a closed one opens there → {ids}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "book.new",
+  "label": "New Book",
+  "params": "{path} — an empty book file (.dcbook)",
+  "menu": [
+   "File",
+   "New"
+  ],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "book.open",
+  "label": "Open Book",
+  "params": "{path} → {documents}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "book.close",
+  "label": "Close Book",
+  "params": "{}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "book.add",
+  "label": "Add Document",
+  "params": "{path, at?: index}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "book.remove",
+  "label": "Remove Document",
+  "params": "{index}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "book.styleSource",
+  "label": "Style Source",
+  "params": "{index}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "book.list",
+  "label": "Book",
+  "params": "{} → {path, styleSource, documents: [{path, pages, firstPage}]}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "book.paginate",
+  "label": "Update Numbering",
+  "params": "{} — each document starts numbering where the previous one ended (files are saved)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "book.syncStyles",
+  "label": "Synchronize Book",
+  "params": "{} — paragraph and character styles and swatches of the style source go into every document (by name)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "book.exportPdf",
+  "label": "Export Book to PDF…",
+  "params": "{path?} — every document in order as one PDF → {path, bytes, pages} (no path: {base64, …})",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "button.set",
+  "label": "Convert to Button",
+  "params": "{ids?, action: page|firstPage|lastPage|nextPage|previousPage|url|none, page?, url?} — the selected objects act on release in interactive PDF",
+  "menu": [
+   "Object",
+   "Interactive"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "button.clear",
+  "label": "Convert to Object",
+  "params": "{ids?}",
+  "menu": [
+   "Object",
+   "Interactive"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "form.set",
+  "label": "Convert to Form Field",
+  "params": "{ids?, kind: textField|checkBox|comboBox|listBox|signature, name?, value?, options?: [string], multiline?, required?, fontSize?} — interactive PDF form fields",
+  "menu": [
+   "Object",
+   "Interactive"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "form.clear",
+  "label": "Convert to Object",
+  "params": "{ids?} — no longer a form field",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "form.list",
+  "label": "Form Fields",
+  "params": "{} → [{id, kind, name, value, options}]",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "button.list",
+  "label": "Buttons",
+  "params": "{} → [{id, name, action}]",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.caption",
+  "label": "Generate Static Caption",
+  "params": "{text?: template (default \"{name}\"; variables {name} {path} {altText} {label} {ppi} {dimensions} {format}), position?: below|above|left|right, offset? (pt, 0), height? (pt, 24), style?: paragraph style, live?: bool (kept current as the source changes), ids?} → {ids}",
+  "menu": [
+   "Object",
+   "Captions"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "color.settings",
+  "label": "Color Settings",
+  "params": "{rgb?: working RGB profile, cmyk?: working CMYK profile, intent?: perceptual|relative|saturation|absolute, bpc?: bool} → {rgb, cmyk, intent, bpc, profiles}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "color.loadProfile",
+  "label": "Load Profile…",
+  "params": "{path} — an ICC profile (.icc/.icm) to use as a working space or proof target",
+  "menu": [],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "color.convert",
+  "label": "Convert Color",
+  "params": "{color: {model: rgb, r, g, b} | {model: cmyk, c, m, y, k} | {model: gray, k}, to: rgb|cmyk|gray|lab} — through the working spaces",
+  "menu": [],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "changes.track",
+  "label": "Track Changes",
+  "params": "{on?: bool (default: toggle)}",
+  "menu": [
+   "Type",
+   "Track Changes"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "changes.list",
+  "label": "Changes",
+  "params": "{} → [{story, start, end, kind: inserted|deleted, text}]",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "changes.accept",
+  "label": "Accept Change",
+  "params": "{story, start} — the change at that position",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "changes.reject",
+  "label": "Reject Change",
+  "params": "{story, start} — the change at that position",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "changes.acceptAll",
+  "label": "Accept All Changes",
+  "params": "{story?} — deleted text goes, added text stays",
+  "menu": [
+   "Type",
+   "Track Changes"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "changes.rejectAll",
+  "label": "Reject All Changes",
+  "params": "{story?} — added text goes, deleted text comes back",
+  "menu": [
+   "Type",
+   "Track Changes"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "condition.list",
+  "label": "Conditions",
+  "params": "{} → [{name, color, visible}]",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "condition.new",
+  "label": "New Condition…",
+  "params": "{name, color?: [r, g, b], visible?} → {name}",
+  "menu": [
+   "Window",
+   "Type & Tables",
+   "Conditional Text"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "condition.options",
+  "label": "Condition Options…",
+  "params": "{name, to?: new name, color?: [r, g, b], visible?: bool}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "condition.delete",
+  "label": "Delete Condition",
+  "params": "{name} — the text it was applied to stays (shown)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "condition.apply",
+  "label": "Apply Condition",
+  "params": "{name, on?: bool (default true), only?: bool (remove the others)} — to the selected text; `name: null` with `only` removes all",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "library.new",
+  "label": "New Library",
+  "params": "{path?} — an empty Object Library (saved to `path` when given)",
+  "menu": [
+   "File",
+   "New"
+  ],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "library.open",
+  "label": "Open Library",
+  "params": "{path | json} → {items}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "library.list",
+  "label": "Library Items",
+  "params": "{} → [{index, name, description}]",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "library.json",
+  "label": "Library Contents",
+  "params": "{} → the library as JSON text (to save where there's no file system)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "library.add",
+  "label": "Add Item",
+  "params": "{name?, description?} — the selection → {index}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "library.place",
+  "label": "Place Item",
+  "params": "{index, spread?, x?, y?} — at its original position unless x/y (top-left) are given",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "library.remove",
+  "label": "Delete Item",
+  "params": "{index}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "conveyor.collect",
+  "label": "Collect",
+  "params": "{ids? (default: the selection)} — each object onto the Content Collector conveyor → {count}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "conveyor.place",
+  "label": "Place",
+  "params": "{index? (0), spread?, x?, y?, keep?: bool (stay on the conveyor)} — the Content Placer: the collected object at x/y (top-left)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "conveyor.list",
+  "label": "Conveyor",
+  "params": "{} → [name]",
+  "menu": [],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "conveyor.clear",
+  "label": "Clear Conveyor",
+  "params": "{}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "library.close",
+  "label": "Close Library",
+  "params": "{}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "list.define",
+  "label": "Define Lists…",
+  "params": "{name, continueAcrossStories?: true, rename?} — paragraphs join it with type.para {listType: numbers, listName}",
+  "menu": [
+   "Type",
+   "Bulleted and Numbered Lists"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "list.delete",
+  "label": "Delete List",
+  "params": "{name}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "story.placeAndLink",
+  "label": "Place and Link",
+  "params": "{story (parent), rect, spread?} — a new frame whose story copies the parent and stays linked → {id, story}",
+  "menu": [
+   "Edit"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "story.links",
+  "label": "Linked Stories",
+  "params": "{} → [{story, parent, outOfDate}]",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "story.updateLink",
+  "label": "Update Link",
+  "params": "{story? (default: every out-of-date linked story)} — the child takes the parent's current content (its own edits are replaced)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "story.unlink",
+  "label": "Unlink",
+  "params": "{story}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "math.insert",
+  "label": "Insert Math Expression…",
+  "params": "{latex, size?: points (12), x?, y?, spread?} — at the text insertion point (inline), else as a frame; or {id, latex} to edit one",
+  "menu": [
+   "Type"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "math.svg",
+  "label": "Math Expression SVG",
+  "params": "{latex, size?} → {svg, width, height} — typeset without placing",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "media.options",
+  "label": "Media Options",
+  "params": "{ids?, playOnPageLoad?, loop?, controls?, poster?: {path | base64+name} | null (placeholder)} — for placed video and sound",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "media.get",
+  "label": "Media",
+  "params": "{id?} → {kind, name, playOnPageLoad, loop, controls, poster}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.pdfLayers",
+  "label": "Object Layers",
+  "params": "{id?} → [{name, visible, default}] — the layers of the selected placed PDF",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.layerOptions",
+  "label": "Object Layer Options…",
+  "params": "{ids?, hidden: [layer name]} — layers of placed PDFs to hide ([] = the file's own settings)",
+  "menu": [
+   "Object"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "liquid.pageRule",
+  "label": "Liquid Page Rule",
+  "params": "{rule: off|scale|reCenter|guideBased|objectBased, pages?: [1-based] (default: all)}",
+  "menu": [
+   "Layout",
+   "Liquid Layout"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "liquid.object",
+  "label": "Object Liquid Settings",
+  "params": "{ids?, resizeWidth?, resizeHeight?, pinTop?, pinBottom?, pinLeft?, pinRight?} — for object-based pages",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "guide.liquid",
+  "label": "Convert to Liquid Guide",
+  "params": "{spread?, page, index, on?: bool (default true)}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "layout.createAlternate",
+  "label": "Create Alternate Layout…",
+  "params": "{name, width, height, rule?: page rule for the copies (default: keep each page's)} — every page copied after the last at the new size (a new section marked `name`), objects following the liquid rules",
+  "menu": [
+   "Layout"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "xml.tags",
+  "label": "Tags",
+  "params": "{} → {root, tags: [{name, color}], styleMap: [[style, tag]], dtd: bool}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "xml.newTag",
+  "label": "New Tag",
+  "params": "{name, color?: [r, g, b]}",
+  "menu": [
+   "Window",
+   "Utilities",
+   "Tags"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "xml.deleteTag",
+  "label": "Delete Tag",
+  "params": "{name} — tagged objects are untagged",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "xml.tagText",
+  "label": "Tag Text",
+  "params": "{tag | null (untag)} — the selected text becomes an inline element",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "xml.tag",
+  "label": "Tag Frame",
+  "params": "{tag (made if new), ids? (default: the selection)} — `tag: null` untags",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "xml.mapStyle",
+  "label": "Map Styles to Tags",
+  "params": "{style: paragraph style, tag | null} — that style's paragraphs export as `<tag>` elements and import back with it",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "xml.structure",
+  "label": "Structure",
+  "params": "{} → {root, elements: [{tag, id, kind, text?}]} in reading order",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "file.exportXml",
+  "label": "Export XML…",
+  "params": "{path?} — the tagged content in reading order → {path, bytes} (no path: {text})",
+  "menu": [
+   "File"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "xml.loadDtd",
+  "label": "Load DTD…",
+  "params": "{path | text} — keep the DTD for validation and add a tag for each declared element; the root takes the first element's name unless already named → {elements}",
+  "menu": [
+   "Window",
+   "Utilities",
+   "Tags"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "xml.deleteDtd",
+  "label": "Delete DTD",
+  "params": "{}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "xml.validate",
+  "label": "Validate from Root Element",
+  "params": "{} — check the structure (as exported) against the loaded DTD → {valid, problems: [{path, message}]}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "file.importXml",
+  "label": "Import XML…",
+  "params": "{path | text} — each element's content goes into the next text frame with that tag (child elements of mapped tags become paragraphs in their style) → {placed, unmatched}",
+  "menu": [
+   "File"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "strokeStyle.list",
+  "label": "Stroke Styles",
+  "params": "{} → [{name, kind}]",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "strokeStyle.new",
+  "label": "New Stroke Style…",
+  "params": "{name, type: stripes|dash|dot, bands?: [[start, width] (fractions of the weight)], pattern?: [dash, gap, …] (pt)} — apply with object.stroke {type: {kind: \"style\", name}}",
+  "menu": [
+   "Object",
+   "Stroke Styles"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "strokeStyle.delete",
+  "label": "Delete Stroke Style",
+  "params": "{name} — strokes using it become solid",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "script.run",
+  "label": "Run Script",
+  "params": "{text} — command script lines (`command.id {json}`, JSON lines or a JSON array; `$N.path` refers to earlier results) → {results, steps}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "states.create",
+  "label": "Convert Selection to Multi-State Object",
+  "params": "{ids? (default: the selection; one group's objects or several objects become states)} → {id, states}",
+  "menu": [
+   "Window",
+   "Interactive",
+   "Object States"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "states.list",
+  "label": "Object States",
+  "params": "{id?} → {states, active}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "states.show",
+  "label": "Show State",
+  "params": "{id?, index? | name?}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "states.rename",
+  "label": "State Options",
+  "params": "{id?, index, name}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "states.release",
+  "label": "Release State to Objects",
+  "params": "{id?} — back to a plain group (every state shows)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "page.transition",
+  "label": "Page Transition",
+  "params": "{pages?: [1-based] | spread? | all?: bool, kind: blinds|box|comb|cover|dissolve|fade|push|split|uncover|wipe|zoomIn|zoomOut|none, duration?: seconds (1), horizontal?: bool} — for interactive PDF",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "page.transitions",
+  "label": "Page Transitions",
+  "params": "{} → [{spread, kind, duration, horizontal}]",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "type.onPath",
+  "label": "Type on a Path",
+  "params": "{id: path, text?, start?: distance along the path, flip?, align?: baseline|ascender|descender|center} → {story} — the text cursor goes into it",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "type.pathOptions",
+  "label": "Type on a Path Options…",
+  "params": "{id?, start?, flip?, align?: baseline|ascender|descender|center, delete?: true (Delete Type from Path)}",
+  "menu": [
+   "Type",
+   "Type on a Path"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.qrCode",
+  "label": "Generate QR Code…",
+  "params": "{type?: url|text|sms|email|vcard (default url), content (url/text), number?, message?, to?, subject?, body?, name?, phone?, email?, org?, url?, color? (swatch, [Black]), rect? (new object; else into the selected frame, or re-encode a selected code), spread?} → {id, content}",
+  "menu": [
+   "Object"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "select.firstAbove",
+  "label": "First Object Above",
+  "params": "{} — the frontmost object on the spread (layers included)",
+  "menu": [
+   "Object",
+   "Select"
+  ],
+  "shortcut": "Cmd+Alt+Shift+]",
+  "enabled": false
+ },
+ {
+  "id": "select.nextAbove",
+  "label": "Next Object Above",
+  "params": "{}",
+  "menu": [
+   "Object",
+   "Select"
+  ],
+  "shortcut": "Cmd+Alt+]",
+  "enabled": false
+ },
+ {
+  "id": "select.nextBelow",
+  "label": "Next Object Below",
+  "params": "{}",
+  "menu": [
+   "Object",
+   "Select"
+  ],
+  "shortcut": "Cmd+Alt+[",
+  "enabled": false
+ },
+ {
+  "id": "select.lastBelow",
+  "label": "Last Object Below",
+  "params": "{} — the backmost object on the spread",
+  "menu": [
+   "Object",
+   "Select"
+  ],
+  "shortcut": "Cmd+Alt+Shift+[",
+  "enabled": false
+ },
+ {
+  "id": "select.container",
+  "label": "Container",
+  "params": "{} — the group or frame holding the selection",
+  "menu": [
+   "Object",
+   "Select"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "select.content",
+  "label": "Content",
+  "params": "{} — the graphic in a frame, or the first object in a group",
+  "menu": [
+   "Object",
+   "Select"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "select.nextInGroup",
+  "label": "Next Object in Group",
+  "params": "{}",
+  "menu": [
+   "Object",
+   "Select"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "select.previousInGroup",
+  "label": "Previous Object in Group",
+  "params": "{}",
+  "menu": [
+   "Object",
+   "Select"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.convertShape",
+  "label": "Convert Shape",
+  "params": "{to: rectangle|roundedRectangle|beveledRectangle|inverseRoundedRectangle|ellipse|triangle|polygon|line|orthogonalLine|openPath|closedPath, ids?}",
+  "menu": [
+   "Object",
+   "Convert Shape"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "file.package",
+  "label": "Package…",
+  "params": "{dir: folder to create, idml?: true, pdf?: false, instructions?: text} — the document (its placed files relinked to Links/), Links/, the font files that draw its text in Document Fonts/ (fallback fonts included; unless their licence restricts it), an IDML copy, an optional PDF and a report → {dir, files, report}",
+  "menu": [
+   "File"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "links.copyTo",
+  "label": "Copy Link(s) To…",
+  "params": "{dir, assets?: [asset ids] (default: all)} — write the placed files to `dir` and relink to the copies → {copied}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "file.printers",
+  "label": "Printers",
+  "params": "{} → {printers: [names], default}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "file.print",
+  "label": "Print…",
+  "params": "{printer?, copies?: 1, pages?: \"1-3,5\", spreads?, marks?, bleed?, dryRun?: bool (only return the spool command)} → {printer, copies, pages, command}",
+  "menu": [
+   "File"
+  ],
+  "shortcut": "Cmd+P",
+  "enabled": false
+ },
+ {
+  "id": "text.placeCaret",
+  "label": "Place Caret",
+  "params": "{frame, point: [x,y] (spread coords)} — converts empty frames to text frames",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "text.release",
+  "label": "Release",
+  "params": "{frame, point, moved: bool, copy?: bool} — ends a press in text: a drag that started in the selected text moves (copy: duplicates) it to the point; a click places the caret",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "text.extendTo",
+  "label": "Extend Text Selection",
+  "params": "{frame, point}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "text.selectWord",
+  "label": "Select Word",
+  "params": "{frame, point}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "text.select",
+  "label": "Select Text",
+  "params": "{story, anchor, focus} (UTF-8 byte offsets into the story text, as find.find reports them: á or — counts 2 or 3)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "text.insert",
+  "label": "Type",
+  "params": "{text, raw?: bool (no typographer's quotes)} — replaces the selected text",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "text.delete",
+  "label": "Delete Text",
+  "params": "{forward?: bool, word?: bool}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "text.move",
+  "label": "Move Caret",
+  "params": "{dir: left|right|up|down|lineStart|lineEnd|storyStart|storyEnd, extend?, word?}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "text.exitToFrame",
+  "label": "Select Frame",
+  "params": "{}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "story.setDirection",
+  "label": "Story Column Direction",
+  "params": "{story?, direction: leftToRight|rightToLeft} — column progression, independent of paragraph direction",
+  "menu": [
+   "Type",
+   "Story Column Direction"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "story.setText",
+  "label": "Set Story Text",
+  "params": "{story, text} — replace a story's whole text",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "story.replaceRange",
+  "label": "Edit Story",
+  "params": "{story, start, end, text} — replace a byte range keeping surrounding formatting",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "story.get",
+  "label": "Get Story",
+  "params": "{story? | frame?} → text, frames, paragraphs, vertical, overset",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "type.fillWithPlaceholder",
+  "label": "Fill with Placeholder Text",
+  "params": "{frame?}",
+  "menu": [
+   "Type"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "type.char",
+  "label": "Character Formatting",
+  "params": "{attrs: {fontFamily?, fontStyle?, size?, leading?: {kind:auto}|{kind:points,value}, tracking?, kerning?, hScale?, vScale?, baselineShift?, fill?, capitalization?, underline?, …}}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "type.para",
+  "label": "Paragraph Formatting",
+  "params": "{attrs: {align?, leftIndent?, firstLineIndent?, spaceBefore?, spaceAfter?, dropCapLines?, hyphenate?, composer?, tabs?, ruleAbove?/ruleBelow?: {on?, weight?, color?, tint?, columnWidth?, offset?, leftIndent?, rightIndent?} (only the named rule fields change), …}}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "type.align",
+  "label": "Align",
+  "params": "{align: left|center|right|leftJustified|…}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "type.alignLeft",
+  "label": "Align Left",
+  "params": "{}",
+  "menu": [],
+  "shortcut": "Cmd+Shift+L",
+  "enabled": false
+ },
+ {
+  "id": "type.alignCenter",
+  "label": "Align Center",
+  "params": "{}",
+  "menu": [],
+  "shortcut": "Cmd+Shift+C",
+  "enabled": false
+ },
+ {
+  "id": "type.alignRight",
+  "label": "Align Right",
+  "params": "{}",
+  "menu": [],
+  "shortcut": "Cmd+Shift+R",
+  "enabled": false
+ },
+ {
+  "id": "type.justify",
+  "label": "Justify Left",
+  "params": "{}",
+  "menu": [],
+  "shortcut": "Cmd+Shift+J",
+  "enabled": false
+ },
+ {
+  "id": "type.bold",
+  "label": "Bold",
+  "params": "{}",
+  "menu": [],
+  "shortcut": "Cmd+Shift+B",
+  "enabled": false
+ },
+ {
+  "id": "type.italic",
+  "label": "Italic",
+  "params": "{}",
+  "menu": [],
+  "shortcut": "Cmd+Shift+I",
+  "enabled": false
+ },
+ {
+  "id": "type.underline",
+  "label": "Underline",
+  "params": "{}",
+  "menu": [],
+  "shortcut": "Cmd+Shift+U",
+  "enabled": false
+ },
+ {
+  "id": "type.allCaps",
+  "label": "All Caps",
+  "params": "{}",
+  "menu": [],
+  "shortcut": "Cmd+Shift+K",
+  "enabled": false
+ },
+ {
+  "id": "type.tateChuYoko",
+  "label": "Tate-Chu-Yoko",
+  "params": "{on?: bool} — set the selected text horizontally within one em of a vertical line (toggles by default)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "type.ruby",
+  "label": "Ruby",
+  "params": "{text} — the reading set over the selected text (one group); empty removes it",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "type.kenten",
+  "label": "Kenten",
+  "params": "{on?: bool} — emphasis dots over the selected characters (toggles by default)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "type.warichu",
+  "label": "Warichu",
+  "params": "{on?: bool, lines?: int, size?: number, lineSpacing?: number, align?: auto|left|center|right|justify, charsBeforeBreak?: int, charsAfterBreak?: int} — set the selection as an inline note in smaller lines inside one line height (toggles by default)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "type.storyDirection",
+  "label": "Story Direction",
+  "params": "{vertical: bool} — the stories of the text selection or the selected frames: vertical lines run top to bottom and follow each other right to left, in every frame of the thread",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "type.sizeUp",
+  "label": "Increase Point Size",
+  "params": "{}",
+  "menu": [],
+  "shortcut": "Cmd+Shift+.",
+  "enabled": false
+ },
+ {
+  "id": "type.sizeDown",
+  "label": "Decrease Point Size",
+  "params": "{}",
+  "menu": [],
+  "shortcut": "Cmd+Shift+,",
+  "enabled": false
+ },
+ {
+  "id": "type.changeCase",
+  "label": "Change Case",
+  "params": "{case: upper|lower|title|sentence} — the selected text, or the stories of selected frames (formatting kept)",
+  "menu": [
+   "Type"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "type.openType",
+  "label": "OpenType",
+  "params": "{feature?: dlig|frac|ordn|swsh|titl|calt|zero|ssNN|any tag, on?: bool (default: toggle), figures?: tabularLining|proportionalOldstyle|proportionalLining|tabularOldstyle|default, stylisticSets?: [1–20]} → {features, figures}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "style.breakLink",
+  "label": "Break Link to Style",
+  "params": "{kind: paragraph|character} — the selected text keeps its look as local formatting, with [No Paragraph Style] / [None]",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "type.selectionAttrs",
+  "label": "Selection Attributes",
+  "params": "{} → resolved character/paragraph attributes at the text selection",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "style.compositeFont.list",
+  "label": "List Composite Fonts",
+  "params": "{} → composite font definitions",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "style.compositeFont.set",
+  "label": "Set Composite Font",
+  "params": "{name, entries: [{name?, characters?, family, style?, relativeSize?, horizontalScale?, verticalScale?, baselineShift?, scaleOption?}]} — replaces a composite font definition; empty characters selects the base entry",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "style.exportTag",
+  "label": "Export Tagging",
+  "params": "{style, character?: bool, tag?: p|h1…h6|blockquote|pre|li|… (span|em|strong|code|sup|sub… for characters; \"\" = automatic), class?} → the tagging",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "style.paragraph.apply",
+  "label": "Apply Paragraph Style",
+  "params": "{name, clearOverrides?: bool}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "style.character.apply",
+  "label": "Apply Character Style",
+  "params": "{name}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "style.paragraph.create",
+  "label": "New Paragraph Style…",
+  "params": "{name, basedOn?, nextStyle?, para?: {…}, chars?: {…}, fromSelection?: bool}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "style.paragraph.edit",
+  "label": "Paragraph Style Options…",
+  "params": "{name, rename?, basedOn?, nextStyle?, para?: {… ruleAbove?/ruleBelow?: only the named rule fields change}, chars?: {…}}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "style.paragraph.delete",
+  "label": "Delete Paragraph Style",
+  "params": "{name, replaceWith?}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "style.character.create",
+  "label": "New Character Style…",
+  "params": "{name, basedOn?: style | \"[None]\", chars?: {…}} — the style sets only `chars` → {name} (made unique)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "style.character.edit",
+  "label": "Character Style Options…",
+  "params": "{name, rename?, basedOn?: style | \"[None]\" | null, chars?: {attr: value | null (no longer set)}} — renaming updates every use",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "style.list",
+  "label": "List Styles",
+  "params": "{} → paragraph and character style names",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "style.object.apply",
+  "label": "Apply Object Style",
+  "params": "{name, ids?}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "style.object.create",
+  "label": "New Object Style…",
+  "params": "{name, fromSelection?: true, fill?, paragraphStyle?}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "swatch.create",
+  "label": "New Color Swatch…",
+  "params": "{name?, color: \"#rrggbb\"|{c,m,y,k}(0..100)|[r,g,b], spot?: bool}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.gradient",
+  "label": "Gradient",
+  "params": "{kind?: linear|radial, stops?: [{location: 0–100, color: \"#rrggbb\"|{c,m,y,k}|[r,g,b], opacity?: 0–100, midpoint?: 13–87}], reverse?: bool, angle?: degrees, from?: [x,y], to?: [x,y] (spread coords: the Gradient Swatch tool's drag), ids?} → {swatch, kind, stops} — edits the fill's gradient (an unnamed gradient unless it equals a gradient swatch)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "style.group",
+  "label": "Move to Group",
+  "params": "{kind: paragraph|character, names: [style names], group: \"Heads\" | \"Heads/Display\" | \"\" (out of any group)} — styles are named Group/Name; every use is renamed → {renamed: {old: new}}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "swatch.load",
+  "label": "Load Swatches…",
+  "params": "{path?|base64?, replace?: bool} — colour swatches from a swatch exchange (.ase) file; names already in the document are kept unless `replace` → {added, replaced}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "swatch.save",
+  "label": "Save Swatches for Exchange…",
+  "params": "{path?, names?: [swatch names] (default: all colour swatches)} → {base64} or writes `path` (.ase)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "object.color",
+  "label": "Apply Color",
+  "params": "{color: \"#rrggbb\"|{c,m,y,k}(0..100)|[r,g,b](0..255), target?: fill|stroke, ids?} — an unnamed colour (not in the Swatches panel until Add to Swatches) on the selection",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "swatch.addToSwatches",
+  "label": "Add to Swatches",
+  "params": "{swatch?: name (default: the selection's fill), target?: fill|stroke, name?: new name} — makes an unnamed colour a swatch",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "swatch.addUnnamed",
+  "label": "Add Unnamed Colors",
+  "params": "{} — every unnamed colour used becomes a swatch",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "swatch.delete",
+  "label": "Delete Swatch",
+  "params": "{name}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "ink.list",
+  "label": "Ink Manager",
+  "params": "{} → {allToProcess, inks: [{name, process: bool (printed as process), alias?}]} — the spot inks",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "ink.options",
+  "label": "Ink Manager",
+  "params": "{allToProcess?: bool, ink?: spot swatch, toProcess?: bool, alias?: spot swatch | null} — output: spots to process, ink aliases",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "swatch.newColorGroup",
+  "label": "New Color Group",
+  "params": "{name?, swatches?: [names]} — a Swatches panel folder (the swatches move into it) → {name}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "swatch.moveToGroup",
+  "label": "Move to Color Group",
+  "params": "{swatches: [names], group: name | null (top level)}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "swatch.ungroupColorGroup",
+  "label": "Ungroup Color Group",
+  "params": "{name} — its swatches go back to the top level",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "swatch.renameColorGroup",
+  "label": "Color Group Options",
+  "params": "{name, to}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "style.cell.create",
+  "label": "New Cell Style…",
+  "params": "{name, fromSelection?: bool (the target cell's look), fill?, tint?, insets?: n|[t,l,b,r], vj?: top|center|bottom|justify, stroke?: {weight, color, tint?}, paragraphStyle?} → {name}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "style.cell.apply",
+  "label": "Apply Cell Style",
+  "params": "{name, story?, table?} — the target cells (the whole table when the cursor is in it)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "style.cell.edit",
+  "label": "Cell Style Options…",
+  "params": "{name, …same as style.cell.create} — cells using the style follow",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "style.table.create",
+  "label": "New Table Style…",
+  "params": "{name, header?, body?, footer?, leftColumn?, rightColumn?: cell style names, border?: {weight, color}, altRows?: {first, firstColor, next, nextColor}, spaceBefore?, spaceAfter?} → {name}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "style.table.apply",
+  "label": "Apply Table Style",
+  "params": "{name, story?, table?}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "style.table.edit",
+  "label": "Table Style Options…",
+  "params": "{name, …same as style.table.create} — tables using the style follow",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.insert",
+  "label": "Create Table",
+  "params": "{rows?: body rows (4), cols? (4), headerRows? (0), footerRows? (0), width?} — at the text insertion point",
+  "menu": [],
+  "shortcut": "Cmd+Alt+Shift+T",
+  "enabled": false
+ },
+ {
+  "id": "table.convertFromText",
+  "label": "Convert Text to Table",
+  "params": "{columnSeparator?: tab|comma} — selected paragraphs become rows",
+  "menu": [
+   "Table"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.convertToText",
+  "label": "Convert Table to Text",
+  "params": "{} — cells separated by tabs, rows by paragraphs",
+  "menu": [
+   "Table"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.insertRow",
+  "label": "Insert Row",
+  "params": "{where?: above|below, count? (1)}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.insertRowAbove",
+  "label": "Insert Row Above",
+  "params": "{count?}",
+  "menu": [
+   "Table",
+   "Insert"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.insertRowBelow",
+  "label": "Insert Row Below",
+  "params": "{count?}",
+  "menu": [
+   "Table",
+   "Insert"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.insertColumn",
+  "label": "Insert Column",
+  "params": "{where?: left|right, count? (1), width?}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.insertColumnLeft",
+  "label": "Insert Column Left",
+  "params": "{count?}",
+  "menu": [
+   "Table",
+   "Insert"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.insertColumnRight",
+  "label": "Insert Column Right",
+  "params": "{count?}",
+  "menu": [
+   "Table",
+   "Insert"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.deleteRow",
+  "label": "Delete Row",
+  "params": "{} — the rows of the target cells",
+  "menu": [
+   "Table",
+   "Delete"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.deleteColumn",
+  "label": "Delete Column",
+  "params": "{} — the columns of the target cells",
+  "menu": [
+   "Table",
+   "Delete"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.delete",
+  "label": "Delete Table",
+  "params": "{}",
+  "menu": [
+   "Table",
+   "Delete"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.merge",
+  "label": "Merge Cells",
+  "params": "{} — merge the target cell range",
+  "menu": [
+   "Table"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.dropCells",
+  "label": "Drag Rows or Columns",
+  "params": "{frame, from: [x, y], to: [x, y]} — selected whole rows (or columns) dragged from `from` move to the row (column) at `to`; otherwise a text drag",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.placeGraphic",
+  "label": "Convert Cell to Graphic Cell",
+  "params": "{path | base64+name, fit?: proportional|fill (default proportional)} — an image in the target cell (its text is kept but hidden)",
+  "menu": [
+   "Table",
+   "Convert Cell Type"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.textCell",
+  "label": "Convert Cell to Text Cell",
+  "params": "{} — drop the target cells' graphics",
+  "menu": [
+   "Table",
+   "Convert Cell Type"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.moveRow",
+  "label": "Move Row",
+  "params": "{from?, to} (0-based; from defaults to the target row) — like dragging a row",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.moveColumn",
+  "label": "Move Column",
+  "params": "{from?, to} (0-based; from defaults to the target column)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.sortRows",
+  "label": "Sort",
+  "params": "{column?: 0-based (default: the target cell's), descending?: bool} — body rows by that column's text (numbers numerically)",
+  "menu": [
+   "Table"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.unmerge",
+  "label": "Unmerge Cells",
+  "params": "{}",
+  "menu": [
+   "Table"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.splitHorizontally",
+  "label": "Split Cell Horizontally",
+  "params": "{} — the target cell becomes two, one above the other",
+  "menu": [
+   "Table"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.splitVertically",
+  "label": "Split Cell Vertically",
+  "params": "{} — the target cell becomes two, side by side",
+  "menu": [
+   "Table"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.setCell",
+  "label": "Cell Options",
+  "params": "{fill?: swatch, tint?, insets?: n | [t,l,b,r], vj?: top|center|bottom|justify, text?, stroke?: {weight?, color?, tint?, type?: solid|dashed|dotted, edges?: all|outer|inner|top|left|bottom|right}}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.setRowHeight",
+  "label": "Row Height",
+  "params": "{height, mode?: atLeast|exactly}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.setColumnWidth",
+  "label": "Column Width",
+  "params": "{width}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.distributeColumns",
+  "label": "Distribute Columns Evenly",
+  "params": "{}",
+  "menu": [
+   "Table"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.distributeRows",
+  "label": "Distribute Rows Evenly",
+  "params": "{story?, table?, rows?: [a,b]} — equal fixed heights preserving the selected rows' composed total height; may overset cell text; unmerge row-spanning cells first",
+  "menu": [
+   "Table"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.options",
+  "label": "Table Options",
+  "params": "{direction?: leftToRight|rightToLeft, border?: {weight?, color?, tint?, type?}, spaceBefore?, spaceAfter?, headerRows?, footerRows?, repeatHeader?, repeatFooter?, altRows?: {first, firstColor, firstTint, next, nextColor, nextTint, skipFirst, skipLast} | null, altCols?: … | null}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.select",
+  "label": "Select Cells",
+  "params": "{story?, table?, rows?: [a,b], cols?: [a,b], what?: cell|row|column|table}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.selectTable",
+  "label": "Select Table",
+  "params": "{}",
+  "menu": [
+   "Table",
+   "Select"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.selectRow",
+  "label": "Select Row",
+  "params": "{}",
+  "menu": [
+   "Table",
+   "Select"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.selectColumn",
+  "label": "Select Column",
+  "params": "{}",
+  "menu": [
+   "Table",
+   "Select"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.nextCell",
+  "label": "Next Cell",
+  "params": "{}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.prevCell",
+  "label": "Previous Cell",
+  "params": "{}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "table.get",
+  "label": "Get Table",
+  "params": "{story?, table?} → rows, columns, cells (text, spans, fill), options",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "layout.pages.insert",
+  "label": "Insert Pages…",
+  "params": "{count?: 1, after?: page index (default: last), parent?: \"A\"|null}",
+  "menu": [
+   "Layout",
+   "Pages"
+  ],
+  "shortcut": "Cmd+Shift+P",
+  "enabled": false
+ },
+ {
+  "id": "layout.rotateSpreadView",
+  "label": "Rotate Spread",
+  "params": "{spread?: index (0), angle: 90 (clockwise) | -90 | 180 | 0 (clear)} — turn one spread on screen (output is unaffected)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "layout.pages.delete",
+  "label": "Delete Pages",
+  "params": "{pages: [index]}",
+  "menu": [
+   "Layout",
+   "Pages"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "layout.pages.move",
+  "label": "Move Pages…",
+  "params": "{from, to}",
+  "menu": [
+   "Layout",
+   "Pages"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "layout.pages.duplicateSpread",
+  "label": "Duplicate Spread",
+  "params": "{spread}",
+  "menu": [
+   "Layout",
+   "Pages"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "layout.pages.applyParent",
+  "label": "Apply Parent to Pages…",
+  "params": "{pages: [index], parent: \"A\"|null}",
+  "menu": [
+   "Layout",
+   "Pages"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "layout.parents.new",
+  "label": "New Parent…",
+  "params": "{prefix?, name?: \"Parent\"}",
+  "menu": [
+   "Layout",
+   "Pages"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "layout.parents.edit",
+  "label": "Edit Parents",
+  "params": "{on: bool} — show parent spreads on the canvas",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "layout.marginsAndColumns",
+  "label": "Margins and Columns…",
+  "params": "{pages?: [index] (default all), margins?: number|{top,bottom,inside,outside}, columns?, gutter?, adjustLayout?: bool (objects follow the margins)}",
+  "menu": [
+   "Layout"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "layout.documentSetup",
+  "label": "Document Setup…",
+  "params": "{width?, height?, pages?: count, startPage?: n, facingPages?, binding?: leftToRight|rightToLeft, intent?: print|web|mobile, bleed?, slug?: n | [top, bottom, inside, outside], adjustLayout?: bool (objects follow the new page size)} → the document setup",
+  "menu": [
+   "File"
+  ],
+  "shortcut": "Cmd+Alt+P",
+  "enabled": false
+ },
+ {
+  "id": "layout.pages.toSpread",
+  "label": "Add Page to Spread",
+  "params": "{page (1-based), spread (0-based)} — the page joins that spread (up to 10 pages; the spread stops shuffling)",
+  "menu": [
+   "Layout",
+   "Pages"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "layout.spreadShuffle",
+  "label": "Allow Selected Spread to Shuffle",
+  "params": "{spread (0-based), allow: bool} — off keeps the spread's pages together when pages are added or removed",
+  "menu": [
+   "Layout",
+   "Pages"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "layout.pageSize",
+  "label": "Page Size",
+  "params": "{pages: [1-based page numbers], width?, height?, preset?: \"A4\"|\"Letter\"|…} — pages of their own size (Page tool); objects on the pages keep their place on them",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "layout.section",
+  "label": "Numbering & Section Options…",
+  "params": "{page (1-based; starts a section there), startNumber?: n|null (continue), style?: arabic|upperRoman|lowerRoman|upperLetters|lowerLetters, prefix?, includePrefix?, marker?, remove?: bool}",
+  "menu": [
+   "Layout"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "layer.move",
+  "label": "Move Layer",
+  "params": "{id, to: index (0 = top/frontmost)}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "layer.selectItems",
+  "label": "Select All on Layer",
+  "params": "{id}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "layer.new",
+  "label": "New Layer…",
+  "params": "{name?}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "layer.set",
+  "label": "Layer Options…",
+  "params": "{id, name?, visible?, locked?, printable?, color?: [r,g,b]}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "layer.delete",
+  "label": "Delete Layer",
+  "params": "{id}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "layer.merge",
+  "label": "Merge Layers",
+  "params": "{ids: [layer ids], into?: layer id (default: the first)} — their objects move to `into`, the other layers are deleted",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "layer.deleteUnused",
+  "label": "Delete Unused Layers",
+  "params": "{} — layers without objects (one layer always stays)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "layer.others",
+  "label": "Hide/Lock Others",
+  "params": "{id, hide?: bool, lock?: bool, show?: true (Show All Layers), unlock?: true (Unlock All Layers)} — Hide Others / Lock Others act on every layer but `id`",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "layer.activate",
+  "label": "Set Active Layer",
+  "params": "{id}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "layout.overrideParentItems",
+  "label": "Override All Parent Page Items",
+  "params": "{page (0-based), ids?: parent items (default: all on the page's parent page)} → {ids} the page's editable copies",
+  "menu": [
+   "Layout",
+   "Pages"
+  ],
+  "shortcut": "Cmd+Alt+Shift+L",
+  "enabled": false
+ },
+ {
+  "id": "layout.removeOverrides",
+  "label": "Remove All Local Overrides",
+  "params": "{page (0-based)} — deletes the page's overridden copies; the parent items show again",
+  "menu": [
+   "Layout",
+   "Pages"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "layout.detachAll",
+  "label": "Detach All Objects from Parent",
+  "params": "{page (0-based)} — the page's overridden copies become ordinary items",
+  "menu": [
+   "Layout",
+   "Pages"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "edit.transparencyBlendSpace",
+  "label": "Transparency Blend Space",
+  "params": "{space: cmyk|rgb} — the colour space transparency is composited in for output",
+  "menu": [
+   "Edit",
+   "Transparency Blend Space"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "prefs.set",
+  "label": "Preferences",
+  "params": "{showHiddenCharacters?, typographersQuotes?, polygonSides?, starInset?, scaleStrokes?, dimensionsIncludeStroke?, transformationsAreTotals?, absolutePageNumbers?, highlightHj?, highlightKeeps?, highlightCustomTracking?, highlightSubstitutedFonts?, richBlackOutput?, favoriteFonts?: [family], showFontNamesInEnglish?} → all application preferences",
+  "menu": [],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "document.preferences",
+  "label": "Document Preferences",
+  "params": "{horizontalUnits?, verticalUnits?: points|picas|inches|millimeters|…, keyboardIncrement? (pt), baselineGrid?: {start, increment, relativeTo, color, viewThreshold}, grid?: {horizontal, vertical, subdivisions, color, inBack}, pasteboard?: [h, v], marginColor?, columnColor?, bleedColor?, slugColor?: [r, g, b], advancedType?: {superscriptSize, superscriptPosition, subscriptSize, subscriptPosition} (%), overprintBlack?, glyphFallback? (draw characters the font lacks from fallback fonts; off: as the font's missing-glyph box)} → those settings",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "document.inspect",
+  "label": "Inspect Document",
+  "params": "{} → pages, spreads, items, stories (with overset), styles, swatches, selection",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "app.links",
+  "label": "Community & Project Links",
+  "params": "{} → {discord, website, appPage, github, issues} (ArtCraft Discord, website, DesignCraft page and repository)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "document.list",
+  "label": "List Documents",
+  "params": "{}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "tool.select",
+  "label": "Select Tool",
+  "params": "{tool: selection|directSelection|type|rectangleFrame|…}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "tool.list",
+  "label": "List Tools",
+  "params": "{}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "document.history",
+  "label": "History",
+  "params": "{}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "find.objects",
+  "label": "Find Object",
+  "params": "{fill?, stroke?: swatch, strokeWeight?, opacity? (0–1), kind?: text|graphic|shape|line|group, layer?, label?, select?: bool (default true)} → {ids} — Find/Change › Object, through the document",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "find.changeObjects",
+  "label": "Change All (Object)",
+  "params": "{…find.objects criteria, change: {fill?, stroke?, strokeWeight?, opacity?}} → {changed}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "find.find",
+  "label": "Find",
+  "params": "{find, grep?: bool, caseSensitive?: bool, wholeWord?: bool, scope?: document|story|selection, story?} → matches [{story, start, end, text}]",
+  "menu": [
+   "Edit",
+   "Find/Change"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "find.change",
+  "label": "Change All",
+  "params": "{find, change, grep?, caseSensitive?, wholeWord?, scope?, story?, first?: bool (change only the first match), attrs?: {character attributes applied to changed text}} → {count}",
+  "menu": [
+   "Edit",
+   "Find/Change"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "find.next",
+  "label": "Find Next",
+  "params": "{find, grep?, …} — selects the next match after the caret",
+  "menu": [
+   "Edit"
+  ],
+  "shortcut": "Cmd+Alt+F",
+  "enabled": false
+ },
+ {
+  "id": "variables.list",
+  "label": "Text Variables",
+  "params": "{} → [{index, name, type, …, value (page 1)}]",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "variables.define",
+  "label": "Define Text Variable…",
+  "params": "{name, type: custom|lastPageNumber|chapterNumber|fileName|creationDate|modificationDate|outputDate|runningHeader, text?, format?, style?, use?: firstOnPage|lastOnPage, character?, section?, extension?, before?, after?} — creates or replaces by name",
+  "menu": [
+   "Type",
+   "Text Variables"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "variables.delete",
+  "label": "Delete Text Variable",
+  "params": "{name} — instances become plain text of their current value",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "variables.insert",
+  "label": "Insert Variable",
+  "params": "{name} — at the text insertion point",
+  "menu": [
+   "Type",
+   "Text Variables"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "toc.generate",
+  "label": "Table of Contents…",
+  "params": "{entries: [{style, level?: 1}] | styles: [names], title?: \"Contents\", pageNumbers?: true, page?: 1-based page for a new frame (its margins), rect?: [x0,y0,x1,y1] (spread coords)} → {story, entries}",
+  "menu": [
+   "Layout"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "toc.update",
+  "label": "Update Table of Contents",
+  "params": "{} — regenerate the existing table of contents",
+  "menu": [
+   "Layout"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "toc.entries",
+  "label": "Table of Contents Entries",
+  "params": "{entries | styles} → [{level, text, page}] without changing the document",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "footnote.insert",
+  "label": "Insert Footnote",
+  "params": "{text?} — a footnote reference at the insertion point; the caret moves into the new footnote's text",
+  "menu": [
+   "Type"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "footnote.options",
+  "label": "Document Footnote Options…",
+  "params": "{style?: arabic|upperRoman|lowerRoman|upperLetters|lowerLetters|symbols, startAt?, restart?: never|page|spread|section, prefix?, suffix?, affixIn?: none|reference|text|both, refPosition?: superscript|subscript|normal|otSuperscript, refCharStyle?, paraStyle?, separator?, spaceBefore?, spaceBetween?, firstBaseline?, firstBaselineMin?, spanColumns?, rule?: {on, weight, color, tint, width, offset, leftIndent}} → the options (no params: just read them)",
+  "menu": [
+   "Type"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "footnote.list",
+  "label": "Footnotes",
+  "params": "{story?} → [{story, id, index, anchor, text}] in story order",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "footnote.setText",
+  "label": "Set Footnote Text",
+  "params": "{story, id, text} — replaces the footnote's text",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "footnote.delete",
+  "label": "Delete Footnote",
+  "params": "{story, id} — deletes the reference (and so the footnote)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "footnote.goToReference",
+  "label": "Go to Footnote Reference",
+  "params": "{} — from footnote text, puts the caret after the footnote's reference",
+  "menu": [
+   "Type"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "xref.insert",
+  "label": "Insert Cross-Reference…",
+  "params": "{anchor? | paragraph?: text to find (first paragraph containing it) | story? + para? (0-based), format?: name (default Full Paragraph & Page Number)} — at the insertion point; the text updates itself as the destination moves",
+  "menu": [
+   "Type",
+   "Hyperlinks & Cross-References"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "anchor.create",
+  "label": "New Hyperlink Destination…",
+  "params": "{name} — a text anchor at the insertion point",
+  "menu": [
+   "Type",
+   "Hyperlinks & Cross-References"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "xref.list",
+  "label": "Cross-References",
+  "params": "{} → [{story, pos, target, format, text}]",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "anchor.list",
+  "label": "Text Anchors",
+  "params": "{} → [{id, name, story, pos, page}]",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "xref.formats",
+  "label": "Cross-Reference Formats",
+  "params": "{} → [{name, definition}]",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "xref.defineFormat",
+  "label": "Define Cross-Reference Format…",
+  "params": "{name, definition} — building blocks: <fullPara />, <paraText />, <paraNum />, <pageNum />, <txtAnchrName />, <chapNum />, <fileName />, <partialPara delim=\":\" includeDelim=\"false\" />; creates or replaces",
+  "menu": [
+   "Type",
+   "Hyperlinks & Cross-References"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "xref.setFormat",
+  "label": "Set Cross-Reference Format",
+  "params": "{story, index, format}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "index.addReference",
+  "label": "New Page Reference…",
+  "params": "{topics?: [level 1..4] | topic?: \"Level 1 > Level 2\" (default: the selected text), sort?: [keys], range?: currentPage|toEndOfStory|suppressPageRange|nextParagraphs|see|seeAlso, paragraphs?: n, target?: topic for see/seeAlso} — a marker at the insertion point",
+  "menu": [
+   "Layout",
+   "Index"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "index.list",
+  "label": "Index Page References",
+  "params": "{} → [{story, pos, topics, range, page}]",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "index.generate",
+  "label": "Generate Index…",
+  "params": "{title?: \"Index\", sectionHeadings?: true, runIn?: false, page?: 1-based page for a new frame, rect?: [x0,y0,x1,y1]} — replaces the existing index → {story, entries}",
+  "menu": [
+   "Layout",
+   "Index"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "index.update",
+  "label": "Update Index",
+  "params": "{} — regenerate the existing index",
+  "menu": [
+   "Layout",
+   "Index"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "anchored.insert",
+  "label": "Insert Anchored Object…",
+  "params": "{ids, story?, pos? (default: the text insertion point), position?: inline|aboveLine|custom, yOffset?, align?: left|center|right, spaceBefore?, spaceAfter?, xRelative?/yRelative?: anchor|textFrame|columnEdge|pageMargin|pageEdge, xOffset?, objectPoint?/refPoint?: 0..8, keepWithinColumn?} — moves the items into the text",
+  "menu": [
+   "Object",
+   "Anchored Object"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "anchored.options",
+  "label": "Anchored Object Options…",
+  "params": "{story?, index? (default: the object at the insertion point), position?: inline|aboveLine|custom, yOffset?, align?: left|center|right, spaceBefore?, spaceAfter?, xRelative?/yRelative?: anchor|textFrame|columnEdge|pageMargin|pageEdge, xOffset?, objectPoint?/refPoint?: 0..8, keepWithinColumn?}",
+  "menu": [
+   "Object",
+   "Anchored Object"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "anchored.release",
+  "label": "Release",
+  "params": "{story?, index? (default: the object at the insertion point)} — puts the object back on the page where it is now and removes it from the text",
+  "menu": [
+   "Object",
+   "Anchored Object"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "anchored.list",
+  "label": "Anchored Objects",
+  "params": "{story?} → [{story, index, pos, position, size}]",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "guide.add",
+  "label": "New Guide",
+  "params": "{orientation: horizontal|vertical, position (spread coordinate), spread?, page? (index in the spread; default: the page under `at` or the position), at? (the other coordinate), spreadGuide?: bool} → {page, index}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "guide.move",
+  "label": "Move Guide",
+  "params": "{spread?, page, index, position}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "guide.delete",
+  "label": "Delete Guide",
+  "params": "{spread?, page, index}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "guide.deleteAll",
+  "label": "Delete All Guides on Spread",
+  "params": "{spread?}",
+  "menu": [
+   "View",
+   "Grids & Guides"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "guide.list",
+  "label": "Guides",
+  "params": "{spread?} → [{page, index, orientation, position, spread}]",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "layout.createGuides",
+  "label": "Create Guides…",
+  "params": "{rows?: 0..1000, columns?: 0..1000, rowGutter?: 12, columnGutter?: 12, fitTo?: margins|page, removeExisting?: false, spread?, page? (index in the spread; default all pages)} — at most 10000 guides per command",
+  "menu": [
+   "Layout"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "links.list",
+  "label": "Links",
+  "params": "{} → [{asset, name, path, status: ok|modified|missing|embedded, pixels, uses: [{id, page, ppi}]}]",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "links.relink",
+  "label": "Relink…",
+  "params": "{asset, path} — use another file for every placement of the graphic",
+  "menu": [
+   "Window",
+   "Links"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "links.relinkFolder",
+  "label": "Relink to Folder…",
+  "params": "{dir?: folder to look in (default: each link's own folder), extension?: e.g. \"tif\" (Relink File Extension), assets?: [ids], missingOnly?: bool (default true with `dir`)} → {relinked, notFound: [names]}",
+  "menu": [
+   "Window",
+   "Links"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "links.update",
+  "label": "Update Link",
+  "params": "{asset?} — reload modified links from their files (all when no asset)",
+  "menu": [
+   "Window",
+   "Links"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "links.embed",
+  "label": "Embed Link",
+  "params": "{asset} — keep only the copy in the document",
+  "menu": [
+   "Window",
+   "Links"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "links.goTo",
+  "label": "Go To Link",
+  "params": "{asset} — selects the frames showing the graphic",
+  "menu": [
+   "Window",
+   "Links"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "font.list",
+  "label": "Fonts in Document",
+  "params": "{} → [{family, style, characters, missing, styleMissing, source: bundled|installed|document|added (null when missing)}] (missing first)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "font.replace",
+  "label": "Find/Replace Font…",
+  "params": "{family, style?, toFamily, toStyle?, redefineStyles?: true} — replaces the font in text and (by default) in paragraph and character styles",
+  "menu": [
+   "Type"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "spelling.check",
+  "label": "Check Spelling…",
+  "params": "{story?, suggestions?: true} → [{story, start, end, word, suggestions}]",
+  "menu": [
+   "Edit",
+   "Spelling"
+  ],
+  "shortcut": "Cmd+I",
+  "enabled": false
+ },
+ {
+  "id": "hyphenation.addException",
+  "label": "Add Hyphenation Exception",
+  "params": "{word: \"ex~am~ple\" (breaks only at ~) or a word with no ~ (never hyphenated)}",
+  "menu": [
+   "Edit",
+   "Spelling",
+   "User Dictionary"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "hyphenation.removeException",
+  "label": "Remove Hyphenation Exception",
+  "params": "{word} (with or without ~)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "hyphenation.list",
+  "label": "Hyphenation Exceptions",
+  "params": "{} → [word]",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "spelling.setWords",
+  "label": "User Dictionary",
+  "params": "{words: [word]} — replace the document's user dictionary",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "spelling.words",
+  "label": "User Dictionary Words",
+  "params": "{} → [word]",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "spelling.addWord",
+  "label": "Add to Dictionary",
+  "params": "{word}",
+  "menu": [
+   "Edit",
+   "Spelling"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "spelling.change",
+  "label": "Change",
+  "params": "{story, start, end, to}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "data.source.select",
+  "label": "Select Data Source…",
+  "params": "{path | bytes|base64, name, delimiter?: comma|tab|semicolon, sheet?} → {fields, records, warnings}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "data.source.update",
+  "label": "Update Data Source",
+  "params": "{} → re-read the linked file",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "data.source.remove",
+  "label": "Remove Data Source",
+  "params": "{} → drop the source; placeholders stay",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "data.fields",
+  "label": "Data Fields",
+  "params": "{csv? | rows? | path? | bytes?, name?} → [{name, kind, uses}]; no params reads the linked source and does not attach one",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "data.placeholder.add",
+  "label": "Insert Field",
+  "params": "{field, role?: text|image|qr|hyperlink, story?, at?, end?, item?} → {id}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "data.placeholder.remove",
+  "label": "Remove Field",
+  "params": "{id}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "data.options",
+  "label": "Data Merge Options",
+  "params": "{records?, one?, range?, perPage?, arrange?, insets?, columnSpacing?, rowSpacing?, fitting?, center?, linkImages?, limit?}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "data.preview",
+  "label": "Preview Record",
+  "params": "{record?: n} → fill the template with that record (session only)",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "data.preview.stop",
+  "label": "Stop Preview",
+  "params": "{} → restore the unfilled template",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "data.merge",
+  "label": "Create Merged Document…",
+  "params": "{csv? | rows? | path? | bytes?, name?, records?, one?, range?, perPage?, arrange?, insets?, columnSpacing?, rowSpacing?, fitting?, center?, linkImages?, limit?} → {records, pages, missingImages, oversetStories, warnings}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "hyperlink.create",
+  "label": "New Hyperlink…",
+  "params": "{url? | email? | page? (1-based), name?, ids?} — from the selected text, or the selected frames",
+  "menu": [
+   "Type",
+   "Hyperlinks & Cross-References"
+  ],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "hyperlink.delete",
+  "label": "Delete Hyperlink",
+  "params": "{id}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "hyperlink.list",
+  "label": "Hyperlinks",
+  "params": "{}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "hyperlink.edit",
+  "label": "Hyperlink Options…",
+  "params": "{id, name?, url? | email? | page? (1-based)}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "hyperlink.goToSource",
+  "label": "Go To Source",
+  "params": "{id} — selects the hyperlink's text or frame",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "bookmark.rename",
+  "label": "Rename Bookmark",
+  "params": "{index, name}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "bookmark.add",
+  "label": "New Bookmark",
+  "params": "{name?, page? (1-based; default: current selection's page or 1)}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "bookmark.delete",
+  "label": "Delete Bookmark",
+  "params": "{index}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "bookmark.list",
+  "label": "Bookmarks",
+  "params": "{}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "preflight.run",
+  "label": "Preflight Document",
+  "params": "{minPpi?: 150} → issues [{severity, kind, message, item?, page?}]",
+  "menu": [
+   "Window",
+   "Output",
+   "Preflight"
+  ],
+  "shortcut": null,
+  "enabled": false
+ }
+]
