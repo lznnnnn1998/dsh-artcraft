@@ -1,0 +1,17 @@
+{
+  "name": "@dsh-artcraft/plugins-workspace",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "description": "DSH plugins that put every ArtCraft (storytold) crafting app under the model's control, without touching the craft repos' own source.",
+  "license": "MIT OR Apache-2.0",
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0"
+  },
+  "scripts": {
+    "postinstall": "node scripts/install-links.mjs",
+    "link": "node scripts/install-links.mjs",
+    "verify": "node scripts/verify.mjs",
+    "catalogs": "node scripts/gen-catalogs.mjs"
+  }
+}

@@ -1,0 +1,1510 @@
+[
+ {
+  "id": "edit.undo",
+  "label": "Undo",
+  "params": "{}",
+  "shortcut": "Cmd+Z"
+ },
+ {
+  "id": "edit.redo",
+  "label": "Redo",
+  "params": "{}",
+  "shortcut": "Cmd+Shift+Z"
+ },
+ {
+  "id": "library.source",
+  "label": "Show Source",
+  "params": "{kind: all|recentlyAdded|album|recentlyDeleted|picks|missing|libraryFolder, id?: albumId, path?: a path from library.folders (for libraryFolder)}"
+ },
+ {
+  "id": "library.filter",
+  "label": "Filter params: partial Filter: {text?, rating?, ratingOp?: atLeast|exactly|atMost, flag?: pick|reject|none|null, label?, kind?, merged?: hdr|panorama|hdrPanorama|any, edited?, date?, libraryFolder?: a path from library.folders, keyword?, person?, camera?}"
+ },
+ {
+  "id": "library.folders",
+  "label": "Library Folders",
+  "params": "{} → [{name, path, count, own, volume, selectable, label?, children}] the disks and the folders the library's photos were imported from, with photo counts (subfolders included in `count`); show one with library.source {kind: libraryFolder, path} (rows with selectable false only open)"
+ },
+ {
+  "id": "library.removeFolder",
+  "label": "Remove Folder from Library",
+  "params": "{path, disk?: bool} — move the library photos imported from this folder (and the folders inside it) to Recently Deleted; one undo step, no file is touched. A whole disk or share (`/Volumes/nas`, `C:\\`, `\\\\srv\\share`) goes only with `disk: true`, the startup disk never → {removed}"
+ },
+ {
+  "id": "folder.label",
+  "label": "Set Folder Color Label",
+  "params": "{path, label: red|yellow|green|blue|purple|none} — give a folder of the library (one its photos were imported from, see library.folders) a colour label, or take it off (also once its photos are gone); one undo step. The label follows the folder when it is renamed or moved with folder.rename / folder.move → {path, label}"
+ },
+ {
+  "id": "library.clearFilter",
+  "label": "Clear Filters",
+  "params": "{}"
+ },
+ {
+  "id": "library.sort",
+  "label": "Sort",
+  "params": "{key?: captureDate|importDate|editDate|fileName|rating|fileSize|random, ascending?: bool, group?: auto|none|day|month|year, seed?: u64 (the shuffle `random` gives)}"
+ },
+ {
+  "id": "library.shuffle",
+  "label": "Reshuffle",
+  "params": "{seed?: 0..2^53-1} — sort at random; without `seed` a new shuffle each time"
+ },
+ {
+  "id": "library.groups",
+  "label": "Date Groups",
+  "params": "{by?: day|month|year (default: the sort's grouping; auto = day)} → [{key, label, start, count}] date headers of the grid"
+ },
+ {
+  "id": "library.select",
+  "label": "Select Photos",
+  "params": "{ids: [id], active?: id, mode?: replace|add|toggle|range} — every id must be a photo of the library"
+ },
+ {
+  "id": "library.selectAll",
+  "label": "Select All",
+  "params": "{}",
+  "shortcut": "Cmd+A"
+ },
+ {
+  "id": "library.devices",
+  "label": "Cameras and Cards",
+  "params": "{} → [{name, path (its DCIM folder), root}] — mounted volumes with a DCIM folder"
+ },
+ {
+  "id": "photo.copyMetadata",
+  "label": "Copy Metadata",
+  "params": "{} — title, caption, copyright (notice, status, usage terms, info URL), creator, location and keywords of the active photo"
+ },
+ {
+  "id": "photo.pasteMetadata",
+  "label": "Paste Metadata",
+  "params": "{ids?, fields?: [title|caption|copyright|copyrightStatus|usageTerms|copyrightUrl|creator|location|keywords] (default: all copied)}"
+ },
+ {
+  "id": "library.selectBy",
+  "label": "Select by Flag, Rating or Label",
+  "params": "{flag?: pick|reject|none, rating?: 0..5, ratingOp?: gte|eq|lte (default gte), label?: red|…|none, add?: bool (extend the selection)} — among the photos in view"
+ },
+ {
+  "id": "library.selectNone",
+  "label": "Deselect All",
+  "params": "{}",
+  "shortcut": "Cmd+Shift+A"
+ },
+ {
+  "id": "library.next",
+  "label": "Next Photo",
+  "params": "{}",
+  "shortcut": "Right"
+ },
+ {
+  "id": "library.previous",
+  "label": "Previous Photo",
+  "params": "{}",
+  "shortcut": "Left"
+ },
+ {
+  "id": "photo.rate",
+  "label": "Set Rating",
+  "params": "{rating: 0..5, ids?, advance?: bool}"
+ },
+ {
+  "id": "photo.decreaseRating",
+  "label": "Decrease Rating",
+  "params": "{ids?, advance?: bool}"
+ },
+ {
+  "id": "photo.increaseRating",
+  "label": "Increase Rating",
+  "params": "{ids?, advance?: bool}"
+ },
+ {
+  "id": "photo.flag",
+  "label": "Set Flag",
+  "params": "{flag: pick|reject|none, ids?, advance?: bool}"
+ },
+ {
+  "id": "photo.pick",
+  "label": "Flag as Pick",
+  "params": "{ids?}",
+  "shortcut": "P"
+ },
+ {
+  "id": "photo.reject",
+  "label": "Flag as Reject",
+  "params": "{ids?}",
+  "shortcut": "X"
+ },
+ {
+  "id": "photo.unflag",
+  "label": "Unflag",
+  "params": "{ids?}",
+  "shortcut": "U"
+ },
+ {
+  "id": "photo.label",
+  "label": "Set Color Label",
+  "params": "{label: red|yellow|green|blue|purple|none, ids?}"
+ },
+ {
+  "id": "photo.rotateLeft",
+  "label": "Rotate Left",
+  "params": "{ids?}",
+  "shortcut": "Cmd+["
+ },
+ {
+  "id": "photo.rotateRight",
+  "label": "Rotate Right [Cmd+]]",
+  "params": "{ids?}"
+ },
+ {
+  "id": "photo.flipHorizontal",
+  "label": "Flip Horizontal",
+  "params": "{ids?}"
+ },
+ {
+  "id": "photo.flipVertical",
+  "label": "Flip Vertical",
+  "params": "{ids?}"
+ },
+ {
+  "id": "photo.removeRegion",
+  "label": "Remove Face Box",
+  "params": "{id?, index} — remove one face / pet region (by its position in the photo's regions) from the photo in the catalog; undoable. The XMP sidecar is never rewritten for this, even with auto-write on, so reading the metadata from the file brings the region back"
+ },
+ {
+  "id": "photo.setRegion",
+  "label": "Resize Face Box",
+  "params": "{id?, index, rect: {x0, y0, x1, y1}} — set one face / pet region's box (normalized, in the photo's upright frame; clamped to the photo, at least 0.5 % each way) in the catalog; undoable. Like photo.removeRegion it never rewrites the XMP sidecar"
+ },
+ {
+  "id": "photo.delete",
+  "label": "Delete Photo",
+  "params": "{ids?} — moves to Recently Deleted",
+  "shortcut": "Delete"
+ },
+ {
+  "id": "photo.restore",
+  "label": "Restore",
+  "params": "{ids?}"
+ },
+ {
+  "id": "photo.deletePermanently",
+  "label": "Delete Permanently",
+  "params": "{ids?}"
+ },
+ {
+  "id": "photo.setMeta",
+  "label": "Edit Info",
+  "params": "{ids?, title?, caption?, altText?, extendedDescription?, copyright?, copyrightStatus?: unknown|copyrighted|publicDomain, usageTerms?, copyrightUrl?, creator?, location?, city?, state?, country?, gps?: \"lat, lon\" | [lat, lon] | null, keywords?: [..], addKeywords?: [..], removeKeywords?: [..]}"
+ },
+ {
+  "id": "album.create",
+  "label": "New Album",
+  "params": "{name, parent?: folderId, folder?: bool, addSelected?: bool}"
+ },
+ {
+  "id": "album.createSmart",
+  "label": "New Smart Album…",
+  "params": "{name, rules?: partial Filter (rating, ratingOp, flag, label, kind, edited, keyword, camera, lens, dateFrom, dateTo, date, text, album, ruleSet: {match: all|any|none, rules: [{field, op, value} | {group: ruleSet}]} — see album.ruleFields), parent?: folderId} — without `rules`, saves the current view (source + filter)"
+ },
+ {
+  "id": "album.ruleFields",
+  "label": "Smart Album Rule Fields",
+  "params": "{} → [{field, label, kind (text|keywords|number|date|choice|bool|album: an album id), group (field-menu submenu, null at the top level), ops: [{op, label}], choices? (ids), choiceLabels? ({id: label})}] for ruleSet rules, in menu order"
+ },
+ {
+  "id": "album.setRules",
+  "label": "Edit Smart Album",
+  "params": "{id, rules?: partial Filter merged onto the current rules (null clears a field), replace?: bool, fromView?: bool (use the current view), name?: also rename it (blank keeps the name) — one undo step, both or neither}"
+ },
+ {
+  "id": "album.rename",
+  "label": "Rename Album",
+  "params": "{id, name}"
+ },
+ {
+  "id": "album.delete",
+  "label": "Delete Album",
+  "params": "{id} — deletes the album or folder and its descendants, keeping photos in the library; one undo step"
+ },
+ {
+  "id": "album.move",
+  "label": "Move Album",
+  "params": "{id, parent?: folderId|null}"
+ },
+ {
+  "id": "album.reorder",
+  "label": "Reorder Album",
+  "params": "{id, parent?: folderId|null, before?: albumId|null} — places the album (or folder) in `parent` (default: where it is; null: the top level) before the sibling `before` of the same kind, or last of its kind; the folder is then ordered by hand. One undo step. → {changed}: how many edits it took (0: already there)"
+ },
+ {
+  "id": "album.sort",
+  "label": "Sort Albums by Name",
+  "params": "{parent?: folderId|null} — drops the hand order of the albums inside the folder (default: the top level), so they are listed by name → {changed}: how many albums lost their place"
+ },
+ {
+  "id": "album.addPhotos",
+  "label": "Add to Album",
+  "params": "{id: albumId, ids?: [photoIds]} (default: selection)"
+ },
+ {
+  "id": "album.toggleTarget",
+  "label": "Add to Target Album",
+  "params": "{ids?} — B: adds the photos to the target album (the Quick Collection unless one is set), or removes them when they're all in it → {album, added}"
+ },
+ {
+  "id": "album.setTarget",
+  "label": "Set as Target Album",
+  "params": "{id: albumId | null} (null = the Quick Collection)"
+ },
+ {
+  "id": "album.clearQuick",
+  "label": "Clear Quick Collection",
+  "params": "{}"
+ },
+ {
+  "id": "library.autoImport",
+  "label": "Auto Import Settings",
+  "params": "{folder?: path | null (off), copy?: bool (copy into the library's Originals, else add in place), album?: name | null} — a watched folder whose new photos are added as they arrive (library.autoImportScan; the app scans every few seconds) → the settings"
+ },
+ {
+  "id": "library.autoImportScan",
+  "label": "Auto Import Now",
+  "params": "{listing?: [[path, size]] (the folder as listed by the caller, e.g. on a worker thread), start?: bool (false: return the `library.import` params as `import` instead of importing)} — add the watched folder's new photos (files the library doesn't have yet; partial / still-copying files wait for the next scan) → {imported, folder, import?}"
+ },
+ {
+  "id": "album.removePhotos",
+  "label": "Remove from Album",
+  "params": "{id: albumId, ids?}"
+ },
+ {
+  "id": "album.setCover",
+  "label": "Set as Album Cover",
+  "params": "{id: albumId, photo?: photoId}"
+ },
+ {
+  "id": "library.inspectLightroom",
+  "label": "Inspect Lightroom Catalog",
+  "params": "{path: .lrcat} → {photos, collections, missing, warnings}; read-only, no Lightroom required"
+ },
+ {
+  "id": "library.importLightroom",
+  "label": "Import Lightroom Catalog",
+  "params": "{path: .lrcat, updateExisting?: false}; direct import of paths, ratings, flags, metadata, keywords, collections, virtual copies & mapped edits. Archives source settings/history first. Existing edited photos are preserved unless updateExisting=true; source catalog is read-only."
+ },
+ {
+  "id": "library.importPreview",
+  "label": "Review Import",
+  "params": "{paths: [file or folder (recursive)]} → {candidates: [{path, name, format, kind, width, height, fileSize, captured, duplicate?: path|content, existing?, error?, previewOnly?: why a raw can only be shown from its embedded preview}], duplicates, scanned} — nothing is added"
+ },
+ {
+  "id": "library.import",
+  "label": "Import Photos",
+  "params": "{paths: [file or folder (recursive)], mode?: add|copy|move (add = reference the files in place; copy = into the library's Originals/YYYY/YYYY-MM-DD/; move = as copy, then each original and its XMP sidecars are removed from the source — only after the copy is verified (a hard link on the same volume, else copied, synced and compared byte for byte) and its catalog record is saved; failed, duplicate and unchecked files keep their sources; a taken name gets -1, -2…; undo removes the photos from the library but leaves the files at the destination), destination?: folder for copies / moves, organize?: date (YYYY/YYYY-MM-DD) | month (YYYY/YYYY-MM) | flat | a folder template, e.g. `{date:%Y}/{date:%Y%m%d}` → 2026/20260114 (the template's `/` make the folders, each level expanded with the rename tokens and made a safe folder name: never outside the destination; must be relative, no `..`; a level with missing metadata is `unknown`) — dated by capture time, else the import time, rename?: file-name template for copies, original extension added (tokens: {name} {num} {seq} {seq:N} {date} {date:%Y%m%d} {folder} {camera} {lens} {iso} {rating} {title} {creator} {ext}; photo.renameTokens explains each; blank = keep names), renameStart?: 1, metadataPreset?: name, dng?: bool (copy raws as DNG; copy only), local?: bool (browsing: the photos stay out of the library, like library.browse; not with move), album?: albumId, albumName?: new album, preset?: presetId, keywords?: [..], onDeleted?: skip|restore|fresh (a file that is in Recently Deleted: skip = leave it there and say so, restore = bring the photo back with its edits, fresh = delete the trashed record and import the file as new)} → {imported, duplicates: [{path, existing, reason, existingDeleted?}], restored?: [photoId], failed, moved?: [{from, to, sidecars?}], kept?: [{path, reason}] (move: sources left in place and why), album?}",
+  "shortcut": "Cmd+Shift+I"
+ },
+ {
+  "id": "library.info",
+  "label": "Library Info",
+  "params": "{}"
+ },
+ {
+  "id": "library.compact",
+  "label": "Optimize Library",
+  "params": "{}"
+ },
+ {
+  "id": "library.clearPreviews",
+  "label": "Clear Preview Cache",
+  "params": "{}"
+ },
+ {
+  "id": "develop.set",
+  "label": "Set Develop Values",
+  "params": "{control?: controlId, value?: number, values?: {controlId: number}, ids?: [photo]} — see develop.controls"
+ },
+ {
+  "id": "develop.adjust",
+  "label": "Nudge Develop Value",
+  "params": "{control, delta}"
+ },
+ {
+  "id": "develop.merge",
+  "label": "Apply Settings JSON",
+  "params": "{settings: partial DevelopSettings JSON, label?}"
+ },
+ {
+  "id": "develop.reset",
+  "label": "Reset Edits",
+  "params": "{ids?}",
+  "shortcut": "Cmd+Shift+R"
+ },
+ {
+  "id": "develop.updateProcess",
+  "label": "Update to Current Process",
+  "params": "{ids?}: moves the target photos (`ids`, else the selection) that are on an older rendering process to the current one, as one undo step (their look can change; the sliders keep their values; see docs/process-versions.md). Enabled while a selected photo is on an older process; named photos are checked themselves (each must exist, one must be on an older process) → {changed, process}"
+ },
+ {
+  "id": "develop.resetSection",
+  "label": "Reset Section",
+  "params": "{section: light|curve|color|mixer|grading|effects|vignette|grain|detail|optics|geometry}"
+ },
+ {
+  "id": "develop.resetControl",
+  "label": "Reset Control",
+  "params": "{control}"
+ },
+ {
+  "id": "develop.sectionEnabled",
+  "label": "Toggle Section",
+  "params": "{section: string, enabled: bool}"
+ },
+ {
+  "id": "develop.autoBwMix",
+  "label": "Auto B&W Mix",
+  "params": "{} — sets the black & white mix from the photo's colours (and switches to B&W)"
+ },
+ {
+  "id": "develop.auto",
+  "label": "Auto Settings",
+  "params": "{}",
+  "shortcut": "Shift+A"
+ },
+ {
+  "id": "develop.wb",
+  "label": "White Balance",
+  "params": "{mode: asShot|auto|daylight|cloudy|shade|tungsten|fluorescent|flash|custom, temp?, tint?}"
+ },
+ {
+  "id": "develop.wbPick",
+  "label": "White Balance Selector",
+  "params": "{x, y} normalized image coords of a neutral point",
+  "shortcut": "W"
+ },
+ {
+  "id": "develop.treatment",
+  "label": "Black & White",
+  "params": "{bw?: bool} (toggles when omitted)",
+  "shortcut": "V"
+ },
+ {
+  "id": "develop.profile",
+  "label": "Set Profile",
+  "params": "{id: profile id (see profiles.list), amount?: 0..200}"
+ },
+ {
+  "id": "profile.favorite",
+  "label": "Favorite Profile",
+  "params": "{id, favorite?: bool} (toggles when omitted)"
+ },
+ {
+  "id": "develop.curve",
+  "label": "Set Point Curve",
+  "params": "{channel: master|red|green|blue, points: [[x,y],...] in 0..1}"
+ },
+ {
+  "id": "crop.set",
+  "label": "Set Crop",
+  "params": "{rect?: [x0,y0,x1,y1] normalized in the straightened frame, angle?: degrees}"
+ },
+ {
+  "id": "crop.drag",
+  "label": "Drag Crop Handle",
+  "params": "{handle: topLeft|topRight|bottomRight|bottomLeft|top|right|bottom|left|move | 0..8, from: [x,y], to: [x,y] (normalized, straightened frame), start?: [x0,y0,x1,y1] (default: the current crop)} — drags a crop handle; stops at the image edge, keeps the opposite edges, honours the aspect lock"
+ },
+ {
+  "id": "crop.straighten",
+  "label": "Straighten",
+  "params": "{angle: degrees -45..45} — keeps the largest crop of the current aspect"
+ },
+ {
+  "id": "crop.autoStraighten",
+  "label": "Auto Straighten",
+  "params": "{} — level the horizon (or plumb lines) with the crop angle"
+ },
+ {
+  "id": "crop.aspect",
+  "label": "Crop Aspect",
+  "params": "{aspect: \"original\"|\"free\"|\"current\" (lock the crop's present shape)|\"toggle\" (lock ↔ free)|\"1x1\"|\"4x5\"|\"8.5x11\"|\"5x7\"|\"2x3\"|\"4x3\"|\"16x9\"|\"16x10\"|[w,h]}"
+ },
+ {
+  "id": "crop.rotateAspect",
+  "label": "Rotate Crop Aspect",
+  "params": "{}",
+  "shortcut": "X"
+ },
+ {
+  "id": "crop.reset",
+  "label": "Reset Crop",
+  "params": "{}",
+  "shortcut": "Cmd+Alt+R"
+ },
+ {
+  "id": "develop.hdr",
+  "label": "HDR",
+  "params": "{enabled?: bool (default: toggle), maxEv?: number 0..5 (headroom limit, stops above SDR white)} — HDR editing: highlights above SDR white for HDR exports and displays; every SDR render uses the SDR rendition (the hdr.sdr* controls)"
+ },
+ {
+  "id": "geometry.upright",
+  "label": "Upright",
+  "params": "{mode: off|auto|guided|level|vertical|full} — analyses the photo (line segments → vanishing points) and stores the correction; run again to update after lens changes"
+ },
+ {
+  "id": "geometry.guides",
+  "label": "Guided Upright Guides",
+  "params": "{guides: [[x0,y0,x1,y1], …] (≤ 4, normalized coords of the lens-corrected image), add?: bool (append one guide, dropping the oldest beyond 4)} — switches Upright to Guided"
+ },
+ {
+  "id": "develop.copy",
+  "label": "Copy Edit Settings",
+  "params": "{groups?: [settingsGroup]} (default: all but crop, masks, remove)",
+  "shortcut": "Cmd+C"
+ },
+ {
+  "id": "develop.pastePrevious",
+  "label": "Paste Settings from Previous",
+  "params": "{ids?, groups?: [settingsGroup] (default: the copy groups)} — from the photo that was active before this one",
+  "shortcut": "Cmd+Alt+V"
+ },
+ {
+  "id": "develop.paste",
+  "label": "Paste Edit Settings",
+  "params": "{ids?, groups?: [settingsGroup] (paste only these of the copied groups)}",
+  "shortcut": "Cmd+V"
+ },
+ {
+  "id": "develop.sync",
+  "label": "Sync Settings",
+  "params": "{groups?} — copy the active photo's settings to all selected photos"
+ },
+ {
+  "id": "develop.quickAdjust",
+  "label": "Quick Develop",
+  "params": "{control: develop control id, delta, ids?} — add `delta` to the control on every target photo (each from its own value; Quick Develop) in one undo step → {changed}"
+ },
+ {
+  "id": "develop.matchExposure",
+  "label": "Match Total Exposures",
+  "params": "{ids?} — set each selected photo's Exposure so its total exposure (shutter × ISO ÷ aperture², plus the slider) equals the active photo's; photos without exposure data are skipped → {changed, skipped}"
+ },
+ {
+  "id": "develop.autoSync",
+  "label": "Auto Sync",
+  "params": "{on?: bool} (toggles when omitted) — edits to the active photo also change the other selected photos (only the settings that changed; not spot removal / red eye) → {on}",
+  "shortcut": "Cmd+Alt+Shift+A"
+ },
+ {
+  "id": "preset.apply",
+  "label": "Apply Preset",
+  "params": "{id: presetId, amount?: 0..200 (percent), ids?}"
+ },
+ {
+  "id": "preset.create",
+  "label": "Create Preset",
+  "params": "{name, group?, groups?: [settingsGroup]}"
+ },
+ {
+  "id": "preset.delete",
+  "label": "Delete Preset",
+  "params": "{id}"
+ },
+ {
+  "id": "preset.favorite",
+  "label": "Favorite Preset",
+  "params": "{id, favorite?: bool}"
+ },
+ {
+  "id": "preset.rename",
+  "label": "Rename Preset",
+  "params": "{id, name}"
+ },
+ {
+  "id": "preset.move",
+  "label": "Move Preset to Group",
+  "params": "{id, group}"
+ },
+ {
+  "id": "preset.update",
+  "label": "Update Preset with Current Settings",
+  "params": "{id, groups?: [settingsGroup] (default: the groups the preset already sets)} — from the active photo"
+ },
+ {
+  "id": "version.create",
+  "label": "Create Version",
+  "params": "{name?}",
+  "shortcut": "Cmd+Shift+S"
+ },
+ {
+  "id": "version.restore",
+  "label": "Restore Version",
+  "params": "{index}"
+ },
+ {
+  "id": "version.delete",
+  "label": "Delete Version",
+  "params": "{index}"
+ },
+ {
+  "id": "version.rename",
+  "label": "Rename Version",
+  "params": "{index, name}"
+ },
+ {
+  "id": "version.update",
+  "label": "Update Version with Current Settings",
+  "params": "{index}"
+ },
+ {
+  "id": "history.clear",
+  "label": "Clear History",
+  "params": "{} — keeps the current settings as the only step"
+ },
+ {
+  "id": "history.restore",
+  "label": "Go to History Step",
+  "params": "{index}"
+ },
+ {
+  "id": "develop.beginInteraction",
+  "label": "Begin Interaction",
+  "params": "{label}"
+ },
+ {
+  "id": "develop.endInteraction",
+  "label": "End Interaction",
+  "params": "{}"
+ },
+ {
+  "id": "develop.cancelInteraction",
+  "label": "Cancel Interaction",
+  "params": "{}"
+ },
+ {
+  "id": "pointColor.pick",
+  "label": "Add Point Color Sample",
+  "params": "{x, y} normalized image coords — samples the colour there (max 8); returns {index, lum, chroma, hue}"
+ },
+ {
+  "id": "develop.targeted",
+  "label": "Targeted Adjustment",
+  "params": "{target: curve|hue|sat|lum, x, y (normalized image coords), delta (slider units; point curves: output levels 0..255), channel?: parametric|master|red|green|blue (curve)} — adjusts the curve region / colour-mixer bands under the point; returns the changed controls"
+ },
+ {
+  "id": "pointColor.delete",
+  "label": "Delete Point Color Sample",
+  "params": "{index}"
+ },
+ {
+  "id": "curve.reset",
+  "label": "Reset Tone Curve",
+  "params": "{channel?: all|point|parametric|master|red|green|blue (default all)} — the active photo's tone curve (or one channel) back to linear"
+ },
+ {
+  "id": "curve.presets",
+  "label": "Point Curve Presets",
+  "params": "{} → {presets: [{name, master, red, green, blue: [[x,y],...], builtin?}], current: name of the preset the active photo's point curves match, or null}"
+ },
+ {
+  "id": "curve.applyPreset",
+  "label": "Apply Point Curve Preset",
+  "params": "{name} — sets the active photo's point curves (all four channels; the parametric curve stays)"
+ },
+ {
+  "id": "curve.savePreset",
+  "label": "Save Point Curve Preset",
+  "params": "{name} — the active photo's point curves under a name (replaces a user preset of that name; built-in names are reserved), saved with the library"
+ },
+ {
+  "id": "curve.deletePreset",
+  "label": "Delete Point Curve Preset",
+  "params": "{name} — a user preset (built-ins can't be deleted)"
+ },
+ {
+  "id": "curve.importPresets",
+  "label": "Import Point Curve Presets",
+  "params": "{path | paths: [file]} — .lccurve JSON files ({format, version, presets: [...]}, an array of presets, or one preset); same-named user presets are replaced → {imported: [name], failed: [[file, error]]}"
+ },
+ {
+  "id": "curve.exportPresets",
+  "label": "Export Point Curve Presets",
+  "params": "{path, names?: [name] (default: every user preset)} — writes a .lccurve JSON file → {path, count}"
+ },
+ {
+  "id": "mask.add",
+  "label": "Create New Mask",
+  "params": "{kind: brush|linear|radial|sky|subject|background|luminanceRange|colorRange|object|prompt, ...shape params (start/end, center/rx/ry/angle/feather, lo/hi…; object: points/exclude [[x,y],…]; prompt: text; object/prompt: seg? a stored segmentation, no model needed), name?} — AI kinds need the SAM 3 model; in the app a prompt returns {pending} and the mask appears when found"
+ },
+ {
+  "id": "mask.addComponent",
+  "label": "Add/Subtract/Intersect Mask",
+  "params": "{id?: maskId, op: add|subtract|intersect, kind, ...shape params}"
+ },
+ {
+  "id": "mask.brushStroke",
+  "label": "Brush Stroke",
+  "params": "{id?: maskId, points: [[x,y],…] normalized, size?: fraction of long edge (0.03), feather?, flow?, density?, erase?: bool, autoMask?: bool}"
+ },
+ {
+  "id": "mask.update",
+  "label": "Update Mask Shape",
+  "params": "{id?, component?: index (0), shape: MaskShape JSON}"
+ },
+ {
+  "id": "mask.sampleColor",
+  "label": "Sample Mask Color",
+  "params": "{x, y: normalized image point, add?: bool (⇧: add to the samples, max 5), id?, component?} — the colour range of the selected mask (its first colour-range component) samples the colour there → {samples}"
+ },
+ {
+  "id": "mask.objectPoint",
+  "label": "Add Object Click",
+  "params": "{x, y: normalized image point, exclude?: bool (⌥-click: leave this part out), id?: maskId} — a click on the selected mask's Object selection (its last Object component); SAM 3 re-segments the object → {include, exclude}"
+ },
+ {
+  "id": "mask.refineDetail",
+  "label": "Refine AI Mask Detail",
+  "params": "{id?: maskId, component?} — a zoomed-in SAM 3 pass over an Object/Describe selection (default: the mask's last one): the photo around it is analyzed again at a higher resolution, in the background; the mask updates when it's done → {started}"
+ },
+ {
+  "id": "segment.prepare",
+  "label": "Prepare AI Masks",
+  "params": "{} — load SAM 3 and analyze the active photo in the background, so Object clicks are instant → {busy}"
+ },
+ {
+  "id": "segment.model.status",
+  "label": "AI Mask Model Status",
+  "params": "{} — whether this build has AI masks, whether the SAM 3 model is installed (and where), loaded, busy, and the download's progress → {available, installed, dir, loaded, busy, analyzing, sizeBytes, license, licenseUrl, mirrors, download: {running, done, total, file, error, finished}}"
+ },
+ {
+  "id": "segment.model.download",
+  "label": "Download AI Mask Model",
+  "params": "{acknowledged: true} — download the SAM 3 model (about 3.4 GB, Meta's SAM License, not LightCraft's) in the background, from the configured mirrors; only after the user agreed to it. Watch segment.model.status; segment.model.cancel stops it (it resumes later) → {started, installed, downloading}"
+ },
+ {
+  "id": "segment.model.cancel",
+  "label": "Cancel AI Mask Model Download",
+  "params": "{} — stop the SAM 3 download (what has arrived is kept, and a new download resumes from it) → {cancelled}"
+ },
+ {
+  "id": "mask.refine",
+  "label": "Refine Mask Edges",
+  "params": "{id?, value: 0..100} — the mask's edges snap to the photo's (guided filter; rendered on the CPU)"
+ },
+ {
+  "id": "mask.adjust",
+  "label": "Set Mask Adjustments",
+  "params": "{id?, values: {exposure, contrast, highlights, shadows, whites, blacks, temp, tint, texture, clarity, dehaze, hue, saturation, sharpness, noise, moire, defringe, color_hue, color_sat, amount}}"
+ },
+ {
+  "id": "mask.select",
+  "label": "Select Mask",
+  "params": "{id|null}"
+ },
+ {
+  "id": "mask.delete",
+  "label": "Delete Mask",
+  "params": "{id?}"
+ },
+ {
+  "id": "mask.deleteAll",
+  "label": "Delete All Masks",
+  "params": "{}"
+ },
+ {
+  "id": "mask.rename",
+  "label": "Rename Mask",
+  "params": "{id?, name}"
+ },
+ {
+  "id": "mask.invert",
+  "label": "Invert Mask",
+  "params": "{id?}"
+ },
+ {
+  "id": "mask.visible",
+  "label": "Show/Hide Mask",
+  "params": "{id?, visible?: bool}"
+ },
+ {
+  "id": "mask.duplicate",
+  "label": "Duplicate Mask",
+  "params": "{id?, invert?: bool (Duplicate and Invert)} — the copy goes right after the original and is selected"
+ },
+ {
+  "id": "mask.component",
+  "label": "Edit Mask Component",
+  "params": "{id?, component: index, action: invert|duplicate|delete|rename|op, name? (rename; empty clears), op?: add|subtract|intersect} — one component of a mask (deleting the last one deletes the mask)"
+ },
+ {
+  "id": "mask.move",
+  "label": "Move Mask",
+  "params": "{id?, to?: index (0 = top), delta?: ±n} — reorder the masks list"
+ },
+ {
+  "id": "spot.findDust",
+  "label": "Find Dust Spots",
+  "params": "{sensitivity?: 0..100 (50), add?: bool (true)} — find sensor-dust spots (small soft dark spots on smooth areas) and add a heal spot on each (one undo step) → {spots: [{x, y, size}], added}"
+ },
+ {
+  "id": "spot.add",
+  "label": "Add Remove Spot",
+  "params": "{mode?: remove|heal|clone, points: [[x,y],…], size?: fraction of long edge, feather?, opacity?, source?: [dx,dy] (default: the best match nearby)} — selects the new spot; returns {index}"
+ },
+ {
+  "id": "spot.select",
+  "label": "Select Spot",
+  "params": "{index|null}"
+ },
+ {
+  "id": "spot.update",
+  "label": "Edit Spot",
+  "params": "{index? (the selected spot), move?: [dx,dy] (the target, normalized), source?: [dx,dy] (offset from the target), moveSource?: [dx,dy], size?, feather?, opacity?, mode?}"
+ },
+ {
+  "id": "spot.refreshSource",
+  "label": "Refresh Source",
+  "params": "{index? (the selected spot)} — picks the next-best source away from the current one"
+ },
+ {
+  "id": "spot.delete",
+  "label": "Delete Spot",
+  "params": "{index? (the selected spot)}"
+ },
+ {
+  "id": "redeye.add",
+  "label": "Add Red Eye Correction",
+  "params": "{center: [x,y] normalized, rx, ry: radii as fractions of the long edge, pet?: bool, pupilSize?: 0..100, darken?: 0..100} — the pupil inside is found automatically; returns {index}"
+ },
+ {
+  "id": "redeye.catchlight",
+  "label": "Pet Eye Catchlight",
+  "params": "{index, on?: bool (default true), offset?: [dx, dy] from the pupil centre in pupil radii (default [-0.35, -0.35])}"
+ },
+ {
+  "id": "redeye.delete",
+  "label": "Delete Red Eye Correction",
+  "params": "{index}"
+ },
+ {
+  "id": "photo.virtualCopy",
+  "label": "Create Virtual Copy",
+  "params": "{ids?, name?} → {ids: [new photo ids]} — a new catalog entry sharing the original file, with independent settings; stacked with its original and named `name` or \"Copy N\"",
+  "shortcut": "Cmd+'"
+ },
+ {
+  "id": "stack.group",
+  "label": "Group into Stack",
+  "params": "{ids?, top?: photoId (default: the active photo), collapsed?: bool (default true)} — stacks the photos are already in are merged",
+  "shortcut": "Cmd+G"
+ },
+ {
+  "id": "stack.ungroup",
+  "label": "Ungroup Stack",
+  "params": "{ids?}",
+  "shortcut": "Cmd+Shift+G"
+ },
+ {
+  "id": "stack.remove",
+  "label": "Remove from Stack",
+  "params": "{ids?}"
+ },
+ {
+  "id": "stack.setTop",
+  "label": "Set as Top of Stack",
+  "params": "{id?} (default: the active photo)",
+  "shortcut": "Shift+S"
+ },
+ {
+  "id": "stack.moveUp",
+  "label": "Move Up in Stack",
+  "params": "{id?} — one place towards the top"
+ },
+ {
+  "id": "stack.moveDown",
+  "label": "Move Down in Stack",
+  "params": "{id?} — one place away from the top"
+ },
+ {
+  "id": "stack.split",
+  "label": "Split Stack",
+  "params": "{id?} — this photo and the ones after it become their own stack"
+ },
+ {
+  "id": "stack.toggle",
+  "label": "Expand/Collapse Stack",
+  "params": "{ids?, collapsed?: bool}",
+  "shortcut": "S"
+ },
+ {
+  "id": "stack.expandAll",
+  "label": "Expand All Stacks",
+  "params": "{}"
+ },
+ {
+  "id": "stack.collapseAll",
+  "label": "Collapse All Stacks",
+  "params": "{}"
+ },
+ {
+  "id": "stack.auto",
+  "label": "Auto-Stack by Capture Time",
+  "params": "{gap?: seconds between consecutive captures (default 60), ids? (default: the selection if several photos, else the current view), preview?: bool} → {stacks, photos}"
+ },
+ {
+  "id": "keyword.sets",
+  "label": "Keyword Sets",
+  "params": "{} → {sets: [{name, keywords}], current, keywords: the nine ⌥1–⌥9 apply}"
+ },
+ {
+  "id": "keyword.useSet",
+  "label": "Use Keyword Set",
+  "params": "{name} (\"Recent Keywords\" = the recently added ones)"
+ },
+ {
+  "id": "keyword.saveSet",
+  "label": "Save Keyword Set",
+  "params": "{name, keywords?: [up to 9, \"\" = an empty slot] (default: the renamed set's, else the current nine), replace?: the set it renames, new?: refuse a name another set has} — replaces a set of that name (or `replace`, in its place) and makes it current"
+ },
+ {
+  "id": "keyword.deleteSet",
+  "label": "Delete Keyword Set",
+  "params": "{name}"
+ },
+ {
+  "id": "keyword.toggleFromSet",
+  "label": "Toggle Keyword from Set",
+  "params": "{index: 1..9, ids?} — the set's keyword N: added to the target photos, or removed when they all have it"
+ },
+ {
+  "id": "keyword.list",
+  "label": "Keywords",
+  "params": "{} → [{name, path, count, children}] keyword tree (`a|b|c` keywords are hierarchical)"
+ },
+ {
+  "id": "keyword.suggest",
+  "label": "Keyword Suggestions",
+  "params": "{prefix?: typed text, ids?, limit?: 12} → keywords to suggest for the photos (co-occurring / most used, or matching the prefix)"
+ },
+ {
+  "id": "keyword.info",
+  "label": "Keyword Info",
+  "params": "{keyword} → {path, listed, count, synonyms, includeOnExport, exportContaining, exportSynonyms, person}"
+ },
+ {
+  "id": "keyword.create",
+  "label": "Create Keyword",
+  "params": "{name, parent?: keyword | null (default: the default parent; null = the top level), synonyms?, includeOnExport?, exportContaining?, exportSynonyms?, person?, addToSelected?: bool, ids?} → {keyword}"
+ },
+ {
+  "id": "keyword.edit",
+  "label": "Edit Keyword",
+  "params": "{keyword, name?: its new name (one level), synonyms?, includeOnExport?, exportContaining?, exportSynonyms?, person?} — what isn't given keeps its value"
+ },
+ {
+  "id": "keyword.move",
+  "label": "Move Keyword",
+  "params": "{keyword, parent: keyword | null (the top level), merge?: bool} — with the keywords below it; onto a name that is taken only with `merge: true`"
+ },
+ {
+  "id": "keyword.purgeUnused",
+  "label": "Purge Unused Keywords",
+  "params": "{} — takes off the keyword list the keywords no photo has → {purged}"
+ },
+ {
+  "id": "keyword.setDefaultParent",
+  "label": "Put New Keywords Inside",
+  "params": "{keyword: keyword | null} — the parent keyword.create puts new keywords inside (null: the top level)"
+ },
+ {
+  "id": "keyword.export",
+  "label": "Export Keywords",
+  "params": "{path?} — the keyword list as a file (Lightroom Classic's format, which Capture One, Photo Supreme and Bridge read) → {keywords, captureOneRefuses: keywords with ; , < > that Capture One's importer refuses, unwritable: keywords left out because the format can't hold them (a name in brackets or braces, a line break, deeper than 64 levels; a synonym as \"path {synonym}\"), text when there is no path}"
+ },
+ {
+  "id": "keyword.import",
+  "label": "Import Keywords",
+  "params": "{path | text} — a keyword list (Lightroom Classic's format, also Capture One's and Photo Supreme's Formatted Vocabulary File): adds the keywords the library doesn't have, gives those it has the list's synonyms; one undo step → {added, updated}"
+ },
+ {
+  "id": "keyword.rename",
+  "label": "Rename Keyword",
+  "params": "{from, to} — on every photo, children included (`a` → `b` renames `a|x` to `b|x`); renaming onto an existing keyword merges them"
+ },
+ {
+  "id": "keyword.delete",
+  "label": "Delete Keyword",
+  "params": "{keyword} — removes it (and the keywords below it) from every photo"
+ },
+ {
+  "id": "keyword.merge",
+  "label": "Merge Keywords",
+  "params": "{from: [keyword], into: keyword} — replaces each `from` keyword (children included) with `into` on every photo"
+ },
+ {
+  "id": "photo.renameTokens",
+  "label": "Rename Template Tags",
+  "params": "{} → {tokens: [{tag, aliases, meaning, example}], dateDirectives: [{directive, meaning}], notes: [..], sample} — the file-name template tags shared by photo.rename, library.import (rename) and app.export (naming); examples are for a sample photo"
+ },
+ {
+  "id": "photo.renamePreview",
+  "label": "Rename Preview",
+  "params": "{template: e.g. `{date}_{name}`, `Trip-{seq:3}` (tokens: {name} {num} {seq} {seq:N} {date} {date:%Y%m%d} {folder} {camera} {lens} {iso} {rating} {title} {creator} {ext}; photo.renameTokens explains each), start?: first sequence number (1), ids?} — renames the files on disk (sidecars too, never overwriting: collisions get -1, -2…); undoable"
+ },
+ {
+  "id": "photo.rename",
+  "label": "Rename Photos",
+  "params": "{template: e.g. `{date}_{name}`, `Trip-{seq:3}` (tokens: {name} {num} {seq} {seq:N} {date} {date:%Y%m%d} {folder} {camera} {lens} {iso} {rating} {title} {creator} {ext}; photo.renameTokens explains each), start?: first sequence number (1), ids?} — renames the files on disk (sidecars too, never overwriting: collisions get -1, -2…); undoable"
+ },
+ {
+  "id": "photo.setCaptureTime",
+  "label": "Edit Capture Time",
+  "params": "{ids?, time?: `2026-09-30T14:05:00` (the active photo gets it, the others shift by the same amount), each?: bool (every photo gets `time`), shift?: seconds, hours?: time-zone shift in hours} → {changed, captured: [..]}"
+ },
+ {
+  "id": "photo.autoTagTracklog",
+  "label": "Auto-Tag Photos from Tracklog",
+  "params": "{path?: GPX file | gpx?: GPX text, ids?, offset?: camera clock's UTC offset for photos whose capture time has no zone (`+02:00`, or hours; default UTC), maxGap?: seconds (600), replace?: bool (also photos that already have GPS), dryRun?: bool} → {tagged, interpolated, nearest, skipped: {noTime, outside, hasGps}, assumedUtc, points, start, end, photos: [{id, gps, match}]} — positions from the track log by capture time; one undo step"
+ },
+ {
+  "id": "label.names",
+  "label": "Color Label Names",
+  "params": "{} → [{label, name, custom}]"
+ },
+ {
+  "id": "label.setNames",
+  "label": "Edit Color Label Names",
+  "params": "{names: {red?: name|null, yellow?, green?, blue?, purple?}} — null or empty restores the colour's name"
+ },
+ {
+  "id": "label.sets",
+  "label": "Color Label Sets",
+  "params": "{} → {sets: [{name, names: [red, yellow, green, blue, purple], builtin}], current: name|null}"
+ },
+ {
+  "id": "label.applySet",
+  "label": "Apply Color Label Set",
+  "params": "{name} — use a set's label names (undoable)"
+ },
+ {
+  "id": "label.saveSet",
+  "label": "Save Color Label Set",
+  "params": "{name} — save the current label names as a set (replaces a user set of that name)"
+ },
+ {
+  "id": "label.deleteSet",
+  "label": "Delete Color Label Set",
+  "params": "{name} — user sets only"
+ },
+ {
+  "id": "library.smartPreviews",
+  "label": "Build Smart Previews",
+  "params": "{ids?, discard?: bool, background?: bool} — build (or discard) the smart previews of the selected photos (else all in view): compact proxies in the library that keep photos editable and exportable (at proxy size) while their originals are offline; a damaged proxy (cut short) is rebuilt → {built, repaired, removed, failed}; with background (the app's menu) the files are read and written on a worker thread → {total, done, failed, repaired, running, what} like library.buildPreviews (progress: library.previewProgress, stop: library.cancelPreviews)"
+ },
+ {
+  "id": "photo.smartPreview",
+  "label": "Smart Preview Status",
+  "params": "{id?} → {smartPreview: bool, originalOnline: bool}"
+ },
+ {
+  "id": "library.buildPreviews",
+  "label": "Build Previews",
+  "params": "{size?: standard (2048 px, or `edge`) | full (1:1), ids?, wait?: bool} — render the grid thumbnail and loupe view of the selected photos (else all in view) into the preview cache, in the background unless `wait` → {total, done, failed, running}"
+ },
+ {
+  "id": "library.previewProgress",
+  "label": "Preview Build Progress",
+  "params": "{} → {total, done, failed, repaired, running, cancelled, what, error} | null"
+ },
+ {
+  "id": "library.cancelPreviews",
+  "label": "Cancel Preview Build",
+  "params": "{}"
+ },
+ {
+  "id": "profile.import",
+  "label": "Import Profiles",
+  "params": "{paths: [.cube file, folder or .zip]} — 3D LUTs become creative profiles (Amount 0–200 %; rendered on the CPU) in the profile browser's groups (folder / zip name, else Imported) → {imported: [{id, name, group}], failed}"
+ },
+ {
+  "id": "profile.deleteImported",
+  "label": "Delete Imported Profile",
+  "params": "{id: lut:…}"
+ },
+ {
+  "id": "library.findSimilar",
+  "label": "Find Similar Photos",
+  "params": "{id?, similarity?: 0..1 (0.8), filter?: bool (true)} — photos that look like the active one (composition and tones), most similar first; filters the view to them (Clear Filters to go back) → {photos: [{id, similarity}]}"
+ },
+ {
+  "id": "photo.analyze",
+  "label": "Assisted Culling",
+  "params": "{ids?, rejectBelow?: sharpness 0..100, pickBest?: bool} — score the selected photos (else all in view) for focus (0..100) and clipping, group look-alike shots taken within 10 s and mark the sharpest of each; optionally reject blurry photos and pick each group's best; one undo step → {photos: [{id, sharpness, clipped, group, best}], groups, rejected, picked}"
+ },
+ {
+  "id": "photo.convertToDng",
+  "label": "Convert to DNG",
+  "params": "{ids?} — write each raw photo as a lossless DNG next to it (settings embedded) and relink the photo to it; originals are kept → {converted: [{id, path, original}], skipped}"
+ },
+ {
+  "id": "photo.duplicate",
+  "label": "Duplicate",
+  "params": "{ids?} — copy each photo's file next to it (`-copy`) and add it with the same settings, metadata and albums (a real file, unlike a virtual copy) → {ids}"
+ },
+ {
+  "id": "photo.reload",
+  "label": "Reload from Disk",
+  "params": "{ids?} — re-read photos whose files changed on disk (e.g. saved by an external editor), or raws shown from their embedded preview that can be decoded now; camera fields the catalog lacks are filled in, and so is the lens data the file carries (an untouched photo then gets its lens correction turned on as import would; an edited one keeps its settings) → {reloaded}"
+ },
+ {
+  "id": "photo.editExternal",
+  "label": "Edit Copy for External Editor",
+  "params": "{colorSpace?: adobeRgb (default) | proPhoto | displayP3 | srgb, dir?} — render the active photo with its edits as a 16-bit TIFF `<name>-Edit.tif` next to it, add it stacked on the original and select it → {path, id, original} (the app then opens it in the external editor)"
+ },
+ {
+  "id": "merge.hdr",
+  "label": "HDR Merge",
+  "params": "{ids?, align=true, deghost=none|low|medium|high, autoSettings=true, stack=false, preview=false, showOverlay=false, previewPath?}"
+ },
+ {
+  "id": "merge.panorama",
+  "label": "Panorama Merge",
+  "params": "{ids?, projection=auto|spherical|cylindrical|perspective, boundaryWarp=0..100, autoCrop=false, fillEdges=false, autoSettings=true, stack=false, maxMegapixels=40, preview=false, previewPath?}"
+ },
+ {
+  "id": "merge.hdrPanorama",
+  "label": "HDR Panorama Merge",
+  "params": "{ids?, bracket=0 (auto from EXIF), align, deghost, projection, boundaryWarp, autoCrop, fillEdges, autoSettings, stack, preview, previewPath?}"
+ },
+ {
+  "id": "catalog.query",
+  "label": "Query Photos",
+  "params": "{filter?: Filter, sort?: Sort, offset?, limit?} — omit filter to list the current view"
+ },
+ {
+  "id": "catalog.stats",
+  "label": "Catalog Statistics",
+  "params": "{}"
+ },
+ {
+  "id": "library.state",
+  "label": "Library State",
+  "params": "{}"
+ },
+ {
+  "id": "photo.allMetadata",
+  "label": "All Metadata",
+  "params": "{id?} → {exif: [{group, tag, name, value}], xmp: [{name, value}]} — every EXIF / TIFF / GPS tag of the file and its XMP properties"
+ },
+ {
+  "id": "albums.list",
+  "label": "List Albums",
+  "params": "{}"
+ },
+ {
+  "id": "photo.inspect",
+  "label": "Inspect Photo",
+  "params": "{id?}"
+ },
+ {
+  "id": "develop.get",
+  "label": "Get Develop Settings",
+  "params": "{id?} → the photo's develop settings; `process` is the rendering process they are interpreted by (see develop.updateProcess)"
+ },
+ {
+  "id": "develop.controls",
+  "label": "List Develop Controls",
+  "params": "{section?} — every slider with range, default and current value"
+ },
+ {
+  "id": "presets.list",
+  "label": "List Presets",
+  "params": "{}"
+ },
+ {
+  "id": "profiles.list",
+  "label": "List Profiles",
+  "params": "{} — every profile with its group and favourite flag"
+ },
+ {
+  "id": "profiles.menu",
+  "label": "Profile Menu",
+  "params": "{} — favourites, recent (newest first) and groups"
+ },
+ {
+  "id": "history.list",
+  "label": "List History",
+  "params": "{id?}"
+ },
+ {
+  "id": "app.gpu",
+  "label": "GPU Rendering",
+  "params": "{enabled?: bool} — allow/forbid GPU rendering (CPU fallback; LIGHTCRAFT_GPU=0 forbids it for the process); returns {enabled, available, adapter, reason (why the GPU is off), lastFallback (latest render redone on the CPU, and why)}"
+ },
+ {
+  "id": "library.memory",
+  "label": "Memory Usage",
+  "params": "{} — bytes held by each cache (decoded sources, rendered previews, GPU buffers; heap when instrumented)"
+ },
+ {
+  "id": "app.memoryBudget",
+  "label": "Memory Budget",
+  "params": "{mb?: number} — set the memory budget shared by the caches (default: a quarter of RAM, at most 1536 MB); returns the report"
+ },
+ {
+  "id": "journal.list",
+  "label": "Command Journal",
+  "params": "{limit?}"
+ },
+ {
+  "id": "photo.saveMetadataToFile",
+  "label": "Save Metadata to File",
+  "params": "{ids?} — writes each photo's XMP sidecar (metadata + develop settings) next to the original, merged into an existing one (other apps' data kept; an unreadable one is backed up first) → {written: [path], merged: [path], backups: [{path, backup}], failed}",
+  "shortcut": "Cmd+S"
+ },
+ {
+  "id": "photo.readMetadataFromFile",
+  "label": "Read Metadata from File",
+  "params": "{ids?} — reads each photo's XMP sidecar (or a raw/DNG's embedded XMP): metadata and develop settings, one undo step → {read, failed}"
+ },
+ {
+  "id": "library.xmpPreferences",
+  "label": "XMP Sidecar Preferences",
+  "params": "{autoWrite?: bool, naming?: stem (IMG_1.xmp, default) | full (IMG_1.CR3.xmp)} → current preferences (saved with the library)"
+ },
+ {
+  "id": "library.toggleAutoWriteXmp",
+  "label": "Automatically Write Changes into XMP",
+  "params": "{} → {autoWrite}"
+ },
+ {
+  "id": "preset.import",
+  "label": "Import Presets",
+  "params": "{paths: [file or folder], group?, dryRun?} — .lcpreset, XMP presets, .lrtemplate, photos carrying edits (DNG/JPEG/TIFF \"DNG presets\"), Luminar looks (.lmp, .mplumpack collections) and .zip bundles of these; folders give their name as group; crs: fields mapped per docs/xmp-interop.md → {imported: [{id,name,group,file,unmapped}], skipped, failed}"
+ },
+ {
+  "id": "preset.export",
+  "label": "Export Presets",
+  "params": "{path, ids?: [presetId], group?: name} (default: all user presets) → {path, count}; writes a .lcpreset JSON file"
+ },
+ {
+  "id": "library.preferences",
+  "label": "Library Preferences",
+  "params": "{import?: {rawPreset?: presetId|\"default\", otherPreset?: presetId|\"default\", perCamera?: bool, cameras?: [{camera: \"Make Model\", preset: presetId|null}], copyright?: text, creator?: text (given to imported photos without one)}, camera?: {camera, preset?, remove?: bool}, cacheMb?: n (0 = default), forgetLocalDays?: n (forget untouched Local photos of folders not browsed for n days; 0 = never)} — develop defaults applied on import (raws / other images / per camera) and the thumbnail cache size, saved with the library → {xmp, import, cacheMb, forgetLocalDays, persistent}"
+ },
+ {
+  "id": "export.contactSheet",
+  "label": "Export Contact Sheet PDF",
+  "params": "{path, ids?: photo ids (default selection), paper?: a4|letter, landscape?: bool, columns?: 1..8, rows?: 1..10, captions?: bool} → {path, pages, photos, bytes}; replaces an existing output, never an original"
+ },
+ {
+  "id": "export.presets",
+  "label": "Export Presets",
+  "params": "{} → [{name, builtin, params}] (use with app.export {preset: name, …overrides})"
+ },
+ {
+  "id": "export.savePreset",
+  "label": "Save Export Preset",
+  "params": "{name, params?: app.export params (default: the last export's)} — adds or replaces a user preset, saved with the library → presets"
+ },
+ {
+  "id": "export.deletePreset",
+  "label": "Delete Export Preset",
+  "params": "{name} — removes a user preset → presets"
+ },
+ {
+  "id": "export.checkTarget",
+  "label": "Check Output Path",
+  "params": "{path} — fails when writing `path` would replace a photo's original (or its XMP sidecar) in the library; front ends call it before saving a render or screenshot to a user-given path → {path}"
+ },
+ {
+  "id": "beforeAfter.setBefore",
+  "label": "Set Before",
+  "params": "{source: import|current|history|version, index? (history step), name? (version)} — what the before side shows (this session)"
+ },
+ {
+  "id": "beforeAfter.swap",
+  "label": "Swap Before and After Settings",
+  "params": "{}"
+ },
+ {
+  "id": "beforeAfter.resetBefore",
+  "label": "Reset Before to Import State",
+  "params": "{}"
+ },
+ {
+  "id": "folder.rename",
+  "label": "Rename Folder",
+  "params": "{path, name} — rename a folder on disk (its files and sidecars go along) and relink the photos in it; one undo step (undo renames it back, refused if the old name is taken) → {path, relinked}"
+ },
+ {
+  "id": "folder.move",
+  "label": "Move Folder",
+  "params": "{path, into: destination folder} — move a folder on disk into another and relink the photos in it; one undo step (undo moves it back, refused if the old place is taken) → {path, relinked}"
+ },
+ {
+  "id": "library.browse",
+  "label": "Browse Folder",
+  "params": "{path, subfolders?: bool} — show a folder's photos without adding them to the library (they're read in place; edits go to XMP sidecars) → {path, photos, new}"
+ },
+ {
+  "id": "library.forgetLocal",
+  "label": "Forget Unchanged Local Photos",
+  "params": "{dryRun?: bool, days?: n (default: the library preference, 0 = never)} — remove Local (browsed, not added) photos nobody changed, of folders not browsed for `days`, from the catalog; files and sidecars stay, browsing the folder again brings them back; not an undo step → {local, forgotten, keptRecent, keptTouched, keptInUse, foldersStamped, days, dryRun}"
+ },
+ {
+  "id": "photo.addToLibrary",
+  "label": "Add to My Photos",
+  "params": "{ids?} — browsed (Local) photos join the library"
+ },
+ {
+  "id": "library.missing",
+  "label": "Missing Photos",
+  "params": "{} → [{id, path}] — photos whose original file isn't where the library expects it"
+ },
+ {
+  "id": "photo.relink",
+  "label": "Locate Photo",
+  "params": "{id?, path} — point a photo at its file's new location (undo never moves files)"
+ },
+ {
+  "id": "library.findMissing",
+  "label": "Find Missing Photos",
+  "params": "{folder} — relink every missing photo whose file is somewhere in the folder: same name and size (and content, when the library knows its hash), or — renamed — same size and content; or {found, missing, ambiguous} — relink what a search already found (the app searches on a worker thread; photos relinked meanwhile and files now in use are skipped) → {found: [{id, from, to, by: name|content}], missing, ambiguous: [{id, from, candidates}] (several same-name candidates and no hash to tell them apart: skipped)}"
+ },
+ {
+  "id": "folder.scanChanges",
+  "label": "Scan Folder for Changes",
+  "params": "{path, disk?: bool (a whole disk or share, or a folder holding disks)} — compare a folder of the library (and the folders inside it) with the disk; changes nothing → {path, new: [{path, name, format, …}] files the library doesn't have, duplicates: files whose content it already has, unreadable: [{path, error}], missing: [{id, path}] photos whose file is gone, moved: [{id, from, to}] photos whose file is elsewhere in the folder (same content), metadata: [{id, path}] photos whose XMP sidecar was saved after they came in or were last edited here and says something the library doesn't}"
+ },
+ {
+  "id": "folder.synchronize",
+  "label": "Synchronize Folder",
+  "params": "{path, disk?: bool, scanned?: bool, importNew?: true, relinkMoved?: true, removeMissing?: false, readMetadata?: false} — bring a folder of the library up to date with the disk (see folder.scanChanges): import its new files in place, relink photos whose file was renamed or moved within it, move photos whose file is gone to Recently Deleted, read XMP sidecars saved by other apps (the sidecar wins); acts on the last folder.scanChanges of the folder while it is current (the folder's photos unchanged), else scans again — or, with `scanned: true`, refuses; one undo step, no file is touched → {imported, relinked, removed, read, failed: [[path, error]]}"
+ },
+ {
+  "id": "metadata.presets",
+  "label": "Metadata Presets",
+  "params": "{} → [{name, fields}]"
+ },
+ {
+  "id": "metadata.savePreset",
+  "label": "Save Metadata Preset",
+  "params": "{name, fields?: {copyright?, copyrightStatus?: unknown|copyrighted|publicDomain, usageTerms?, copyrightUrl?, creator?, title?, caption?, location?, city?, state?, country?, keywords?: [..]}, only?: [field] (from the active photo when `fields` is absent; default the copyright fields, creator, place)} — adds or replaces"
+ },
+ {
+  "id": "metadata.deletePreset",
+  "label": "Delete Metadata Preset",
+  "params": "{name}"
+ },
+ {
+  "id": "metadata.applyPreset",
+  "label": "Apply Metadata Preset",
+  "params": "{name, ids?} — text fields replace, keywords are added; one undo step"
+ },
+ {
+  "id": "filter.presets",
+  "label": "Filter Presets",
+  "params": "{} → [{name, filter}]"
+ },
+ {
+  "id": "filter.savePreset",
+  "label": "Save Filter Preset",
+  "params": "{name} — the current filter (library.filter), saved with the library"
+ },
+ {
+  "id": "filter.applyPreset",
+  "label": "Apply Filter Preset",
+  "params": "{name} — replaces the current filter → {photos}"
+ },
+ {
+  "id": "filter.deletePreset",
+  "label": "Delete Filter Preset",
+  "params": "{name}"
+ },
+ {
+  "id": "denoise.models.list",
+  "label": "Denoise Models",
+  "params": "{} → {dir, productsDir, model, runtime, auto, cacheGb, threads, runOn, models: [{id, name, version, licence{name, commercial, url, notice}, provenance, source, sizeBytes, sha256, tile, known, downloadHost, installed, selected, accepted}]}"
+ },
+ {
+  "id": "denoise.models.inspect",
+  "label": "Inspect Denoise Model",
+  "params": "{path} → model terms from an adjacent manifest; never executes the file"
+ },
+ {
+  "id": "denoise.models.install",
+  "label": "Install Denoise Model",
+  "params": "{path, acknowledged: true, activate?: true, background?: false} → {installed, model} or {started} — install a denoise model from a file: an .onnx with a denoise-model.json beside it, or an archive LightCraft knows (the darktable `.dtmodel`). `acknowledged` must be true: the user has been shown the model's licence and accepted it. Unless `activate` is false it becomes the model in use"
+ },
+ {
+  "id": "denoise.models.download",
+  "label": "Download Denoise Model",
+  "params": "{id, acknowledged: true} → {started, from} — fetch a model LightCraft has a pinned address for (see `downloadHost` in the list) in the background over HTTPS with lightcraft-fetch. `acknowledged` must be true: the user has been shown the model's terms and accepted them. It is checked against its size and SHA-256, installed and chosen by itself; `denoise.models.downloads` shows how far it is"
+ },
+ {
+  "id": "denoise.models.downloads",
+  "label": "Denoise Model Downloads",
+  "params": "{} → {running, downloads: [{id, state: running | done | installed | failed | cancelled, bytes, total, error, from}]} — also installs any download that has arrived"
+ },
+ {
+  "id": "denoise.models.test",
+  "label": "Test Denoise Model",
+  "params": "{id} → {ok, result} — load an installed model and check it gives sensible pictures; needs the denoise runtime"
+ },
+ {
+  "id": "denoise.models.remove",
+  "label": "Remove Denoise Model",
+  "params": "{id} → {removed, model} — delete an installed model (its cached pictures stay until they are evicted)"
+ },
+ {
+  "id": "denoise.models.select",
+  "label": "Choose Denoise Model",
+  "params": "{id: installed model | null} → {model} — null switches denoise off"
+ },
+ {
+  "id": "denoise.settings",
+  "label": "Denoise Settings",
+  "params": "{auto?: bool, cacheGb?: 1..10000, threads?: 1..64 | null, runOn?: auto | gpu | cpu} → the settings — `auto`: make the picture of the photos being looked at that have a Denoise amount; `cacheGb`: how much the cached pictures may take; `threads`: most tiles run at once; `runOn`: where the model runs — `auto` (the default) the graphics card where it is faster than the processor (both timed on this computer when the card is set up), `gpu` the card whenever it can run the model, `cpu` the processor. Setting `runOn` also lets the card be tried again after a set-up that failed or closed LightCraft"
+ },
+ {
+  "id": "denoise.toggle",
+  "label": "AI Denoise",
+  "params": "{id?: photoId, enabled?: bool} → {id, enabled, amount} — turn AI Denoise on (50% initially) or off for one raw photo, independent of selection and Auto Sync; needs an installed model to turn on"
+ },
+ {
+  "id": "denoise.queue",
+  "label": "Denoise Photos",
+  "params": "{ids?: [photoId], scope?: selected | visible | withAmount, retry?: false} → {added, …status} — make the denoised pictures of raw photos that have none, in the background. `retry` tries photos that failed before"
+ },
+ {
+  "id": "denoise.cancel",
+  "label": "Cancel Denoise",
+  "params": "{id?, all?} → {cancelled} — stop the photo being made and/or forget the ones waiting (all of them when `id` is omitted)"
+ },
+ {
+  "id": "denoise.status",
+  "label": "Denoise Status",
+  "params": "{id?} → {enabled, model, runtime, productsDir, queued, running: {photo, done, total, seconds} | null, ready, made, auto, runOn, device: {kind: gpu | cpu | pending | none, adapter?, reason?, cardMs?, cpuMs?, fellBack?}, cache: {files, bytes, limitBytes}, generation, photo?: {state: notApplicable | noModel | ready | queued | running | failed | idle, …}}"
+ },
+ {
+  "id": "denoise.pump",
+  "label": "Denoise Pump",
+  "params": "{pace?: pause | light | normal | full} → {active, running, queued, ready, generation, downloading} — called every frame by the app: takes in finished work and keeps one photo going"
+ },
+ {
+  "id": "denoise.clear",
+  "label": "Clear Denoise Cache",
+  "params": "{} → {deleted, bytes} — delete every cached denoised picture of this library (they are made again when wanted)"
+ },
+ {
+  "id": "faces.models.list",
+  "label": "Face Models",
+  "params": "{} → {dir, enabled, embedder, runtime, models: [{id, name, role, licence{name, commercial, url, notice}, provenance, source, sizeBytes, known, installed, selected}]}"
+ },
+ {
+  "id": "faces.models.inspect",
+  "label": "Inspect Face Model File",
+  "params": "{path} → what a .onnx file is: {kind: known | draft | unsupported, model, assumptions, reason, alreadyInstalled}; installs nothing"
+ },
+ {
+  "id": "faces.models.install",
+  "label": "Install Face Model",
+  "params": "{path, acknowledged: true, activate?: true} → {installed, active: {embedder, enabled}} — copy a .onnx face recognition model into the models folder. `acknowledged` must be true: the user has been shown its licence (see inspect) and accepted it. Unless `activate` is false the model becomes the one in use and recognition is switched on; an earlier model stays installed"
+ },
+ {
+  "id": "faces.models.download",
+  "label": "Download Face Model",
+  "params": "{id, acknowledged: true} → {started, from} — fetch a recognition model LightCraft has a pinned address for (see `downloadHost` in the list), in the background over pure-Rust https (lightcraft-fetch). `acknowledged` must be true: the user has been shown the model's terms and accepted them. It is checked against its size and SHA-256, then installed, chosen and switched on by itself; `faces.models.downloads` shows how far it is"
+ },
+ {
+  "id": "faces.models.downloads",
+  "label": "Face Model Downloads",
+  "params": "{} → {running, downloads: [{id, state: running | done | installed | failed | cancelled, bytes, total, error, from}]} — also installs any download that has arrived; `installed` stays listed until `faces.models.downloadCancel` clears it"
+ },
+ {
+  "id": "faces.models.downloadCancel",
+  "label": "Cancel Face Model Download",
+  "params": "{id} → {discarded} — stop a download, or delete a finished one that was not installed"
+ },
+ {
+  "id": "faces.models.test",
+  "label": "Test Face Model",
+  "params": "{id} → {ok, result: {loadMs, embedMs, dimension, checks}} — load an installed recognition model and check it gives sensible faces; needs the recognition runtime"
+ },
+ {
+  "id": "faces.models.remove",
+  "label": "Remove Face Model",
+  "params": "{id} — delete an installed model"
+ },
+ {
+  "id": "faces.models.select",
+  "label": "Choose Face Recognition Model",
+  "params": "{id: installed recogniser | null}"
+ },
+ {
+  "id": "faces.enable",
+  "label": "Face Recognition On/Off",
+  "params": "{enabled?: bool} (toggles when omitted)"
+ },
+ {
+  "id": "faces.detect",
+  "label": "Detect Faces",
+  "params": "{ids?, apply?: bool (default true), score?: 0.6, nmsIou?: 0.3, maxFaces?} → {photos: [{id, faces: [{rect, score, landmarks}]}]}. Finds faces with the YuNet detector (download it first: `faces.models.download {id: \"yunet-2023mar\"}`) and, unless `apply` is false, adds them as unnamed face regions (one undo step), replacing earlier detections but never regions from XMP or ones you named; the sidecar is not touched"
+ },
+ {
+  "id": "faces.index",
+  "label": "Index Faces",
+  "params": "{budgetMs?: 200, ids?: [photo ids to do first]} → {embedded, photosDone, pendingPhotos, indexedFaces, ms} — embed the faces in the library with the chosen recognition model, as many photos as fit in the time (at least one); call again until `pendingPhotos` is 0. `budgetMs: 0` only reports"
+ },
+ {
+  "id": "faces.suggest",
+  "label": "Suggest Names for Faces",
+  "params": "{ids?, threshold?, margin?, budgetMs?} → {photos: [{id, faces: [{index, suggestion: {name, score, runnerUp} | null, candidates: [{name, score}]}]}]} — who the unnamed faces in these photos might be, from the faces already named in the library. Only suggestions: nothing is named"
+ },
+ {
+  "id": "faces.pump",
+  "label": "Index Faces in the Background",
+  "params": "{pace?: pause | light | normal | full} → {active, inFlight, pendingPhotos, indexedFaces, searchedPhotos, workers} — cheap to call every frame: takes in what the background workers have finished and gives them the next photos, as many at once as the pace allows (none when paused, one when light, half the machine's threads when normal, four fifths when full); inactive until face recognition is on in Settings with a model chosen"
+ },
+ {
+  "id": "faces.evaluate",
+  "label": "Evaluate Face Recognition",
+  "params": "{budgetMs?: 0, burstSecs?: 5, margin?, thresholds?: [..], scope?: \"visible\"} → {queries, top1, sweep: [{threshold, suggested, correct, precision, recall}]} — leave-one-out over your named faces: each is ranked against the others (ignoring shots within burstSecs of it) to show how well the chosen model recognises people in *your* photos and which threshold to trust. Faces not yet embedded are done within budgetMs (`faces.index` does them all); counts only"
+ },
+ {
+  "id": "faces.unnamed",
+  "label": "Unnamed Faces",
+  "params": "{limit?: 600} → {total, faces: [{photo, index, rect, view, suggestion: {name, score} | null}], ordered, ready} — the faces nobody has named; with recognition running, look-alikes are next to each other and a face the named ones recognise carries the name they suggest. `view` is the box to show the face by. Name them with `faces.nameFaces`"
+ },
+ {
+  "id": "faces.nameFaces",
+  "label": "Name Faces",
+  "params": "{faces: [{photo, index}], name} → {named, photos} — name (or, with a null or empty name, clear) many face regions as one undoable step; the sidecar is not touched"
+ },
+ {
+  "id": "faces.person",
+  "label": "Faces of a Person",
+  "params": "{name, more?: 120} → {name, total, confirmed: [{photo, index, rect}], more: [{photo, index, rect, score}], ready, pendingPhotos} — the faces named `name` across the library, and the unnamed faces that look most like them (best first, already embedded ones only, once recognition is on); confirm one with `faces.setName`"
+ },
+ {
+  "id": "faces.setName",
+  "label": "Name Face",
+  "params": "{id?, index, name} — name a face region (null or empty clears it); undoable; the sidecar is not touched"
+ },
+ {
+  "id": "activity.list",
+  "label": "Background Tasks",
+  "params": "{} → {tasks: [{id, kind, label, done, total, unit: count|bytes|percent, detail, cancellable, cancelling, ageMs}]} — the long-running tasks in flight (imports, exports, preview builds, downloads, the face scan…), oldest first; total 0 = not known yet"
+ },
+ {
+  "id": "activity.cancel",
+  "label": "Cancel Background Task",
+  "params": "{id} | {all: true} → {cancelled: n} — ask a task (or every cancellable task) to stop; it stops at its next file or photo. An unknown id (it may have just finished) or a task that can't be cancelled is an error"
+ },
+ {
+  "id": "app.export",
+  "label": "Export Now",
+  "params": "{path?: output file (.jpg/.png/.tif/.webp/.avif/.dng) | dir?, ids?, preset?, format?: jpeg|png|tiff|webp|avif|dng|original, longEdge?|shortEdge?|width?|height?|megapixels?|percent? (default longEdge 3000; longEdge 0 = full size), dontEnlarge?, ppi?, quality?: 1..100, limitKb?, colorSpace?: srgb|displayP3|adobeRgb|proPhoto|rec2020, bitDepth?: 8|10|16|32, hdr? (HDR output for HDR edits: gain map JPEG, float TIFF), sharpen?: none|screen|matte|glossy, sharpenAmount?: low|standard|high, metadata?: all|allExceptCamera|copyright|none, removeLocation?, naming?, startNumber?, subfolder?, conflict?: unique|overwrite|skip, tiffCompression?: none|lzw|zip, dngCompression?: lossless|deflate|uncompressed, watermark?: text | {text?, vertical? (upright columns, right to left), size? (text height, 0.005..0.5 of the short edge; default 0.035), opacity? (0..1; 0.7), anchor?: topLeft|top|topRight|left|center|right|bottomLeft|bottom|bottomRight, inset? (margin, 0..0.4 of the short edge; 0.025), color? [r,g,b] sRGB, shadow?, image? (graphic drawn instead of the text), imageWidth? (0.01..1 of the photo's width; 0.2)}} — an unknown parameter, an out-of-range watermark size or a value of the wrong kind is an error, not a default"
+ }
+]

@@ -1,0 +1,27 @@
+# Cloned upstream repositories (~2.5 GB). Read-only inputs, reproducible with
+#   git clone --depth 1 https://github.com/storytold/<repo>.git
+# The full list, with what each one is, is in docs/CRAFT-MATRIX.md.
+repos/
+
+# Downloaded craft CLIs and release archives (~3.6 GB), reproducible from the
+# official GitHub releases with scripts/fetch-binaries.mjs.
+bin/
+crafts-bin/
+
+# Verification scratch space
+.verify/
+
+# Local credentials — never commit a token
+*.token
+github_token*.txt
+.env
+.env.*
+
+# Node dependencies, recreated by scripts/install-links.mjs
+node_modules/
+
+# A craft writing a project into the working directory would land here
+/ARTIFACT
+
+# Editor and OS noise
+.DS_Store

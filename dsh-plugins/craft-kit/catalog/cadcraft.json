@@ -1,0 +1,3794 @@
+[
+ {
+  "id": "new",
+  "label": "New Drawing...",
+  "params": "{metric?: bool}",
+  "menu": [
+   "File",
+   "New Drawing..."
+  ],
+  "shortcut": "Cmd+N",
+  "aliases": [
+   "qnew"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "open",
+  "label": "Open...",
+  "params": "{path} | {data: base64, name}",
+  "menu": [
+   "File",
+   "Open..."
+  ],
+  "shortcut": "Cmd+O",
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "close",
+  "label": "Close",
+  "params": "{index?}",
+  "menu": [
+   "File",
+   "Close"
+  ],
+  "shortcut": "Cmd+W",
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "closeall",
+  "label": "Close All",
+  "menu": [
+   "File",
+   "Close All"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "qsave",
+  "label": "Save",
+  "params": "{path?}",
+  "menu": [
+   "File",
+   "Save"
+  ],
+  "shortcut": "Cmd+S",
+  "aliases": [
+   "save"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "saveas",
+  "label": "Save As...",
+  "params": "{path, format?: dxf|dwg}",
+  "menu": [
+   "File",
+   "Save As..."
+  ],
+  "shortcut": "Cmd+Shift+S",
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "document.switch",
+  "label": "Switch Drawing",
+  "params": "{index}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "document.bytes",
+  "label": "Drawing as bytes",
+  "params": "{format?: dxf} → {data: base64}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "u",
+  "label": "Undo",
+  "params": "{}",
+  "menu": [
+   "Edit",
+   "Undo"
+  ],
+  "shortcut": "Cmd+Z",
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "undo",
+  "label": "Undo",
+  "params": "{count?: n}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "redo",
+  "label": "Redo",
+  "params": "{count?: n}",
+  "menu": [
+   "Edit",
+   "Redo"
+  ],
+  "shortcut": "Cmd+Shift+Z",
+  "aliases": [
+   "mredo"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "cutclip",
+  "label": "Cut",
+  "params": "{handles?}",
+  "menu": [
+   "Edit",
+   "Cut"
+  ],
+  "shortcut": "Cmd+X",
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "copyclip",
+  "label": "Copy",
+  "params": "{handles?}",
+  "menu": [
+   "Edit",
+   "Copy"
+  ],
+  "shortcut": "Cmd+C",
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "copybase",
+  "label": "Copy with Base Point",
+  "params": "{handles?, base: [x,y]}",
+  "menu": [
+   "Edit",
+   "Copy with Base Point"
+  ],
+  "shortcut": "Cmd+Shift+C",
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "pasteclip",
+  "label": "Paste",
+  "params": "{at?: [x,y]} (where the base point lands; default: the original coordinates)",
+  "menu": [
+   "Edit",
+   "Paste"
+  ],
+  "shortcut": "Cmd+V",
+  "aliases": [],
+  "enabled": false
+ },
+ {
+  "id": "pasteblock",
+  "label": "Paste as Block",
+  "params": "{at?: [x,y]} (insertion point; default: the original coordinates)",
+  "menu": [
+   "Edit",
+   "Paste as Block"
+  ],
+  "shortcut": "Cmd+Shift+V",
+  "aliases": [],
+  "enabled": false
+ },
+ {
+  "id": "pasteorig",
+  "label": "Paste to Original Coordinates",
+  "params": "{} (only into a drawing other than the one copied from)",
+  "menu": [
+   "Edit",
+   "Paste to Original Coordinates"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": false
+ },
+ {
+  "id": "erase.selection",
+  "label": "Clear",
+  "params": "{}",
+  "menu": [
+   "Edit",
+   "Clear"
+  ],
+  "shortcut": "Delete",
+  "aliases": [],
+  "enabled": false
+ },
+ {
+  "id": "selectall",
+  "label": "Select All",
+  "menu": [
+   "Edit",
+   "Select All"
+  ],
+  "shortcut": "Cmd+A",
+  "aliases": [
+   "ai_selall"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "ai_deselect",
+  "label": "Deselect All",
+  "params": "{}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "select",
+  "label": "Select",
+  "params": "{handles: [hex]} | {window: [[x,y],[x,y]], crossing?: bool} | {at: [x,y]} | {clear: true} | {add?: bool}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "qselect",
+  "label": "Quick Select...",
+  "params": "{type?: \"Line\"|\"Circle\"|..., property?, operator?: \"=\"|\"!=\"|\">\"|\"<\"|\"*\" (wildcard), value?, mode?: new|append|exclude, applyTo?: drawing|selection, layer?, color?} → selected handles",
+  "menu": [
+   "Edit",
+   "Quick Select..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "qs"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "qselect.info",
+  "label": "Quick Select Properties",
+  "params": "{applyTo?: drawing|selection, type?} → object types with counts and the properties available for `type`",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "zoom",
+  "label": "Zoom",
+  "params": "{mode: extents|all|window|previous|in|out|center|scale|object, p1?, p2?, center?, height?, factor?, xp?: bool (scale relative to paper space: in a viewport, `factor` paper units per model unit), limits?: bool (scale relative to the limits)} (center: `height`, or `factor` with `xp`/`limits`)",
+  "menu": [
+   "View",
+   "Zoom",
+   "Realtime"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "z"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "zoom.previous",
+  "label": "Zoom Previous",
+  "menu": [
+   "View",
+   "Zoom",
+   "Previous"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "zoom.window",
+  "label": "Zoom Window",
+  "params": "{p1, p2}",
+  "menu": [
+   "View",
+   "Zoom",
+   "Window"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "zoom.in",
+  "label": "Zoom In",
+  "menu": [
+   "View",
+   "Zoom",
+   "In"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "zoom.out",
+  "label": "Zoom Out",
+  "menu": [
+   "View",
+   "Zoom",
+   "Out"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "zoom.all",
+  "label": "Zoom All",
+  "menu": [
+   "View",
+   "Zoom",
+   "All"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "zoom.extents",
+  "label": "Zoom Extents",
+  "menu": [
+   "View",
+   "Zoom",
+   "Extents"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "zoom.object",
+  "label": "Zoom Object",
+  "params": "{handles?}",
+  "menu": [
+   "View",
+   "Zoom",
+   "Object"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "pan",
+  "label": "Pan",
+  "params": "{delta: [dx,dy]} | {from, to} | {center}",
+  "menu": [
+   "View",
+   "Pan",
+   "Realtime"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "p"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "pan.left",
+  "label": "Pan Left",
+  "menu": [
+   "View",
+   "Pan",
+   "Left"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "pan.right",
+  "label": "Pan Right",
+  "menu": [
+   "View",
+   "Pan",
+   "Right"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "pan.up",
+  "label": "Pan Up",
+  "menu": [
+   "View",
+   "Pan",
+   "Up"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "pan.down",
+  "label": "Pan Down",
+  "menu": [
+   "View",
+   "Pan",
+   "Down"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "regen",
+  "label": "Regen",
+  "menu": [
+   "View",
+   "Regen"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "re"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "regenall",
+  "label": "Regen All",
+  "menu": [
+   "View",
+   "Regen All"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "rea"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "redraw",
+  "label": "Redraw",
+  "menu": [
+   "View",
+   "Redraw"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "r"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "view.set",
+  "label": "Set View",
+  "params": "{center: [x,y], height}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "view.get",
+  "label": "Get View",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "layout.set",
+  "label": "Switch Layout",
+  "params": "{name: \"Model\" | layout name}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "line",
+  "label": "Line",
+  "params": "{points: [[x,y],...], closed?: bool}",
+  "menu": [
+   "Draw",
+   "Line"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "l"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "pline",
+  "label": "Polyline",
+  "params": "{vertices: [[x,y] | {p:[x,y], bulge, startWidth, endWidth}], closed?, width?}",
+  "menu": [
+   "Draw",
+   "Polyline"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "pl"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "circle",
+  "label": "Circle",
+  "params": "{center, radius} | {center, diameter} | {p1, p2} | {p1, p2, p3}",
+  "menu": [
+   "Draw",
+   "Circle",
+   "Center, Radius"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "c"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "arc",
+  "label": "Arc",
+  "params": "{p1, p2, p3} | {center, radius, start, end (degrees)} | {start, center, end}",
+  "menu": [
+   "Draw",
+   "Arc",
+   "3 Points"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "a"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "rectang",
+  "label": "Rectangle",
+  "params": "{p1, p2 | dimensions: [l, w] (p2 picks the quadrant) | area + length|breadth, rotation? (deg), fillet?, chamfer?: [d1, d2], width?, elevation?, thickness?}",
+  "menu": [
+   "Draw",
+   "Rectangle"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "rec",
+   "rectangle"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "polygon",
+  "label": "Polygon",
+  "params": "{sides, center, radius, inscribed?: bool, angle?: deg to a vertex (inscribed) or edge midpoint (default: bottom edge horizontal)} | {sides, edge: [[x,y],[x,y]]}",
+  "menu": [
+   "Draw",
+   "Polygon"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "pol"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "ellipse",
+  "label": "Ellipse",
+  "params": "{center, major: [dx,dy], ratio, start?, end? (degrees)}",
+  "menu": [
+   "Draw",
+   "Ellipse",
+   "Center"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "el"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "point",
+  "label": "Point",
+  "params": "{at: [x,y]} | {points: [...]}",
+  "menu": [
+   "Draw",
+   "Point",
+   "Single Point"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "po"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "point.multiple",
+  "label": "Multiple Point",
+  "params": "{points: [...]}",
+  "menu": [
+   "Draw",
+   "Point",
+   "Multiple Point"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "xline",
+  "label": "Construction Line",
+  "params": "{base, through} | {base, angle (degrees)} | {base, hor|ver: true} | {vertex, start, end} (bisect) | {handle, distance, side} | {handle, through} (offset)",
+  "menu": [
+   "Draw",
+   "Construction Line"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "xl"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "ray",
+  "label": "Ray",
+  "params": "{base, through}",
+  "menu": [
+   "Draw",
+   "Ray"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "spline",
+  "label": "Spline",
+  "params": "{fit: [[x,y],...]} | {control: [...], degree?}",
+  "menu": [
+   "Draw",
+   "Spline",
+   "Fit Points"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "spl"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "donut",
+  "label": "Donut",
+  "params": "{center, inside, outside}",
+  "menu": [
+   "Draw",
+   "Donut"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "do",
+   "doughnut"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "text",
+  "label": "Single Line Text",
+  "params": "{at, text, height?, rotation? (degrees), justify?: L|C|R|M|TL|TC|TR|ML|MC|MR|BL|BC|BR}",
+  "menu": [
+   "Draw",
+   "Text",
+   "Single Line Text"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "dt",
+   "dtext"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "mtext",
+  "label": "Multiline Text",
+  "params": "{at, text, height?, width?, attach?: 1..9, rotation?}",
+  "menu": [
+   "Draw",
+   "Text",
+   "Multiline Text..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "t",
+   "mt"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "arc.sce",
+  "label": "Start, Center, End",
+  "params": "{start, center, end}",
+  "menu": [
+   "Draw",
+   "Arc",
+   "Start, Center, End"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "arc.sca",
+  "label": "Start, Center, Angle",
+  "params": "{start, center, angle (degrees, + = CCW)}",
+  "menu": [
+   "Draw",
+   "Arc",
+   "Start, Center, Angle"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "arc.scl",
+  "label": "Start, Center, Length",
+  "params": "{start, center, length (chord; negative = major arc)}",
+  "menu": [
+   "Draw",
+   "Arc",
+   "Start, Center, Length"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "arc.sea",
+  "label": "Start, End, Angle",
+  "params": "{start, end, angle (degrees, + = CCW)}",
+  "menu": [
+   "Draw",
+   "Arc",
+   "Start, End, Angle"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "arc.sed",
+  "label": "Start, End, Direction",
+  "params": "{start, end, direction (degrees | [dx,dy])}",
+  "menu": [
+   "Draw",
+   "Arc",
+   "Start, End, Direction"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "arc.ser",
+  "label": "Start, End, Radius",
+  "params": "{start, end, radius (negative = major arc)}",
+  "menu": [
+   "Draw",
+   "Arc",
+   "Start, End, Radius"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "arc.cse",
+  "label": "Center, Start, End",
+  "params": "{center, start, end}",
+  "menu": [
+   "Draw",
+   "Arc",
+   "Center, Start, End"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "arc.csa",
+  "label": "Center, Start, Angle",
+  "params": "{center, start, angle (degrees)}",
+  "menu": [
+   "Draw",
+   "Arc",
+   "Center, Start, Angle"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "arc.csl",
+  "label": "Center, Start, Length",
+  "params": "{center, start, length (chord)}",
+  "menu": [
+   "Draw",
+   "Arc",
+   "Center, Start, Length"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "arc.continue",
+  "label": "Continue",
+  "params": "{end} (tangent from the last line/arc) | {start, direction, end}",
+  "menu": [
+   "Draw",
+   "Arc",
+   "Continue"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "circle.cd",
+  "label": "Center, Diameter",
+  "params": "{center, diameter}",
+  "menu": [
+   "Draw",
+   "Circle",
+   "Center, Diameter"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "circle.2p",
+  "label": "2 Points",
+  "params": "{p1, p2}",
+  "menu": [
+   "Draw",
+   "Circle",
+   "2 Points"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "circle.3p",
+  "label": "3 Points",
+  "params": "{p1, p2, p3}",
+  "menu": [
+   "Draw",
+   "Circle",
+   "3 Points"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "circle.ttr",
+  "label": "Tan, Tan, Radius",
+  "params": "{h1, p1, h2, p2, radius} (lines, circles, arcs, polyline segments; nearest solution to the picks)",
+  "menu": [
+   "Draw",
+   "Circle",
+   "Tan, Tan, Radius"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "circle.ttt",
+  "label": "Tan, Tan, Tan",
+  "params": "{h1, p1, h2, p2, h3, p3}",
+  "menu": [
+   "Draw",
+   "Circle",
+   "Tan, Tan, Tan"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "ellipse.axis",
+  "label": "Axis, End",
+  "params": "{p1, p2, distance} | {p1, p2, p3} (axis endpoints, then half the other axis)",
+  "menu": [
+   "Draw",
+   "Ellipse",
+   "Axis, End"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "ellipse.arc",
+  "label": "Elliptical Arc",
+  "params": "{center, major: [dx,dy], ratio, start, end (degrees)} | {p1, p2, distance, start, end}",
+  "menu": [
+   "Draw",
+   "Ellipse",
+   "Arc"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "divide",
+  "label": "Divide",
+  "params": "{handle, segments, block?, align?: bool}",
+  "menu": [
+   "Draw",
+   "Point",
+   "Divide"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "div"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "measure",
+  "label": "Measure",
+  "params": "{handle, length, block?, align?: bool, from?: [x,y] (end to start at)}",
+  "menu": [
+   "Draw",
+   "Point",
+   "Measure"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "me"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "revcloud",
+  "label": "Rectangular",
+  "params": "{p1, p2} | {points: [...]} | {freehand: [...]} | {handle}, arcLength?, style?: normal|calligraphy, reverse?",
+  "menu": [
+   "Draw",
+   "Revision Cloud",
+   "Rectangular"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "revcloud.polygonal",
+  "label": "Polygonal",
+  "params": "{points: [[x,y],...], arcLength?}",
+  "menu": [
+   "Draw",
+   "Revision Cloud",
+   "Polygonal"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "revcloud.freehand",
+  "label": "Freehand",
+  "params": "{freehand: [[x,y],...], arcLength?}",
+  "menu": [
+   "Draw",
+   "Revision Cloud",
+   "Freehand"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "wipeout",
+  "label": "Wipeout",
+  "params": "{points: [[x,y],...]} | {handle (closed polyline), erase?: bool} | {frames: on|off|display}",
+  "menu": [
+   "Draw",
+   "Wipeout"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "3dpoly",
+  "label": "3D Polyline",
+  "params": "{points: [[x,y,z?],...], closed?}",
+  "menu": [
+   "Draw",
+   "3D Polyline"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "3p"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "mline",
+  "label": "Multiline",
+  "params": "{points, scale?, justification?: top|zero|bottom, closed?} (two offset polylines)",
+  "menu": [
+   "Draw",
+   "Multiline"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "ml"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "helix",
+  "label": "Helix",
+  "params": "{center, baseRadius, topRadius?, height?, turns?, ccw?} (3D polyline approximation)",
+  "menu": [
+   "Draw",
+   "Helix"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "spline.cv",
+  "label": "Control Vertices",
+  "params": "{control: [[x,y],...], degree?: 1..10 (default 3), closed?}",
+  "menu": [
+   "Draw",
+   "Spline",
+   "Control Vertices"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "centermark",
+  "label": "Center Mark",
+  "params": "{handle | handles} (circles/arcs; lines on the CENTER linetype)",
+  "menu": [
+   "Draw",
+   "Center Mark"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "centerline",
+  "label": "Center Line",
+  "params": "{h1, h2} (two lines)",
+  "menu": [
+   "Draw",
+   "Center Line"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "dimlinear",
+  "label": "Linear",
+  "params": "{p1, p2, at, rotation? (degrees; default: horizontal/vertical from `at`), text?} | {object: hex, at} (associative)",
+  "menu": [
+   "Dimension",
+   "Linear"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "dli",
+   "dimlin"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "dimaligned",
+  "label": "Aligned",
+  "params": "{p1, p2, at, text?}",
+  "menu": [
+   "Dimension",
+   "Aligned"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "dal",
+   "dimali"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "dimradius",
+  "label": "Radius",
+  "params": "{handle, at?} | {center, point}",
+  "menu": [
+   "Dimension",
+   "Radius"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "dra",
+   "dimrad"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "dimdiameter",
+  "label": "Diameter",
+  "params": "{handle, at?} | {center, point}",
+  "menu": [
+   "Dimension",
+   "Diameter"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "ddi",
+   "dimdia"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "dimangular",
+  "label": "Angular",
+  "params": "{vertex, p1, p2, at} | {lines: [hex, hex], at} | {arc: hex, at} (associative)",
+  "menu": [
+   "Dimension",
+   "Angular"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "dan",
+   "dimang"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "dimarc",
+  "label": "Arc Length",
+  "params": "{handle, at}",
+  "menu": [
+   "Dimension",
+   "Arc Length"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "dar"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "dimordinate",
+  "label": "Ordinate",
+  "params": "{feature, leader, xtype?: bool}",
+  "menu": [
+   "Dimension",
+   "Ordinate"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "dor",
+   "dimord"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "dimcontinue",
+  "label": "Continue",
+  "params": "{points: [[x,y]...]} (continues the last linear dimension)",
+  "menu": [
+   "Dimension",
+   "Continue"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "dco",
+   "dimcont"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "dimbaseline",
+  "label": "Baseline",
+  "params": "{points: [[x,y]...]} (baseline from the last linear dimension)",
+  "menu": [
+   "Dimension",
+   "Baseline"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "dba",
+   "dimbase"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "qdim",
+  "label": "Quick Dimension",
+  "params": "{handles?, at: [x,y], vertical?: bool}",
+  "menu": [
+   "Dimension",
+   "Quick Dimension"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "dim",
+  "label": "Dimension",
+  "params": "{p1, p2, at}",
+  "menu": [
+   "Dimension",
+   "Dimension"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "mleader",
+  "label": "Multileader",
+  "params": "{points: [[arrow], ..., [landing]], text}",
+  "menu": [
+   "Dimension",
+   "Multileader"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "mld"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "leader",
+  "label": "Leader",
+  "params": "{points: [[x,y]...], text?}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [
+   "lead"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "dimstyle.update",
+  "label": "Update",
+  "params": "{handles?}",
+  "menu": [
+   "Dimension",
+   "Update"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "dimoverride",
+  "label": "Override",
+  "params": "{handles?, <DimStyle fields or DIM* variables: values>, clear?: bool, text?: override text}",
+  "menu": [
+   "Dimension",
+   "Override"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "dov",
+   "dimover"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "dimreassociate",
+  "label": "Reassociate Dimensions",
+  "params": "{handles?} (dimensions; attaches their definition points to the objects under them)",
+  "menu": [
+   "Dimension",
+   "Reassociate Dimensions"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "dre"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "dimdisassociate",
+  "label": "Disassociate Dimensions",
+  "params": "{handles?}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [
+   "dda"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "dimtedit.home",
+  "label": "Home",
+  "params": "{handles?}",
+  "menu": [
+   "Dimension",
+   "Align Text",
+   "Home"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "dimtedit.angle",
+  "label": "Angle",
+  "params": "{handles?, angle: degrees}",
+  "menu": [
+   "Dimension",
+   "Align Text",
+   "Angle"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "dimtedit.left",
+  "label": "Left",
+  "params": "{handles?}",
+  "menu": [
+   "Dimension",
+   "Align Text",
+   "Left"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "dimtedit.center",
+  "label": "Center",
+  "params": "{handles?}",
+  "menu": [
+   "Dimension",
+   "Align Text",
+   "Center"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "dimtedit.right",
+  "label": "Right",
+  "params": "{handles?}",
+  "menu": [
+   "Dimension",
+   "Align Text",
+   "Right"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "dimtedit",
+  "label": "Dimension Text Edit",
+  "params": "{handles?, at?: [x,y], mode?: home|angle|left|center|right, angle?}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [
+   "dimted"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "dimspace",
+  "label": "Dimension Space",
+  "params": "{base: hex, handles: [hex], spacing?: number (default DIMDLI)}",
+  "menu": [
+   "Dimension",
+   "Dimension Space"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "hatch",
+  "label": "Hatch...",
+  "params": "{points?: [[x,y]] (internal points) | handles?: [hex] (closed objects), pattern?: \"ANSI31\", scale?, angle? (degrees), associative?}",
+  "menu": [
+   "Draw",
+   "Hatch..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "h",
+   "bh",
+   "-hatch"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "gradient",
+  "label": "Gradient...",
+  "params": "{points? | handles?, color1?, color2?, angle?}",
+  "menu": [
+   "Draw",
+   "Gradient..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "gd"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "boundary",
+  "label": "Boundary...",
+  "params": "{points: [[x,y]]}",
+  "menu": [
+   "Draw",
+   "Boundary..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "bo",
+   "bpoly"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "region",
+  "label": "Region",
+  "params": "{handles?}",
+  "menu": [
+   "Draw",
+   "Region"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "reg"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "hatchedit",
+  "label": "Hatch Edit",
+  "params": "{handles?, pattern?, scale?, angle?}",
+  "menu": [
+   "Modify",
+   "Object",
+   "Hatch..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "he"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "block",
+  "label": "Make...",
+  "params": "{name, base: [x,y], handles?, keep?: \"convert\"|\"retain\"|\"delete\" (default \"convert\"), description?}",
+  "menu": [
+   "Draw",
+   "Block",
+   "Make..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "b",
+   "bmake"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "-block",
+  "label": "Create Block",
+  "params": "{name, base: [x,y], handles?, keep?: \"delete\"|\"retain\"|\"convert\" (default \"delete\"), description?}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [
+   "-b"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "insert",
+  "label": "Block...",
+  "params": "{name (\"*NAME\": exploded), file?: DXF/DWG path (defines or redefines block `name`, default the file name, from its model space; base point $INSBASE), at: [x,y], scale?: number | [x, y], rotation? (degrees), basePoint?: [x,y] (block coordinates), attribs?: {TAG: value}, explode?: bool}",
+  "menu": [
+   "Insert",
+   "Block..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "i",
+   "-insert",
+   "ddinsert"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "attdef",
+  "label": "Define Attributes...",
+  "params": "{tag, prompt?, default?, at, height?, invisible?}",
+  "menu": [
+   "Draw",
+   "Block",
+   "Define Attributes..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "att",
+   "-attdef"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "attedit",
+  "label": "Single...",
+  "params": "{handle, values: {TAG: value} (tags in any case)} → {changed, unknownTags?}",
+  "menu": [
+   "Modify",
+   "Object",
+   "Attribute",
+   "Single..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "ate",
+   "eattedit"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "-attedit",
+  "label": "Global",
+  "params": "{find, replace?, block?, tag?, value? (wildcard specifications, default *), handles? (default: every block reference in the current space)} → {changed}",
+  "menu": [
+   "Modify",
+   "Object",
+   "Attribute",
+   "Global"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "-ate",
+   "atte"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "wblock",
+  "label": "Write Block",
+  "params": "{path, name? | handles?, base?}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [
+   "w"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "base",
+  "label": "Base",
+  "params": "{at: [x,y]}",
+  "menu": [
+   "Draw",
+   "Block",
+   "Base"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "purge",
+  "label": "Purge",
+  "params": "{type?: all|blocks|dimstyles|groups|layers|linetypes|mleaderstyles|tablestyles|textstyles|zerolength|emptytext (default all: every named type), names?: \"A*,B\" (default *)} → purged",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [
+   "pu",
+   "-purge"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "blocks.list",
+  "label": "List Blocks",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "battman",
+  "label": "Block Attribute Manager...",
+  "params": "{name}",
+  "menu": [
+   "Modify",
+   "Object",
+   "Attribute",
+   "Block Attribute Manager..."
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "attdisp",
+  "label": "Attribute Display",
+  "params": "{mode: \"normal\" | \"on\" | \"off\"} (sets ATTMODE to 1 / 2 / 0) → {attmode}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "attsync",
+  "label": "Synchronize Attributes",
+  "params": "{name} or {handle} (a reference of the block) → {block, references}",
+  "menu": [
+   "Modify",
+   "Object",
+   "Attribute",
+   "Synchronize Attributes"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "erase",
+  "label": "Erase",
+  "params": "{handles?: [hex]} (default: selection)",
+  "menu": [
+   "Modify",
+   "Erase"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "e",
+   "delete"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "move",
+  "label": "Move",
+  "params": "{handles?, from?: [x,y], to?: [x,y] | delta: [dx,dy]}",
+  "menu": [
+   "Modify",
+   "Move"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "m"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "copy",
+  "label": "Copy",
+  "params": "{handles?, delta: [dx,dy] | from,to, count?: n}",
+  "menu": [
+   "Modify",
+   "Copy"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "co",
+   "cp"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "rotate",
+  "label": "Rotate",
+  "params": "{handles?, base: [x,y], angle (degrees), copy?: bool}",
+  "menu": [
+   "Modify",
+   "Rotate"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "ro"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "scale",
+  "label": "Scale",
+  "params": "{handles?, base: [x,y], factor, copy?: bool}",
+  "menu": [
+   "Modify",
+   "Scale"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "sc"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "mirror",
+  "label": "Mirror",
+  "params": "{handles?, p1, p2, erase?: bool}",
+  "menu": [
+   "Modify",
+   "Mirror"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "mi"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "stretch",
+  "label": "Stretch",
+  "params": "{window: [[x,y],[x,y]], delta: [dx,dy]}",
+  "menu": [
+   "Modify",
+   "Stretch"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "s"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "offset",
+  "label": "Offset",
+  "params": "{handle, distance, side: [x,y], erase?: bool, layer?: \"source\"|\"current\"}",
+  "menu": [
+   "Modify",
+   "Offset"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "o"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "trim",
+  "label": "Trim",
+  "params": "{handle, pick: [x,y] | fence: [[x,y],...] | crossing: [[x,y],[x,y]], edges?: [hex], edgeMode?: \"extend\"|\"none\", mode?: \"quick\"|\"standard\"}",
+  "menu": [
+   "Modify",
+   "Trim"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "tr"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "extend",
+  "label": "Extend",
+  "params": "{handle, pick: [x,y] | fence: [[x,y],...] | crossing: [[x,y],[x,y]], edges?: [hex], edgeMode?: \"extend\"|\"none\"}",
+  "menu": [
+   "Modify",
+   "Extend"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "ex"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "fillet",
+  "label": "Fillet",
+  "params": "{h1, p1, h2, p2, radius?, trim?: bool} (lines, arcs, circles) | {handle, polyline: true, radius?}",
+  "menu": [
+   "Modify",
+   "Fillet"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "f"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "chamfer",
+  "label": "Chamfer",
+  "params": "{h1, p1, h2, p2, d1?, d2? | length, angle (degrees), trim?: bool} | {handle, polyline: true, d1?, d2? | length, angle}",
+  "menu": [
+   "Modify",
+   "Chamfer"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "cha"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "explode",
+  "label": "Explode",
+  "params": "{handles?}",
+  "menu": [
+   "Modify",
+   "Explode"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "x"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "draworder.front",
+  "label": "Bring to Front",
+  "params": "{handles?}",
+  "menu": [
+   "Tools",
+   "Draw Order",
+   "Bring to Front"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "draworder.back",
+  "label": "Send to Back",
+  "params": "{handles?}",
+  "menu": [
+   "Tools",
+   "Draw Order",
+   "Send to Back"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "break",
+  "label": "Break",
+  "params": "{handle, p1, p2}",
+  "menu": [
+   "Modify",
+   "Break"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "br"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "breakatpoint",
+  "label": "Break At Point",
+  "params": "{handle, at}",
+  "menu": [
+   "Modify",
+   "Break At Point"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "join",
+  "label": "Join",
+  "params": "{handles?}",
+  "menu": [
+   "Modify",
+   "Join"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "j"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "overkill",
+  "label": "Delete Duplicate Objects",
+  "params": "{handles?}",
+  "menu": [
+   "Modify",
+   "Delete Duplicate Objects"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "array",
+  "label": "Array",
+  "params": "{type?: \"rectangular\" (default) | \"polar\" | \"path\", ...the parameters of arrayrect, arraypolar or arraypath}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [
+   "ar"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "arrayrect",
+  "label": "Rectangular Array",
+  "params": "{handles?, rows, cols, rowSpacing, colSpacing}",
+  "menu": [
+   "Modify",
+   "Array",
+   "Rectangular Array"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "arraypolar",
+  "label": "Polar Array",
+  "params": "{handles?, center, count, angle? (degrees, default 360), rotate?: bool}",
+  "menu": [
+   "Modify",
+   "Array",
+   "Polar Array"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "pedit",
+  "label": "Polyline",
+  "params": "{handle | handles, option: close|open|join|width|fit|spline|decurve|reverse|ltypegen|vertex, width?, handles2? (join), fuzz?, action?: move|insert|straighten|width, index?, to?, startWidth?, endWidth?, convert?: bool}",
+  "menu": [
+   "Modify",
+   "Object",
+   "Polyline"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "pe"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "splinedit",
+  "label": "Spline",
+  "params": "{handle, option: close|open|reverse|refit|purge|polyline|move, fit?, index?, to?, precision?}",
+  "menu": [
+   "Modify",
+   "Object",
+   "Spline"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "spe"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "lengthen",
+  "label": "Lengthen",
+  "params": "{handle, pick?: [x,y] (end), delta? | deltaAngle? (deg) | percent? | total? | totalAngle? (deg) | to?: [x,y]} ({handle} alone measures)",
+  "menu": [
+   "Modify",
+   "Lengthen"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "len"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "align",
+  "label": "Align",
+  "params": "{handles?, s1, d1, s2?, d2?, scale?: bool}",
+  "menu": [
+   "Modify",
+   "3D Operations",
+   "Align"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "al"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "blend",
+  "label": "Blend",
+  "params": "{h1, p1, h2, p2, continuity?: tangent|smooth}",
+  "menu": [
+   "Modify",
+   "Blend"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "blendcurves"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "reverse",
+  "label": "Reverse",
+  "params": "{handles?} (lines, polylines, 3D polylines, splines)",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "ncopy",
+  "label": "Copy Nested Objects",
+  "params": "{handle (block reference), pick?: [x,y] (nearest nested object; default all), delta? | from,to}",
+  "menu": [
+   "Modify",
+   "Copy Nested Objects"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "chspace",
+  "label": "Change Space",
+  "params": "{handles?, to?: \"model\" | layout name, viewport?: handle}",
+  "menu": [
+   "Modify",
+   "Change Space"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "flatten",
+  "label": "Flatten Objects",
+  "params": "{handles?} (z = 0, 3D polylines become polylines)",
+  "menu": [
+   "Modify",
+   "Flatten Objects"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "arraypath",
+  "label": "Path Array",
+  "params": "{handles?, path (handle), count? (default 6) | spacing?, align?: bool (default true)}",
+  "menu": [
+   "Modify",
+   "Array",
+   "Path Array"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "textedit",
+  "label": "Edit Text...",
+  "params": "{handle, text} (text, mtext, attribute definitions, dimension text override)",
+  "menu": [
+   "Modify",
+   "Object",
+   "Edit Text..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "ed",
+   "ddedit"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "grip.move",
+  "label": "Grip Stretch",
+  "params": "{handle?, handles?, index, to} (stretch the grip) | {handles?, index, baseHandle?, to, mode: \"move\", copy?} (move about the grip)",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "grip.stretch",
+  "label": "Grip Stretch",
+  "params": "{handle?, handles?, index, to}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "grip.rotate",
+  "label": "Grip Rotate",
+  "params": "{handles?, base | baseHandle+index, angle (degrees) | to, copy?}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "grip.scale",
+  "label": "Grip Scale",
+  "params": "{handles?, base | baseHandle+index, factor | to, copy?}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "grip.mirror",
+  "label": "Grip Mirror",
+  "params": "{handles?, base | baseHandle+index, to (second mirror point), copy?}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "layer",
+  "label": "Layers",
+  "params": "{} → layers, states (typed -LAYER: option prompts)",
+  "menu": [
+   "Format",
+   "Layers"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "la",
+   "layers",
+   "-layer"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "layer.new",
+  "label": "New Layer",
+  "params": "{name, color?, linetype?, lineweight? (mm), current?: bool}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "layer.set",
+  "label": "Set Layer Properties",
+  "params": "{name, on?, frozen?, locked?, plot?, color?, linetype?, lineweight?, transparency?, description?, newVpFreeze?, newName?}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "layer.current",
+  "label": "Make Current",
+  "params": "{name}",
+  "menu": [
+   "Format",
+   "Layer Tools",
+   "Make Current"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "clayer"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "layer.delete",
+  "label": "Delete Layer",
+  "params": "{name}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "laymcur",
+  "label": "Make Object's Layer Current",
+  "params": "{handles?}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "laymch",
+  "label": "Layer Match",
+  "params": "{handles?, layer}",
+  "menu": [
+   "Format",
+   "Layer Tools",
+   "Layer Match"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "laycur",
+  "label": "Change to Current Layer",
+  "params": "{handles?}",
+  "menu": [
+   "Format",
+   "Layer Tools",
+   "Change to Current Layer"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "layiso",
+  "label": "Isolate Layer",
+  "params": "{handles?}",
+  "menu": [
+   "Format",
+   "Layer Tools",
+   "Isolate Layer"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "layuniso",
+  "label": "Unisolate Layer",
+  "menu": [
+   "Format",
+   "Layer Tools",
+   "Unisolate Layer"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "layfrz",
+  "label": "Freeze Layer",
+  "params": "{handles?}",
+  "menu": [
+   "Format",
+   "Layer Tools",
+   "Freeze Layer"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "layoff",
+  "label": "Layer Off",
+  "params": "{handles?}",
+  "menu": [
+   "Format",
+   "Layer Tools",
+   "Layer Off"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "laylck",
+  "label": "Lock Layer",
+  "params": "{handles?}",
+  "menu": [
+   "Format",
+   "Layer Tools",
+   "Lock Layer"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "layulk",
+  "label": "Unlock Layer",
+  "params": "{handles?}",
+  "menu": [
+   "Format",
+   "Layer Tools",
+   "Unlock Layer"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "layon",
+  "label": "Turn All Layers On",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "laythw",
+  "label": "Thaw All Layers",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "layerp",
+  "label": "Previous Layer",
+  "menu": [
+   "Format",
+   "Layer Tools",
+   "Previous Layer"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "layerstate.save",
+  "label": "Save Layer State",
+  "params": "{name}",
+  "menu": [
+   "Format",
+   "Layer States Manager..."
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "layerstate.restore",
+  "label": "Restore Layer State",
+  "params": "{name}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "layerstate.list",
+  "label": "List Layer States",
+  "params": "{} → states",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "layerstate.delete",
+  "label": "Delete Layer State",
+  "params": "{name}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "layerstate.rename",
+  "label": "Rename Layer State",
+  "params": "{from, to}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "laymrg",
+  "label": "Layer Merge",
+  "params": "{from: [names], to} (the from layers' objects move to `to`, then the from layers are deleted)",
+  "menu": [
+   "Format",
+   "Layer Tools",
+   "Layer Merge"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "laydel",
+  "label": "Layer Delete",
+  "params": "{names: [...]} (deletes the layers and every object on them)",
+  "menu": [
+   "Format",
+   "Layer Tools",
+   "Layer Delete"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "layout",
+  "label": "Layout",
+  "params": "{option: new|copy|delete|rename|set|list, name?, to?} (typed LAYOUT / -LAYOUT: option prompts)",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [
+   "lo"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "layout.new",
+  "label": "New Layout",
+  "params": "{name?, viewport?: bool (default true)} → {name, viewport}",
+  "menu": [
+   "Insert",
+   "Layout",
+   "New Layout"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "layout.delete",
+  "label": "Delete Layout",
+  "params": "{name}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "layout.rename",
+  "label": "Rename Layout",
+  "params": "{from?: current layout, to}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "layout.copy",
+  "label": "Copy Layout",
+  "params": "{from, to?}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "layout.list",
+  "label": "List Layouts",
+  "params": "→ [{name, tabOrder, page, viewports}]",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "mview",
+  "label": "Viewports",
+  "params": "{p1?, p2? (default: printable area), count?: 1-4, arrangement?: vertical|horizontal|left|right|above|below, layout?}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [
+   "mv"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "vports",
+  "label": "New Viewports...",
+  "params": "{count?: 1-4, arrangement?, p1?, p2?, layout?}",
+  "menu": [
+   "View",
+   "Viewports",
+   "New Viewports..."
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "vports.1",
+  "label": "1 Viewport",
+  "params": "{p1?, p2?, layout?}",
+  "menu": [
+   "View",
+   "Viewports",
+   "1 Viewport"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "vports.2",
+  "label": "2 Viewports",
+  "params": "{p1?, p2?, arrangement?: vertical|horizontal, layout?}",
+  "menu": [
+   "View",
+   "Viewports",
+   "2 Viewports"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "vports.3",
+  "label": "3 Viewports",
+  "params": "{p1?, p2?, arrangement?: right|left|above|below|vertical|horizontal, layout?}",
+  "menu": [
+   "View",
+   "Viewports",
+   "3 Viewports"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "vports.4",
+  "label": "4 Viewports",
+  "params": "{p1?, p2?, layout?}",
+  "menu": [
+   "View",
+   "Viewports",
+   "4 Viewports"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "viewport.set",
+  "label": "Viewport Properties",
+  "params": "{handle? (default: selected viewports), scale?: paper units per model unit | \"1:50\", viewHeight?, center?: [x,y], locked?, freeze?: [layer], thaw?: [layer], colors?: {layer: color | null}}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "vplayer",
+  "label": "Viewport Layer Freeze",
+  "params": "{handle?, freeze?: [layer], thaw?: [layer], colors?: {layer: color (\"red\" | 1..255 | \"r,g,b\") | null to clear}} (typed: option prompts)",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "pagesetup",
+  "label": "Page Setup Manager...",
+  "params": "{layout?: current, paper?: \"A4\"|\"A3\"|\"Letter\"|\"ANSI B\"|…, width?, height? (mm), landscape?, margins?: [l,b,r,t] mm, lineweights?, plotArea?, scale?, scaleToFit?, center?, plotStyleTable?}",
+  "menu": [
+   "File",
+   "Page Setup Manager..."
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "plot",
+  "label": "Print...",
+  "params": "{path? (else returns base64 `data`), layout?: current|\"Model\", paper?, landscape?, fit?: bool, scale?, lineweights?: bool}",
+  "menu": [
+   "File",
+   "Print..."
+  ],
+  "shortcut": "Cmd+P",
+  "aliases": [
+   "print"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "exportpdf",
+  "label": "Export to PDF...",
+  "params": "{path? (else returns base64 `data`), layout?, paper?, landscape?, fit?, lineweights?}",
+  "menu": [
+   "File",
+   "Export to PDF..."
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "mspace",
+  "label": "Model Space (in viewport)",
+  "params": "{handle?: viewport, at?: [x,y] paper point inside a viewport} (default: the last active or first viewport)",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [
+   "ms"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "pspace",
+  "label": "Paper Space",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [
+   "ps"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "properties",
+  "label": "Properties",
+  "params": "{handles?} → properties of the selection",
+  "menu": [
+   "Modify",
+   "Properties"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "pr",
+   "props",
+   "ch"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "properties.set",
+  "label": "Set Properties",
+  "params": "{handles?, layer?, color?, linetype?, lineweight?, ltscale?, transparency?: \"ByLayer\" | \"ByBlock\" | 0..90, visible?, <geometry fields: radius, center, start, end, text, height, rotation…>}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "matchprop",
+  "label": "Match Properties",
+  "params": "{source, targets: [hex]}",
+  "menu": [
+   "Modify",
+   "Match Properties"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "ma",
+   "painter"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "color",
+  "label": "Color...",
+  "params": "{color: \"ByLayer\" | \"red\" | 1..255 | \"r,g,b\"}",
+  "menu": [
+   "Format",
+   "Color..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "col",
+   "colour"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "linetype",
+  "label": "Linetype...",
+  "params": "{current?: name, load?: name | \"*\"}",
+  "menu": [
+   "Format",
+   "Linetype..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "lt",
+   "ltype"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "lweight",
+  "label": "Lineweight...",
+  "params": "{lineweight: mm | ByLayer}",
+  "menu": [
+   "Format",
+   "Lineweight..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "lw",
+   "lineweight"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "ltscale",
+  "label": "Linetype Scale",
+  "params": "{scale}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [
+   "lts"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "units",
+  "label": "Units...",
+  "params": "{lunits?: 1..5, luprec?: 0..8, aunits?: 0..4, auprec?: 0..8, insunits?}",
+  "menu": [
+   "Format",
+   "Units..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "un"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "limits",
+  "label": "Drawing Limits",
+  "params": "{min: [x,y], max: [x,y]}",
+  "menu": [
+   "Format",
+   "Drawing Limits"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "style",
+  "label": "Text Style...",
+  "params": "{name, font?, bigFont?, height?, widthFactor?, oblique? (degrees), backwards?, upsideDown?, vertical?, annotative?, current?} → styles",
+  "menu": [
+   "Format",
+   "Text Style..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "st"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "style.list",
+  "label": "List Text Styles",
+  "params": "{} → text styles",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "style.rename",
+  "label": "Rename Text Style",
+  "params": "{from, to}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "style.delete",
+  "label": "Delete Text Style",
+  "params": "{name} (not Standard, the current style or one in use)",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "style.current",
+  "label": "Set Current Text Style",
+  "params": "{name}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "dimstyle",
+  "label": "Dimension Style...",
+  "params": "{name, current?, <style fields or DIM* variables, e.g. arrowSize / DIMASZ, DIMTSZ, DIMBLK, DIMTAD, DIMLUNIT…>} → styles",
+  "menu": [
+   "Format",
+   "Dimension Style..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "d",
+   "dst",
+   "ddim"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "dimstyle.dimension",
+  "label": "Dimension Style...",
+  "params": "same as `dimstyle`",
+  "menu": [
+   "Dimension",
+   "Dimension Style..."
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "dimstyle.list",
+  "label": "List Dimension Styles",
+  "params": "{name?} → styles (with all variables for `name`)",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "dimstyle.rename",
+  "label": "Rename Dimension Style",
+  "params": "{from, to}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "dimstyle.delete",
+  "label": "Delete Dimension Style",
+  "params": "{name} (not Standard, the current style or one in use)",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "dimstyle.current",
+  "label": "Set Current Dimension Style",
+  "params": "{name}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "dimstyle.override",
+  "label": "Dimension Style Override",
+  "params": "{handles?, <style fields or DIM* variables: values>, clear?: bool} (per-dimension overrides)",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "tablestyle",
+  "label": "Table Style...",
+  "params": "{name, textHeight?, margin?, title?, header?, current?} → styles",
+  "menu": [
+   "Format",
+   "Table Style..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "ts"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "mleaderstyle",
+  "label": "Multileader Style...",
+  "params": "{name, arrowSize?, textHeight?, landingGap?, dogleg?, textStyle?, current?} → styles",
+  "menu": [
+   "Format",
+   "Multileader Style..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "mls"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "ddptype",
+  "label": "Point Style...",
+  "params": "{pdmode, pdsize}",
+  "menu": [
+   "Format",
+   "Point Style..."
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "rename",
+  "label": "Rename...",
+  "params": "{table: layer|linetype|style|dimstyle|block|mleaderstyle|tablestyle|view|ucs, from, to}",
+  "menu": [
+   "Format",
+   "Rename..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "ren",
+   "-rename"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "dist",
+  "label": "Distance",
+  "params": "{p1, p2}",
+  "menu": [
+   "Tools",
+   "Inquiry",
+   "Distance"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "di"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "id",
+  "label": "ID Point",
+  "params": "{at}",
+  "menu": [
+   "Tools",
+   "Inquiry",
+   "ID Point"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "list",
+  "label": "List",
+  "params": "{handles?}",
+  "menu": [
+   "Tools",
+   "Inquiry",
+   "List"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "li",
+   "ls"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "area",
+  "label": "Area",
+  "params": "{points: [[x,y],...]} | {handle}",
+  "menu": [
+   "Tools",
+   "Inquiry",
+   "Area"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "aa"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "time",
+  "label": "Time",
+  "menu": [
+   "Tools",
+   "Inquiry",
+   "Time"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "status",
+  "label": "Status",
+  "menu": [
+   "Tools",
+   "Inquiry",
+   "Status"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "drawing.inspect",
+  "label": "Inspect Drawing",
+  "params": "{entities?: bool, limit?: n}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "entities",
+  "label": "Query Entities",
+  "params": "{type?, layer?, window?: [[x,y],[x,y]], crossing?: bool (default true; false = entirely inside), limit?, offset?} → {count (all matches), returned, offset, entities}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "count",
+  "label": "Count",
+  "params": "{block?} → {blocks: {name: n}} | {block, count}, plus a `message` line",
+  "menu": [
+   "Tools",
+   "Count"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "ortho",
+  "label": "Ortho Mode",
+  "params": "{on?: bool}",
+  "menu": [],
+  "shortcut": "F8",
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "grid",
+  "label": "Grid Display",
+  "params": "{on?: bool}",
+  "menu": [],
+  "shortcut": "F7",
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "snap",
+  "label": "Snap Mode",
+  "params": "{on?: bool}",
+  "menu": [],
+  "shortcut": "F9",
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "polar",
+  "label": "Polar Tracking",
+  "params": "{on?: bool}",
+  "menu": [],
+  "shortcut": "F10",
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "otrack",
+  "label": "Object Snap Tracking",
+  "params": "{on?: bool}",
+  "menu": [],
+  "shortcut": "F11",
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "dynmode",
+  "label": "Dynamic Input",
+  "params": "{on?: bool}",
+  "menu": [],
+  "shortcut": "F12",
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "lwdisplay",
+  "label": "Show/Hide Lineweight",
+  "params": "{on?: bool}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "isodraft",
+  "label": "Isometric Drafting",
+  "params": "{on?: bool}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "transparencydisplay",
+  "label": "Show/Hide Transparency",
+  "params": "{on?: bool}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "qpmode",
+  "label": "Quick Properties",
+  "params": "{on?: bool}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "selectioncycling",
+  "label": "Selection Cycling",
+  "params": "{on?: bool}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "osnap",
+  "label": "Object Snap",
+  "params": "{on?: bool, modes?: [\"end\",\"mid\",...] | osmode?: n}",
+  "menu": [],
+  "shortcut": "F3",
+  "aliases": [
+   "os",
+   "ddosnap"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "dsettings",
+  "label": "Drafting Settings...",
+  "params": "{snapunit?: [x,y], gridunit?: [x,y], polarang? (degrees), gridmajor?}",
+  "menu": [
+   "Tools",
+   "Drafting Settings..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "ds",
+   "se"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "setvar",
+  "label": "Set Variable",
+  "params": "{name, value}",
+  "menu": [
+   "Tools",
+   "Inquiry",
+   "Set Variable"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "set"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "getvar",
+  "label": "Get Variable",
+  "params": "{name}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "sysvars",
+  "label": "List System Variables",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "cal",
+  "label": "QuickCalc",
+  "params": "{expr: \"(3+4)*2^2\", vars?: {x: 1}}",
+  "menu": [
+   "Tools",
+   "Inquiry",
+   "Quick"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "quickcalc",
+   "qc"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "find",
+  "label": "Find...",
+  "params": "{find, replace?, matchCase?: bool, wholeWord?: bool}",
+  "menu": [
+   "Edit",
+   "Find..."
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "massprop",
+  "label": "Region/Mass Properties",
+  "params": "{handles?}",
+  "menu": [
+   "Tools",
+   "Inquiry",
+   "Region/Mass Properties"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "measuregeom",
+  "label": "Measure Geometry",
+  "params": "{mode: distance|radius|angle|area, ...}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "radius.measure",
+  "label": "Radius",
+  "params": "{handle}",
+  "menu": [
+   "Tools",
+   "Inquiry",
+   "Radius"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "angle.measure",
+  "label": "Angle",
+  "params": "{vertex, p1, p2} | {h1, h2}",
+  "menu": [
+   "Tools",
+   "Inquiry",
+   "Angle"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "table",
+  "label": "Table...",
+  "params": "{at: [x,y], rows (data rows), cols, rowHeight?, colWidth?, cells?: [[text]], title?: text, header?: [text]}",
+  "menu": [
+   "Draw",
+   "Table..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "tb"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "table.set",
+  "label": "Set Table Cell",
+  "params": "{handle, row, col, text}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "table.insertrow",
+  "label": "Insert Row",
+  "params": "{handle, row? (insert before; default: append), height?}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "table.deleterow",
+  "label": "Delete Row",
+  "params": "{handle, row}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "table.insertcol",
+  "label": "Insert Column",
+  "params": "{handle, col? (insert before; default: append), width?}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "table.deletecol",
+  "label": "Delete Column",
+  "params": "{handle, col}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "table.merge",
+  "label": "Merge Cells",
+  "params": "{handle, row, col, rows, cols}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "table.unmerge",
+  "label": "Unmerge Cells",
+  "params": "{handle, row, col}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "geomconstraint",
+  "label": "Geometric Constraint",
+  "params": "{type: coincident|collinear|concentric|fix|parallel|perpendicular|horizontal|vertical|tangent|smooth|symmetric|equal, h1, p1?, h2?, p2?, h3?, p3?}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [
+   "gcon"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "gccoincident",
+  "label": "Coincident",
+  "params": "{h1, p1?, h2?, p2?, h3?, p3?} (h = handle; p = \"start\"/\"end\"/\"mid\"/\"center\"/\"v<i>\"/\"seg<i>\"/\"object\" or a pick point [x, y])",
+  "menu": [
+   "Tools",
+   "Parametric",
+   "Geometric Constraints",
+   "Coincident"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "gcperpendicular",
+  "label": "Perpendicular",
+  "params": "{h1, p1?, h2?, p2?, h3?, p3?} (h = handle; p = \"start\"/\"end\"/\"mid\"/\"center\"/\"v<i>\"/\"seg<i>\"/\"object\" or a pick point [x, y])",
+  "menu": [
+   "Tools",
+   "Parametric",
+   "Geometric Constraints",
+   "Perpendicular"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "gcparallel",
+  "label": "Parallel",
+  "params": "{h1, p1?, h2?, p2?, h3?, p3?} (h = handle; p = \"start\"/\"end\"/\"mid\"/\"center\"/\"v<i>\"/\"seg<i>\"/\"object\" or a pick point [x, y])",
+  "menu": [
+   "Tools",
+   "Parametric",
+   "Geometric Constraints",
+   "Parallel"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "gctangent",
+  "label": "Tangent",
+  "params": "{h1, p1?, h2?, p2?, h3?, p3?} (h = handle; p = \"start\"/\"end\"/\"mid\"/\"center\"/\"v<i>\"/\"seg<i>\"/\"object\" or a pick point [x, y])",
+  "menu": [
+   "Tools",
+   "Parametric",
+   "Geometric Constraints",
+   "Tangent"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "gchorizontal",
+  "label": "Horizontal",
+  "params": "{h1, p1?, h2?, p2?, h3?, p3?} (h = handle; p = \"start\"/\"end\"/\"mid\"/\"center\"/\"v<i>\"/\"seg<i>\"/\"object\" or a pick point [x, y])",
+  "menu": [
+   "Tools",
+   "Parametric",
+   "Geometric Constraints",
+   "Horizontal"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "gcvertical",
+  "label": "Vertical",
+  "params": "{h1, p1?, h2?, p2?, h3?, p3?} (h = handle; p = \"start\"/\"end\"/\"mid\"/\"center\"/\"v<i>\"/\"seg<i>\"/\"object\" or a pick point [x, y])",
+  "menu": [
+   "Tools",
+   "Parametric",
+   "Geometric Constraints",
+   "Vertical"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "gccollinear",
+  "label": "Collinear",
+  "params": "{h1, p1?, h2?, p2?, h3?, p3?} (h = handle; p = \"start\"/\"end\"/\"mid\"/\"center\"/\"v<i>\"/\"seg<i>\"/\"object\" or a pick point [x, y])",
+  "menu": [
+   "Tools",
+   "Parametric",
+   "Geometric Constraints",
+   "Collinear"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "gcconcentric",
+  "label": "Concentric",
+  "params": "{h1, p1?, h2?, p2?, h3?, p3?} (h = handle; p = \"start\"/\"end\"/\"mid\"/\"center\"/\"v<i>\"/\"seg<i>\"/\"object\" or a pick point [x, y])",
+  "menu": [
+   "Tools",
+   "Parametric",
+   "Geometric Constraints",
+   "Concentric"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "gcsmooth",
+  "label": "Smooth",
+  "params": "{h1, p1?, h2?, p2?, h3?, p3?} (h = handle; p = \"start\"/\"end\"/\"mid\"/\"center\"/\"v<i>\"/\"seg<i>\"/\"object\" or a pick point [x, y])",
+  "menu": [
+   "Tools",
+   "Parametric",
+   "Geometric Constraints",
+   "Smooth"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "gcsymmetric",
+  "label": "Symmetric",
+  "params": "{h1, p1?, h2?, p2?, h3?, p3?} (h = handle; p = \"start\"/\"end\"/\"mid\"/\"center\"/\"v<i>\"/\"seg<i>\"/\"object\" or a pick point [x, y])",
+  "menu": [
+   "Tools",
+   "Parametric",
+   "Geometric Constraints",
+   "Symmetric"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "gcequal",
+  "label": "Equal",
+  "params": "{h1, p1?, h2?, p2?, h3?, p3?} (h = handle; p = \"start\"/\"end\"/\"mid\"/\"center\"/\"v<i>\"/\"seg<i>\"/\"object\" or a pick point [x, y])",
+  "menu": [
+   "Tools",
+   "Parametric",
+   "Geometric Constraints",
+   "Equal"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "gcfix",
+  "label": "Fix",
+  "params": "{h1, p1?, h2?, p2?, h3?, p3?} (h = handle; p = \"start\"/\"end\"/\"mid\"/\"center\"/\"v<i>\"/\"seg<i>\"/\"object\" or a pick point [x, y])",
+  "menu": [
+   "Tools",
+   "Parametric",
+   "Geometric Constraints",
+   "Fix"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "autoconstrain",
+  "label": "AutoConstrain",
+  "params": "{handles?, tolerance?, angleTolerance? (degrees), types?: [names]}",
+  "menu": [
+   "Tools",
+   "Parametric",
+   "AutoConstrain"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "constraintbar",
+  "label": "Constraint Bars",
+  "params": "{mode?: show|hide|showall|hideall, handles?}",
+  "menu": [
+   "Tools",
+   "Parametric",
+   "Constraint Bars",
+   "Select Objects"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "constraintbar.showall",
+  "label": "Show All Constraint Bars",
+  "menu": [
+   "Tools",
+   "Parametric",
+   "Constraint Bars",
+   "Show All"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "constraintbar.hideall",
+  "label": "Hide All Constraint Bars",
+  "menu": [
+   "Tools",
+   "Parametric",
+   "Constraint Bars",
+   "Hide All"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "dimconstraint",
+  "label": "Dimensional Constraint",
+  "params": "{type: linear|aligned|horizontal|vertical|angular|radius|diameter, h1, p1?, h2?, p2?, expr? | value?, name?}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [
+   "dcon"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "dcaligned",
+  "label": "Aligned",
+  "params": "{h1, p1?, h2?, p2?, expr? | value?, name?}",
+  "menu": [
+   "Tools",
+   "Parametric",
+   "Dimensional Constraints",
+   "Aligned"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "dchorizontal",
+  "label": "Horizontal",
+  "params": "{h1, p1?, h2?, p2?, expr? | value?, name?}",
+  "menu": [
+   "Tools",
+   "Parametric",
+   "Dimensional Constraints",
+   "Horizontal"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "dcvertical",
+  "label": "Vertical",
+  "params": "{h1, p1?, h2?, p2?, expr? | value?, name?}",
+  "menu": [
+   "Tools",
+   "Parametric",
+   "Dimensional Constraints",
+   "Vertical"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "dcangular",
+  "label": "Angular",
+  "params": "{h1, p1?, h2?, p2?, expr? | value?, name?}",
+  "menu": [
+   "Tools",
+   "Parametric",
+   "Dimensional Constraints",
+   "Angular"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "dcradius",
+  "label": "Radius",
+  "params": "{h1, p1?, h2?, p2?, expr? | value?, name?}",
+  "menu": [
+   "Tools",
+   "Parametric",
+   "Dimensional Constraints",
+   "Radius"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "dcdiameter",
+  "label": "Diameter",
+  "params": "{h1, p1?, h2?, p2?, expr? | value?, name?}",
+  "menu": [
+   "Tools",
+   "Parametric",
+   "Dimensional Constraints",
+   "Diameter"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "dclinear",
+  "label": "Linear",
+  "params": "{h1, p1?, h2?, p2?, expr? | value?, name?}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "dcdisplay",
+  "label": "Dynamic Dimensions",
+  "params": "{mode?: show|hide|showall|hideall, handles?}",
+  "menu": [
+   "Tools",
+   "Parametric",
+   "Dynamic Dimensions",
+   "Select Objects"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "dcdisplay.showall",
+  "label": "Show All Dynamic Dimensions",
+  "menu": [
+   "Tools",
+   "Parametric",
+   "Dynamic Dimensions",
+   "Show All"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "dcdisplay.hideall",
+  "label": "Hide All Dynamic Dimensions",
+  "menu": [
+   "Tools",
+   "Parametric",
+   "Dynamic Dimensions",
+   "Hide All"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "delconstraint",
+  "label": "Delete Constraints",
+  "params": "{handles? | ids?: [n]}",
+  "menu": [
+   "Tools",
+   "Parametric",
+   "Delete Constraints"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "parameters",
+  "label": "Parameters Manager",
+  "params": "{} lists; {name, expr | value, description?} sets (new name = user parameter) and re-solves; {delete: name}",
+  "menu": [
+   "Tools",
+   "Parametric",
+   "Parameters Manager"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "par",
+   "parametersclose"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "constraintsettings",
+  "label": "Constraint Settings",
+  "params": "{infer?, distanceTolerance?, angleTolerance?, autoTypes?: [names], barsVisible?, barTransparency?, dimsVisible?}",
+  "menu": [
+   "Tools",
+   "Parametric",
+   "Constraint Settings"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "csettings"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "constraints.inspect",
+  "label": "Inspect Constraints",
+  "params": "{} → constraints, glyph anchors, parameters, settings",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ }
+]

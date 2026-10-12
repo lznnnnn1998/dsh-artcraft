@@ -1,0 +1,14 @@
+{
+  "cadcraft": "/Users/zhinan/Documents/dsh_workspace/dsh-artcraft/crafts-bin/cadcraft-cli",
+  "gridcraft": "/Users/zhinan/Documents/dsh_workspace/dsh-artcraft/crafts-bin/gridcraft-cli",
+  "soundcraft": "/Users/zhinan/Documents/dsh_workspace/dsh-artcraft/crafts-bin/soundcraft-cli",
+  "deckcraft": "/Users/zhinan/Documents/dsh_workspace/dsh-artcraft/crafts-bin/deckcraft-cli",
+  "wordcraft": "/Users/zhinan/Documents/dsh_workspace/dsh-artcraft/crafts-bin/wordcraft-cli",
+  "photocraft": "/Users/zhinan/Documents/dsh_workspace/dsh-artcraft/crafts-bin/photocraft-cli",
+  "lightcraft": "/Users/zhinan/Documents/dsh_workspace/dsh-artcraft/crafts-bin/lightcraft-cli",
+  "pdfcraft": "/Users/zhinan/Documents/dsh_workspace/dsh-artcraft/crafts-bin/pdfcraft-cli",
+  "vectorcraft": "/Users/zhinan/Documents/dsh_workspace/dsh-artcraft/crafts-bin/vectorcraft-cli",
+  "effectcraft": "/Users/zhinan/Documents/dsh_workspace/dsh-artcraft/crafts-bin/effectcraft-cli",
+  "filmcraft": "/Users/zhinan/Documents/dsh_workspace/dsh-artcraft/crafts-bin/filmcraft-cli",
+  "designcraft": "/Users/zhinan/Documents/dsh_workspace/dsh-artcraft/crafts-bin/designcraft-cli"
+}
