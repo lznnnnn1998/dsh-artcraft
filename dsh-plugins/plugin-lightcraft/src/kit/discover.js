@@ -140,8 +140,8 @@ export function discoverCraft(profile              , configured         , packag
   return undefined
 }
 
-/** Cached `--version` output per resolved path. */
-const versionCache = new Map                            ()
+/** Cached `--version` output per resolved path; only successes are stored. */
+const versionCache = new Map                ()
 
 /**
  * Read a craft binary's version, tolerating CLIs that spell the flag
@@ -162,7 +162,10 @@ export function craftVersion(path        , timeoutMs = 5000)                    
       // Try the next spelling; a missing flag is expected on some crafts.
     }
   }
-  versionCache.set(path, version)
+  // Only a successful probe is cached. A binary that is mid-install, or that
+  // had not been written when the previous call ran, must be retried rather
+  // than remembered as version-less for the rest of the session.
+  if (version !== undefined) versionCache.set(path, version)
   return version
 }
 
