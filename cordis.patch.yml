@@ -1,0 +1,38 @@
+# The root bundle: installs all twelve craft plugins at once.
+#
+# Use this when installing the repository as a whole rather than one craft:
+#
+#   dsh plugin --profile web add github:lznnnnn1998/dsh-artcraft
+#
+# or, from a checkout:
+#
+#   node scripts/install-into-profile.mjs --profile web
+#
+# Each `name` below is a package inside this repository. Installing a single
+# craft on its own is also supported — every package under `dsh-plugins/`
+# declares its own `dsh.bundle`, so `dsh plugin add` accepts it directly.
+- insert:
+    - id: artcraft-cadcraft
+      name: "dsh-artcraft-plugin-cadcraft"
+    - id: artcraft-deckcraft
+      name: "dsh-artcraft-plugin-deckcraft"
+    - id: artcraft-designcraft
+      name: "dsh-artcraft-plugin-designcraft"
+    - id: artcraft-effectcraft
+      name: "dsh-artcraft-plugin-effectcraft"
+    - id: artcraft-filmcraft
+      name: "dsh-artcraft-plugin-filmcraft"
+    - id: artcraft-gridcraft
+      name: "dsh-artcraft-plugin-gridcraft"
+    - id: artcraft-lightcraft
+      name: "dsh-artcraft-plugin-lightcraft"
+    - id: artcraft-pdfcraft
+      name: "dsh-artcraft-plugin-pdfcraft"
+    - id: artcraft-photocraft
+      name: "dsh-artcraft-plugin-photocraft"
+    - id: artcraft-soundcraft
+      name: "dsh-artcraft-plugin-soundcraft"
+    - id: artcraft-vectorcraft
+      name: "dsh-artcraft-plugin-vectorcraft"
+    - id: artcraft-wordcraft
+      name: "dsh-artcraft-plugin-wordcraft"
