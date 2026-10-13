@@ -201,6 +201,24 @@ another tool, or to set a per-call timeout — point it at the same binaries in
 Its tools appear as `mcp__gridcraft__<toolName>`. The two approaches are independent and can be
 used together; the built-in client additionally exposes MCP *resources*.
 
+## Publishing the packages
+
+```sh
+node scripts/publish-npm.mjs --dry-run     # what the registry is missing
+node scripts/publish-npm.mjs               # publish the missing ones
+```
+
+npm throttles publishing per account and **does not document the quota**, so a
+bulk publish of twelve packages can stop partway with
+`E429 … rate limited exceeded`. The script publishes only versions the registry
+lacks, so it is safe to re-run: finished packages are skipped and a throttled
+run stops instead of burning the remaining attempts.
+
+Point it at a token with `NPM_CONFIG_USERCONFIG`, so no credential is ever
+written into this repository. Publishing needs 2FA or a token that bypasses it:
+a granular token must have **Bypass 2FA** enabled, and a classic **Automation**
+token does so inherently.
+
 ## Verify
 
 ```sh
