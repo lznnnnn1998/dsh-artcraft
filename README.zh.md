@@ -105,14 +105,11 @@ MCP server 每个插件只启动一次并保持常驻(启动 GridCraft 引擎要
 git clone https://github.com/lznnnnn1998/dsh-artcraft
 cd dsh-artcraft
 
-# 1. 下载各 craft 的 CLI —— 官方 release 二进制,不需要 Rust 工具链
-node scripts/fetch-binaries.mjs
+# 1. 下载各 craft 的 CLI —— macOS / Windows / Linux 通用,不需要 Rust 工具链
+node scripts/install-craft.mjs
 
-# 2. 把插件链接到你的 deepseek-harness 检出
-node scripts/install-links.mjs
-
-# 3. 装进一个 DSH profile,然后重启它
-node scripts/link-into-profile.mjs --profile web
+# 2. 把插件装进一个 DSH profile,然后重启它
+node scripts/install-into-profile.mjs --profile web
 ```
 
 然后直接说:
@@ -127,9 +124,9 @@ node scripts/link-into-profile.mjs --profile web
 <summary><b>环境要求</b></summary>
 
 - **Node.js** `^22.19.0 || >=24.0.0`
-- 一份**已构建**的 [deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) 检出 ——
-  `scripts/install-links.mjs` 会自动找到它,也可以用 `--harness` 指定
-- macOS、Linux 或 Windows(官方 release 二进制三个平台都有)
+- 一个正在运行的 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) profile
+- **macOS、Windows 11 或 Ubuntu 24.04** —— 安装脚本会自动选对构建,且不需要别的东西
+  (不需要 Rust,也不需要 `unzip` / `tar`)
 
 没有别的了。这些 craft 应用**不需要**从源码构建;第 1 步下载的是官方签名的 release 二进制。
 

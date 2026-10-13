@@ -107,14 +107,11 @@ then shut down after five idle minutes or when the plugin unloads.
 git clone https://github.com/lznnnnn1998/dsh-artcraft
 cd dsh-artcraft
 
-# 1. the craft CLIs — official release binaries, no Rust toolchain needed
-node scripts/fetch-binaries.mjs
+# 1. the craft CLIs — macOS, Windows and Linux, no Rust toolchain needed
+node scripts/install-craft.mjs
 
-# 2. link the plugins against your deepseek-harness checkout
-node scripts/install-links.mjs
-
-# 3. install into a DSH profile, then restart it
-node scripts/link-into-profile.mjs --profile web
+# 2. install the plugins into a DSH profile, then restart it
+node scripts/install-into-profile.mjs --profile web
 ```
 
 Then just ask:
@@ -129,9 +126,9 @@ Full instructions, configuration and troubleshooting: **[docs/INSTALL.md](docs/I
 <summary><b>Requirements</b></summary>
 
 - **Node.js** `^22.19.0 || >=24.0.0`
-- A **built** [deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) checkout —
-  `scripts/install-links.mjs` finds it or you point at it with `--harness`
-- macOS, Linux, or Windows (the release binaries cover all three)
+- A running [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) profile
+- **macOS, Windows 11 or Ubuntu 24.04** — the installer picks the right build, and
+  nothing else is required (no Rust, no `unzip`, no `tar`)
 
 Nothing else. The craft apps are **not** built from source; step 1 downloads signed release
 binaries.

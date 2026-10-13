@@ -37,58 +37,54 @@ Tool names are prefixed with the craft: `gridcraft_run`, `gridcraft_commands`, �
 
 ## Install
 
-### 1. Get the craft CLIs
-
-The plugins need each craft's CLI binary. They are ordinary release assets, so no Rust toolchain
-is required:
+### 1. Get the craft CLIs (macOS, Windows 11, Ubuntu 24.04)
 
 ```sh
-node scripts/fetch-binaries.mjs            # all crafts → crafts-bin/
-node scripts/fetch-binaries.mjs gridcraft  # or just one
-node scripts/fetch-binaries.mjs --list     # show what would be fetched
+node scripts/install-craft.mjs              # every craft this platform supports
+node scripts/install-craft.mjs gridcraft    # or just one
+node scripts/install-craft.mjs --list       # what would be fetched
+node scripts/install-craft.mjs --force      # reinstall over an existing copy
 ```
 
-Binaries land in `crafts-bin/` and their paths are recorded in
-`dsh-plugins/craft-kit/catalog/binaries.json`, which the kernel reads first. You can also skip
-this step and point the plugins at your own copies (see [Configuration](#configuration)).
+CLIs land in `$DSH_HOME/crafts/bin` (`~/.dsh/crafts/bin` by default) and the
+plugins find them there with no configuration. Nothing here needs a Rust
+toolchain, `unzip`, `tar` or `7z`: archives are unpacked by Node itself.
 
-### 2. Link the plugin dependencies
+| Platform | Archive used | CLI inside |
+|:--|:--|:--|
+| macOS (Intel + Apple silicon) | `<craft>-cli-<v>-macos-universal.zip` | `<craft>-cli` |
+| Windows x64 / arm64 | `<craft>-<v>-windows-<arch>-portable.zip` | `<craft>-cli.exe` |
+| Linux x64 / arm64 | `<craft>-<v>-linux-<arch>.tar.gz` | `bin/<craft>-cli` |
 
-The plugins import `@deepseek-ai/cordis` and `@deepseek-ai/dsh-tools`, and they must be the *same*
-instances the harness runs — a second Cordis copy would hand the plugin a different `Context` and
-nothing would register. `node_modules` is not committed, so link it against your harness checkout:
+On Windows and Linux the CLI lives inside the full application archive, because
+those platforms have no separate CLI download — only the one binary is extracted.
+
+Set `GITHUB_TOKEN` to avoid GitHub's anonymous rate limit, and
+`DSH_ARTCRAFT_BIN_DIR` to install somewhere else.
+
+### 2. Install the plugins into a DSH profile
 
 ```sh
-node scripts/install-links.mjs
-# or, if autodetection misses it:
-node scripts/install-links.mjs --harness ~/code/deepseek-harness
-DSH_HARNESS_DIR=/path/to/deepseek-harness node scripts/install-links.mjs
+node scripts/install-into-profile.mjs                    # profile "web", home ~/.dsh
+node scripts/install-into-profile.mjs --profile web
+node scripts/install-into-profile.mjs --dry-run          # show what would change
+node scripts/install-into-profile.mjs --uninstall
 ```
 
-It looks for a **built** checkout (its `vendor/cordis/lib/index.js` and
-`packages/core/tools/lib/index.js` must exist) and fails with instructions if it finds only an
-unbuilt one. `pnpm install` inside `dsh-plugins/` produces the same links.
+The script packs each plugin, installs the tarballs into the profile with pnpm,
+and records them in the profile's `dsh.profile.bundles`. That last step is what
+makes the plugins **appear on the Web Plugins page**: a row written directly into
+`cordis.patch.yml` loads, but no bundle owns it, so the page cannot list or toggle
+it.
 
-### 3. Load the plugins into a DSH profile
+### 3. Restart the profile
 
 ```sh
-node scripts/link-into-profile.mjs                    # profile "web", home ~/.dsh
-node scripts/link-into-profile.mjs --profile headless
-node scripts/link-into-profile.mjs --print            # show the YAML rows only
-node scripts/link-into-profile.mjs --remove           # uninstall
+dsh --profile web web
 ```
 
-This symlinks each plugin into the profile's `node_modules` and writes one managed `insert` block
-into `<profile>/cordis.patch.yml` between `# >>> dsh-artcraft plugins` markers. Hand-written rows
-elsewhere in the file are never touched, and re-running is idempotent.
-
-### 4. Restart the profile
-
-```sh
-dsh --profile web web        # or whichever profile you linked into
-```
-
-Plugin rows are read at boot, so a running session keeps the tools it started with.
+Plugin rows are read at boot. The Plugins page then lists all twelve, and the
+agent gains their tools.
 
 ## Use
 
@@ -200,11 +196,11 @@ dsh-plugins/
     catalog/                   per-craft catalog snapshots + binaries.json
   plugin-<craft>/              one DSH plugin per craft
 scripts/
-  fetch-binaries.mjs           download and install the craft CLIs
-  install-links.mjs            link the plugins against your harness checkout
+  install-craft.mjs            download the craft CLIs for this platform
+  install-into-profile.mjs     install the plugins into a dsh profile
   build-kit.mjs                compile craft-kit/src → craft-kit/lib
   gen-catalogs.mjs             snapshot each craft's command catalog
-  link-into-profile.mjs        install/uninstall the plugins in a dsh profile
+  lib/archive.mjs              Node-only zip and tar.gz extraction
   verify.mjs                   end-to-end verification
 docs/
   INSTALL.md                   this file
@@ -225,7 +221,7 @@ must live inside an `insert` list (the linker does this for you). A
 `warning: N entries did not activate` message prints the exact error per plugin on stderr.
 
 **A tool says the binary was not found.** The message lists every path searched; run
-`node scripts/fetch-binaries.mjs <craft>` or set `$<CRAFT>_CLI`.
+`node scripts/install-craft.mjs <craft>` or set `$<CRAFT>_CLI`.
 
 **A craft command fails with `unknown option`.** The craft's profile disagrees with its CLI —
 `docs/craft-notes/<craft>.md` records which options were verified, and `DSH_ARTCRAFT_TRACE=/tmp/trace.log`
