@@ -3,14 +3,18 @@
  *
  * Registers model-callable tools that drive the `photocraft-cli` binary this machine
  * already has — both its generic `--cmd` surface and its own MCP server. The
- * PhotoCraft source tree is never touched: the CLI is an external process,
- * located at call time so installing it mid-session works.
- * @module @dsh-artcraft/plugin-photocraft
+ * PhotoCraft source tree is never touched: the CLI is an external process, located
+ * at call time so installing it mid-session works.
+ *
+ * The kernel under `./kit/` is generated from `dsh-plugins/craft-kit/src` by
+ * `scripts/build-kit.mjs` and inlined so this package installs standalone.
+ * @module dsh-artcraft-plugin-photocraft
  */
 
+import { defineTool } from '@deepseek-ai/dsh-tools'
 import type { Context } from '@deepseek-ai/cordis'
-import { applyCraftPlugin, profileOf } from '@dsh-artcraft/craft-kit'
-import type { CraftPluginConfig } from '@dsh-artcraft/craft-kit'
+import { applyCraftPlugin, profileOf } from './kit/index.js'
+import type { CraftPluginConfig } from './kit/index.js'
 import { PLUGIN_ROOT } from './root.ts'
 
 export const name = 'dsh-artcraft-photocraft'
@@ -23,6 +27,12 @@ export const craft = profileOf('photocraft')
 export type Config = CraftPluginConfig
 
 export function apply(ctx: Context, config: Config = {}): void {
-  if (craft === undefined) throw new Error('dsh-artcraft-photocraft: profile "photocraft" is missing from craft-kit')
-  ctx.effect(() => applyCraftPlugin(ctx, { profile: craft, packageRoot: PLUGIN_ROOT, config }))
+  if (craft === undefined) throw new Error('dsh-artcraft-photocraft: profile "photocraft" is missing from the inlined kernel')
+  // `ctx.effect` ties the registration and the MCP server to this plugin's fiber.
+  ctx.effect(() => applyCraftPlugin(ctx, {
+    profile: craft,
+    packageRoot: PLUGIN_ROOT,
+    config,
+    defineTool: defineTool as never,
+  }))
 }

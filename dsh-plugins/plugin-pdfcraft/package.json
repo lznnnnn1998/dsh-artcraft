@@ -1,9 +1,9 @@
 {
-  "name": "@dsh-artcraft/plugin-pdfcraft",
+  "name": "dsh-artcraft-plugin-pdfcraft",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "DSH plugin: drive PdfCraft (PDF reader and editor) headlessly from the agent through its own CLI.",
+  "description": "DSH plugin: drive PdfCraft (PDF reading and editing) headlessly through its own CLI and MCP server.",
   "license": "MIT OR Apache-2.0",
   "exports": {
     ".": "./src/index.ts",
@@ -11,8 +11,7 @@
   },
   "peerDependencies": {
     "@deepseek-ai/cordis": "*",
-    "@deepseek-ai/dsh-tools": "*",
-    "@dsh-artcraft/craft-kit": "*"
+    "@deepseek-ai/dsh-tools": "*"
   },
   "peerDependenciesMeta": {
     "@deepseek-ai/cordis": {
@@ -20,12 +19,26 @@
     },
     "@deepseek-ai/dsh-tools": {
       "optional": true
-    },
-    "@dsh-artcraft/craft-kit": {
-      "optional": true
     }
   },
-  "scripts": {
-    "postinstall": "node ../../scripts/install-links.mjs"
-  }
+  "files": [
+    "src",
+    "cordis.patch.yml",
+    "README.md"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "keywords": [
+    "dsh-plugin",
+    "dsh",
+    "deepseek-harness",
+    "cordis",
+    "artcraft",
+    "pdfcraft",
+    "ai-agent",
+    "mcp"
+  ]
 }

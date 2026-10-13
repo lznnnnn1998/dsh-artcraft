@@ -14,6 +14,7 @@
  */
 
 import { accessSync, constants, readFileSync, statSync } from 'node:fs'
+import { homedir } from 'node:os'
 import { delimiter, dirname, isAbsolute, join, resolve } from 'node:path'
 import { execFileSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
@@ -37,6 +38,21 @@ function pathDirs(): string[] {
 
 /** Directory holding this kernel (`<workspace>/dsh-plugins/craft-kit/src`). */
 const kernelDir = dirname(fileURLToPath(import.meta.url))
+
+/**
+ * Where `scripts/install-craft.mjs` puts downloaded CLIs.
+ *
+ * This is the location that works for an installed plugin: the package may sit
+ * in a profile's `node_modules` with no workspace around it, so the binary is
+ * cached under the harness home instead. `DSH_ARTCRAFT_BIN_DIR` overrides it.
+ */
+function cacheDirs(): string[] {
+  const explicit = process.env.DSH_ARTCRAFT_BIN_DIR
+  if (explicit !== undefined && explicit.length > 0) return [explicit]
+  const roots = [process.env.DSH_HOME, join(homedir(), '.dsh'), join(homedir(), '.dsh-artcraft')]
+    .filter((root): root is string => typeof root === 'string' && root.length > 0)
+  return [...new Set(roots.map(root => join(root, 'crafts', 'bin')))]
+}
 
 /**
  * Bases a relative search directory is resolved against.
@@ -86,6 +102,7 @@ export function candidates(profile: CraftProfile, configured?: string, packageRo
   if (configured !== undefined && configured.length > 0) out.push({ path: configured, source: 'config.path' })
   const fromEnv = process.env[profile.envVar]
   if (fromEnv !== undefined && fromEnv.length > 0) out.push({ path: fromEnv, source: `env:${profile.envVar}` })
+  for (const dir of cacheDirs()) out.push({ path: join(dir, platformBinaryName(profile)), source: `cache:${dir}` })
   const recorded = recordedBinary(profile)
   if (recorded !== undefined) out.push(recorded)
   const seen = new Set<string>()
@@ -97,8 +114,16 @@ export function candidates(profile: CraftProfile, configured?: string, packageRo
       out.push({ path: join(resolved, profile.bin), source: `search-dir:${resolved}` })
     }
   }
-  for (const dir of pathDirs()) out.push({ path: join(dir, profile.bin), source: 'PATH' })
+  for (const dir of pathDirs()) {
+    out.push({ path: join(dir, profile.bin), source: 'PATH' })
+    if (process.platform === 'win32') out.push({ path: join(dir, `${profile.bin}.exe`), source: 'PATH' })
+  }
   return out
+}
+
+/** The CLI's executable name on this platform (`-cli.exe` on Windows). */
+export function platformBinaryName(profile: CraftProfile): string {
+  return process.platform === 'win32' ? `${profile.bin}.exe` : profile.bin
 }
 
 /**
@@ -157,7 +182,7 @@ export function missingBinaryMessage(profile: CraftProfile, configured?: string,
   ]
   lines.push(
     `Fix it by any of:`,
-    `  - run \`node scripts/fetch-binaries.mjs ${profile.id}\` in the dsh-artcraft workspace`,
+    `  - run \`node scripts/install-craft.mjs ${profile.id}\` (macOS, Windows and Linux)`,
     `  - set ${profile.envVar}=/absolute/path/to/${profile.bin}`,
     `  - download the CLI from https://github.com/storytold/${profile.id}/releases/latest and put it on PATH`,
     `  - pass { "path": "/absolute/path/to/${profile.bin}" } in this plugin's config`,

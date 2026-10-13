@@ -3,14 +3,18 @@
  *
  * Registers model-callable tools that drive the `filmcraft-cli` binary this machine
  * already has — both its generic `--cmd` surface and its own MCP server. The
- * FilmCraft source tree is never touched: the CLI is an external process,
- * located at call time so installing it mid-session works.
- * @module @dsh-artcraft/plugin-filmcraft
+ * FilmCraft source tree is never touched: the CLI is an external process, located
+ * at call time so installing it mid-session works.
+ *
+ * The kernel under `./kit/` is generated from `dsh-plugins/craft-kit/src` by
+ * `scripts/build-kit.mjs` and inlined so this package installs standalone.
+ * @module dsh-artcraft-plugin-filmcraft
  */
 
+import { defineTool } from '@deepseek-ai/dsh-tools'
 import type { Context } from '@deepseek-ai/cordis'
-import { applyCraftPlugin, profileOf } from '@dsh-artcraft/craft-kit'
-import type { CraftPluginConfig } from '@dsh-artcraft/craft-kit'
+import { applyCraftPlugin, profileOf } from './kit/index.js'
+import type { CraftPluginConfig } from './kit/index.js'
 import { PLUGIN_ROOT } from './root.ts'
 
 export const name = 'dsh-artcraft-filmcraft'
@@ -23,6 +27,12 @@ export const craft = profileOf('filmcraft')
 export type Config = CraftPluginConfig
 
 export function apply(ctx: Context, config: Config = {}): void {
-  if (craft === undefined) throw new Error('dsh-artcraft-filmcraft: profile "filmcraft" is missing from craft-kit')
-  ctx.effect(() => applyCraftPlugin(ctx, { profile: craft, packageRoot: PLUGIN_ROOT, config }))
+  if (craft === undefined) throw new Error('dsh-artcraft-filmcraft: profile "filmcraft" is missing from the inlined kernel')
+  // `ctx.effect` ties the registration and the MCP server to this plugin's fiber.
+  ctx.effect(() => applyCraftPlugin(ctx, {
+    profile: craft,
+    packageRoot: PLUGIN_ROOT,
+    config,
+    defineTool: defineTool as never,
+  }))
 }
