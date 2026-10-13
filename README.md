@@ -15,6 +15,7 @@ as a first-class plugin.
 [![Tools](https://img.shields.io/badge/tools-92-informational?style=flat-square)](#two-surfaces-per-craft)
 [![MCP](https://img.shields.io/badge/MCP-bridged-8A2BE2?style=flat-square)](#two-surfaces-per-craft)
 [![Verified](https://img.shields.io/badge/verified-12%2F12-brightgreen?style=flat-square)](#verify-it-yourself)
+[![npm](https://img.shields.io/npm/v/dsh-artcraft-plugin-gridcraft?style=flat-square&label=npm&color=cb3837)](https://www.npmjs.com/package/dsh-artcraft-plugin-gridcraft)
 
 English · [中文](README.zh.md)
 
@@ -113,6 +114,16 @@ node scripts/install-craft.mjs
 # 2. install the plugins into a DSH profile, then restart it
 node scripts/install-into-profile.mjs --profile web
 ```
+
+Or install a single craft from npm, straight into a profile:
+
+```sh
+dsh plugin --profile web add dsh-artcraft-plugin-gridcraft
+```
+
+Each craft is its own package: `dsh-artcraft-plugin-<craft>` for `cadcraft`, `gridcraft`,
+`soundcraft`, `deckcraft`, `wordcraft`, `photocraft`, `lightcraft`, `pdfcraft`, `vectorcraft`,
+`effectcraft`, `filmcraft` and `designcraft`.
 
 Then just ask:
 
