@@ -8,8 +8,6 @@
  * @module @dsh-artcraft/craft-kit/tools
  */
 
-import { defineTool } from '@deepseek-ai/dsh-tools'
-                                                  
 import { CraftMcpClient, renderSchema } from './mcp.js'
                                        
 import { groupsOf, loadCatalog, score } from './catalog.js'
@@ -710,26 +708,53 @@ export function createToolSet(runtime              )               {
 export const CRAFT_SECTION_ORDER = 120
 
 /**
+ * The `defineTool` shape the kernel calls. Structurally typed so the kernel
+ * itself needs no DSH import — the plugin passes the real implementation in.
+ */
+                                    
+              
+                     
+                     
+           
+                   
+                                                                              
+   
+                                                          
+             
+
+/** The `ctx` surface the kernel uses; kept structural for the same reason. */
+                                     
+                                                             
+                          
+                                                                                
+   
+                                                          
+ 
+
+/**
  * Register every craft tool on `ctx.tools` and return a disposer.
  *
- * Plugin packages call this instead of hand-rolling `defineTool` per tool, so
- * one place owns the contract: the kernel attaches the registration to the
- * calling fiber, releases the MCP server when the plugin unloads, and adds the
- * system-prompt section that tells the model the tools exist.
+ * Plugin packages call this instead of hand-rolling a registration per tool, so
+ * one place owns the contract: the harness's own `defineTool` is supplied by the
+ * caller, the kernel attaches nothing global, releases the MCP server when the
+ * plugin unloads, and adds the system-prompt section that tells the model the
+ * tools exist.
  * @param ctx - the plugin's Cordis context.
- * @param options - the craft, the plugin package root, and the plugin config.
+ * @param options - the craft, the plugin package root, the config, and `defineTool`.
  * @returns a disposer that unregisters the tools and closes the MCP server.
  */
 export function applyCraftPlugin(
-  ctx         ,
+  ctx                    ,
   options   
                                   
                                                                             
                                 
                                        
+                                                                                     
+                                   
    ,
 )             {
-  const { profile, packageRoot, config = {} } = options
+  const { profile, packageRoot, config = {}, defineTool } = options
   const runtime = createRuntime(profile, packageRoot, config)
   const tools = createToolSet(runtime)
   const disposers                 = []
@@ -738,13 +763,13 @@ export function applyCraftPlugin(
     disposers.push(ctx.tools.register(defineTool({
       name: spec.name,
       description: spec.description,
-      parameters: spec.parameters         ,
+      parameters: spec.parameters,
       output: {
         schema: { type: 'string' },
-        render: (_args, value) => [{ type: 'text', text: value }],
+        render: (_args         , value        ) => [{ type: 'text'         , text: value }],
       },
-      async execute(args) {
-        return await spec.execute(args                           )
+      async execute(args       ) {
+        return await spec.execute(args                                      )
       },
     })))
   }

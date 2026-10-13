@@ -31,7 +31,9 @@ const pluginsDir = join(root, 'dsh-plugins')
 const quick = process.argv.includes('--quick')
 const requested = process.argv.slice(2).filter(arg => !arg.startsWith('--'))
 
-const kit = await import(join(pluginsDir, 'craft-kit', 'lib', 'index.js'))
+// Every plugin package carries its own inlined copy of the kernel, so the
+// verifier loads what actually ships rather than a shared workspace copy.
+const inlinedKit = async (craft) => await import(join(pluginsDir, `plugin-${craft}`, 'src', 'kit', 'index.js'))
 
 const failures = []
 const notes = []
@@ -106,29 +108,38 @@ for (const plugin of plugins) {
   const manifestPath = join(dir, 'package.json')
   if (!existsSync(manifestPath)) { fail(craft, 'no package.json'); continue }
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'))
-  if (manifest.name !== `@dsh-artcraft/plugin-${craft}`) fail(craft, `unexpected package name ${manifest.name}`)
+  if (manifest.name !== `dsh-artcraft-plugin-${craft}`) fail(craft, `unexpected package name ${manifest.name}`)
   const entry = manifest.exports?.['.']
   const entryPath = typeof entry === 'string' ? join(dir, entry) : undefined
   if (entryPath === undefined || !existsSync(entryPath)) { fail(craft, `entry point missing: ${entry}`); continue }
 
-  const profile = kit.profileOf(craft)
-  if (profile === undefined) { fail(craft, 'no craft profile in craft-kit/src/profiles.mjs'); continue }
-
-  // The plugin's own bare imports must land on the harness's single copies.
-  // Resolution is anchored at the package directory (as Node does for a real
-  // import from that file), and it must resolve to plain JavaScript: the DSH
-  // loader imports plugin packages as ordinary ESM.
-  const require = createRequire(join(dir, 'src', 'index.ts'))
-  for (const specifier of ['@deepseek-ai/cordis', '@deepseek-ai/dsh-tools', '@dsh-artcraft/craft-kit']) {
-    try {
-      const resolved = require.resolve(specifier)
-      if (specifier === '@dsh-artcraft/craft-kit' && !resolved.includes('dsh-plugins/craft-kit')) {
-        fail(craft, `craft-kit resolved outside the workspace: ${resolved}`)
-      }
-    } catch {
-      fail(craft, `cannot resolve ${specifier} from ${entry}`)
+  // A published plugin must be self-contained: its kernel travels with it, and
+  // the only bare imports it keeps are the two the harness installation routes.
+  const kitDir = join(dir, 'src', 'kit')
+  if (!existsSync(join(kitDir, 'index.js'))) fail(craft, 'no inlined kernel at src/kit/index.js — run scripts/build-kit.mjs')
+  const entrySource = readFileSync(entryPath, 'utf8')
+  const bareImports = [...entrySource.matchAll(/from '([^.'][^']*)'/g)].map(match => match[1])
+  for (const specifier of bareImports) {
+    if (!specifier.startsWith('@deepseek-ai/')) {
+      fail(craft, `installed package cannot resolve ${specifier}: only @deepseek-ai/* is routed to the harness`)
     }
   }
+  if (!bareImports.some(specifier => specifier === '@deepseek-ai/dsh-tools')) {
+    fail(craft, 'entry does not import defineTool from @deepseek-ai/dsh-tools')
+  }
+
+  // `dsh.bundle` is what makes the package installable at all.
+  const bundlePatch = manifest.dsh?.bundle?.patch
+  if (typeof bundlePatch !== 'string') fail(craft, 'package.json declares no dsh.bundle.patch')
+  else {
+    const patchPath = join(dir, bundlePatch)
+    if (!existsSync(patchPath)) fail(craft, `dsh.bundle.patch points at a missing file: ${bundlePatch}`)
+    else if (!readFileSync(patchPath, 'utf8').includes(manifest.name)) fail(craft, `${bundlePatch} does not reference ${manifest.name}`)
+  }
+
+  const kit = await inlinedKit(craft)
+  const profile = kit.profileOf(craft)
+  if (profile === undefined) { fail(craft, 'the inlined kernel has no profile for this craft'); continue }
 
   const runtime = kit.createRuntime(profile, dir, {})
   const binary = runtime.binary()
