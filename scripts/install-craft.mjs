@@ -28,12 +28,17 @@ import { homedir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { extractFromArchive } from './lib/archive.mjs'
+import { buildCraftCli, findCargo, installBinary, looksLikeRepo, repoPath } from './lib/source-build.js'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const argv = process.argv.slice(2)
 const flag = (name) => { const i = argv.indexOf(name); return i === -1 ? undefined : argv[i + 1] }
 const listOnly = argv.includes('--list')
 const force = argv.includes('--force')
+/** `--from-source` compiles from a checkout instead of downloading a release. */
+const fromSource = argv.includes('--from-source')
+/** Where `--from-source` clones the craft repositories. */
+const reposDir = resolve(flag('--repos') ?? join(root, 'repos'))
 const requested = argv.filter(a => !a.startsWith('--') && !(argv[argv.indexOf(a) - 1] ?? '').startsWith('--'))
 
 /**
@@ -126,6 +131,14 @@ async function download(id, asset, destination, attempts = 3) {
 }
 
 if (listOnly) {
+  if (fromSource) {
+    const cargo = findCargo()
+    console.log(`  source mode: ${cargo === undefined ? 'Rust NOT installed' : cargo.version} | repos: ${reposDir}`)
+    for (const profile of profiles) {
+      console.log(`  ${profile.id.padEnd(14)} cargo build --release -p ${profile.id}-cli`)
+    }
+    process.exit(0)
+  }
   for (const profile of profiles) {
     const target = platform.releaseTarget(profile.id)
     console.log(target === undefined
@@ -133,6 +146,60 @@ if (listOnly) {
       : `  ${profile.id.padEnd(14)} ${target.label.padEnd(22)} ${target.asset(profile.id, '<version>')}`)
   }
   process.exit(0)
+}
+
+if (fromSource) {
+  const cargo = findCargo()
+  if (cargo === undefined) {
+    console.error('--from-source needs a Rust toolchain, and none was found.')
+    console.error('Install it with:  curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs | sh')
+    console.error('Then re-open the shell (or add ~/.cargo/bin to PATH) and run this again.')
+    console.error('Without Rust, omit --from-source to download the release binaries instead.')
+    process.exit(2)
+  }
+  console.log(`source mode: ${cargo.version}`)
+  console.log(`repos:       ${reposDir}`)
+  mkdirSync(installRoot, { recursive: true })
+  mkdirSync(reposDir, { recursive: true })
+
+  const built = []
+  for (const profile of profiles) {
+    const dir = repoPath(reposDir, profile.id)
+    if (!looksLikeRepo(dir)) {
+      process.stdout.write(`${profile.id.padEnd(14)} cloning… `)
+      try {
+        execFileSync('git', ['clone', '--depth', '1', `https://github.com/storytold/${profile.id}.git`, dir], { stdio: 'pipe', timeout: 900_000 })
+        console.log('ok')
+      } catch (error) {
+        console.log(`FAILED — ${String(error.stderr ?? error.message).slice(0, 200)}`)
+        continue
+      }
+    }
+    const binPath = join(installRoot, platform.binaryName(profile.id))
+    const markerPath = join(installRoot, `${profile.id}.version.json`)
+    if (!force && existsSync(binPath) && existsSync(markerPath)) {
+      const marker = JSON.parse(readFileSync(markerPath, 'utf8'))
+      if (marker.source === 'source') { console.log(`${profile.id.padEnd(14)} ${String(marker.version).padEnd(8)} already built`); continue }
+    }
+    process.stdout.write(`${profile.id.padEnd(14)} building… `)
+    const result = buildCraftCli({ repoDir: dir, craft: profile.id, cargo })
+    if (!result.ok) {
+      console.log('FAILED')
+      console.error(result.log.split('\n').slice(-8).map(line => `    ${line}`).join('\n'))
+      continue
+    }
+    installBinary(result.binary, installRoot, platform.binaryName(profile.id))
+    let version = 'source'
+    try {
+      version = execFileSync(binPath, ['--version'], { encoding: 'utf8', timeout: 20_000 }).trim().split('\n')[0]
+    } catch { /* a CLI without --version still installs */ }
+    writeFileSync(markerPath, JSON.stringify({ id: profile.id, version, source: 'source', repo: dir, builtAt: new Date().toISOString() }, undefined, 2) + '\n')
+    console.log(`ok in ${result.seconds.toFixed(0)}s → ${binPath}`)
+    built.push(profile.id)
+  }
+  console.log(`\nbuilt ${built.length} of ${profiles.length} craft CLI(s) from source`)
+  if (built.length > 0) console.log(`The plugins find these automatically: ${installRoot}`)
+  process.exit(built.length === profiles.length ? 0 : 1)
 }
 
 mkdirSync(installRoot, { recursive: true })

@@ -62,6 +62,35 @@ those platforms have no separate CLI download — only the one binary is extract
 Set `GITHUB_TOKEN` to avoid GitHub's anonymous rate limit, and
 `DSH_ARTCRAFT_BIN_DIR` to install somewhere else.
 
+#### Or build from source
+
+```sh
+node scripts/install-craft.mjs --from-source                 # clone into ./repos and build
+node scripts/install-craft.mjs --from-source gridcraft       # one craft
+node scripts/install-craft.mjs --from-source --repos ~/src   # use an existing checkout
+```
+
+This compiles each craft's `*-cli` crate with Cargo instead of downloading, which
+is worth it when you want a specific commit, a local patch, an architecture
+upstream does not publish, or a fully offline workflow. It is cheaper than it
+looks: **the CLI crates do not depend on the GUI stack**, so a release build is
+about a minute and 266 MB of `target/` for GridCraft, against the multi-hour
+egui/wgpu build the full application would need.
+
+Rust is required and checked before anything is cloned:
+
+```sh
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
+| | Download | `--from-source` |
+|:--|:--|:--|
+| Time to first run | ~1 min per craft | ~1 min per craft after a one-time Rust install |
+| Architectures | what upstream publishes | anything Rust targets |
+| Version control | latest release only | any commit, and local patches |
+| Works offline | no | yes, after the first clone |
+| Integrity | upstream's signed, notarized binary | your own build |
+
 ### 2. Install the plugins into a DSH profile
 
 ```sh
