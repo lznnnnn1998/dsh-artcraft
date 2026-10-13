@@ -1,7 +1,7 @@
 {
   "name": "dsh-artcraft-plugin-photocraft",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "type": "module",
   "description": "DSH plugin: drive PhotoCraft (raster image editing) headlessly through its own CLI and MCP server.",
   "license": "MIT OR Apache-2.0",
@@ -40,5 +40,8 @@
     "photocraft",
     "ai-agent",
     "mcp"
-  ]
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }

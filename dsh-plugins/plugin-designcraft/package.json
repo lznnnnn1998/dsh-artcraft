@@ -1,7 +1,7 @@
 {
   "name": "dsh-artcraft-plugin-designcraft",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "type": "module",
   "description": "DSH plugin: drive DesignCraft (page and layout design) headlessly through its own CLI and MCP server.",
   "license": "MIT OR Apache-2.0",
@@ -40,5 +40,8 @@
     "designcraft",
     "ai-agent",
     "mcp"
-  ]
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }
