@@ -104,6 +104,35 @@ evidence in the matching [craft-notes](craft-notes) file.
 - **PhotoCraft's `--new` and VectorCraft's blank start** mean "no source flag" for those crafts;
   asking for `sample: true` on a craft without one is reported as an error rather than ignored.
 
+## Building the CLIs from source
+
+Every craft also builds from its own checkout, which is documented in
+[docs/INSTALL.md](INSTALL.md#or-build-from-source):
+
+```sh
+node scripts/install-craft.mjs --from-source
+```
+
+All twelve built and passed the full verifier. Measured on Apple silicon with
+rustc 1.99, the CLI crates carry no GUI dependency, so a release build is far
+cheaper than the application build:
+
+| Craft | Build | Craft | Build |
+|:--|--:|:--|--:|
+| gridcraft | 21s | designcraft | 89s |
+| soundcraft | 35s | lightcraft | 114s |
+| deckcraft | 43s | filmcraft | 114s |
+| wordcraft | 44s | pdfcraft | 125s |
+| cadcraft | 60s | effectcraft | 155s |
+| photocraft | 161s | vectorcraft | 170s |
+
+Roughly 18 minutes for all twelve including the clones, and about 11 GB of
+repositories plus `target/` directories.
+
+A source build is also *newer* than the releases: the repositories are ahead of
+the last published version, so the live catalogs are larger — wordcraft 615 vs
+460 commands, photocraft 904 vs 858, effectcraft 731 vs 669.
+
 ## Reproducing every claim
 
 ```sh
