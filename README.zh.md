@@ -15,6 +15,7 @@ PDF、幻灯片、文档 —— 全部以一等插件的形式接入
 [![Tools](https://img.shields.io/badge/tools-92-informational?style=flat-square)](#每个应用两个接口)
 [![MCP](https://img.shields.io/badge/MCP-bridged-8A2BE2?style=flat-square)](#每个应用两个接口)
 [![Verified](https://img.shields.io/badge/verified-12%2F12-brightgreen?style=flat-square)](#自己验证)
+[![npm](https://img.shields.io/npm/v/dsh-artcraft-plugin-gridcraft?style=flat-square&label=npm&color=cb3837)](https://www.npmjs.com/package/dsh-artcraft-plugin-gridcraft)
 
 [English](README.md) · 中文
 
@@ -111,6 +112,16 @@ node scripts/install-craft.mjs
 # 2. 把插件装进一个 DSH profile,然后重启它
 node scripts/install-into-profile.mjs --profile web
 ```
+
+也可以直接从 npm 装某一个 craft:
+
+```sh
+dsh plugin --profile web add dsh-artcraft-plugin-gridcraft
+```
+
+每个 craft 是独立的包:`dsh-artcraft-plugin-<craft>`,对应 `cadcraft`、`gridcraft`、
+`soundcraft`、`deckcraft`、`wordcraft`、`photocraft`、`lightcraft`、`pdfcraft`、
+`vectorcraft`、`effectcraft`、`filmcraft`、`designcraft`。
 
 然后直接说:
 
