@@ -1,0 +1,31 @@
+{
+  "name": "dsh-artcraft",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Every ArtCraft (storytold) crafting app as a DSH plugin — twelve Cordis plugins driving CADCraft, GridCraft, SoundCraft and nine more headlessly over each app's own CLI and MCP server.",
+  "license": "MIT OR Apache-2.0",
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "files": [
+    "cordis.patch.yml",
+    "dsh-plugins",
+    "scripts",
+    "docs",
+    "README.md",
+    "README.zh.md"
+  ],
+  "workspaces": [
+    "dsh-plugins/plugin-*"
+  ],
+  "scripts": {
+    "verify": "node scripts/verify.mjs",
+    "install-craft": "node scripts/install-craft.mjs",
+    "install-profile": "node scripts/install-into-profile.mjs",
+    "build-kit": "node scripts/build-kit.mjs",
+    "catalogs": "node scripts/gen-catalogs.mjs"
+  }
+}
