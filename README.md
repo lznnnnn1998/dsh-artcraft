@@ -110,6 +110,8 @@ cd dsh-artcraft
 
 # 1. the craft CLIs — macOS, Windows and Linux, no Rust toolchain needed
 node scripts/install-craft.mjs
+#    …or compile them from source instead (needs Rust, ~1 min per craft):
+# node scripts/install-craft.mjs --from-source
 
 # 2. install the plugins into a DSH profile, then restart it
 node scripts/install-into-profile.mjs --profile web

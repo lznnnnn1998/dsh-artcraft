@@ -57,6 +57,22 @@ for (const file of sources) {
 // 2. every plugin's src/kit — the same modules, inlined so the package is
 //    self-contained. `profiles.mjs` is what the kernel reads the craft registry
 //    from, so the whole set travels together.
+// 3. scripts/lib — the same treatment for build-time helpers that carry types.
+const scriptLibDir = join(root, 'scripts', 'lib')
+let scriptFiles = []
+if (existsSync(scriptLibDir)) {
+  scriptFiles = readdirSync(scriptLibDir).filter(file => file.endsWith('.ts'))
+  for (const file of scriptFiles) {
+    const target = join(scriptLibDir, file.replace(/\.ts$/, '.js'))
+    const compiled = compile(file, readFileSync(join(scriptLibDir, file), 'utf8'))
+    const previous = existsSync(target) ? readFileSync(target, 'utf8') : undefined
+    if (previous === compiled) continue
+    if (check) { stale += 1; console.error(`stale: scripts/lib/${file.replace(/\.ts$/, '.js')}`); continue }
+    writeFileSync(target, compiled)
+    written.push(`scripts/lib/${file.replace(/\.ts$/, '.js')}`)
+  }
+}
+
 const pluginsDir = join(root, 'dsh-plugins')
 const plugins = readdirSync(pluginsDir, { withFileTypes: true })
   .filter(entry => entry.isDirectory() && entry.name.startsWith('plugin-'))

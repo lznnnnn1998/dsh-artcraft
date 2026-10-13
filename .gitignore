@@ -22,6 +22,8 @@ node_modules/
 
 # A craft writing a project into the working directory would land here
 /ARTIFACT
+*.pcraft
+/*.png
 
 # Editor and OS noise
 .DS_Store
