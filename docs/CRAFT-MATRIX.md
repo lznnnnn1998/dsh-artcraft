@@ -107,7 +107,7 @@ evidence in the matching [craft-notes](craft-notes) file.
 ## Reproducing every claim
 
 ```sh
-node scripts/fetch-binaries.mjs           # install the 12 CLIs
+node scripts/install-craft.mjs            # install the 12 CLIs for this platform
 node scripts/gen-catalogs.mjs             # re-snapshot each catalog
 node scripts/verify.mjs                   # discovery + catalog + tools + a real headless run
 DSH_ARTCRAFT_TRACE=/tmp/trace.log node scripts/verify.mjs   # also log every exact argv
