@@ -48,7 +48,7 @@
  */
 
 import { execFileSync } from 'node:child_process'
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs'
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 import { parseArgv } from './lib/host.mjs'
@@ -79,6 +79,24 @@ if (token === undefined) {
 
 const API = 'https://api.github.com'
 const root = execFileSync('git', ['rev-parse', '--show-toplevel'], { encoding: 'utf8' }).trim()
+const gitDir = execFileSync('git', ['rev-parse', '--absolute-git-dir'], { encoding: 'utf8' }).trim()
+
+/**
+ * The commit this clone last created through the API, if any.
+ *
+ * An API-created commit cannot be referenced locally — the sha differs from the
+ * local one — so without this, the second push from the same clone would trip
+ * the stale-clone guard over a commit it made itself seconds earlier. Stored in
+ * `.git/`, so it is never committed or pushed.
+ */
+const lastPushFile = join(gitDir, 'artcraft-pushed-head')
+const lastPushedHead = (() => {
+  try {
+    return readFileSync(lastPushFile, 'utf8').trim()
+  } catch {
+    return undefined
+  }
+})()
 
 /** One authenticated JSON request against the GitHub API. */
 async function api(path, init = {}) {
@@ -185,7 +203,10 @@ try {
   if (parentSha !== undefined && expectHead === undefined) {
     const known = gitOk(['cat-file', '-e', `${parentSha}^{commit}`])
     const ancestor = known && gitOk(['merge-base', '--is-ancestor', parentSha, 'HEAD'])
-    if (!ancestor && !forceStale) {
+    // A commit this clone made through the API is recognisable, even though its
+    // sha cannot exist locally.
+    const ours = lastPushedHead !== undefined && lastPushedHead === parentSha
+    if (!ancestor && !ours && !forceStale) {
       console.error(known
         ? `this clone does not contain the remote head ${parentSha.slice(0, 8)} — it is behind or diverged.`
         : `this clone has never fetched the remote head ${parentSha.slice(0, 8)} ("${String(remoteCommit?.message ?? '').split('\n')[0]}").`)
@@ -200,9 +221,10 @@ try {
       console.error('name the head you verified, and accept that a concurrent push would be lost.')
       process.exit(2)
     }
-    if (!ancestor) {
+    if (!ancestor && !ours) {
       console.error(`warning: proceeding past remote head ${parentSha.slice(0, 8)}, which is not an ancestor of HEAD (--force-stale)`)
     }
+    if (ours) console.error(`remote head ${parentSha.slice(0, 8)} is the commit this clone pushed last`)
   }
   if (expectHead !== undefined) {
     console.error(`remote head pinned and confirmed: ${String(parentSha).slice(0, 8)}`)
@@ -303,6 +325,13 @@ try {
 
   console.log(`pushed ${branch} → ${commit.sha}`)
   console.log(`tree ${tree.sha} matches the local tree`)
+  // Recorded so a later push from this clone recognises its own commit instead
+  // of tripping the stale-clone guard.
+  writeFileSync(lastPushFile, `${commit.sha}\n`)
+  if (parentSha !== undefined && !gitOk(['cat-file', '-e', `${parentSha}^{commit}`])) {
+    console.log('note: this clone cannot see the new head locally — `git fetch` when the network allows,')
+    console.log('      or push again from here and it will be recognised as this clone\'s own commit.')
+  }
   console.log('note: the local commit sha differs from the remote one (the API re-creates the commit)')
 } finally {
   rmSync(scratch, { recursive: true, force: true })
