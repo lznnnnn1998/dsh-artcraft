@@ -14,7 +14,6 @@
 
 import { spawn } from 'node:child_process'
                                                                         
-import { killTree } from './exec.js'
                                                            
 
 /** One tool as the MCP server declares it. */
@@ -82,8 +81,6 @@ export class CraftMcpClient {
     const child = spawn(this.#binary.path, [...(this.#profile.mcpArgs ?? ['mcp']), ...this.#args], {
       stdio: ['pipe', 'pipe', 'pipe'],
       env: { ...process.env, NO_COLOR: '1', TERM: 'dumb' },
-      // Keeps the long-lived server from flashing a console window on Windows.
-      windowsHide: true,
     })
     this.#child = child
     this.#buffer = ''
@@ -156,9 +153,7 @@ export class CraftMcpClient {
     if (this.#idleTimer !== undefined) clearTimeout(this.#idleTimer)
     const child = this.#child
     this.#child = undefined
-    // `killTree` rather than `child.kill`: on Windows the craft server's own
-    // helper processes are not in a process group and would otherwise survive.
-    if (child !== undefined && child.exitCode === null) killTree(child)
+    if (child !== undefined && child.exitCode === null) child.kill('SIGKILL')
   }
 
   /** Buffer stdout and resolve one response per complete line. */

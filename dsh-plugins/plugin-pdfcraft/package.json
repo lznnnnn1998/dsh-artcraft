@@ -1,12 +1,12 @@
 {
   "name": "dsh-artcraft-plugin-pdfcraft",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "type": "module",
   "description": "DSH plugin: drive PdfCraft (PDF reading and editing) headlessly through its own CLI and MCP server.",
   "license": "MIT OR Apache-2.0",
   "exports": {
-    ".": "./src/index.js",
+    ".": "./src/index.ts",
     "./package.json": "./package.json"
   },
   "peerDependencies": {
@@ -23,7 +23,8 @@
   },
   "files": [
     "src",
-    "cordis.patch.yml"
+    "cordis.patch.yml",
+    "README.md"
   ],
   "dsh": {
     "bundle": {

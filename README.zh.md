@@ -102,25 +102,6 @@ MCP server 每个插件只启动一次并保持常驻(启动 GridCraft 引擎要
 
 ## 快速开始
 
-**Windows** —— 克隆后在 PowerShell 里执行:
-
-```powershell
-git clone https://github.com/lznnnnn1998/dsh-artcraft
-cd dsh-artcraft
-.\install.ps1                      # 或者: install.cmd (如果 .ps1 被策略禁止运行)
-```
-
-它会自动找到 harness 自带的 Node(`PATH` 里没有 `node` / `npm` / `pnpm` 也能装),下载本平台
-所需的全部 craft CLI,再把十二个插件装进你的 DSH profile。只想装一个 craft、先试运行、或者
-装完立刻验证:
-
-```powershell
-.\install.ps1 -Crafts gridcraft,wordcraft -Profile desktop -List     # 只看看会做什么
-.\install.ps1 -Crafts gridcraft -Verify                             # 装一个并验证
-```
-
-**macOS / Linux** —— 同样两步,手动执行:
-
 ```sh
 git clone https://github.com/lznnnnn1998/dsh-artcraft
 cd dsh-artcraft
@@ -131,9 +112,6 @@ node scripts/install-craft.mjs
 # 2. 把插件装进一个 DSH profile,然后重启它
 node scripts/install-into-profile.mjs --profile web
 ```
-
-两个平台跑的是同一套 Node 脚本;`install.ps1` 只是额外负责找 Node、并按 PowerShell 的习惯给出
-默认值。安装不会改动系统级设置,也不会改你的 shell 配置。
 
 也可以直接从 npm 装某一个 craft:
 
@@ -156,10 +134,10 @@ dsh plugin --profile web add dsh-artcraft-plugin-gridcraft
 <details>
 <summary><b>环境要求</b></summary>
 
-- **Node.js** `^22.19.0 || >=24.0.0` —— Windows 上会自动使用 harness 自带的 Node,不必加进 `PATH`
+- **Node.js** `^22.19.0 || >=24.0.0`
 - 一个正在运行的 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) profile
 - **macOS、Windows 11 或 Ubuntu 24.04** —— 安装脚本会自动选对构建,且不需要别的东西
-  (不需要 Rust,也不需要 `unzip` / `tar` / `npm` / `pnpm`)
+  (不需要 Rust,也不需要 `unzip` / `tar`)
 
 没有别的了。这些 craft 应用**不需要**从源码构建;第 1 步下载的是官方签名的 release 二进制。
 
@@ -231,16 +209,10 @@ dsh-plugins/
 开个 issue,或者自己跑一遍并开启追踪:
 
 ```sh
-# macOS / Linux
 DSH_ARTCRAFT_TRACE=/tmp/trace.log node scripts/verify.mjs <craft>
 ```
 
-```powershell
-# Windows (PowerShell)
-$env:DSH_ARTCRAFT_TRACE = "$env:TEMP\artcraft-trace.log"; node scripts\verify.mjs <craft>
-```
-
-这会把每次调用的完整 argv 写进该追踪文件。
+这会把每次调用的完整 argv 写进 `/tmp/trace.log`。
 
 ## 许可证
 

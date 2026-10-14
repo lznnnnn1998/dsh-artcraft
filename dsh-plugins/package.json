@@ -9,9 +9,9 @@
     "node": "^22.19.0 || >=24.0.0"
   },
   "scripts": {
-    "postinstall": "node ../scripts/install-links.mjs --optional",
-    "link": "node ../scripts/install-links.mjs",
-    "verify": "node ../scripts/verify.mjs",
-    "catalogs": "node ../scripts/gen-catalogs.mjs"
+    "postinstall": "node scripts/install-links.mjs",
+    "link": "node scripts/install-links.mjs",
+    "verify": "node scripts/verify.mjs",
+    "catalogs": "node scripts/gen-catalogs.mjs"
   }
 }

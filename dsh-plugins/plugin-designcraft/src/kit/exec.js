@@ -7,35 +7,9 @@
  * @module @dsh-artcraft/craft-kit/exec
  */
 
-import { spawn, spawnSync } from 'node:child_process'
-                                                      
+import { spawn } from 'node:child_process'
 import { appendFileSync } from 'node:fs'
                                                                            
-
-/**
- * Terminate a craft process and anything it started.
- *
- * Windows has no process groups and no signals, so `child.kill` reaches only
- * the direct child: a craft engine that spawned helpers would leave them
- * running. `taskkill /T` walks the child tree instead. Both steps are
- * best-effort, because by the time this runs the process may already be gone.
- * @param child - the process to terminate.
- */
-export function killTree(child              )       {
-  if (child.exitCode !== null || child.signalCode !== null) return
-  try {
-    child.kill('SIGKILL')
-  } catch {
-    // Already exited.
-  }
-  // Re-check before taskkill: a recycled pid would otherwise be killed.
-  if (process.platform !== 'win32' || child.pid === undefined || child.exitCode !== null) return
-  try {
-    spawnSync('taskkill', ['/pid', String(child.pid), '/T', '/F'], { stdio: 'ignore' })
-  } catch {
-    // taskkill is absent on some minimal images; the direct kill still ran.
-  }
-}
 
 /** Default cap on captured stdout+stderr, so a runaway export cannot flood the model. */
 export const MAX_CAPTURE_BYTES = 256 * 1024
@@ -89,8 +63,6 @@ export async function runCraft(options                 )                        
       cwd,
       stdio: ['ignore', 'pipe', 'pipe'],
       env: { ...process.env, NO_COLOR: '1', TERM: 'dumb' },
-      // Without this Windows flashes a console window for every craft run.
-      windowsHide: true,
     })
 
     const stdout           = []
@@ -117,10 +89,10 @@ export async function runCraft(options                 )                        
     let timedOut = false
     const timer = setTimeout(() => {
       timedOut = true
-      killTree(child)
+      child.kill('SIGKILL')
     }, timeoutMs)
 
-    const onAbort = ()       => { killTree(child) }
+    const onAbort = ()       => { child.kill('SIGKILL') }
     options.signal?.addEventListener('abort', onAbort, { once: true })
 
     const cleanup = ()       => {

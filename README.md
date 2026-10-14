@@ -104,25 +104,6 @@ then shut down after five idle minutes or when the plugin unloads.
 
 ## Quick start
 
-**Windows** — from a fresh clone, in PowerShell:
-
-```powershell
-git clone https://github.com/lznnnnn1998/dsh-artcraft
-cd dsh-artcraft
-.\install.ps1                      # or: install.cmd   (if .ps1 files are blocked)
-```
-
-That finds the Node the harness already ships (no `node`, `npm` or `pnpm` on `PATH`
-needed), downloads every craft CLI for your platform, and installs the twelve plugins
-into your DSH profile. Add `-Crafts gridcraft` for one craft, `-List` for a dry run, or
-`-Verify` to prove it works:
-
-```powershell
-.\install.ps1 -Crafts gridcraft,wordcraft -Profile desktop -Verify
-```
-
-**macOS and Linux** — the same two steps by hand:
-
 ```sh
 git clone https://github.com/lznnnnn1998/dsh-artcraft
 cd dsh-artcraft
@@ -135,10 +116,6 @@ node scripts/install-craft.mjs
 # 2. install the plugins into a DSH profile, then restart it
 node scripts/install-into-profile.mjs --profile web
 ```
-
-Both platforms run the same Node scripts; `install.ps1` only adds Node discovery and
-PowerShell-friendly defaults. Nothing is installed machine-wide and no shell profile is
-modified.
 
 Or install a single craft from npm, straight into a profile:
 
@@ -161,11 +138,10 @@ Full instructions, configuration and troubleshooting: **[docs/INSTALL.md](docs/I
 <details>
 <summary><b>Requirements</b></summary>
 
-- **Node.js** `^22.19.0 || >=24.0.0` — on Windows the harness's own bundled Node is
-  found automatically, so you do not need it on `PATH`
+- **Node.js** `^22.19.0 || >=24.0.0`
 - A running [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) profile
 - **macOS, Windows 11 or Ubuntu 24.04** — the installer picks the right build, and
-  nothing else is required (no Rust, no `unzip`, no `tar`, no `npm`, no `pnpm`)
+  nothing else is required (no Rust, no `unzip`, no `tar`)
 
 Nothing else. The craft apps are **not** built from source; step 1 downloads signed release
 binaries.
@@ -248,16 +224,10 @@ Found a craft whose CLI behaves differently than described? The notes are meant 
 open an issue with the raw output, or run the offending command with tracing on:
 
 ```sh
-# macOS / Linux
 DSH_ARTCRAFT_TRACE=/tmp/trace.log node scripts/verify.mjs <craft>
 ```
 
-```powershell
-# Windows (PowerShell)
-$env:DSH_ARTCRAFT_TRACE = "$env:TEMP\artcraft-trace.log"; node scripts\verify.mjs <craft>
-```
-
-That writes the exact argv of every invocation to the trace file.
+That writes the exact argv of every invocation to `/tmp/trace.log`.
 
 ## License
 
