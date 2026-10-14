@@ -13,9 +13,10 @@
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { loadModule } from './lib/host.mjs'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-const kit = await import(join(root, 'dsh-plugins', 'craft-kit', 'lib', 'index.js'))
+const kit = await loadModule(join(root, 'dsh-plugins', 'craft-kit', 'lib', 'index.js'))
 
 const requested = process.argv.slice(2).filter(arg => !arg.startsWith('--'))
 const profiles = requested.length > 0

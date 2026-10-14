@@ -22,9 +22,9 @@
 
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs'
 import { execFileSync } from 'node:child_process'
-import { createRequire } from 'node:module'
-import { dirname, join, resolve } from 'node:path'
-import { fileURLToPath, pathToFileURL } from 'node:url'
+import { join, resolve, dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { loadModule, readJson } from './lib/host.mjs'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const pluginsDir = join(root, 'dsh-plugins')
@@ -33,7 +33,9 @@ const requested = process.argv.slice(2).filter(arg => !arg.startsWith('--'))
 
 // Every plugin package carries its own inlined copy of the kernel, so the
 // verifier loads what actually ships rather than a shared workspace copy.
-const inlinedKit = async (craft) => await import(join(pluginsDir, `plugin-${craft}`, 'src', 'kit', 'index.js'))
+// `loadModule` is what makes that work on Windows, where `import()` rejects a
+// bare `E:\…` path as an unsupported URL scheme.
+const inlinedKit = async (craft) => await loadModule(join(pluginsDir, `plugin-${craft}`, 'src', 'kit', 'index.js'))
 
 const failures = []
 const notes = []
@@ -103,15 +105,27 @@ try {
 }
 
 const results = []
+// The kernel keeps each craft's MCP server warm for `mcpIdleMs` (5 minutes by
+// default), and a live child process holds the event loop open. Without an
+// explicit dispose the verifier would appear to hang after printing its table.
+const runtimes = []
 for (const plugin of plugins) {
   const { craft, dir } = plugin
   const manifestPath = join(dir, 'package.json')
   if (!existsSync(manifestPath)) { fail(craft, 'no package.json'); continue }
-  const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'))
+  const manifest = readJson(manifestPath)
   if (manifest.name !== `dsh-artcraft-plugin-${craft}`) fail(craft, `unexpected package name ${manifest.name}`)
   const entry = manifest.exports?.['.']
   const entryPath = typeof entry === 'string' ? join(dir, entry) : undefined
   if (entryPath === undefined || !existsSync(entryPath)) { fail(craft, `entry point missing: ${entry}`); continue }
+  // The entry must already be JavaScript. A plugin reaches a profile as an
+  // installed package, and Node refuses to strip types under `node_modules`
+  // (ERR_UNSUPPORTED_NODE_MODULES_TYPE_STRIPPING) — a `.ts` entry installs
+  // cleanly and then cannot ever load, which is exactly the failure this check
+  // exists to catch. `scripts/build-kit.mjs` generates the `.js` from the `.ts`.
+  if (entryPath.endsWith('.ts')) {
+    fail(craft, `entry point is TypeScript (${entry}) — it cannot load from node_modules; run scripts/build-kit.mjs and point exports at the generated .js`)
+  }
 
   // A published plugin must be self-contained: its kernel travels with it, and
   // the only bare imports it keeps are the two the harness installation routes.
@@ -142,6 +156,7 @@ for (const plugin of plugins) {
   if (profile === undefined) { fail(craft, 'the inlined kernel has no profile for this craft'); continue }
 
   const runtime = kit.createRuntime(profile, dir, {})
+  runtimes.push(runtime)
   const binary = runtime.binary()
   if (binary === undefined) { fail(craft, `craft CLI ${profile.bin} not found`); continue }
   const catalog = await runtime.catalog()
@@ -255,6 +270,10 @@ for (const plugin of plugins) {
   }
   results.push(row)
 }
+
+// Close every craft's MCP server before reporting, so a failure exit cannot
+// orphan a child process on any platform.
+for (const runtime of runtimes) runtime.dispose()
 
 const width = Math.max(...results.map(row => row.craft.length), 6)
 console.log(`${'craft'.padEnd(width)}  ${'binary'.padEnd(28)}  ${'catalog'.padEnd(13)}  tools  ${'mcp'.padEnd(22)}  run`)
