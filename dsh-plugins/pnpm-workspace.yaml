@@ -1,17 +1,16 @@
 # The ArtCraft plugin packages. `packages` lists every plugin so pnpm links
-# them together.
+# them together; the peers they import from the harness installation come from
+# `dependencies` below, resolved into this workspace's node_modules.
 packages:
   - 'plugin-*'
 
 # The plugins import `@deepseek-ai/cordis` and `@deepseek-ai/dsh-tools` from the
-# running harness, and must get the *same* instance the harness runs. Those are
-# resolved from a deepseek-harness checkout, because the published npm copies are
-# older than the harness this targets.
-#
-# `node scripts/install-links.mjs` finds that checkout, creates the links in
-# every plugin's node_modules, and only then writes the matching `dependencies:`
-# block here. It is deliberately absent from this file: a hard-coded `link:`
-# path that does not exist on your machine makes `pnpm install` fail outright
-# with ERR_PNPM_LINKED_PKG_DIR_NOT_FOUND, before anything could correct it.
+# running harness. Those are `link:` paths into a deepseek-harness checkout,
+# because the published npm copies are older than the harness this targets;
+# `scripts/install-links.mjs` rewrites them to match your checkout.
+dependencies:
+  '@deepseek-ai/cordis': link:../../../../deepseek-harness/vendor/cordis
+  '@deepseek-ai/dsh-tools': link:../../../../deepseek-harness/packages/core/tools
+
 nodeLinker: hoisted
 autoInstallPeers: false

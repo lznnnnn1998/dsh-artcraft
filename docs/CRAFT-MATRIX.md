@@ -142,9 +142,4 @@ node scripts/verify.mjs                   # discovery + catalog + tools + a real
 DSH_ARTCRAFT_TRACE=/tmp/trace.log node scripts/verify.mjs   # also log every exact argv
 ```
 
-```powershell
-# Windows: the same four commands (install.ps1 wraps the first and third)
-$env:DSH_ARTCRAFT_TRACE = "$env:TEMP\artcraft-trace.log"; node scripts\verify.mjs
-```
-
 All three exited 0 with the results in the table above.

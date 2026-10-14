@@ -20,37 +20,37 @@
  * @module scripts/install-craft
  */
 
-import { chmodSync, copyFileSync, existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs'
+import { chmodSync, copyFileSync, createWriteStream, existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs'
 import { execFileSync } from 'node:child_process'
+import { Readable } from 'node:stream'
+import { pipeline } from 'node:stream/promises'
+import { homedir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { extractFromArchive } from './lib/archive.mjs'
-import { downloadAsset, megabytes, resolveRelease } from './lib/craft-release.mjs'
 import { buildCraftCli, findCargo, installBinary, looksLikeRepo, repoPath } from './lib/source-build.js'
-import { defaultDshHome, isWindows, loadModule, parseArgv, readJson, rustInstallHint } from './lib/host.mjs'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-const args = parseArgv(process.argv.slice(2), ['--dir', '--repos'])
-const listOnly = args.has('--list')
-const force = args.has('--force')
+const argv = process.argv.slice(2)
+const flag = (name) => { const i = argv.indexOf(name); return i === -1 ? undefined : argv[i + 1] }
+const listOnly = argv.includes('--list')
+const force = argv.includes('--force')
 /** `--from-source` compiles from a checkout instead of downloading a release. */
-const fromSource = args.has('--from-source')
+const fromSource = argv.includes('--from-source')
 /** Where `--from-source` clones the craft repositories. */
-const reposDir = resolve(args.value('--repos', join(root, 'repos')))
-const requested = args.positionals
+const reposDir = resolve(flag('--repos') ?? join(root, 'repos'))
+const requested = argv.filter(a => !a.startsWith('--') && !(argv[argv.indexOf(a) - 1] ?? '').startsWith('--'))
 
 /**
  * Default install root: the harness home, beside the profiles, so the location
  * is stable no matter where the plugin package itself was unpacked.
  */
-const installRoot = resolve(args.value('--dir')
+const installRoot = resolve(flag('--dir')
   ?? process.env.DSH_ARTCRAFT_BIN_DIR
-  ?? join(defaultDshHome(), 'crafts', 'bin'))
+  ?? join(process.env.DSH_HOME ?? join(homedir(), '.dsh'), 'crafts', 'bin'))
 
-// `import()` needs a URL on Windows, where a bare `E:\…` path is read as the
-// protocol `e:`; loadModule is the portable spelling.
-const kit = await loadModule(join(root, 'dsh-plugins', 'craft-kit', 'lib', 'index.js'))
-const platform = await loadModule(join(root, 'dsh-plugins', 'craft-kit', 'lib', 'platform.js'))
+const kit = await import(join(root, 'dsh-plugins', 'craft-kit', 'lib', 'index.js'))
+const platform = await import(join(root, 'dsh-plugins', 'craft-kit', 'lib', 'platform.js'))
 
 const profiles = requested.length > 0
   ? requested.map(id => kit.profileOf(id)).filter(Boolean)
@@ -64,6 +64,71 @@ if (requested.length > 0 && profiles.length !== requested.length) {
 }
 
 console.log(`platform: ${process.platform}/${process.arch}   install root: ${installRoot}`)
+
+/** Ask the GitHub API for the newest release and its matching asset. */
+async function findAsset(id, target) {
+  const headers = { 'user-agent': 'dsh-artcraft', accept: 'application/vnd.github+json' }
+  if (process.env.GITHUB_TOKEN !== undefined) headers.authorization = `Bearer ${process.env.GITHUB_TOKEN}`
+  const releaseResponse = await fetch(`https://api.github.com/repos/storytold/${id}/releases/latest`, { headers })
+  if (!releaseResponse.ok) throw new Error(`GitHub API ${releaseResponse.status}`)
+  const release = await releaseResponse.json()
+  const version = String(release.tag_name ?? '').replace(/^v/, '')
+  const wanted = target.asset(id, version)
+  if (wanted === undefined) throw new Error(`no ${target.label} asset naming rule for ${id}`)
+  const asset = (release.assets ?? []).find(candidate => candidate.name === wanted)
+  if (asset === undefined) {
+    const available = (release.assets ?? []).map(a => a.name).filter(n => target.container === 'zip' ? n.endsWith('.zip') : n.endsWith('.tar.gz'))
+    throw new Error(`asset ${wanted} not in ${release.tag_name}. Available archives: ${available.slice(0, 4).join(', ') || '(none)'}`)
+  }
+  return { version, tag: release.tag_name, asset }
+}
+
+/**
+ * Download through the API endpoint, which redirects to a signed CDN URL.
+ *
+ * The asset endpoint also works when `github.com` itself is unreachable, and
+ * streaming to a file keeps a 20 MB Windows archive out of memory. A CDN drop
+ * mid-transfer is the most common failure on a slow link, so each attempt
+ * restarts from zero and a short size check decides whether it completed.
+ * @param id - craft id (the repository name).
+ * @param asset - the release asset to fetch.
+ * @param destination - file to write.
+ * @returns the number of bytes written.
+ */
+async function download(id, asset, destination, attempts = 3) {
+  const headers = { accept: 'application/octet-stream', 'user-agent': 'dsh-artcraft' }
+  if (process.env.GITHUB_TOKEN !== undefined) headers.authorization = `Bearer ${process.env.GITHUB_TOKEN}`
+  const url = `https://api.github.com/repos/storytold/${id}/releases/assets/${asset.id}`
+  let lastError
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    rmSync(destination, { force: true })
+    try {
+      const response = await fetch(url, { headers, redirect: 'follow' })
+      if (!response.ok) throw new Error(`HTTP ${response.status}`)
+      await pipeline(Readable.fromWeb(response.body), createWriteStream(destination))
+      const size = statSync(destination).size
+      if (size !== asset.size) throw new Error(`truncated: ${size} of ${asset.size} bytes`)
+      return size
+    } catch (error) {
+      lastError = error
+      if (attempt < attempts) process.stdout.write(`retry ${attempt}… `)
+    }
+  }
+  // Fall back to the platform's own client, which handles proxies, certificate
+  // stores and slow CDN links differently from Node's fetch.
+  try {
+    rmSync(destination, { force: true })
+    const args = ['-sSL', '--retry', '3', '--retry-all-errors', '--fail', '-o', destination]
+    if (process.env.GITHUB_TOKEN !== undefined) args.push('-H', `Authorization: Bearer ${process.env.GITHUB_TOKEN}`)
+    args.push('-H', 'Accept: application/octet-stream', url)
+    execFileSync('curl', args, { stdio: 'ignore', timeout: 900_000 })
+    const size = statSync(destination).size
+    if (size !== asset.size) throw new Error(`truncated via curl: ${size} of ${asset.size} bytes`)
+    return size
+  } catch (error) {
+    throw new Error(`${lastError?.message ?? 'download failed'} (curl fallback: ${error.message})`)
+  }
+}
 
 if (listOnly) {
   if (fromSource) {
@@ -87,10 +152,8 @@ if (fromSource) {
   const cargo = findCargo()
   if (cargo === undefined) {
     console.error('--from-source needs a Rust toolchain, and none was found.')
-    console.error(`Install it with:  ${rustInstallHint()}`)
-    console.error(isWindows
-      ? 'Then re-open the shell (or add %USERPROFILE%\\.cargo\\bin to PATH) and run this again.'
-      : 'Then re-open the shell (or add ~/.cargo/bin to PATH) and run this again.')
+    console.error('Install it with:  curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs | sh')
+    console.error('Then re-open the shell (or add ~/.cargo/bin to PATH) and run this again.')
     console.error('Without Rust, omit --from-source to download the release binaries instead.')
     process.exit(2)
   }
@@ -115,7 +178,7 @@ if (fromSource) {
     const binPath = join(installRoot, platform.binaryName(profile.id))
     const markerPath = join(installRoot, `${profile.id}.version.json`)
     if (!force && existsSync(binPath) && existsSync(markerPath)) {
-      const marker = readJson(markerPath)
+      const marker = JSON.parse(readFileSync(markerPath, 'utf8'))
       if (marker.source === 'source') { console.log(`${profile.id.padEnd(14)} ${String(marker.version).padEnd(8)} already built`); continue }
     }
     process.stdout.write(`${profile.id.padEnd(14)} building… `)
@@ -148,26 +211,23 @@ for (const profile of profiles) {
   const binPath = join(installRoot, platform.binaryName(profile.id))
   const markerPath = join(installRoot, `${profile.id}.version.json`)
   if (!force && existsSync(binPath) && existsSync(markerPath)) {
-    const marker = readJson(markerPath)
+    const marker = JSON.parse(readFileSync(markerPath, 'utf8'))
     skipped.push(profile.id)
     console.log(`${profile.id.padEnd(14)} ${String(marker.version).padEnd(8)} already installed`)
     continue
   }
   try {
-    const { version, tag, asset } = await resolveRelease(profile.id, target)
+    const { version, tag, asset } = await findAsset(profile.id, target)
     const archive = join(installRoot, `.download-${asset.name}`)
-    process.stdout.write(`${profile.id.padEnd(14)} ${tag.padEnd(8)} downloading ${megabytes(asset.size)}… `)
-    const bytes = await downloadAsset(profile.id, asset, archive, {
-      onRetry: (attempt) => process.stdout.write(`retry ${attempt}… `),
-    })
+    process.stdout.write(`${profile.id.padEnd(14)} ${tag.padEnd(8)} downloading ${(asset.size / 1e6).toFixed(1)} MB… `)
+    const bytes = await download(profile.id, asset, archive)
     const member = extractFromArchive(archive, join(installRoot, `.extract-${profile.id}`), target, profile.id)
     copyFileSync(member, binPath)
-    // Windows has no execute bit; the archive is the executable as-is.
-    if (!isWindows) chmodSync(binPath, 0o755)
+    if (process.platform !== 'win32') chmodSync(binPath, 0o755)
     rmSync(archive, { force: true })
     rmSync(join(installRoot, `.extract-${profile.id}`), { recursive: true, force: true })
     writeFileSync(markerPath, JSON.stringify({ id: profile.id, version, tag, asset: asset.name, platform: process.platform, arch: process.arch }, undefined, 2) + '\n')
-    console.log(`ok (${megabytes(bytes)}) → ${binPath}`)
+    console.log(`ok (${(bytes / 1e6).toFixed(1)} MB) → ${binPath}`)
     installed.push(profile.id)
   } catch (error) {
     console.log(`FAILED — ${error.message}`)
