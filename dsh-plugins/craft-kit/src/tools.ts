@@ -364,7 +364,12 @@ export function createToolSet(runtime: CraftRuntime): CraftToolSet {
       ...(profile.run.saveMode ?? 'flag') === 'flag'
         ? { save: { type: 'string', description: `Path to write the edited document to (${profile.extensions.join('/')}).` } }
         : {},
-      ...profile.run.exportFlag !== undefined && profile.run.exportFlag !== profile.run.saveFlag
+      // `export` is always advertised when the craft can render one. Where the
+      // craft writes documents and artifacts through the same flag (VectorCraft
+      // `--export`), the executor folds `export` into `save`; the parameter is
+      // still offered because naming the artifact is what a caller means, and
+      // withholding it only pushes them to `extraArgs`.
+      ...profile.run.exportFlag !== undefined
         ? { export: { type: 'string', description: 'Path to export a rendered artifact to (png/svg/pdf, or the app\'s native media type).' } }
         : {},
       ...profile.run.sampleFlag.length > 0

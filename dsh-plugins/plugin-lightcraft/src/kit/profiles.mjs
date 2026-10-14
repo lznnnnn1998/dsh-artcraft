@@ -261,7 +261,10 @@ export const CRAFT_PROFILES = [
       cmdSeparator: '',
       cmdStyle: 'flag-params',
       cmdParamsFlag: '--params',
+      // VectorCraft renders documents and artifacts through one flag, so both
+      // names map to it: the kernel folds `export` into `save` when they match.
       saveFlag: '--export',
+      exportFlag: '--export',
     },
     reads: [
       { name: 'convert', verb: 'convert', summary: 'Open any readable format and export it to another.' },
