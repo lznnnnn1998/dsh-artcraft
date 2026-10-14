@@ -208,16 +208,41 @@ node scripts/publish-npm.mjs --dry-run     # what the registry is missing
 node scripts/publish-npm.mjs               # publish the missing ones
 ```
 
-npm throttles publishing per account and **does not document the quota**, so a
-bulk publish of twelve packages can stop partway with
-`E429 … rate limited exceeded`. The script publishes only versions the registry
-lacks, so it is safe to re-run: finished packages are skipped and a throttled
-run stops instead of burning the remaining attempts.
+The script publishes only versions the registry lacks, so it is safe to re-run:
+finished packages are skipped and a throttled run stops instead of burning the
+remaining attempts.
 
 Point it at a token with `NPM_CONFIG_USERCONFIG`, so no credential is ever
 written into this repository. Publishing needs 2FA or a token that bypasses it:
 a granular token must have **Bypass 2FA** enabled, and a classic **Automation**
 token does so inherently.
+
+### A publish can come back `ok` and still not be live
+
+npm's [staged publishing](https://docs.npmjs.com/staged-publishing) adds an
+approval step. When it routes a new package through staging it publishes a
+placeholder version `0.0.0-stage` and holds the real version for a maintainer to
+approve — while `npm publish` still exits 0. The package then looks present but
+`npm view <pkg> version` answers `0.0.0-stage`.
+
+Check what is actually live before assuming a publish finished:
+
+```sh
+node scripts/publish-npm.mjs --dry-run
+```
+
+A `MISSING (registry has 0.0.0-stage)` line means the version is staged. To
+publish it, review and **Approve** it with 2FA on npmjs.com's **Staged Packages**
+tab, or with npm CLI 11.15.0 or later:
+
+```sh
+npm stage list
+npm stage approve <stage-id>
+```
+
+Re-publishing that exact version fails with
+`409 Cannot publish over previously staged version`, so approve it (or bump the
+version) rather than retrying.
 
 ## Verify
 
