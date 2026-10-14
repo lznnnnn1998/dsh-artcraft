@@ -12,26 +12,41 @@
  * `node_modules` is not committed, so a fresh clone must recreate those links.
  * This script finds the deepseek-harness checkout, verifies the two harness
  * packages are present (a checkout that was never installed lacks their built
- * `lib/`), and symlinks everything into place. It is idempotent and also runs
+ * `lib/`), and links everything into place. It is idempotent and also runs
  * from `dsh-plugins/`'s `postinstall`.
+ *
+ * On Windows the links are **junctions**, which need neither Developer Mode nor
+ * an elevated shell; a plain directory symlink would fail with `EPERM` on a
+ * stock machine.
  *
  * Usage:
  *   node scripts/install-links.mjs                 # autodetect the harness
  *   node scripts/install-links.mjs --harness DIR   # or name it explicitly
  *   node scripts/install-links.mjs --check         # report only, never write
+ *   node scripts/install-links.mjs --optional      # warn, do not fail, when absent
  * @module scripts/install-links
  */
 
-import { existsSync, lstatSync, mkdirSync, readFileSync, readdirSync, rmSync, symlinkSync } from 'node:fs'
+import { existsSync, lstatSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
 import { homedir } from 'node:os'
-import { dirname, join, relative, resolve } from 'node:path'
+import { dirname, join, relative, resolve, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { isWindows, linkDir, parseArgv, envAssignmentHint } from './lib/host.mjs'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const pluginsDir = join(root, 'dsh-plugins')
-const checkOnly = process.argv.includes('--check')
-const harnessFlag = process.argv.indexOf('--harness')
-const explicitHarness = harnessFlag === -1 ? undefined : process.argv[harnessFlag + 1]
+const args = parseArgv(process.argv.slice(2), ['--harness'])
+const checkOnly = args.has('--check')
+/**
+ * `--optional` makes a missing harness checkout a warning instead of a failure.
+ *
+ * The workspace's `postinstall` uses it: linking the peers only matters once
+ * the plugins are actually loaded, and failing there would make
+ * `pnpm install` in `dsh-plugins/` impossible on a machine that has no harness
+ * source checkout.
+ */
+const optional = args.has('--optional')
+const explicitHarness = args.value('--harness', undefined)
 
 /**
  * Harness packages a plugin imports, and the file that proves a checkout is
@@ -79,19 +94,32 @@ function findHarness() {
 const { path: harness, seen } = findHarness()
 
 if (harness === undefined) {
-  console.error('Could not find a usable deepseek-harness checkout.\n')
+  console.error(optional
+    ? 'No usable deepseek-harness checkout was found, so the plugin peers were not linked.\n'
+    : 'Could not find a usable deepseek-harness checkout.\n')
+  if (optional) {
+    console.error('That is fine unless you mean to load the plugins from this workspace: profiles')
+    console.error('installed by scripts/install-into-profile.mjs resolve their peers from the')
+    console.error('harness itself and need nothing linked here.\n')
+  }
   console.error('Looked in:')
   for (const line of [...new Set(seen)]) console.error(line)
+  const example = isWindows ? 'C:\\src\\deepseek-harness' : '/path/to/deepseek-harness'
   console.error(`
 The plugins must import the same cordis instance the harness runs, so they need
 a built harness checkout. Fix it with either:
 
   1. clone and build it:   git clone https://github.com/deepseek-ai/deepseek-harness
-                           pnpm install && pnpm run build
-  2. point at an existing one:  node scripts/install-links.mjs --harness /path/to/deepseek-harness
-     or set DSH_HARNESS_DIR=/path/to/deepseek-harness
-`)
-  process.exit(2)
+                           then, in that checkout:  pnpm install && pnpm run build
+  2. point at an existing one:
+                           node scripts/install-links.mjs --harness ${example}
+                           ${envAssignmentHint('DSH_HARNESS_DIR', example)}
+${isWindows ? `
+On Windows the harness ships its own package manager, so no global pnpm is
+needed — run it with the Node the harness uses:
+  node "%USERPROFILE%\\.dsh\\dsh-runtimes\\<runtime>\\dependencies\\pnpm\\bin\\pnpm.mjs" install
+` : ''}`)
+  process.exit(optional ? 0 : 2)
 }
 
 /** Plugin packages present in this workspace. */
@@ -103,16 +131,23 @@ function pluginPackages() {
     .sort((a, b) => a.craft.localeCompare(b.craft))
 }
 
-/** Create `target` as a symlink to `source`, replacing a stale link. */
+/** Create `target` as a link to `source`, replacing a stale link. */
 function link(source, target) {
   const existing = lstatSync(target, { throwIfNoEntry: false })
   if (existing !== undefined) {
-    if (!existing.isSymbolicLink()) return { ok: false, reason: `${target} exists and is not a symlink` }
+    if (!existing.isSymbolicLink()) return { ok: false, reason: `${target} exists and is not a link` }
     rmSync(target)
   }
   if (checkOnly) return { ok: true, reason: 'would link' }
   mkdirSync(dirname(target), { recursive: true })
-  symlinkSync(source, target, 'dir')
+  try {
+    linkDir(source, target)
+  } catch (error) {
+    const fix = isWindows
+      ? 'Re-run from an elevated shell, or enable Developer Mode.'
+      : 'Check the directory permissions.'
+    return { ok: false, reason: `${target}: ${error.message}. ${fix}` }
+  }
   return { ok: true, reason: 'linked' }
 }
 
@@ -146,20 +181,31 @@ for (const target of targets) {
 }
 
 // pnpm's workspace file carries the harness paths so `pnpm install` can also
-// produce these links; keep it in step with what autodetection found.
+// produce these links; keep it in step with what autodetection found. The
+// workspace file ships without a `dependencies:` block — a `link:` path that
+// does not exist on this machine would make `pnpm install` fail before this
+// script ever ran — so the block is appended the first time a harness is found.
+//
+// Both the match and the replacement are line-ending tolerant, and the paths
+// are written with forward slashes: a default Windows checkout has CRLF line
+// endings (`core.autocrlf=true`) and backslash `relative()` results, and a
+// `\n`-only regex silently matched nothing there.
 const workspaceFile = join(pluginsDir, 'pnpm-workspace.yaml')
 if (!checkOnly && existsSync(workspaceFile)) {
-  const harnessRelative = relative(pluginsDir, harness)
-  const wanted = `dependencies:
-  '@deepseek-ai/cordis': link:${harnessRelative}/vendor/cordis
-  '@deepseek-ai/dsh-tools': link:${harnessRelative}/packages/core/tools
-`
+  const harnessRelative = relative(pluginsDir, harness).split(sep).join('/')
   const text = readFileSync(workspaceFile, 'utf8')
-  const updated = text.replace(/dependencies:\n(?:  .*\n)+/, wanted)
-  if (updated !== text) {
-    const { writeFileSync } = await import('node:fs')
-    writeFileSync(workspaceFile, updated)
-  }
+  const eol = text.includes('\r\n') ? '\r\n' : '\n'
+  const wanted = [
+    'dependencies:',
+    `  '@deepseek-ai/cordis': link:${harnessRelative}/vendor/cordis`,
+    `  '@deepseek-ai/dsh-tools': link:${harnessRelative}/packages/core/tools`,
+    '',
+  ].join(eol)
+  const block = /dependencies:\r?\n(?:  .*\r?\n)+/
+  const updated = block.test(text)
+    ? text.replace(block, wanted)
+    : `${text.trimEnd()}${eol}${eol}# Written by scripts/install-links.mjs; do not edit by hand.${eol}${wanted}`
+  if (updated !== text) writeFileSync(workspaceFile, updated)
 }
 
 if (failures > 0) {

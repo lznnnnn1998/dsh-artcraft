@@ -20,6 +20,9 @@ github_token*.txt
 # Node dependencies, recreated by scripts/install-links.mjs
 node_modules/
 
+# Package tarballs, from scripts/install-into-profile.mjs or `pnpm pack`
+*.tgz
+
 # A craft writing a project into the working directory would land here
 /ARTIFACT
 *.pcraft

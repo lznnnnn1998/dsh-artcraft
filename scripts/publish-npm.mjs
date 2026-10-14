@@ -16,21 +16,24 @@
  *
  * The npm token is read from the environment, never from this file:
  *   NPM_CONFIG_USERCONFIG=/path/to/npmrc node scripts/publish-npm.mjs
+ *
+ * Publishing is done with whichever package manager this machine has — the
+ * bundled pnpm when there is no global one, which is the usual situation on
+ * Windows, where `npm` is a `.cmd` shim Node cannot spawn directly.
  * @module scripts/publish-npm
  */
 
-import { execFileSync } from 'node:child_process'
-import { existsSync, readFileSync, readdirSync } from 'node:fs'
+import { existsSync, readdirSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { PM_ENV, packageManager, parseArgv, readJson, runPackageManager } from './lib/host.mjs'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const pluginsDir = join(root, 'dsh-plugins')
-const argv = process.argv.slice(2)
-const flag = (name, fallback) => { const i = argv.indexOf(name); return i === -1 ? fallback : argv[i + 1] }
-const dryRun = argv.includes('--dry-run')
-const retryWait = Number(flag('--retry-wait', '120'))
-const only = flag('--only')
+const args = parseArgv(process.argv.slice(2), ['--retry-wait', '--only'])
+const dryRun = args.has('--dry-run')
+const retryWait = Number(args.value('--retry-wait', '120'))
+const only = args.value('--only', undefined)
 
 /** Every plugin package, in the order they should be published. */
 function plugins() {
@@ -38,7 +41,7 @@ function plugins() {
     .filter(entry => entry.isDirectory() && entry.name.startsWith('plugin-'))
     .map(entry => join(pluginsDir, entry.name))
     .filter(dir => existsSync(join(dir, 'package.json')))
-    .map(dir => ({ dir, manifest: JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8')) }))
+    .map(dir => ({ dir, manifest: readJson(join(dir, 'package.json')) }))
     .filter(plugin => only === undefined || plugin.manifest.name.endsWith(`-${only}`))
     .sort((a, b) => a.manifest.name.localeCompare(b.manifest.name))
 }
@@ -77,6 +80,9 @@ if (dryRun) {
 }
 
 console.log(`\npublishing ${missing.length} package(s)…`)
+const pm = packageManager()
+console.log(`package manager: ${pm.label}  (${pm.source})`)
+console.log(`Set ${PM_ENV} to override it.\n`)
 let ok = 0
 const throttled = []
 for (const [index, plugin] of missing.entries()) {
@@ -84,7 +90,7 @@ for (const [index, plugin] of missing.entries()) {
   process.stdout.write(`  ${name.padEnd(38)} `)
   let output = ''
   try {
-    output = execFileSync('npm', ['publish'], { cwd: plugin.dir, encoding: 'utf8', stdio: 'pipe', timeout: 600_000 })
+    output = runPackageManager(pm, ['publish'], { cwd: plugin.dir, encoding: 'utf8', stdio: 'pipe', timeout: 600_000 })
     console.log('ok')
     ok += 1
   } catch (error) {

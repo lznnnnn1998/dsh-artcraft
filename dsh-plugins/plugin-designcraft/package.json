@@ -6,7 +6,7 @@
   "description": "DSH plugin: drive DesignCraft (page and layout design) headlessly through its own CLI and MCP server.",
   "license": "MIT OR Apache-2.0",
   "exports": {
-    ".": "./src/index.ts",
+    ".": "./src/index.js",
     "./package.json": "./package.json"
   },
   "peerDependencies": {
@@ -23,8 +23,7 @@
   },
   "files": [
     "src",
-    "cordis.patch.yml",
-    "README.md"
+    "cordis.patch.yml"
   ],
   "dsh": {
     "bundle": {
