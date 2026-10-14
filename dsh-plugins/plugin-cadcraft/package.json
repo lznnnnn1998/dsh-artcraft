@@ -1,6 +1,6 @@
 {
   "name": "dsh-artcraft-plugin-cadcraft",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": false,
   "type": "module",
   "description": "DSH plugin: drive CADCraft (CAD and drafting) headlessly through its own CLI and MCP server.",

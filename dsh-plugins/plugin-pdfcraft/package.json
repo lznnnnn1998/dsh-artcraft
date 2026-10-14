@@ -1,6 +1,6 @@
 {
   "name": "dsh-artcraft-plugin-pdfcraft",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": false,
   "type": "module",
   "description": "DSH plugin: drive PdfCraft (PDF reading and editing) headlessly through its own CLI and MCP server.",
