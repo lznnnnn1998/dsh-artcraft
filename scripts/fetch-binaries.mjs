@@ -1,114 +1,139 @@
 #!/usr/bin/env node
 /**
- * Fetch, unpack and install every ArtCraft CLI into `crafts-bin/`.
+ * Fetch, unpack and install every ArtCraft CLI into the workspace's
+ * `crafts-bin/`.
+ *
+ * `scripts/install-craft.mjs` is the recommended installer: it puts the CLIs
+ * under the harness home, where every profile finds them. This one is the
+ * workspace-local alternative — useful when you want the binaries beside the
+ * checkout (a CI job, a container image, or several profiles sharing one copy).
  *
  * The craft repositories are never touched: this works entirely from the
- * published GitHub release assets, which is what makes the DSH plugins
+ * published GitHub release artifacts, which is what makes the DSH plugins
  * runnable on a machine with no Rust toolchain.
  *
+ * Windows is a first-class target: the archive for this platform is chosen from
+ * the same table the plugins use, and it is unpacked by Node itself, so no
+ * `unzip`, `xattr` or POSIX shell is involved.
+ *
  * Usage:
- *   node scripts/fetch-binaries.mjs                 # every profile in index.mjs
+ *   node scripts/fetch-binaries.mjs                 # every craft this platform supports
  *   node scripts/fetch-binaries.mjs gridcraft ...   # only the named crafts
  *   node scripts/fetch-binaries.mjs --list          # show what would be fetched
+ *   node scripts/fetch-binaries.mjs --dir DIR       # install somewhere else
+ *   node scripts/fetch-binaries.mjs --force         # reinstall over an existing copy
  * @module scripts/fetch-binaries
  */
 
-import { execFileSync } from 'node:child_process'
-import { chmodSync, copyFileSync, existsSync, mkdirSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs'
+import { chmodSync, copyFileSync, existsSync, mkdirSync, rmSync, statSync, writeFileSync } from 'node:fs'
 import { basename, dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { extractFromArchive } from './lib/archive.mjs'
+import { downloadAsset, megabytes, resolveRelease } from './lib/craft-release.mjs'
+import { isWindows, loadModule, parseArgv } from './lib/host.mjs'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-const downloadDir = join(root, 'bin', 'dl')
-const unpackDir = join(root, 'bin', 'unpacked')
-const installDir = join(root, 'crafts-bin')
+const args = parseArgv(process.argv.slice(2), ['--dir'])
+const listOnly = args.has('--list')
+const force = args.has('--force')
+const requested = args.positionals
 
-const { CRAFT_PROFILES } = await import('../dsh-plugins/craft-kit/src/profiles.mjs')
+const installDir = resolve(args.value('--dir') ?? join(root, 'crafts-bin'))
 
-const argv = process.argv.slice(2)
-const listOnly = argv.includes('--list')
-const requested = argv.filter(arg => !arg.startsWith('--'))
+// `profiles.mjs` is plain JavaScript so it loads with no build step; the
+// platform table is generated, and is committed, so it is present in a clone.
+const { CRAFT_PROFILES } = await loadModule(join(root, 'dsh-plugins', 'craft-kit', 'src', 'profiles.mjs'))
+const platform = await loadModule(join(root, 'dsh-plugins', 'craft-kit', 'lib', 'platform.js'))
+
+/** Profiles that publish a runnable CLI release, in registry order. */
+const releasable = CRAFT_PROFILES.filter((profile) => profile.release !== false)
+
+if (requested.length > 0) {
+  const known = new Set(releasable.map((profile) => profile.id))
+  const unknown = requested.filter((id) => !known.has(id))
+  if (unknown.length > 0) {
+    console.error(`unknown craft id(s): ${unknown.join(', ')}`)
+    console.error(`known: ${releasable.map((profile) => profile.id).join(' ')}`)
+    process.exit(2)
+  }
+}
+
 const profiles = requested.length > 0
-  ? CRAFT_PROFILES.filter(p => requested.includes(p.id))
-  : CRAFT_PROFILES.filter(p => p.release !== false)
+  ? releasable.filter((profile) => requested.includes(profile.id))
+  : releasable
 
-if (requested.length > 0 && profiles.length !== requested.length) {
-  const known = new Set(CRAFT_PROFILES.map(p => p.id))
-  const unknown = requested.filter(id => !known.has(id))
-  console.error(`unknown craft id(s): ${unknown.join(', ')}`)
-  process.exit(2)
-}
-
-mkdirSync(downloadDir, { recursive: true })
-mkdirSync(unpackDir, { recursive: true })
-mkdirSync(installDir, { recursive: true })
-
-/** Ask the GitHub API for the newest macOS CLI asset of one craft. */
-async function latestMacCli(repo, bin) {
-  const response = await fetch(`https://api.github.com/repos/storytold/${repo}/releases/latest`, {
-    headers: { 'user-agent': 'dsh-artcraft-plugins', accept: 'application/vnd.github+json' },
-  })
-  if (!response.ok) throw new Error(`GitHub API ${response.status} for ${repo}`)
-  const release = await response.json()
-  const asset = (release.assets ?? []).find(candidate =>
-    candidate.name.startsWith(`${bin}-`) && candidate.name.includes('macos') && candidate.name.endsWith('.zip'))
-  if (asset === undefined) throw new Error(`${repo}@${release.tag_name} has no macOS CLI zip`)
-  return { tag: release.tag_name, name: asset.name, url: asset.browser_download_url, size: asset.size }
-}
-
-/** Download when absent, then unpack and install the CLI. */
-async function install(profile) {
-  const asset = await latestMacCli(profile.id, profile.bin)
-  const zip = join(downloadDir, asset.name)
-  if (!existsSync(zip) || statSync(zip).size !== asset.size) {
-    process.stdout.write(`downloading ${profile.id} ${asset.tag} (${(asset.size / 1e6).toFixed(1)} MB)… `)
-    const response = await fetch(asset.url, { redirect: 'follow' })
-    if (!response.ok) throw new Error(`download ${response.status} for ${asset.url}`)
-    writeFileSync(zip, Buffer.from(await response.arrayBuffer()))
-    console.log('ok')
-  }
-  const target = join(unpackDir, profile.id)
-  rmSync(target, { recursive: true, force: true })
-  mkdirSync(target, { recursive: true })
-  execFileSync('unzip', ['-o', '-q', zip, '-d', target])
-  const binary = findBinary(target, profile.bin)
-  if (binary === undefined) throw new Error(`${asset.name}: no ${profile.bin} inside`)
-  const installed = join(installDir, profile.bin)
-  rmSync(installed, { force: true })
-  copyFileSync(binary, installed)
-  chmodSync(installed, 0o755)
-  // macOS quarantines downloaded executables; the plugins exec them directly.
-  try { execFileSync('xattr', ['-d', 'com.apple.quarantine', installed], { stdio: 'ignore' }) } catch { /* not quarantined */ }
-  let version
-  try {
-    version = execFileSync(installed, ['--version'], { encoding: 'utf8', timeout: 8000 }).trim().split('\n')[0]
-  } catch { version = '(no --version)' }
-  console.log(`${profile.id.padEnd(14)} ${asset.tag.padEnd(10)} -> crafts-bin/${profile.bin}  ${version}`)
-  return { id: profile.id, tag: asset.tag, bin: profile.bin, version }
-}
-
-/** Depth-first search for the first executable file named `bin`. */
-function findBinary(dir, bin) {
-  for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    const full = join(dir, entry.name)
-    if (entry.isDirectory()) { const nested = findBinary(full, bin); if (nested !== undefined) return nested; continue }
-    if (entry.name === bin && (statSync(full).mode & 0o111) !== 0) return full
-  }
-  return undefined
-}
+console.log(`platform: ${process.platform}/${process.arch}   install root: ${installDir}`)
 
 if (listOnly) {
-  for (const profile of profiles) console.log(`${profile.id.padEnd(14)} ${profile.bin}`)
+  for (const profile of profiles) {
+    const target = platform.releaseTarget(profile.id)
+    console.log(target === undefined
+      ? `  ${profile.id.padEnd(14)} unsupported on ${process.platform}/${process.arch}`
+      : `  ${profile.id.padEnd(14)} ${target.label.padEnd(22)} ${target.asset(profile.id, '<version>')}`)
+  }
   process.exit(0)
 }
 
-const results = []
-for (const profile of profiles) {
+mkdirSync(installDir, { recursive: true })
+
+/** The version marker written beside each installed binary. */
+const versionsPath = join(installDir, 'VERSIONS.json')
+const previous = new Map()
+if (existsSync(versionsPath)) {
   try {
-    results.push(await install(profile))
-  } catch (error) {
-    console.error(`${profile.id}: ${error.message}`)
+    for (const entry of readJson(versionsPath)) previous.set(entry.id, entry)
+  } catch {
+    // A malformed marker is not worth failing over; it is rewritten below.
   }
 }
-console.log(`\ninstalled ${results.length}/${profiles.length} craft CLIs into ${basename(installDir)}/`)
-writeFileSync(join(installDir, 'VERSIONS.json'), JSON.stringify(results, undefined, 2) + '\n')
+
+const results = []
+const failed = []
+for (const profile of profiles) {
+  const target = platform.releaseTarget(profile.id)
+  if (target === undefined) {
+    console.log(`${profile.id.padEnd(14)} unsupported on ${process.platform}/${process.arch}`)
+    continue
+  }
+  const fileName = platform.binaryName(profile.id)
+  const installed = join(installDir, fileName)
+  if (!force && existsSync(installed)) {
+    const known = previous.get(profile.id)
+    results.push(known ?? { id: profile.id, bin: fileName, version: '(present)' })
+    console.log(`${profile.id.padEnd(14)} ${String(known?.tag ?? '').padEnd(10)} already present  → crafts-bin/${fileName}`)
+    continue
+  }
+  try {
+    const { version, tag, asset } = await resolveRelease(profile.id, target)
+    const archive = join(installDir, `.download-${asset.name}`)
+    process.stdout.write(`${profile.id.padEnd(14)} ${tag.padEnd(10)} downloading ${megabytes(asset.size)}… `)
+    await downloadAsset(profile.id, asset, archive, {
+      onRetry: (attempt) => process.stdout.write(`retry ${attempt}… `),
+    })
+    // Only the CLI member is extracted, so a 96 MB Windows application archive
+    // never unpacks into the workspace.
+    const scratch = join(installDir, `.extract-${profile.id}`)
+    const member = extractFromArchive(archive, scratch, target, profile.id)
+    rmSync(installed, { force: true })
+    copyFileSync(member, installed)
+    if (!isWindows) chmodSync(installed, 0o755)
+    rmSync(archive, { force: true })
+    rmSync(scratch, { recursive: true, force: true })
+    const bytes = statSync(installed).size
+    console.log(`ok → crafts-bin/${fileName}  ${version}  (${megabytes(bytes)})`)
+    results.push({ id: profile.id, tag, bin: fileName, version })
+  } catch (error) {
+    failed.push(profile.id)
+    console.log(`FAILED — ${error.message}`)
+  }
+}
+
+writeFileSync(versionsPath, JSON.stringify(results, undefined, 2) + '\n')
+console.log(`\ninstalled ${results.length}/${profiles.length} craft CLI(s) into ${basename(installDir)}/`)
+if (failed.length > 0) {
+  console.error(`failed: ${failed.join(', ')}`)
+  process.exitCode = 1
+}
+if (results.length > 0) {
+  console.log('The plugins search crafts-bin/ beside the workspace, so no configuration is needed.')
+}
