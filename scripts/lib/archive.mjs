@@ -36,8 +36,18 @@ function tarEntries(buffer) {
   return entries
 }
 
-/** Read a zip archive's central directory and inflate one entry's data. */
-function zipEntries(buffer) {
+/**
+ * Read a zip archive's central directory *without* decompressing anything.
+ *
+ * Windows and Linux release archives are the full application, not a dedicated
+ * CLI bundle, so they hold hundreds of megabytes of entries of which exactly one
+ * is wanted. Recording where each entry's compressed bytes begin and inflating
+ * only the winner keeps peak memory at the size of one member — decompressing
+ * the whole archive eagerly used to cost several gigabytes on Windows.
+ * @param buffer - the whole `.zip` file.
+ * @returns entries as `{ path, method, compressedSize, dataStart }`.
+ */
+function zipDirectory(buffer) {
   // Locate the End Of Central Directory record, scanning back over any comment.
   let eocd = -1
   for (let i = buffer.length - 22; i >= 0 && i > buffer.length - 22 - 65_536; i -= 1) {
@@ -61,20 +71,27 @@ function zipEntries(buffer) {
     const localNameLength = buffer.readUInt16LE(localOffset + 26)
     const localExtraLength = buffer.readUInt16LE(localOffset + 28)
     const dataStart = localOffset + 30 + localNameLength + localExtraLength
-    const raw = buffer.subarray(dataStart, dataStart + compressedSize)
-    if (method === 0) entries.push({ path, data: raw })
-    else if (method === 8) entries.push({ path, data: inflateRawSync(raw) })
-    // Other methods (bzip2, lzma) never appear in these release archives.
+    // Methods other than store/deflate (bzip2, lzma) never appear in these
+    // release archives; an entry using one is skipped rather than mis-read.
+    if (method === 0 || method === 8) entries.push({ path, method, compressedSize, dataStart })
     offset += 46 + nameLength + extraLength + commentLength
   }
   return entries
 }
 
+/** The bytes of one zip entry, decompressed on demand. */
+function zipMemberData(buffer, entry) {
+  const raw = buffer.subarray(entry.dataStart, entry.dataStart + entry.compressedSize)
+  return entry.method === 0 ? raw : inflateRawSync(raw)
+}
+
 /**
  * Extract the one archive member matching a target's predicate.
  *
- * Tar streams are sequential, so a match can be returned as soon as it is seen
- * and the rest of a 300 MB archive stays compressed in memory only once.
+ * Only the matching member is ever decompressed and written: a zip's central
+ * directory is read in place and a single entry inflated, and for a tar the
+ * entries are slices of one decompressed buffer. The rest of a 300 MB
+ * application archive is never materialized.
  * @param archivePath - the `.zip`, `.tar.gz` or `.tar` file.
  * @param scratchDir - directory the member is written into (created if needed).
  * @param target - `{ container, match }` describing what to look for.
@@ -100,11 +117,11 @@ export function extractFromArchive(archivePath, scratchDir, target, craft) {
       return out
     }
   } else {
-    for (const entry of zipEntries(raw)) {
+    for (const entry of zipDirectory(raw)) {
       if (!target.match(craft, entry.path)) continue
       const out = join(scratchDir, 'member')
       mkdirSync(dirname(out), { recursive: true })
-      writeFileSync(out, entry.data)
+      writeFileSync(out, zipMemberData(raw, entry))
       return out
     }
   }

@@ -20,20 +20,36 @@ import { execFileSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 import type { CraftBinary, CraftProfile } from './types.ts'
 
-/** True when `path` is an executable regular file (or a symlink to one). */
+/**
+ * True when `path` is an executable regular file (or a symlink to one).
+ *
+ * `X_OK` is a no-op on Windows — it succeeds for any file that exists — so on
+ * that platform the name is additionally required to carry an executable
+ * extension (`PATHEXT`), which stops a stray text file called
+ * `gridcraft-cli` from being adopted as the binary.
+ */
 export function isExecutable(path: string): boolean {
   try {
     if (!statSync(path).isFile()) return false
     accessSync(path, constants.X_OK)
+    if (process.platform === 'win32') {
+      const extensions = (process.env.PATHEXT ?? '.COM;.EXE;.BAT;.CMD')
+        .split(';').map(extension => extension.trim().toLowerCase()).filter(extension => extension.length > 0)
+      const lower = path.toLowerCase()
+      return extensions.some(extension => lower.endsWith(extension))
+    }
     return true
   } catch {
     return false
   }
 }
 
-/** Every directory on `PATH`, in order. */
+/** Every directory on `PATH`, in order, with quoting removed. */
 function pathDirs(): string[] {
-  return (process.env.PATH ?? '').split(delimiter).filter(entry => entry.length > 0)
+  return (process.env.PATH ?? '')
+    .split(delimiter)
+    .map(entry => entry.trim().replace(/^"(.*)"$/, '$1'))
+    .filter(entry => entry.length > 0)
 }
 
 /** Directory holding this kernel (`<workspace>/dsh-plugins/craft-kit/src`). */
@@ -111,14 +127,37 @@ export function candidates(profile: CraftProfile, configured?: string, packageRo
       const resolved = isAbsolute(dir) ? dir : resolve(base, dir)
       if (seen.has(resolved)) continue
       seen.add(resolved)
-      out.push({ path: join(resolved, profile.bin), source: `search-dir:${resolved}` })
+      // Windows installs the CLI as `<craft>-cli.exe`, so the platform's own
+      // name has to be tried before the bare one; otherwise a workspace
+      // `crafts-bin/` copy is never found there.
+      for (const name of candidateNames(profile)) {
+        out.push({ path: join(resolved, name), source: `search-dir:${resolved}` })
+      }
     }
   }
   for (const dir of pathDirs()) {
-    out.push({ path: join(dir, profile.bin), source: 'PATH' })
-    if (process.platform === 'win32') out.push({ path: join(dir, `${profile.bin}.exe`), source: 'PATH' })
+    for (const name of candidateNames(profile)) {
+      out.push({ path: join(dir, name), source: 'PATH' })
+    }
   }
   return out
+}
+
+/**
+ * Names a craft CLI may have on this platform, most likely first.
+ *
+ * Windows installs `<craft>-cli.exe`, so the extension is what a `PATH` or
+ * `crafts-bin/` lookup has to try; `PATHEXT` is honoured rather than assumed
+ * because a machine may have narrowed it. The bare name comes last, and only on
+ * Windows, for a CLI a user renamed themselves.
+ * @param profile - the craft being located.
+ * @returns candidate file names, deduplicated.
+ */
+function candidateNames(profile: CraftProfile): string[] {
+  if (process.platform !== 'win32') return [profile.bin]
+  const extensions = (process.env.PATHEXT ?? '.COM;.EXE;.BAT;.CMD')
+    .split(';').map(extension => extension.trim().toLowerCase()).filter(extension => extension.length > 0)
+  return [...new Set([platformBinaryName(profile), ...extensions.map(extension => `${profile.bin}${extension}`), profile.bin])]
 }
 
 /** The CLI's executable name on this platform (`-cli.exe` on Windows). */
@@ -178,6 +217,13 @@ export function craftVersion(path: string, timeoutMs = 5000): string | undefined
  */
 export function missingBinaryMessage(profile: CraftProfile, configured?: string, packageRoot?: string): string {
   const tried = candidates(profile, configured, packageRoot)
+  const executable = `${profile.bin}${process.platform === 'win32' ? '.exe' : ''}`
+  const example = process.platform === 'win32'
+    ? `C:\\path\\to\\${executable}`
+    : `/absolute/path/to/${executable}`
+  const setEnv = process.platform === 'win32'
+    ? `$env:${profile.envVar}="${example}"   (PowerShell;  set ${profile.envVar}=${example} in cmd.exe)`
+    : `export ${profile.envVar}=${example}`
   const lines = [
     `${profile.product}: '${profile.bin}' was not found, so the ${profile.id} tools cannot run.`,
     `Searched, in order:`,
@@ -186,9 +232,12 @@ export function missingBinaryMessage(profile: CraftProfile, configured?: string,
   lines.push(
     `Fix it by any of:`,
     `  - run \`node scripts/install-craft.mjs ${profile.id}\` (macOS, Windows and Linux)`,
-    `  - set ${profile.envVar}=/absolute/path/to/${profile.bin}`,
+    `  - set ${setEnv}`,
     `  - download the CLI from https://github.com/storytold/${profile.id}/releases/latest and put it on PATH`,
-    `  - pass { "path": "/absolute/path/to/${profile.bin}" } in this plugin's config`,
+    `  - pass { "path": "${example.replace(/\\/g, '\\\\')}" } in this plugin's config`,
   )
+  if (process.platform === 'win32') {
+    lines.push(`The Windows build is the portable archive's \`${executable}\`; no Rust toolchain is needed.`)
+  }
   return lines.join('\n')
 }
