@@ -1,0 +1,283 @@
+{
+  "format_version": 1,
+  "name": "deepseek_harness_greeting",
+  "sample_rate": 44100,
+  "bit_depth": "Int24",
+  "frame_rate": "Fps30",
+  "timecode_start": 0,
+  "tempo": {
+    "tempos": [
+      {
+        "tick": 0,
+        "bpm": 120.0
+      }
+    ],
+    "meters": [
+      {
+        "tick": 0,
+        "numerator": 4,
+        "denominator": 4
+      }
+    ]
+  },
+  "key_signatures": [],
+  "tracks": [
+    {
+      "id": 2,
+      "name": "voice_raw",
+      "kind": "Audio",
+      "format": "Mono",
+      "color": [
+        86,
+        132,
+        214
+      ],
+      "height": "Medium",
+      "playlists": [
+        {
+          "name": "voice_raw",
+          "clips": [
+            {
+              "id": 3,
+              "name": "voice_raw-dcoffsre-eq7ban-comp-maxi",
+              "start": 0,
+              "length": 113432,
+              "content": {
+                "Audio": {
+                  "source": 7,
+                  "offset": 0
+                }
+              },
+              "gain_db": 0.0,
+              "gain_env": [],
+              "fade_in": {
+                "len": 529,
+                "shape": "EqualPower"
+              },
+              "fade_out": {
+                "len": 889,
+                "shape": "EqualPower"
+              },
+              "muted": false,
+              "edit_locked": false,
+              "time_locked": false,
+              "rating": 0,
+              "sync_point": 0,
+              "color": null,
+              "stretch": 1.0,
+              "group": null
+            }
+          ]
+        }
+      ],
+      "active_playlist": 0,
+      "mixer": {
+        "volume_db": 3.0,
+        "pan": [
+          0.0
+        ],
+        "mute": false,
+        "solo": false,
+        "solo_safe": false,
+        "record_arm": false,
+        "input_monitor": false,
+        "phase_invert": false,
+        "input": "None",
+        "output": "Main",
+        "inserts": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sends": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "automation_mode": "Read",
+        "trim_db": 0.0,
+        "vca": null,
+        "surround": null
+      },
+      "automation": [],
+      "view": "waveform",
+      "hidden": false,
+      "inactive": false,
+      "frozen": false,
+      "comments": "",
+      "folder": null,
+      "folder_open": true,
+      "instrument": null,
+      "ticks_timebase": false,
+      "elastic": null,
+      "pinned": false
+    }
+  ],
+  "sources": [
+    {
+      "id": 1,
+      "name": "voice_raw",
+      "path": "Audio Files/voice_raw.wav",
+      "channels": 1,
+      "frames": 113432,
+      "sample_rate": 44100,
+      "format": "Wav",
+      "time_reference": 0,
+      "unsaved": false
+    },
+    {
+      "id": 4,
+      "name": "voice_raw-dcoffsre",
+      "path": "Audio Files/voice_raw-dcoffsre.wav",
+      "channels": 1,
+      "frames": 113432,
+      "sample_rate": 44100,
+      "format": "Wav",
+      "time_reference": 0,
+      "unsaved": false
+    },
+    {
+      "id": 5,
+      "name": "voice_raw-dcoffsre-eq7ban",
+      "path": "Audio Files/voice_raw-dcoffsre-eq7ban.wav",
+      "channels": 1,
+      "frames": 113432,
+      "sample_rate": 44100,
+      "format": "Wav",
+      "time_reference": 0,
+      "unsaved": false
+    },
+    {
+      "id": 6,
+      "name": "voice_raw-dcoffsre-eq7ban-comp",
+      "path": "Audio Files/voice_raw-dcoffsre-eq7ban-comp.wav",
+      "channels": 1,
+      "frames": 113432,
+      "sample_rate": 44100,
+      "format": "Wav",
+      "time_reference": 0,
+      "unsaved": false
+    },
+    {
+      "id": 7,
+      "name": "voice_raw-dcoffsre-eq7ban-comp-maxi",
+      "path": "Audio Files/voice_raw-dcoffsre-eq7ban-comp-maxi.wav",
+      "channels": 1,
+      "frames": 113432,
+      "sample_rate": 44100,
+      "format": "Wav",
+      "time_reference": 0,
+      "unsaved": false
+    }
+  ],
+  "videos": [],
+  "busses": [],
+  "outputs": [
+    {
+      "name": "Out 1-2",
+      "first_channel": 0,
+      "format": "Stereo"
+    }
+  ],
+  "markers": [],
+  "groups": [],
+  "edit": {
+    "tool": "Smart",
+    "edit_mode": "Slip",
+    "selection": {
+      "start": 112543,
+      "end": 113434
+    },
+    "selected_tracks": [
+      2
+    ],
+    "selected_clips": [],
+    "selected_sources": [],
+    "playhead": 0,
+    "grid": {
+      "Note": {
+        "value": "Sixteenth",
+        "dotted": false,
+        "triplet": false
+      }
+    },
+    "nudge": {
+      "Seconds": 1.0
+    },
+    "grid_lines": true,
+    "main_counter": "MinSecs",
+    "sub_counter": "Samples",
+    "zoom": {
+      "samples_per_px": 1024.0,
+      "scroll": 0,
+      "waveform_zoom": 1.0,
+      "presets": [
+        64.0,
+        256.0,
+        1024.0,
+        4096.0,
+        16384.0
+      ]
+    },
+    "rulers": [
+      "bars_beats",
+      "min_secs",
+      "tempo",
+      "meter",
+      "markers"
+    ],
+    "link_timeline_edit": true,
+    "link_track_edit": false,
+    "insertion_follows_playback": false,
+    "loop_playback": false,
+    "pre_post_roll": false,
+    "pre_roll": 88200,
+    "post_roll": 88200,
+    "tab_to_transient": false,
+    "automation_follows_edit": true,
+    "markers_follow_edit": false,
+    "layered_editing": false,
+    "mirrored_midi": false,
+    "click": false,
+    "countoff": false,
+    "countoff_bars": 2,
+    "midi_merge": false,
+    "record_mode": "normal",
+    "loop_record": false,
+    "quickpunch": false,
+    "scrolling": "page",
+    "solo_mode": "sip",
+    "pre_fader_metering": false,
+    "delay_compensation": true,
+    "keyboard_focus": "commands",
+    "timeline_selection": {
+      "start": 112543,
+      "end": 113434
+    },
+    "flags": [
+      "view.clip.gain_line",
+      "view.clip.name",
+      "view.clip.overlap_shadows",
+      "view.marker.ruler_lines",
+      "waveform.peak"
+    ],
+    "values": {}
+  },
+  "next_id": 8,
+  "comments": "",
+  "midi_originals": {}
+}

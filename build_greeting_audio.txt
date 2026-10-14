@@ -1,0 +1,12 @@
+session.new {"name":"DeepSeek Harness Greeting","sample_rate":44100,"bit_depth":24}
+file.import_audio {"path":"/Users/zhinan/Documents/dsh_workspace/dsh-artcraft/voice_raw.wav"}
+audiosuite.process {"process":"dc_offset_removal","clips":[3],"params":{"cutoff":10}}
+audiosuite.process {"process":"eq_7band","clips":[3],"params":{"hpf_on":1,"hpf_freq":80}}
+audiosuite.process {"process":"compressor","clips":[3],"params":{"threshold":-18,"ratio":2.5,"attack":8,"release":120,"knee":6,"makeup":2}}
+audiosuite.process {"process":"maximizer","clips":[3],"params":{"threshold":-3,"ceiling":-2,"release":60}}
+mix.volume {"tracks":[2],"db":3}
+edit.select {"tracks":[2],"start":{"seconds":0},"end":{"seconds":0.012}}
+edit.fades_create {"shape":"equal power"}
+edit.select {"tracks":[2],"start":{"seconds":2.552},"end":{"seconds":2.5722}}
+edit.fades_create {"shape":"equal power"}
+file.bounce_mix {"path":"/Users/zhinan/Documents/dsh_workspace/dsh-artcraft/deepseek_harness_greeting.wav","format":"wav","bit_depth":16,"start":0,"end":113432,"dither":true}
