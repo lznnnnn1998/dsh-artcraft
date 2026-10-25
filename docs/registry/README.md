@@ -74,6 +74,18 @@ descriptions state what the plugin does with no superlatives.
 
 ## Local validation
 
-The files in this directory were checked for: URL shape, the subdirectory actually existing,
-that subdirectory declaring `dsh.bundle`, the filename convention, the `name` pointing at the
-same repository, a valid `category`, and both descriptions being present.
+```sh
+node scripts/validate-registry-entries.mjs
+```
+
+It parses each entry with a real YAML parser (taken from the harness checkout this repository
+already needs) and checks the rules the registry's own CI checks: the URL shape, that the
+subdirectory exists and declares `dsh.bundle.patch`, that official `@deepseek-ai/*` packages are
+peers rather than dependencies, the filename convention, that `name` names the same repository, a
+valid `category`, and both non-empty descriptions without superlatives.
+
+**Parse before you paste.** An unquoted `: ` inside a description — `Drive GridCraft from the
+agent: build …` — makes YAML read the rest of the line as a nested mapping, and the entry fails
+with `bad indentation of a mapping entry`. Descriptions here are double-quoted for that reason,
+which also keeps the apostrophes in text like `CADCraft's` legal. A regex check cannot catch this;
+only a parser can.
