@@ -122,7 +122,9 @@ then shut down after five idle minutes or when the plugin unloads.
   overview plus five end-to-end workflows (report, brand kit, explainer video, drawing set,
   conversion). `scripts/install-into-profile.mjs` installs them from a checkout beside this
   repository, or pass `--skills-dir`. Tools provide the capability; the skills provide the
-  competence, and cost context only when loaded.
+  competence, and cost context only when loaded. The dependency is one-way and declared: the
+  skills repository carries a `compatibility.json` naming the minimum plugin release and every tool
+  it calls, and it refuses to install against older plugins.
 
 ## Quick start
 
