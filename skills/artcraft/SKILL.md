@@ -99,6 +99,11 @@ FigCraft's MCP server ships prompts for common jobs (`mobile_screen`, `design_sy
 document, the command catalogue and comments. `<craft>_mcp_tools` lists them; read the named
 prompt to follow the app's own recipe before improvising one.
 
+## Companion skills
+
+- `artcraft-report` — a data-backed report or brief: GridCraft figures, a WordCraft document with
+  a native chart, exported to PDF and verified page by page.
+
 ## Pitfalls
 
 - **Parameter grammar is not JSON Schema.** `describe` prints shorthand like

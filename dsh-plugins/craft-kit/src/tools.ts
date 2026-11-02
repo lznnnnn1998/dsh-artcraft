@@ -8,6 +8,8 @@
  * @module @dsh-artcraft/craft-kit/tools
  */
 
+import { craftCallView, craftResultView } from './present.ts'
+import { appendJournal } from './journal.ts'
 import { CraftMcpClient, renderSchema } from './mcp.ts'
 import type { McpTool } from './mcp.ts'
 import { groupsOf, loadCatalog, score } from './catalog.ts'
@@ -314,13 +316,17 @@ export interface CraftToolSet {
   readonly job: ToolSpec<'job'>
 }
 
-/** One tool's definition: name/description/schema plus its executor. */
+/** One tool's definition: name/description/schema plus its executor and views. */
 export interface ToolSpec<K extends string> {
   readonly kind: K
   readonly name: string
   readonly description: string
   readonly parameters: Record<string, unknown>
   readonly execute: (args: Record<string, unknown>) => Promise<string>
+  /** Pending-call card: what this call is about to do. */
+  readonly presentCall?: (args: Record<string, unknown>) => unknown
+  /** Completed-call card: what the call produced. */
+  readonly presentResult?: (args: Record<string, unknown>, text: string, isError: boolean) => unknown
 }
 
 /**
@@ -918,6 +924,7 @@ export function createToolSet(runtime: CraftRuntime): CraftToolSet {
 }
 
 
+
 /** Prompt-section slot: after the built-in tool sections, app prose follows. */
 export const CRAFT_SECTION_ORDER = 120
 
@@ -934,7 +941,33 @@ export type DefineTool = (options: {
     render: (args: unknown, value: string) => { type: 'text'; text: string }[]
   }
   execute: (args: never, exec: unknown) => Promise<string>
+  presentCall?: (args: unknown) => unknown
+  presentResult?: (args: unknown, result: { content?: readonly { type: string; text?: string }[]; isError: boolean }) => unknown
 }) => unknown
+
+/** One-line journal summary for a finished call. */
+function journalSummary(kind: string, args: Record<string, unknown>, text: string, elapsedMs: number): string {
+  const output = ['save', 'export', 'output', 'out'].map(key => args[key]).find(value => typeof value === 'string' && value.length > 0)
+  switch (kind) {
+    case 'run': {
+      const count = Array.isArray(args.commands) ? args.commands.length : 0
+      const exit = /exited (\d+)/.exec(text)
+      return `${count} command(s)${output === undefined ? '' : ` → ${String(output)}`}`
+        + `${exit === null ? '' : ` · exit ${exit[1]}`} · ${elapsedMs}ms`
+    }
+    case 'mcpCall':
+      return `tool ${String(args.tool ?? '?')} · ${elapsedMs}ms`
+    case 'job':
+      return `job ${String(args.action ?? 'list')}${typeof args.job === 'string' ? ` ${args.job}` : ''}`
+    case 'inspect':
+    case 'convert':
+      return `${String(args.file ?? args.input ?? '')}${args.output === undefined ? '' : ` → ${String(args.output)}`}`
+    default: {
+      const first = text.trim().split('\n')[0] ?? ''
+      return first.length > 120 ? `${first.slice(0, 120)}…` : first
+    }
+  }
+}
 
 /** The `ctx` surface the kernel uses; kept structural for the same reason. */
 export interface CraftPluginContext {
@@ -983,8 +1016,32 @@ export function applyCraftPlugin(
         render: (_args: unknown, value: string) => [{ type: 'text' as const, text: value }],
       },
       async execute(args: never) {
-        return await spec.execute(args as unknown as Record<string, unknown>)
+        const typed = args as unknown as Record<string, unknown>
+        const startedAt = Date.now()
+        try {
+          const text = await spec.execute(typed)
+          appendJournal(profile, { at: startedAt, kind: spec.kind, summary: journalSummary(spec.kind, typed, text, Date.now() - startedAt) })
+          return text
+        } catch (error) {
+          appendJournal(profile, {
+            at: startedAt,
+            kind: spec.kind,
+            summary: `failed: ${String((error as Error).message ?? error).slice(0, 140)}`,
+          })
+          throw error
+        }
       },
+      // Cards: a run is one call with a dozen steps, so the raw JSONL is a poor
+      // row. These turn it into a titled card — what the call does, then what it
+      // produced — and the journal keeps the same story on disk.
+      presentCall: (args: unknown) => craftCallView(profile, spec.kind, (args ?? {}) as Record<string, unknown>),
+      presentResult: (args: unknown, result: { content?: readonly { type: string; text?: string }[]; isError: boolean }) =>
+        craftResultView(
+          profile,
+          spec.kind,
+          (result.content ?? []).filter(block => block.type === 'text').map(block => block.text ?? '').join('\n'),
+          result.isError === true,
+        ),
     })))
   }
   ctx.systemPrompt.section({
