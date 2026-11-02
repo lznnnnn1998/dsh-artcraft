@@ -114,6 +114,9 @@ then shut down after five idle minutes or when the plugin unloads.
 - **Use the app's own recipes.** `<craft>_mcp_tools` also lists the MCP **resources** (the open
   document, the command catalogue, comments) and **prompts** — FigCraft ships six curated
   workflows such as `design_system` and `prototype_flow`.
+- **Long jobs run in the background.** A 4K render, a texture bake or an audio bounce outlasts a
+  tool timeout; pass `background: true` to `_run` and the process keeps going while the call
+  returns a job id, a log path and a `_job` tool to poll, wait on or kill.
 - **A skill, not just tools.** `skills/artcraft/SKILL.md` is installed to `$DSH_HOME/skills` and
   carries the workflow, per-craft quirks and pitfalls. Tools provide the capability; the skill
   provides the competence, and costs context only when loaded.

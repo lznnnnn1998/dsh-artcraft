@@ -12,11 +12,11 @@ import { CraftMcpClient, renderSchema } from './mcp.ts'
 import type { McpTool } from './mcp.ts'
 import { groupsOf, loadCatalog, score } from './catalog.ts'
 import { craftVersion, discoverCraft, missingBinaryMessage } from './discover.ts'
-import { mkdirSync, writeFileSync } from 'node:fs'
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
-import { DEFAULT_TIMEOUT_MS, buildRunArgv, runCraft } from './exec.ts'
-import type { CraftCommandInput } from './exec.ts'
+import { DEFAULT_TIMEOUT_MS, buildRunArgv, killTree, runCraft, startCraftJob } from './exec.ts'
+import type { CraftCommandInput, CraftJobState } from './exec.ts'
 import type { CraftBinary, CraftCommand, CraftProfile, CraftRunResult } from './types.ts'
 
 /**
@@ -159,7 +159,53 @@ export function createRuntime(profile: CraftProfile, packageRoot: string, config
   let catalogCache: { key: string; value: { commands: readonly CraftCommand[]; origin: string; note?: string } } | undefined
   const mcpClients = new Map<string, CraftMcpClient>()
   const artifacts = config.artifactsDir ?? join(tmpdir(), 'dsh-artcraft', profile.id)
+  const jobs = new Map<string, CraftJobState>()
+  const jobChildren = new Map<string, import('node:child_process').ChildProcess>()
+  let jobCounter = 0
   return {
+    startJob(binary, argv) {
+      jobCounter += 1
+      const id = `j${jobCounter}`
+      const jobDir = join(artifacts, 'jobs')
+      mkdirSync(jobDir, { recursive: true })
+      const logPath = join(jobDir, `${profile.id}-${id}.log`)
+      const started = startCraftJob({ profile, binary, argv, cwd: process.cwd(), logPath, id })
+      const state: CraftJobState = { ...started, running: true, argv: started.argv, logPath, id, pid: started.pid, startedAt: started.startedAt }
+      jobs.set(id, state)
+      jobChildren.set(id, started.child)
+      started.child.on('close', (code, signal) => {
+        const settled: CraftJobState = {
+          ...state, running: false, exitCode: code, signal,
+          durationMs: Date.now() - state.startedAt,
+        }
+        jobs.set(id, settled)
+        jobChildren.delete(id)
+      })
+      started.child.unref()
+      return started
+    },
+    jobState(id) {
+      return jobs.get(id)
+    },
+    jobs() {
+      return [...jobs.values()].sort((a, b) => a.startedAt - b.startedAt)
+    },
+    async waitForJob(id, timeoutMs) {
+      const state = jobs.get(id)
+      if (state === undefined) return undefined
+      const deadline = Date.now() + Math.max(0, timeoutMs)
+      for (;;) {
+        const current = jobs.get(id)
+        if (current === undefined || !current.running) return current
+        if (Date.now() >= deadline) return current
+        await new Promise(resolve => setTimeout(resolve, 200))
+      }
+    },
+    killJob(id) {
+      const child = jobChildren.get(id)
+      if (child !== undefined) killTree(child)
+      return child !== undefined
+    },
     artifactsDir(): string {
       return artifacts
     },
@@ -264,6 +310,8 @@ export interface CraftToolSet {
   readonly mcpTools?: ToolSpec<'mcpTools'>
   readonly mcpCall?: ToolSpec<'mcpCall'>
   readonly mcpStatus?: ToolSpec<'mcpStatus'>
+  /** Background jobs started with `run` + `background: true`. */
+  readonly job: ToolSpec<'job'>
 }
 
 /** One tool's definition: name/description/schema plus its executor. */
@@ -322,6 +370,25 @@ export function createToolSet(runtime: CraftRuntime): CraftToolSet {
   const timeoutMs = config.timeoutMs ?? DEFAULT_TIMEOUT_MS
   const catalogLimit = config.catalogLimit ?? 60
 
+  /**
+   * Run now, or start a background job when `background` is set.
+   *
+   * Renders, bakes and bounces outlast the tool timeout; a job keeps the process
+   * alive after the call returns and leaves its output in a log file.
+   */
+  const runOrStart = async (binary: CraftBinary, argv: readonly string[], background: unknown): Promise<string> => {
+    if (background === true) {
+      const job = runtime.startJob(binary, argv)
+      return [
+        `started ${profile.id} job ${job.id}${job.pid === undefined ? '' : ` (pid ${job.pid})`}`,
+        `log: ${job.logPath}`,
+        `poll with \`${profile.id}_job\` {"action":"status","job":"${job.id}"}`,
+        `or wait with {"action":"wait","job":"${job.id}","timeoutMs":300000}`,
+      ].join('\n')
+    }
+    return renderRun(await runCraft({ profile, binary, argv, cwd: process.cwd(), timeoutMs }), profile)
+  }
+
   /** Guard every tool: a missing binary is an answer, never a crash. */
   const requireBinary = (): CraftBinary => {
     const binary = runtime.binary()
@@ -335,13 +402,14 @@ export function createToolSet(runtime: CraftRuntime): CraftToolSet {
     input: string | undefined,
     sample: string | boolean | undefined,
     commands: readonly CraftCommandInput[],
+    background: unknown,
   ): Promise<string> => {
     const argv = buildRunArgv(profile, {
       ...input !== undefined ? { input } : {},
       ...sample !== undefined ? { sample } : {},
       commands,
     })
-    return renderRun(await runCraft({ profile, binary, argv, cwd: process.cwd(), timeoutMs }), profile)
+    return await runOrStart(binary, argv, background)
   }
 
   const session: CraftSession = { commands: [], stale: false }
@@ -373,6 +441,7 @@ export function createToolSet(runtime: CraftRuntime): CraftToolSet {
       + `${profile.blurb} Files: ${profile.extensions.join(', ')}.`,
     parameters: {
       input: { type: 'string', description: `Absolute or workspace-relative path to an existing ${profile.extensions[0]} document. Mutually exclusive with \`sample\`.` },
+      background: { type: 'boolean', description: 'Start the work as a background job and return immediately; poll it with the job tool. Use for long renders, bakes and bounces.' },
       commands: {
         type: 'array',
         description: 'Ordered commands to apply. Each is { "id": "cell.set", "json": { "cell": "A1", "input": "x" } }. An entry may also be a raw CLI string.',
@@ -466,8 +535,7 @@ export function createToolSet(runtime: CraftRuntime): CraftToolSet {
         }
         writeFileSync(scriptPath, typeof body === 'string' ? body : JSON.stringify(body, null, 2) + '\n')
         const extra = Array.isArray(args.extraArgs) ? args.extraArgs.filter((a): a is string => typeof a === 'string') : []
-        const scriptResult = await runCraft({ profile, binary, argv: [...argv, ...extra], cwd: process.cwd(), timeoutMs })
-        return renderRun(scriptResult, profile)
+        return await runOrStart(binary, [...argv, ...extra], args.background)
       }
       if (profile.run.scriptFlag !== undefined) {
         const scriptPath = join(craftWorkDir(profile), `steps-${Date.now()}.json`)
@@ -482,8 +550,7 @@ export function createToolSet(runtime: CraftRuntime): CraftToolSet {
           profile.run.scriptFlag, scriptPath,
           ...Array.isArray(args.extraArgs) ? args.extraArgs.filter((a): a is string => typeof a === 'string') : [],
         ]
-        const result = await runCraft({ profile, binary, argv: [profile.run.verb, ...extra], cwd: process.cwd(), timeoutMs })
-        return renderRun(result, profile)
+        return await runOrStart(binary, [profile.run.verb, ...extra], args.background)
       }
       if (profile.run.scriptMode === true) {
         const scriptPath = join(craftWorkDir(profile), `run-${Date.now()}.jsonl`)
@@ -495,12 +562,7 @@ export function createToolSet(runtime: CraftRuntime): CraftToolSet {
           scriptPath,
           ...Array.isArray(args.extraArgs) ? args.extraArgs.filter((a): a is string => typeof a === 'string') : [],
         ]
-        const result = await runCraft({
-          profile, binary,
-          argv: [...globalFlagsFor(profile, args), profile.run.verb, ...extra],
-          cwd: process.cwd(), timeoutMs,
-        })
-        return renderRun(result, profile)
+        return await runOrStart(binary, [...globalFlagsFor(profile, args), profile.run.verb, ...extra], args.background)
       }
       // PdfCraft's `run` accepts exactly one tool per invocation; sending a
       // list would produce "expected key=value" from the CLI, so the extra
@@ -511,7 +573,7 @@ export function createToolSet(runtime: CraftRuntime): CraftToolSet {
       // whole list in a single process; the history recorded above is replayed
       // through that path, so a second call continues the same document.
       if (profile.oneToolPerRun === true && profile.run.scriptFlag === undefined && rest.length > 0) {
-        const only = await runSingle(binary, input, sample, single)
+        const only = await runSingle(binary, input, sample, single, args.background)
         return `${only}\n\n[${profile.product} runs one tool per call: ${rest.length} further command(s) were not sent — ${rest.map(c => c.id).join(', ')}. Call this tool again for each.]`
       }
       const argv = buildRunArgv(profile, {
@@ -529,8 +591,7 @@ export function createToolSet(runtime: CraftRuntime): CraftToolSet {
         ...args.print === true ? { print: true } : {},
         ...Array.isArray(args.extraArgs) ? { extra: args.extraArgs.filter((a): a is string => typeof a === 'string') } : {},
       })
-      const result = await runCraft({ profile, binary, argv, cwd: process.cwd(), timeoutMs })
-      return renderRun(result, profile)
+      return await runOrStart(binary, argv, args.background)
     },
   }
 
@@ -644,8 +705,7 @@ export function createToolSet(runtime: CraftRuntime): CraftToolSet {
       else if (argMode === 'section') argv.push(typeof args.section === 'string' && args.section.length > 0 ? args.section : inspectSpec.section ?? 'project')
       if (inspectSpec.projectFlag !== undefined && typeof args.project === 'string') argv.push(inspectSpec.projectFlag, args.project)
       argv.push(...inspectSpec.extraArgs ?? [], ...extra)
-      const result = await runCraft({ profile, binary, argv, cwd: process.cwd(), timeoutMs })
-      return renderRun(result, profile)
+      return await runOrStart(binary, argv, args.background)
     },
   }
 
@@ -669,6 +729,69 @@ export function createToolSet(runtime: CraftRuntime): CraftToolSet {
       return renderRun(result, profile)
     },
   } : undefined
+
+  const job: ToolSpec<'job'> = {
+    kind: 'job',
+    name: `${profile.id}_job`,
+    description:
+      `Track background work started by \`${profile.id}_run\` with \`background: true\`. `
+      + `Long renders, bakes and bounces outlive a tool timeout; the job keeps running and logs to a file. `
+      + `Actions: \`list\` every job, \`status\` one (with the log tail), \`wait\` for it to finish, \`kill\` it.`,
+    parameters: {
+      action: { type: 'string', enum: ['list', 'status', 'wait', 'kill'], description: 'What to do. Defaults to list.' },
+      job: { type: 'string', description: 'Job id returned by the run call, e.g. "j1".' },
+      timeoutMs: { type: 'number', description: 'For action "wait": milliseconds to block (default 60000, at most 600000).' },
+      tailLines: { type: 'number', description: 'For "status"/"wait": how many log lines to show (default 20).' },
+    },
+    async execute(args) {
+      const action = typeof args.action === 'string' ? args.action : 'list'
+      const tailLines = typeof args.tailLines === 'number' && args.tailLines > 0 ? Math.min(Math.floor(args.tailLines), 200) : 20
+      /** Last lines of a job's log, with a byte cap so a huge log cannot flood the model. */
+      const tail = (path: string): string => {
+        try {
+          const text = readFileSync(path, 'utf8')
+          const lines = text.split('\n')
+          const shown = lines.slice(Math.max(0, lines.length - tailLines)).join('\n').trim()
+          return shown.length > 8000 ? `…${shown.slice(-8000)}` : shown
+        } catch {
+          return '(no log yet)'
+        }
+      }
+      /** A job's argv, shortened: a 200-command render would otherwise print pages. */
+      const commandLine = (argv: readonly string[]): string => {
+        const text = argv.join(' ')
+        return text.length > 240 ? `${text.slice(0, 240)}… (${argv.length} arguments)` : text
+      }
+      const describe = (state: CraftJobState): string => [
+        `${state.id}${state.running ? ' (running)' : ` (exit ${state.exitCode ?? state.signal ?? '?'})`}`
+        + ` — ${state.durationMs === undefined ? `${Math.round((Date.now() - state.startedAt) / 1000)}s so far` : `${Math.round(state.durationMs / 1000)}s`}`,
+        `  command: ${commandLine(state.argv)}`,
+        `  log: ${state.logPath}`,
+      ].join('\n')
+
+      if (action === 'list') {
+        const all = runtime.jobs()
+        if (all.length === 0) return `${profile.product}: no background jobs in this session.`
+        return [`${profile.product} background jobs: ${all.length}`, ...all.map(describe)].join('\n')
+      }
+      const id = typeof args.job === 'string' ? args.job.trim() : ''
+      if (id.length === 0) throw new Error('job is required for action ' + JSON.stringify(action))
+      if (action === 'kill') {
+        const killed = runtime.killJob(id)
+        const state = runtime.jobState(id)
+        return killed ? `killed ${id}` : `${id} is not running${state === undefined ? ' (unknown job)' : ''}`
+      }
+      if (action === 'wait') {
+        const timeout = typeof args.timeoutMs === 'number' && args.timeoutMs > 0 ? Math.min(Math.floor(args.timeoutMs), 600_000) : 60_000
+        const state = await runtime.waitForJob(id, timeout)
+        if (state === undefined) return `No job named ${JSON.stringify(id)}.`
+        return [describe(state), '', tail(state.logPath)].join('\n')
+      }
+      const state = runtime.jobState(id)
+      if (state === undefined) return `No job named ${JSON.stringify(id)}.`
+      return [describe(state), '', tail(state.logPath)].join('\n')
+    },
+  }
 
   const mcp = runtime.mcp()
   const idleMs = config.mcpIdleMs ?? 300_000
@@ -790,6 +913,7 @@ export function createToolSet(runtime: CraftRuntime): CraftToolSet {
     ...mcpTools !== undefined ? { mcpTools } : {},
     ...mcpCall !== undefined ? { mcpCall } : {},
     ...mcpStatus !== undefined ? { mcpStatus } : {},
+    job,
   }
 }
 
