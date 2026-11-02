@@ -156,6 +156,71 @@ export async function runCraft(options: RunCraftOptions): Promise<CraftRunResult
 }
 
 /**
+ * Run one craft process in the background and stream its output to a log file.
+ *
+ * Long operations — a 4K render, a texture bake, an audio bounce — outlast any
+ * reasonable tool timeout, and killing them at the timer loses the work. A job
+ * keeps the process alive after the tool returns, so the caller can poll or wait
+ * and still read the output afterwards.
+ */
+export interface CraftJobHandle {
+  /** Short id used by the job tools. */
+  readonly id: string
+  /** Process id, for diagnostics. */
+  readonly pid: number | undefined
+  /** Absolute path of the log file receiving stdout and stderr. */
+  readonly logPath: string
+  /** When the process started. */
+  readonly startedAt: number
+  /** The full argv after the executable. */
+  readonly argv: readonly string[]
+}
+
+/** A started job, including the process handle the runtime uses to observe it. */
+export interface StartedCraftJob extends CraftJobHandle {
+  /** The running process; the runtime listens for its exit. */
+  readonly child: ChildProcess
+}
+
+/** Live job state kept by the runtime. */
+export interface CraftJobState extends CraftJobHandle {
+  /** Whether the process is still running. */
+  readonly running: boolean
+  /** Exit code once settled. */
+  readonly exitCode?: number | null
+  /** Signal once settled, when the process was killed. */
+  readonly signal?: NodeJS.Signals | null
+  /** Wall-clock duration once settled. */
+  readonly durationMs?: number
+}
+
+/**
+ * Start a craft CLI in the background.
+ * @param options - profile, binary, argv, cwd and the log file to write.
+ * @returns a handle the caller can poll through its runtime.
+ */
+export function startCraftJob(options: RunCraftOptions & { readonly logPath: string; readonly id: string }): StartedCraftJob {
+  const { profile, binary, argv, cwd, logPath, id } = options
+  const child = spawn(binary.path, [...argv], {
+    cwd,
+    stdio: ['ignore', 'pipe', 'pipe'],
+    env: { ...process.env, NO_COLOR: '1', TERM: 'dumb' },
+    windowsHide: true,
+  })
+  const write = (chunk: Buffer): void => {
+    try {
+      appendFileSync(logPath, chunk)
+    } catch {
+      // A full disk must not take the tool down; the process keeps running.
+    }
+  }
+  child.stdout?.on('data', write)
+  child.stderr?.on('data', write)
+  void profile
+  return { id, pid: child.pid, logPath, startedAt: Date.now(), argv, child }
+}
+
+/**
  * Compose the argv for one headless `run` invocation.
  *
  * Each craft spells "run these commands" differently — repeated `--cmd id=json`

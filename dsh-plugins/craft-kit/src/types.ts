@@ -6,6 +6,10 @@
  * @module @dsh-artcraft/craft-kit/types
  */
 
+import type { CraftJobHandle, CraftJobState } from './exec.ts'
+
+export type { CraftJobHandle, CraftJobState }
+
 /** How one craft CLI spells its one-shot, headless "run some commands" verb. */
 export interface CraftRunSpec {
   /** Subcommand that runs a document headlessly, e.g. `run`. */

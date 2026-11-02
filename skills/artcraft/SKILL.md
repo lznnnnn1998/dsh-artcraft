@@ -107,8 +107,10 @@ prompt to follow the app's own recipe before improvising one.
 - **Save is explicit.** A run without `save` changes nothing on disk.
 - **One document per run.** `input` opens an existing file; `save` writes the result. To edit
   a file in place, pass the same path to both.
-- **Long jobs.** Big renders, bakes and bounces can outlast the default timeout; raise it and
-  render at a low resolution first to check the composition.
+- **Long jobs.** Big renders, bakes and bounces outlast the default timeout. Pass
+  `background: true` to `<craft>_run`; it returns a job id and a log path, and `<craft>_job` with
+  `{"action":"wait","job":"j1"}` blocks until it finishes. Render at low resolution first to check
+  the composition, then re-run at full size in the background.
 - **Binary output is not text.** `inspect` summarises; use the craft's own export/render
   command for a file the user can open.
 - **Do not shell out to the CLI yourself.** The plugin locates the right binary, version and
