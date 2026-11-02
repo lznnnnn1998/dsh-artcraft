@@ -193,11 +193,14 @@ export function craftResultView(profile: CraftProfile, kind: string, text: strin
     }
   }
   if (kind === 'run') return summariseRun(profile, text)
-  const firstLine = text.trim().split('\n')[0] ?? ''
-  const lines = text.split('\n').length
+  const all = text.trim().split('\n').filter(line => line.trim().length > 0)
+  // A few lines are usually the whole story (job status, an image path and its
+  // dimensions); keep them rather than collapsing to one line and a count.
+  const shown = all.slice(0, 4)
+  if (all.length > shown.length) shown.push(`…and ${all.length - shown.length} more lines`)
   return {
     card: 'generic',
     title: `${profile.product} · ${kind}`,
-    content: [{ type: 'text', text: lines > 1 ? `${firstLine}\n(${lines} lines)` : firstLine }],
+    content: (shown.length === 0 ? ['(no output)'] : shown).map(line => ({ type: 'text', text: line })),
   }
 }
