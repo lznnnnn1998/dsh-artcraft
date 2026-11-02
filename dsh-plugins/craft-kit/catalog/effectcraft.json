@@ -68,7 +68,7 @@
  {
   "id": "file.import",
   "label": "File...",
-  "params": "{paths: [string] (files or folders), sequence?: bool (the Sequence checkbox: true imports numbered stills of one run as one image sequence, one picked file bringing its whole run and several picked files that range; default: a numbered still brings its run, except dropped files (drag), which import as stills as in After Effects; folders' runs import as sequences; false imports stills and a folder's files individually), alphabetical?: bool (Force Alphabetical Order: every image of that type in the folder, by name), frameRate?: fps (image sequences; default Settings ▸ Import ▸ Sequence Footage), importAs?: footage|composition|compositionLayerSizes (Photoshop, PDF, Illustrator and EPS files), layer?: name|index (footage of one Photoshop layer), page?: number from 1 (PDF / Illustrator page), drag?: bool (dropped files: Settings ▸ Import ▸ Default Drag Import As; files import as stills unless sequence), addToComp?: bool (also add them to the active comp, at time?, index?, position? as in layer.addItem), background?: bool (probe the files in a background job, jobs.list / jobs.wait; returns {job})}",
+  "params": "{paths: [string] (files or folders), sequence?: bool (the Sequence checkbox: true imports numbered stills of one run as one image sequence, one picked file bringing its whole run and several picked files that range; default false: picked or dropped files import as stills, as in After Effects; folders' runs import as sequences; false imports stills and a folder's files individually), alphabetical?: bool (Force Alphabetical Order: every image of that type in the folder, by name), frameRate?: fps (image sequences; default Settings ▸ Import ▸ Sequence Footage), importAs?: footage|composition|compositionLayerSizes (Photoshop, PDF, Illustrator and EPS files), layer?: name|index (footage of one Photoshop layer), page?: number from 1 (PDF / Illustrator page), drag?: bool (dropped files: Settings ▸ Import ▸ Default Drag Import As; files import as stills unless sequence), addToComp?: bool (also add them to the active comp, at time?, index?, position? as in layer.addItem), newComp?: bool (make one new composition of the footage and solids imported, as file.newCompFromSelection with single; a layered file imported as a composition is that composition and gets no other; takes precedence over addToComp), background?: bool (probe the files in a background job, jobs.list / jobs.wait; returns {job})}",
   "menu": [
    "File",
    "Import"
@@ -79,7 +79,7 @@
  {
   "id": "file.projectSettings",
   "label": "Project Settings...",
-  "params": "{bitDepth?: 8|16|32, colorEngine?: adobe|ocio, workingSpace?: none|srgb|rec709|rec2020|p3|acescg|aces2065, workingGamma?: 2.2|2.4 (with no working space), linearize?, blendLinear?, hdr?: clip|compand|toneMap, outputSpace?: srgb|rec709|rec2020|p3|rec2100pq|rec2100hlg, renderer?: gpu|software, timeDisplay?: timecode|frames|feet35|feet16}",
+  "params": "{bitDepth?: 8|16|32, colorEngine?: adobe|ocio, workingSpace?: none|srgb|rec709|rec2020|p3|acescg|aces2065, workingGamma?: 2.2|2.4 (with no working space), linearize?, blendLinear?, hdr?: clip|compand|toneMap, outputSpace?: srgb|rec709|rec2020|p3|rec2100pq|rec2100hlg, renderer?: gpu|software, timeDisplay?: timecode|frames|feet35|feet16, frameStart?: 0|1 (Frame Count: Start at 0 / Start at 1)}",
   "menu": [
    "File"
   ],
@@ -105,7 +105,7 @@
  {
   "id": "roto.model.select",
   "label": "Use Roto Brush Model",
-  "params": "{id: classical|mobilesam, wait?} (Roto Brush 2.0 / 3.0 use it; wait: loaded before returning)",
+  "params": "{id: classical|mobilesam|sam2.1-hiera-tiny|sam2.1-hiera-small|sam2.1-hiera-base-plus|sam2.1-hiera-large, wait?} (Roto Brush 2.0 / 3.0 use it; wait: loaded before returning)",
   "enabled": true
  },
  {
@@ -231,12 +231,19 @@
   "enabled": false
  },
  {
+  "id": "edit.pasteSvg",
+  "label": "Paste SVG as Shapes",
+  "params": "{svg: SVG markup, name?, comp?} → {layer, skipped} (Edit ▸ Paste runs it for SVG on the system clipboard)",
+  "enabled": false
+ },
+ {
   "id": "edit.pasteReversedKeyframes",
   "label": "Paste Reversed Keyframes",
   "params": "{layers?, prop?|path?, time?}",
   "menu": [
    "Edit"
   ],
+  "shortcut": "Cmd+Shift+V",
   "enabled": false
  },
  {
@@ -252,7 +259,7 @@
  {
   "id": "edit.duplicate",
   "label": "Duplicate",
-  "params": "{layers?} (effects or shape items when they are selected)",
+  "params": "{layers?} (without layers: during a text edit the edited layer, else the selected effects, shape items or text animators, else the selected layers)",
   "menu": [
    "Edit"
   ],
@@ -435,9 +442,15 @@
   "enabled": false
  },
  {
+  "id": "comp.deleteAllMarkers",
+  "label": "Delete All Markers",
+  "params": "{comp?}",
+  "enabled": false
+ },
+ {
   "id": "layer.newText",
   "label": "Text",
-  "params": "{text?, name? (layer name; default the text), position? [x,y], box? [x,y,w,h] (paragraph text, comp space), vertical?, edit? (start editing), font?, style?, size?, fill?, stroke?, applyFill?, applyStroke?, strokeWidth?, tracking?, leading?, baselineShift?, hScale?, vScale?, tsume?, fauxBold?, fauxItalic?, allCaps?, smallCaps?, baseline?, superscript?, subscript?, kerning?, ligatures?, justify?, indentLeft?, indentRight?, indentFirst?, spaceBefore?, spaceAfter?, direction?, composer?, hangingPunctuation?, strokeOverFill?} (attributes as layer.setText)",
+  "params": "{text?, name? (layer name; default the text), position? [x,y], box? [x,y,w,h] (paragraph text, comp space), vertical?, edit? (start editing), font?, style?, size?, fill?, stroke?, applyFill?, applyStroke?, strokeWidth?, tracking?, leading?, baselineShift?, hScale?, vScale?, tsume?, fauxBold?, fauxItalic?, allCaps?, smallCaps?, baseline?, superscript?, subscript?, kerning?, ligatures?, justify?, indentLeft?, indentRight?, indentFirst?, spaceBefore?, spaceAfter?, direction?, composer?, hangingPunctuation?, strokeOverFill?, lineJoin?} (attributes as layer.setText)",
   "menu": [
    "Layer",
    "New"
@@ -501,11 +514,18 @@
  {
   "id": "layer.addItem",
   "label": "Add Footage to Comp",
-  "params": "{item: id|name, time? (s, the In point), index? (1-based stack position; default above the selected layer), position? ([x, y] comp px; default the centre), duration? (s, for a still)}",
+  "params": "{item: id|name, time? (s, where the layer starts), index? (1-based stack position; default above the selected layer), position? ([x, y] comp px; default the centre), duration? (s, for a still), in? (s, the In point in comp time; default the start), out? (s, the Out point; default the end of the footage or the comp; in must be before out), anchor? ([x, y] layer px; default the centre)}",
   "menu": [
    "File"
   ],
   "shortcut": "Cmd+/",
+  "enabled": false
+ },
+ {
+  "id": "layer.replaceSource",
+  "label": "Replace Layer Source",
+  "params": "{comp?, layers?, layer?, item?: id|name (default the Project panel selection), fixExpressions?: bool (accepted for After Effects compatibility)} → {layers, item}",
+  "shortcut": "Cmd+Alt+/",
   "enabled": false
  },
  {
@@ -529,9 +549,21 @@
   "enabled": false
  },
  {
+  "id": "layer.extendSelectionNext",
+  "label": "Extend Selection to Next Layer",
+  "shortcut": "Cmd+Shift+ArrowDown",
+  "enabled": false
+ },
+ {
+  "id": "layer.extendSelectionPrevious",
+  "label": "Extend Selection to Previous Layer",
+  "shortcut": "Cmd+Shift+ArrowUp",
+  "enabled": false
+ },
+ {
   "id": "layer.setSwitch",
   "label": "Layer Switch",
-  "params": "{layers?, switch: video|audio|solo|lock|shy|collapse|quality|fx|frameBlend|motionBlur|adjustment|threeD|guide|preserveTransparency, value?, merge?}",
+  "params": "{layers?, switch: video|audio|solo|lock|shy|collapse|quality|fx|frameBlend|motionBlur|adjustment|threeD|guide|preserveTransparency, value?, merge?, others? (the named layers alone: the other layers get the opposite state, or come back)}",
   "enabled": false
  },
  {
@@ -556,7 +588,7 @@
  {
   "id": "layer.setTrackMatte",
   "label": "Track Matte",
-  "params": "{layer?, matte: layer|null, kind?: alpha|alphaInverted|luma|lumaInverted}",
+  "params": "{layers? | layer?, matte: layer|null, kind?: alpha|alphaInverted|luma|lumaInverted|preserve}",
   "enabled": false
  },
  {
@@ -568,27 +600,67 @@
  {
   "id": "layer.timing",
   "label": "Layer Timing",
-  "params": "{layers?, op?: moveInToTime|moveOutToTime|trimInToTime|trimOutToTime, delta?, start?, in?, out?, merge?}",
+  "params": "{layers?, op?: moveInToTime|moveOutToTime|moveInToStart|moveOutToEnd|trimInToTime|trimOutToTime, delta?, start?, in?, out?, inDelta?, outDelta? (seconds, per layer), merge?}",
+  "enabled": false
+ },
+ {
+  "id": "layer.moveInToStart",
+  "label": "Move Layer In Point to Beginning of Comp",
+  "params": "{layers?}",
+  "shortcut": "Alt+Home",
+  "enabled": false
+ },
+ {
+  "id": "layer.moveOutToEnd",
+  "label": "Move Layer Out Point to End of Comp",
+  "params": "{layers?}",
+  "shortcut": "Alt+End",
+  "enabled": false
+ },
+ {
+  "id": "layer.moveEarlier",
+  "label": "Move Layers 1 Frame Earlier",
+  "params": "{layers?}",
+  "shortcut": "Alt+PageUp",
+  "enabled": false
+ },
+ {
+  "id": "layer.moveLater",
+  "label": "Move Layers 1 Frame Later",
+  "params": "{layers?}",
+  "shortcut": "Alt+PageDown",
+  "enabled": false
+ },
+ {
+  "id": "layer.moveEarlier10",
+  "label": "Move Layers 10 Frames Earlier",
+  "params": "{layers?}",
+  "shortcut": "Alt+Shift+PageUp",
+  "enabled": false
+ },
+ {
+  "id": "layer.moveLater10",
+  "label": "Move Layers 10 Frames Later",
+  "params": "{layers?}",
+  "shortcut": "Alt+Shift+PageDown",
   "enabled": false
  },
  {
   "id": "layer.slip",
   "label": "Slip Edit",
-  "params": "{layers?, delta? (seconds) | frames?, merge?}",
+  "params": "{layers?, delta? (seconds) | frames?, merge?} → {requested, slipped: [{layer, delta, clamped}]}",
   "enabled": false
  },
  {
   "id": "layer.slipBack",
   "label": "Slip Edit 1 Frame Earlier",
   "params": "{layers?}",
-  "shortcut": "Alt+PageUp",
   "enabled": false
  },
  {
   "id": "layer.slipForward",
   "label": "Slip Edit 1 Frame Later",
   "params": "{layers?}",
-  "shortcut": "Alt+PageDown",
   "enabled": false
  },
  {
@@ -631,13 +703,13 @@
  {
   "id": "layer.addShapeItem",
   "label": "Add (Shape)",
-  "params": "{layer?, kind: group|rect|ellipse|star|polygon|path|fill|stroke|gfill|gstroke|trim|repeater|round|offset|pucker|twist|zigzag|wiggle|merge, group?: uid|path} → {uid, path}",
+  "params": "{layer?, kind: group|rect|ellipse|star|polygon|path|fill|stroke|gfill|gstroke|trim|repeater|round|offset|pucker|twist|zigzag|wiggle|wiggler|merge|frontColor|bevelColor|sideColor|backColor, group?: uid|path} → {uid, path} (frontColor…backColor: the group's Front / Bevel / Side / Back item, which colours that surface of every extruded paint in the group in Advanced 3D)",
   "enabled": false
  },
  {
   "id": "layer.setText",
   "label": "Edit Text",
-  "params": "{layer?, range?: [start, end] (characters; default all), text?, font?, style?, size?, fill?, stroke?, applyFill?, applyStroke?, strokeWidth?, tracking?, leading?: px|\"auto\", baselineShift? px, hScale? %, vScale? %, tsume? %, fauxBold?, fauxItalic?, allCaps?, smallCaps?, baseline?: normal|superscript|subscript, superscript?, subscript?, kerning?: metrics|optical|number, ligatures?, discretionaryLigatures? (OpenType), contextualAlternates?, stylisticAlternates?, stylisticSets?: [1–20], ss01?, ss02?, ss03?, ss04?, ss05?, ss06?, ss07?, ss08?, ss09?, ss10?, ss11?, ss12?, ss13?, ss14?, ss15?, ss16?, ss17?, ss18?, ss19?, ss20?, swash?, titling?, ordinals?, fractions?, allSmallCaps?, figureStyle?: default|lining|oldStyle, figureWidth?: default|proportional|tabular, figures?, variations?: {tag: value} (variable font axes; null resets), justify?: left|center|right|justifyLeft|justifyCenter|justifyRight|justifyAll, indentLeft?, indentRight?, indentFirst?, spaceBefore?, spaceAfter?, direction?: ltr|rtl, composer?: everyLine|singleLine, hangingPunctuation?, strokeOverFill?, box?: [x,y,w,h]|null (layer space), vertical?}",
+  "params": "{layer?, range?: [start, end] (characters; default all), text?, font?, style?, size?, fill?, stroke?, applyFill?, applyStroke?, strokeWidth?, tracking?, leading?: px|\"auto\", baselineShift? px, hScale? %, vScale? %, tsume? %, fauxBold?, fauxItalic?, allCaps?, smallCaps?, baseline?: normal|superscript|subscript, superscript?, subscript?, kerning?: metrics|optical|number, ligatures?, discretionaryLigatures? (OpenType), contextualAlternates?, stylisticAlternates?, stylisticSets?: [1–20], ss01?, ss02?, ss03?, ss04?, ss05?, ss06?, ss07?, ss08?, ss09?, ss10?, ss11?, ss12?, ss13?, ss14?, ss15?, ss16?, ss17?, ss18?, ss19?, ss20?, swash?, titling?, ordinals?, fractions?, allSmallCaps?, figureStyle?: default|lining|oldStyle, figureWidth?: default|proportional|tabular, figures?, variations?: {tag: value} (variable font axes; null resets), justify?: left|center|right|justifyLeft|justifyCenter|justifyRight|justifyAll, indentLeft?, indentRight?, indentFirst?, spaceBefore?, spaceAfter?, direction?: ltr|rtl, composer?: everyLine|singleLine, hangingPunctuation?, strokeOverFill?, lineJoin?: miter|round|bevel, box?: [x,y,w,h]|null (layer space), vertical?}",
   "enabled": false
  },
  {
@@ -773,7 +845,7 @@
  {
   "id": "layer.style.add",
   "label": "Add Layer Style",
-  "params": "{style: dropShadow|innerShadow|outerGlow|innerGlow|bevelEmboss|satin|colorOverlay|gradientOverlay|stroke (or display name), layers?}",
+  "params": "{style: dropShadow|innerShadow|outerGlow|innerGlow|bevelEmboss|satin|colorOverlay|gradientOverlay|stroke (or display name), or blendingOptions (the Layer Styles group with Blending Options only), layers?, merge?}",
   "enabled": false
  },
  {
@@ -814,7 +886,7 @@
  {
   "id": "layer.newLight",
   "label": "Light...",
-  "params": "{kind?: Parallel|Spot|Point|Ambient|Environment (default Spot; Environment lights and reflects from an equirectangular image layer: prop.set its lightOptions/source to that layer's id, or leave it empty for the comp's Environment Layer, see layer.environment), name?, color?, intensity?, coneAngle?, coneFeather?, falloff?: None|Smooth|Inverse Square Clamped, radius?, falloffDistance?, castsShadows?, shadowDarkness?, shadowDiffusion?, position? [x,y,z], poi? [x,y,z]}",
+  "params": "{kind?: Parallel|Spot|Point|Ambient|Environment (default Spot; Environment lights and reflects from an equirectangular image layer: prop.set its lightOptions/source to that layer's id, or leave it empty for the comp's Environment Layer or a flat default environment of its colour and intensity, see layer.environment; an Environment light switches a Classic 3D comp to Advanced 3D), name?, color?, intensity?, coneAngle?, coneFeather?, falloff?: None|Smooth|Inverse Square Clamped, radius?, falloffDistance?, castsShadows?, shadowDarkness?, shadowDiffusion?, position? [x,y,z], poi? [x,y,z]}",
   "menu": [
    "Layer",
    "New"
@@ -846,13 +918,19 @@
  {
   "id": "layer.lightSettings",
   "label": "Light Settings...",
-  "params": "{layer?, name?, kind?: Parallel|Spot|Point|Ambient|Environment, color?, intensity?, coneAngle?, coneFeather?, falloff?, radius?, falloffDistance?, castsShadows?, shadowDarkness?, shadowDiffusion?, position?, poi?}",
+  "params": "{layer?, name?, kind?: Parallel|Spot|Point|Ambient|Environment (changing to Environment switches a Classic 3D comp to Advanced 3D), color?, intensity?, coneAngle?, coneFeather?, falloff?, radius?, falloffDistance?, castsShadows?, shadowDarkness?, shadowDiffusion?, position?, poi?}",
   "enabled": false
  },
  {
   "id": "view.set3DView",
   "label": "Switch 3D View",
   "params": "{view: activeCamera|default|front|left|top|back|right|bottom|custom1|custom2|custom3, comp?}",
+  "enabled": false
+ },
+ {
+  "id": "view.setPaneView",
+  "label": "Set View of Pane",
+  "params": "{pane: 0 (main) | 1 | 2 | 3, view: activeCamera|default|front|left|top|back|right|bottom|custom1|custom2|custom3, comp?}",
   "enabled": false
  },
  {
@@ -1048,7 +1126,7 @@
  {
   "id": "layer.newModel",
   "label": "3D Model Layer",
-  "params": "{item?: id or name of a 3D model footage item, path?: a .gltf, .glb or .obj file to import, name?, time? (s), index? (1-based stack position), position? ([x, y] comp px)}; switches a Classic 3D comp to Advanced 3D",
+  "params": "{item?: id or name of a 3D model footage item, path?: a .gltf, .glb, .obj, .stl or .fbx file to import, name?, time? (s), index? (1-based stack position), position? ([x, y] comp px)}; switches a Classic 3D comp to Advanced 3D",
   "enabled": false
  },
  {
@@ -1177,7 +1255,7 @@
  {
   "id": "layer.addTextAnimator",
   "label": "Animate Text",
-  "params": "{layer?, properties: [anchor|position|scale|skew|rotation|opacity|transformAll|lineAnchor|lineSpacing|characterOffset|characterValue|blur|fillColor|fillHue|fillSaturation|fillBrightness|fillOpacity|strokeColor|strokeHue|strokeSaturation|strokeBrightness|strokeOpacity|strokeWidth|tracking|perChar3d], name?}",
+  "params": "{layer?, properties: [anchor|position|scale|skew|rotation|opacity|transformAll|lineAnchor|lineSpacing|characterOffset|characterValue|blur|fillColor|fillHue|fillSaturation|fillBrightness|fillOpacity|strokeColor|strokeHue|strokeSaturation|strokeBrightness|strokeOpacity|strokeWidth|tracking|frontColor|bevelColor|sideColor|backColor|perChar3d], name?}",
   "enabled": false
  },
  {
@@ -1244,7 +1322,7 @@
  {
   "id": "text.fonts",
   "label": "List Fonts",
-  "params": "{query?, rescan?} → {count, families: [{family, styles, origin: bundled|system|user, nativeName?}], added} (rescan picks up fonts installed since launch)",
+  "params": "{query?, variable?, rescan?} → {count, families: [{family, styles, origin: bundled|system|user, variable, nativeName?}], added} (variable: only variable fonts; rescan picks up fonts installed since launch)",
   "enabled": true
  },
  {
@@ -1269,6 +1347,12 @@
   "id": "text.delete",
   "label": "Delete Text",
   "params": "{layer?, direction?: backward|forward, word?, range?: [start, end], merge?}",
+  "enabled": false
+ },
+ {
+  "id": "text.deleteSurrounding",
+  "label": "Delete Text Around Selection",
+  "params": "{layer?, before?, after?, bytes?, merge?} (input-method replacement: the characters before and after the selection are deleted, the selection stays; bytes counts UTF-8 bytes)",
   "enabled": false
  },
  {
@@ -1297,6 +1381,20 @@
    "Layer",
    "Time"
   ],
+  "enabled": false
+ },
+ {
+  "id": "layer.stretchInToTime",
+  "label": "Stretch Layer In Point to Current Time",
+  "params": "{layers?}",
+  "shortcut": "Cmd+Shift+,",
+  "enabled": false
+ },
+ {
+  "id": "layer.stretchOutToTime",
+  "label": "Stretch Layer Out Point to Current Time",
+  "params": "{layers?}",
+  "shortcut": "Cmd+Alt+,",
   "enabled": false
  },
  {
@@ -1350,7 +1448,7 @@
  {
   "id": "prop.set",
   "label": "Set Property Value",
-  "params": "{layer?, path|prop, value, time? (layer s by default), timeBase?: layer|comp, merge?, selected? (also the other selected layers), offset? (them by the same change)}",
+  "params": "{layer?, path|prop, value, time? (layer s by default), timeBase?: layer|comp, merge?, selected? (also the other selected layers), offset? (them by the same change), proportional? (with offset: Proportional Scrubbing, each layer by its share in selection order, the first none, the last all), dims? (with selected, a typed value: the components edited, e.g. [2] for Z; the other layers keep the rest of their own value), follow? (with dims: components that move on each other layer by the change its first typed component takes)}",
   "enabled": false
  },
  {
@@ -1390,7 +1488,7 @@
  {
   "id": "prop.reset",
   "label": "Reset Property",
-  "params": "{layer?, path|prop, default?} → removes keyframes and expression; the value becomes `default`, else the property's own (an effect parameter's, a Transform property's)",
+  "params": "{layer?, path|prop, default?} → removes the expression; the value becomes `default`, else the property's own (an effect parameter's, a Transform property's), as a keyframe at the current time when the property is animated",
   "enabled": false
  },
  {
@@ -1470,6 +1568,15 @@
    "Animation"
   ],
   "shortcut": "Cmd+Alt+H",
+  "enabled": false
+ },
+ {
+  "id": "keys.setMuted",
+  "label": "Mute Keyframes",
+  "params": "{muted?: bool (default true)}",
+  "menu": [
+   "Animation"
+  ],
   "enabled": false
  },
  {
@@ -1562,6 +1669,12 @@
   "id": "project.usage",
   "label": "Project Item Usage",
   "params": "{items?: [id|name] (default: selected)} → {items, layers, comps} that deleting them removes",
+  "enabled": true
+ },
+ {
+  "id": "project.usedIn",
+  "label": "Project Item Used In",
+  "params": "{item?: id|name (default: selected)} → {item, count, comps: [{id, name, layers}]}",
   "enabled": true
  },
  {
@@ -1690,7 +1803,7 @@
  {
   "id": "prop.pickWhip",
   "label": "Pick Whip (Link Property)",
-  "params": "{layer?, path|prop, target: {layer, path|prop, dimension?}, expression?, range?: [start, end]} → sets an AE reference expression (`dimension`: one of the target's values, `position[0]`; with `expression`: inserts it there, replacing the characters in `range`, default the end)",
+  "params": "{layer?, path|prop, target: {layer, path|prop, dimension?}, expression?, range?: [start, end], byIndex?: bool} → sets an AE reference expression (`dimension`: one of the target's values, `position[0]`; with `expression`: inserts it there, replacing the characters in `range`, default the end; `byIndex`: an effect's properties by their index, `effect(\"Color Control\")(1)`, as an Alt pick whip does)",
   "enabled": false
  },
  {
@@ -1880,7 +1993,7 @@
  {
   "id": "path.freeTransform",
   "label": "Free Transform Points",
-  "params": "{layer?, mask?, scale?: % | [x%, y%], rotation?: deg, offset?: [dx, dy], anchor?: [x, y]}",
+  "params": "{layer?, mask?, scale?: % | [x%, y%], rotation?: deg, offset?: [dx, dy], anchor?: [x, y], merge?: string}",
   "menu": [
    "Layer",
    "Mask and Shape Path"
@@ -1928,6 +2041,18 @@
   "enabled": false
  },
  {
+  "id": "effect.pickCryptomatte",
+  "label": "Pick Cryptomatte",
+  "params": "{layer?, effect?: index|uid|name, x, y (effect space), mode?: replace|add|remove (default replace), scale? (preview resolution, default 1), time?, probeOnly?} → {name, hash, layer, selection, changed, selected} | {pending} — edits the Cryptomatte effect's Selection with the ID under the point",
+  "enabled": false
+ },
+ {
+  "id": "effect.cryptomatteAt",
+  "label": "Cryptomatte At",
+  "params": "{layer?, effect?: index|uid|name, x, y (effect space), scale?, time?, probeOnly?: bool (don't build the probe)} → {name, hash, layer, selected} | {pending} | null — the Cryptomatte ID under the point",
+  "enabled": true
+ },
+ {
   "id": "effect.applyLast",
   "label": "Last Effect",
   "params": "{layers?}",
@@ -1960,6 +2085,12 @@
   "enabled": false
  },
  {
+  "id": "effect.setLabel",
+  "label": "Effect Label",
+  "params": "{layer?, effect, label: name|index 0-16 (None clears)}",
+  "enabled": false
+ },
+ {
   "id": "effect.reorder",
   "label": "Reorder Effect",
   "params": "{layer?, effect, index}",
@@ -1987,6 +2118,12 @@
   "id": "effect.reset",
   "label": "Reset Effect",
   "params": "{layer?, effect}",
+  "enabled": false
+ },
+ {
+  "id": "effect.swapTintColors",
+  "label": "Swap Tint Colors",
+  "params": "{comp?, layer?, effect?: index|uid|name} — swaps Tint's Map Black To and Map White To at the current layer time in one undo step",
   "enabled": false
  },
  {
@@ -2066,6 +2203,30 @@
   "enabled": false
  },
  {
+  "id": "time.workAreaStart",
+  "label": "Go to Work Area Start",
+  "shortcut": "Shift+Home",
+  "enabled": false
+ },
+ {
+  "id": "time.workAreaEnd",
+  "label": "Go to Work Area End",
+  "shortcut": "Shift+End",
+  "enabled": false
+ },
+ {
+  "id": "time.previousInOut",
+  "label": "Go to Previous In or Out Point",
+  "shortcut": "Cmd+Alt+Shift+ArrowLeft",
+  "enabled": false
+ },
+ {
+  "id": "time.nextInOut",
+  "label": "Go to Next In or Out Point",
+  "shortcut": "Cmd+Alt+Shift+ArrowRight",
+  "enabled": false
+ },
+ {
   "id": "time.layerIn",
   "label": "Go to Layer In Point",
   "shortcut": "I",
@@ -2094,13 +2255,54 @@
  {
   "id": "time.go",
   "label": "Go To",
-  "params": "{to: start|end|workStart|workEnd|layerIn|layerOut|nextKey|prevKey, prop?: uid, visible?: [{layer, prop}]}",
+  "params": "{to: start|end|workStart|workEnd|layerIn|layerOut|nextInOut|prevInOut|nextKey|prevKey, prop?: uid, visible?: [{layer, prop}]}",
+  "enabled": false
+ },
+ {
+  "id": "comp.workAreaToSelection",
+  "label": "Set Work Area to Selected Layers",
+  "params": "{comp?, layers? (default the selected layers; the whole composition with none)}",
+  "shortcut": "Cmd+Alt+B",
+  "enabled": false
+ },
+ {
+  "id": "comp.activateRecent",
+  "label": "Activate Most Recent Composition in Hierarchy",
+  "params": "{comp?}",
+  "shortcut": "Shift+Escape",
+  "enabled": false
+ },
+ {
+  "id": "keys.deselectAll",
+  "label": "Deselect All Keyframes and Properties",
+  "shortcut": "Shift+F2",
+  "enabled": true
+ },
+ {
+  "id": "layer.mask.selectNext",
+  "label": "Select Next Mask",
+  "params": "{layer?}",
+  "shortcut": "Alt+`",
+  "enabled": false
+ },
+ {
+  "id": "layer.mask.selectPrevious",
+  "label": "Select Previous Mask",
+  "params": "{layer?}",
+  "shortcut": "Alt+Shift+`",
+  "enabled": false
+ },
+ {
+  "id": "layer.castsShadows",
+  "label": "Casts Shadows",
+  "params": "{layers?, value?}",
+  "shortcut": "Alt+Shift+C",
   "enabled": false
  },
  {
   "id": "renderQueue.add",
   "label": "Add to Render Queue",
-  "params": "{comp?: id|name, template?: Render Settings template, format?: h264|hevc|av1|prores|webm|png|jpeg|tiff|exr|gif|wav|aiff, output?: path|template, log?: errorsOnly|plusSettings|plusPerFrameInfo, quality?: best|draft|1-100 (jpeg, webm), resolution?: full|half|third|quarter|scale, proxyUse?, effects?, solo?, guideLayers?, colorDepth?, frameBlending?, fieldRender?, pulldown?, motionBlur?, timeSpan?: workArea|comp|custom, start?: s, end?: s, duration?: s, frameRate?: fps|null, skipExisting?: bool, storageOverflow?: bool, channels?: rgb|rgba|alpha, color?, bitrate?: kbps, webmBitrate?, keyframeInterval?, proresProfile?, profile?, level?, rateControl?, webmCodec?, audioBitrate?, opusApplication?, crop?, resize?, includeProjectLink?, audio?: auto|on|off, sampleRate?, audioChannels?, audioFormat?, loop?: bool (values as in setRenderSettings / setOutputModule)}",
+  "params": "{comp?: id|name, template?: Render Settings template, format?: h264|hevc|av1|prores|uncompressed|webm|png|jpeg|tiff|exr|tga|gif|wav|aiff, output?: path|template, log?: errorsOnly|plusSettings|plusPerFrameInfo, quality?: best|draft|1-100 (jpeg, webm), resolution?: full|half|third|quarter|scale, proxyUse?, effects?, solo?, guideLayers?, colorDepth?, frameBlending?, fieldRender?, pulldown?, motionBlur?, timeSpan?: workArea|comp|custom, start?: s, end?: s, duration?: s, frameRate?: fps|null, skipExisting?: bool, storageOverflow?: bool, channels?: rgb|rgba|alpha, color?, bitrate?: kbps, webmBitrate?, keyframeInterval?, proresProfile?, profile?, level?, rateControl?, webmCodec?, audioBitrate?, opusApplication?, crop?, resize?, includeProjectLink?, audio?: auto|on|off, sampleRate?, audioChannels?, audioFormat?, loop?: bool (values as in setRenderSettings / setOutputModule)}",
   "menu": [
    "Composition"
   ],
@@ -2128,7 +2330,7 @@
  {
   "id": "renderQueue.setOutputModule",
   "label": "Output Module Settings...",
-  "params": "{item?|index?, module?: n (1 = first), template?: name, format?: h264|hevc|av1|prores|webm|png|jpeg|tiff|exr|gif|wav|aiff, channels?: rgb|rgba|alpha, color?: straight|premultiplied, quality?: 1-100, bitrate?: kbps, webmBitrate?: bool, keyframeInterval?: frames (0 = auto), proresProfile?: proxy|lt|standard|hq|4444|4444xq, profile?: main|main10 (HEVC/AV1), level?: auto|4.1, rateControl?: bitrate|quality, webmCodec?: vp9|av1, audioBitrate?: Opus kbps, opusApplication?: audio|voice, crop?: bool|{useRoi?, roi?, top?, left?, bottom?, right?}, cropTop?, cropLeft?, cropBottom?, cropRight?, resize?: bool|{preset?, width?, height?, lockAspect?, quality?: low|high}, resizeWidth?, resizeHeight?, postRenderAction?: none|import|importAndReplace|setProxy, includeProjectLink?: bool, audio?: auto|on|off, sampleRate?, audioChannels?: mono|stereo, audioFormat?: 16|24|32, loop?: bool, output?}",
+  "params": "{item?|index?, module?: n (1 = first), template?: name, format?: h264|hevc|av1|prores|uncompressed|webm|png|jpeg|tiff|exr|tga|gif|wav|aiff, channels?: rgb|rgba|alpha, color?: straight|premultiplied, quality?: 1-100, bitrate?: kbps, webmBitrate?: bool, keyframeInterval?: frames (0 = auto), proresProfile?: proxy|lt|standard|hq|4444|4444xq, profile?: main|main10 (HEVC/AV1), level?: auto|4.1, rateControl?: bitrate|quality, webmCodec?: vp9|av1, audioBitrate?: Opus kbps, opusApplication?: audio|voice, crop?: bool|{useRoi?, roi?, top?, left?, bottom?, right?}, cropTop?, cropLeft?, cropBottom?, cropRight?, resize?: bool|{preset?, width?, height?, lockAspect?, quality?: low|high}, resizeWidth?, resizeHeight?, postRenderAction?: none|import|importAndReplace|setProxy, includeProjectLink?: bool, audio?: auto|on|off, sampleRate?, audioChannels?: mono|stereo, audioFormat?: 16|24|32, loop?: bool, output?}",
   "enabled": false
  },
  {
@@ -2369,7 +2571,7 @@
  {
   "id": "layer.sampling",
   "label": "Sampling",
-  "params": "{layers?, sampling: bilinear|bicubic}",
+  "params": "{layers?, sampling: bilinear|bicubic, toggle?}",
   "enabled": false
  },
  {
@@ -2584,7 +2786,7 @@
  {
   "id": "layer.revealSource",
   "label": "Reveal Layer Source in Project",
-  "params": "{layer?}",
+  "params": "{layers?}",
   "menu": [
    "Layer",
    "Reveal"
@@ -2624,7 +2826,7 @@
  {
   "id": "layer.create",
   "label": "Create",
-  "params": "{op: editableText|shapesFromText|masksFromText|shapesFromVector, layers?}",
+  "params": "{op: editableText|shapesFromText|masksFromText|shapesFromVector|instance3d, layers?}",
   "enabled": false
  },
  {
@@ -2686,9 +2888,39 @@
   "enabled": false
  },
  {
+  "id": "anim.applyBuiltinPreset",
+  "label": "Apply Built-in Animation Preset",
+  "params": "{preset: id|name (see anim.builtinPresets), layers?}",
+  "enabled": false
+ },
+ {
+  "id": "anim.builtinPresets",
+  "label": "Built-in Animation Presets",
+  "params": "{category?}",
+  "enabled": true
+ },
+ {
   "id": "view.addGuide",
   "label": "Add Guide...",
-  "params": "{orientation?: vertical|horizontal, position? (comp px)}",
+  "params": "{orientation?: vertical|horizontal, position? (comp px, or percent with percent: true), percent?: bool}",
+  "menu": [
+   "View"
+  ],
+  "enabled": false
+ },
+ {
+  "id": "view.addPercentGuide",
+  "label": "Add Percentage Guide...",
+  "params": "{orientation?: vertical|horizontal, position? (percent of the comp)}",
+  "menu": [
+   "View"
+  ],
+  "enabled": false
+ },
+ {
+  "id": "view.convertGuides",
+  "label": "Convert Guides to Percentage",
+  "params": "{comp?, to?: percent|pixels, index?}",
   "menu": [
    "View"
   ],
@@ -2719,6 +2951,66 @@
   "menu": [
    "View"
   ],
+  "enabled": false
+ },
+ {
+  "id": "view.res.full",
+  "label": "Full",
+  "params": "{comp?}",
+  "menu": [
+   "View",
+   "Resolution"
+  ],
+  "shortcut": "Cmd+J",
+  "enabled": false
+ },
+ {
+  "id": "view.res.half",
+  "label": "Half",
+  "params": "{comp?}",
+  "menu": [
+   "View",
+   "Resolution"
+  ],
+  "shortcut": "Cmd+Shift+J",
+  "enabled": false
+ },
+ {
+  "id": "view.res.third",
+  "label": "Third",
+  "params": "{comp?}",
+  "menu": [
+   "View",
+   "Resolution"
+  ],
+  "enabled": false
+ },
+ {
+  "id": "view.res.quarter",
+  "label": "Quarter",
+  "params": "{comp?}",
+  "menu": [
+   "View",
+   "Resolution"
+  ],
+  "shortcut": "Cmd+Alt+Shift+J",
+  "enabled": false
+ },
+ {
+  "id": "view.res.custom",
+  "label": "Custom...",
+  "params": "{factor?: 1..40 (render every n-th pixel), comp?}",
+  "menu": [
+   "View",
+   "Resolution"
+  ],
+  "shortcut": "Cmd+Alt+J",
+  "enabled": false
+ },
+ {
+  "id": "view.res.auto",
+  "label": "Resolution: Auto",
+  "params": "{comp?}",
   "enabled": false
  },
  {
@@ -2842,6 +3134,84 @@
   "enabled": true
  },
  {
+  "id": "view.fastPreviews.off",
+  "label": "Fast Previews: Off (Final Quality)",
+  "shortcut": "Cmd+Alt+1",
+  "enabled": true
+ },
+ {
+  "id": "view.fastPreviews.adaptive",
+  "label": "Fast Previews: Adaptive Resolution",
+  "shortcut": "Cmd+Alt+2",
+  "enabled": true
+ },
+ {
+  "id": "view.fastPreviews.draft",
+  "label": "Fast Previews: Draft",
+  "shortcut": "Cmd+Alt+3",
+  "enabled": true
+ },
+ {
+  "id": "view.fastPreviews.fastDraft",
+  "label": "Fast Previews: Fast Draft",
+  "shortcut": "Cmd+Alt+4",
+  "enabled": true
+ },
+ {
+  "id": "view.fastPreviews.wireframe",
+  "label": "Fast Previews: Wireframe",
+  "shortcut": "Cmd+Alt+5",
+  "enabled": true
+ },
+ {
+  "id": "view.channel.red",
+  "label": "Show Channel: Red",
+  "shortcut": "Alt+1",
+  "enabled": true
+ },
+ {
+  "id": "view.channel.green",
+  "label": "Show Channel: Green",
+  "shortcut": "Alt+2",
+  "enabled": true
+ },
+ {
+  "id": "view.channel.blue",
+  "label": "Show Channel: Blue",
+  "shortcut": "Alt+3",
+  "enabled": true
+ },
+ {
+  "id": "view.channel.alpha",
+  "label": "Show Channel: Alpha",
+  "shortcut": "Alt+4",
+  "enabled": true
+ },
+ {
+  "id": "view.channel.redColorized",
+  "label": "Show Channel: Red, Colorized",
+  "shortcut": "Alt+Shift+1",
+  "enabled": true
+ },
+ {
+  "id": "view.channel.greenColorized",
+  "label": "Show Channel: Green, Colorized",
+  "shortcut": "Alt+Shift+2",
+  "enabled": true
+ },
+ {
+  "id": "view.channel.blueColorized",
+  "label": "Show Channel: Blue, Colorized",
+  "shortcut": "Alt+Shift+3",
+  "enabled": true
+ },
+ {
+  "id": "view.channel.rgbStraight",
+  "label": "Show Channel: RGB Straight",
+  "shortcut": "Alt+Shift+4",
+  "enabled": true
+ },
+ {
   "id": "view.moveGuide",
   "label": "Move Guide",
   "params": "{comp?, index, position (comp px), merge?}",
@@ -2862,7 +3232,7 @@
  {
   "id": "shape.fillStroke",
   "label": "Fill and Stroke",
-  "params": "{layers?, fill?: color, stroke?: color, strokeWidth?, merge?} → {fill, stroke, strokeWidth} (first layer)",
+  "params": "{layers?, fillType?: none|solid|linear|radial, strokeType?, fill?: color, stroke?: color, strokeWidth?, merge?} → {fill, stroke, strokeWidth, fillType, strokeType} (first layer)",
   "enabled": false
  },
  {
@@ -2956,6 +3326,18 @@
   "enabled": false
  },
  {
+  "id": "layer.quickOffset",
+  "label": "Quick Offset",
+  "params": "{delta (comp s: the last layer's move), layers? (in order; default the selection), merge?, fromStart?: bool (with merge: delta is the whole drag)}",
+  "enabled": false
+ },
+ {
+  "id": "keys.quickOffset",
+  "label": "Quick Offset Keyframes",
+  "params": "{delta (comp s: the last layer's keys' move), merge?, fromStart?: bool (with merge: delta is the whole drag)}",
+  "enabled": false
+ },
+ {
   "id": "project.newFolder",
   "label": "New Folder",
   "params": "{name?, parent?}",
@@ -2992,6 +3374,12 @@
    "File",
    "Save As"
   ],
+  "enabled": true
+ },
+ {
+  "id": "file.checkOutput",
+  "label": "Check Output File",
+  "params": "{path} → {path, blocked, source?: footage|proxy|project, reason?}: whether an export may be written to path (it may not replace a file the project reads)",
   "enabled": true
  },
  {
@@ -3094,7 +3482,7 @@
  {
   "id": "file.runScript",
   "label": "Run Script File...",
-  "params": "{path (.jsx/.js JavaScript, or a .jsonl/.json command script) | name (an installed or sample script, see file.scripts.list) | steps: [{command, params}]}",
+  "params": "{path (.jsx/.js JavaScript, or a .jsonl/.json command script) | name (an installed or sample script, see file.scripts.list) | recent: index (File ▸ Scripts ▸ Recent Script Files, 0 = the most recent) | steps: [{command, params}]}",
   "menu": [
    "File",
    "Scripts"
@@ -3110,7 +3498,7 @@
  {
   "id": "file.interpretFootage",
   "label": "Main...",
-  "params": "{items?, frameRate?: fps|\"file\", alpha?: straight|premultiplied|ignore|guess, guessAlpha?, matteColor?, invertAlpha?, loop?, pixelAspect?, fields?: off|upper|lower, colorProfile?: srgb|rec709|rec2020|p3|auto, linearLight?, preserveRgb? (the file's values unconverted), overrideStart?: bool (false: Use Source File Timecode), startTimecode?: timecode|frame (Override Start)}",
+  "params": "{items?|item?, frameRate?: fps|\"file\", alpha?: straight|premultiplied|ignore|guess, guessAlpha?, matteColor?|premulColor?, invertAlpha?, loop?, pixelAspect?, fields?: off|upper|lower, colorProfile?: srgb|rec709|rec2020|p3|auto, linearLight?, preserveRgb? (the file's values unconverted), overrideStart?: bool (false: Use Source File Timecode), startTimecode?: timecode|frame (Override Start), logConversion? (Cineon Settings of DPX and Cineon files), cineonUnits?: 10bit|8bit|float, convertedBlack?, convertedWhite?, pointUnits?: 10bit|8bit|float (the units of convertedBlack and convertedWhite; default cineonUnits, else the footage's Units), tenBitBlack?, tenBitWhite? (0..1023), currentGamma? (0.1..10), highlightRolloff? (0..100)}",
   "menu": [
    "File",
    "Interpret Footage"
@@ -3131,7 +3519,7 @@
  {
   "id": "file.applyInterpretation",
   "label": "Apply Interpretation",
-  "params": "{items?}",
+  "params": "{items?|item?}",
   "menu": [
    "File",
    "Interpret Footage"
@@ -3142,7 +3530,7 @@
  {
   "id": "file.replaceFootage",
   "label": "File...",
-  "params": "{path, item?, sequence?: bool (default true: a numbered still brings its image sequence), alphabetical?: bool}",
+  "params": "{path, item?, sequence?: bool (a numbered still brings its image sequence; default: the item keeps its kind, so a still stays a still and a sequence stays a sequence), alphabetical?: bool}",
   "menu": [
    "File",
    "Replace Footage"
@@ -3173,7 +3561,7 @@
  {
   "id": "file.reloadFootage",
   "label": "Reload Footage",
-  "params": "{items?}",
+  "params": "{items?|item?}",
   "menu": [
    "File"
   ],
@@ -3200,6 +3588,18 @@
   "enabled": true
  },
  {
+  "id": "footage.relink",
+  "label": "Relink Footage",
+  "params": "{item, path} — point a footage item at its file's new location (keeps the interpretation) and relink the other missing files found in the same place",
+  "enabled": false
+ },
+ {
+  "id": "footage.missing",
+  "label": "Missing Footage",
+  "params": "{} → {missing: [{item, name, path}]}",
+  "enabled": true
+ },
+ {
   "id": "file.exportLottie",
   "label": "Lottie JSON...",
   "params": "{comp?, path (.json or .lottie), includeExpressions?: bool, textAsShapes?: bool}",
@@ -3220,6 +3620,16 @@
   "enabled": true
  },
  {
+  "id": "file.importProject",
+  "label": "EffectCraft Project...",
+  "params": "{path (.ecproj or .ecprojx)} — merges the project into a folder named after the file; returns {folder, items, comps, rootComps, primaryComp (the only root comp, else null), missingMedia, warnings}",
+  "menu": [
+   "File",
+   "Import"
+  ],
+  "enabled": true
+ },
+ {
   "id": "file.importTimeline",
   "label": "Adobe Premiere Pro Project...",
   "params": "{path (.xml Final Cut Pro XML from Premiere Pro or .fcpxml .otio .edl .aaf .omf), format?: auto|xml|fcpxml|otio|edl|aaf|omf, edlFrameRate?: number}",
@@ -3232,7 +3642,7 @@
  {
   "id": "file.exportTimeline",
   "label": "Adobe Premiere Pro Project...",
-  "params": "{comp?, path (Final Cut Pro XML .xml for Premiere Pro or .fcpxml .otio .edl .aaf .omf), format?: xml|fcpxml|otio|edl|aaf|omf, prerender?: none|unsupported|all, precomps?: nest|prerender}",
+  "params": "{comp?, path (Final Cut Pro XML .xml for Premiere Pro or .fcpxml .otio .edl .aaf .omf), format?: xml|fcpxml|otio|edl|aaf|omf, prerender?: none|unsupported|all, precomps?: nest|prerender, background?: bool (pre-render and write as a job, jobs.list / jobs.wait; returns {job})}",
   "menu": [
    "File",
    "Export"
@@ -3263,15 +3673,47 @@
   "enabled": false
  },
  {
+  "id": "comp.scale",
+  "label": "Scale Composition",
+  "params": "{comp?, factor? (2 = twice the size) | width? | height? (the other side keeps the aspect ratio)}",
+  "enabled": false
+ },
+ {
   "id": "comp.saveFrameAs",
   "label": "File...",
-  "params": "{path (.png; with queue: an output path or template), time?, scale?, queue?: bool (add a Render Queue item from the Frame Default templates instead of writing now)}",
+  "params": "{path (.png; with queue: an output path or template), time?, scale?, queue?: bool (add a Render Queue item from the Frame Default templates instead of writing now), transparent?: bool (default true)}",
   "menu": [
    "Composition",
    "Save Frame As"
   ],
   "shortcut": "Cmd+Alt+S",
   "enabled": false
+ },
+ {
+  "id": "comp.copyFrame",
+  "label": "Copy Frame to Clipboard",
+  "params": "{comp?, time?, scale?}",
+  "menu": [
+   "Composition"
+  ],
+  "enabled": false
+ },
+ {
+  "id": "comp.savePreset",
+  "label": "Save Composition Preset",
+  "params": "{name, width, height, pixelAspect, frameRate} (replaces a saved preset with the same name)",
+  "enabled": true
+ },
+ {
+  "id": "comp.deletePreset",
+  "label": "Delete Composition Preset",
+  "params": "{name}",
+  "enabled": true
+ },
+ {
+  "id": "comp.presets",
+  "label": "Composition Presets",
+  "enabled": true
  },
  {
   "id": "comp.responsiveTime",
@@ -3437,6 +3879,11 @@
   "enabled": true
  },
  {
+  "id": "effects.copyPresetsFolderPath",
+  "label": "Copy Presets Folder Path",
+  "enabled": true
+ },
+ {
   "id": "playback.toggle",
   "label": "Play Current Preview",
   "params": "{shortcut?: spacebar|shiftSpacebar|numpad0|shiftNumpad0|altNumpad0 (whose Preview panel options to use; default spacebar)}",
@@ -3489,55 +3936,6 @@
    "View"
   ],
   "shortcut": ",",
-  "enabled": false
- },
- {
-  "id": "view.res.full",
-  "label": "Full",
-  "menu": [
-   "View",
-   "Resolution"
-  ],
-  "shortcut": "Cmd+J",
-  "enabled": false
- },
- {
-  "id": "view.res.half",
-  "label": "Half",
-  "menu": [
-   "View",
-   "Resolution"
-  ],
-  "shortcut": "Cmd+Shift+J",
-  "enabled": false
- },
- {
-  "id": "view.res.third",
-  "label": "Third",
-  "menu": [
-   "View",
-   "Resolution"
-  ],
-  "enabled": false
- },
- {
-  "id": "view.res.quarter",
-  "label": "Quarter",
-  "menu": [
-   "View",
-   "Resolution"
-  ],
-  "shortcut": "Cmd+Alt+Shift+J",
-  "enabled": false
- },
- {
-  "id": "view.res.custom",
-  "label": "Custom...",
-  "params": "{factor?: 1..40 (render every n-th pixel)}",
-  "menu": [
-   "View",
-   "Resolution"
-  ],
   "enabled": false
  },
  {
@@ -3743,6 +4141,12 @@
   "params": "{} — the Project panel's selection, with the layers that use it; one undo step",
   "shortcut": "Shift+Delete",
   "enabled": true
+ },
+ {
+  "id": "prop.editGradient",
+  "label": "Edit Gradient...",
+  "params": "{layer?, path|prop, comp?} — a gradient property; opens the Gradient Editor at the current time",
+  "enabled": false
  },
  {
   "id": "track.motion",
@@ -3962,6 +4366,12 @@
   "enabled": false
  },
  {
+  "id": "camera.exportBlender",
+  "label": "Export Scene to Blender...",
+  "params": "{path: .py, comp?, layer?, effect?, sensorWidth?: mm (default 36), unitScale?: Blender units per comp pixel (default 0.01), startFrame?: positive integer (default 1), includePoints?: true}",
+  "enabled": false
+ },
+ {
   "id": "camera.setGroundPlane",
   "label": "Set Ground Plane and Origin",
   "params": "{points?: [id] (default: selected), layer?, effect?}",
@@ -3976,7 +4386,7 @@
  {
   "id": "roto.stroke",
   "label": "Roto Brush Stroke",
-  "params": "{layer?, kind?: fg|bg|refine|refineErase, points: [[x, y], …] (layer pixels), frame? (layer frame; default current), radius? (layer px; default the tool's diameter / 2), effect?}",
+  "params": "{layer?, kind?: fg|bg|refine|refineErase, points: [[x, y], …] (layer pixels), frame? (layer frame; default current), radius? (layer px; default the tool's diameter / 2), effect?, object? (0–31; default the current object: with a tracker each object is followed on its own and the mattes are united)}",
   "enabled": false
  },
  {
@@ -4006,7 +4416,7 @@
  {
   "id": "roto.clearStrokes",
   "label": "Remove Roto Brush Strokes",
-  "params": "{layer?, effect?, frame? (only this layer frame), kind?}",
+  "params": "{layer?, effect?, frame? (only this layer frame), kind?, object? (only this object's strokes)}",
   "enabled": false
  },
  {
@@ -4017,7 +4427,37 @@
  {
   "id": "roto.options",
   "label": "Roto Brush Options",
-  "params": "{diameter?, refineDiameter?, view?: alphaBoundary|alpha|alphaOverlay|none, overlayColor?: [r,g,b], overlayOpacity?, boundaryColor?: [r,g,b], autoPropagate?}",
+  "params": "{diameter?, refineDiameter?, view?: alphaBoundary|alpha|alphaOverlay|none, overlayColor?: [r,g,b], overlayOpacity?, boundaryColor?: [r,g,b], autoPropagate?, object? (the object new strokes belong to, 0–31)}",
+  "enabled": true
+ },
+ {
+  "id": "objectMatte.apply",
+  "label": "Object Matte",
+  "params": "{layer?, effect? (uid: re-prompt this Object Matte instead of adding one), point: [x, y] (layer pixels: the object), box?: [x0, y0, x1, y1] (layer pixels, around the object), frame? (reference layer frame; default current), track?: follow the object from that frame (default true), before?, after? (frames to follow it; default 30, up to 600)}",
+  "enabled": false
+ },
+ {
+  "id": "objectMatte.propagate",
+  "label": "Track Object Matte",
+  "params": "{layer?, effect?, direction?: forward|backward|both, wait?: block until done} (a background job like Roto Brush propagation; roto.cancel stops it)",
+  "enabled": false
+ },
+ {
+  "id": "objectMatte.freeze",
+  "label": "Freeze Object Matte",
+  "params": "{layer?, effect?, wait?}",
+  "enabled": false
+ },
+ {
+  "id": "objectMatte.unfreeze",
+  "label": "Unfreeze Object Matte",
+  "params": "{layer?, effect?}",
+  "enabled": false
+ },
+ {
+  "id": "objectMatte.status",
+  "label": "Object Matte Status",
+  "params": "{layer?, effect?}: the job's progress, whether the instance is frozen, its frames and which are computed",
   "enabled": true
  },
  {
@@ -4207,6 +4647,7 @@
   "id": "file.openRecent",
   "label": "Open Recent",
   "params": "{index? | path?}",
+  "shortcut": "Cmd+Alt+Shift+P",
   "enabled": false
  },
  {
@@ -4253,6 +4694,7 @@
   "id": "anim.applyRecentPreset",
   "label": "Recent Animation Presets",
   "params": "{index? | path?, layers?}",
+  "shortcut": "Cmd+Alt+Shift+F",
   "enabled": false
  },
  {
@@ -4282,6 +4724,12 @@
    "File",
    "Replace Footage"
   ],
+  "enabled": false
+ },
+ {
+  "id": "file.replaceWithPrecomp",
+  "label": "Replace with Precomposition",
+  "params": "{item?}",
   "enabled": false
  },
  {
@@ -4556,6 +5004,7 @@
    "File",
    "Set Proxy"
   ],
+  "shortcut": "Cmd+Alt+P",
   "enabled": false
  },
  {
@@ -4577,7 +5026,7 @@
  {
   "id": "file.interpretProxy",
   "label": "Proxy...",
-  "params": "{items?|item?, alpha?, matteColor?, invertAlpha?, frameRate?, loop?, pixelAspect?, fields?, colorProfile?, linearLight?}",
+  "params": "{items?|item?, alpha?, guessAlpha?, matteColor?|premulColor?, invertAlpha?, frameRate?, loop?, pixelAspect?, fields?, colorProfile?, linearLight?, preserveRgb?, overrideStart?, startTimecode? (as file.interpretFootage), logConversion?, cineonUnits?, convertedBlack?, convertedWhite?, pointUnits?, tenBitBlack?, tenBitWhite?, currentGamma?, highlightRolloff? (Cineon Settings of DPX and Cineon proxies)}",
   "menu": [
    "File",
    "Interpret Footage"
@@ -4607,25 +5056,37 @@
  {
   "id": "file.uninstallScript",
   "label": "Uninstall Script",
-  "params": "{name}",
+  "params": "{name (a script at the top of a Scripts folder, not `Folder/File.jsx`)}",
   "enabled": true
  },
  {
   "id": "file.scripts.list",
   "label": "List Scripts",
-  "params": "{} → [{name, panel, source: installed|sample|extension}]",
+  "params": "{} → [{name (`Folder/File.jsx` in a subfolder), panel, source: installed|sample|extension}]",
   "enabled": true
  },
  {
   "id": "window.scriptPanel",
   "label": "ScriptUI Panel",
-  "params": "{name (a script in the ScriptUI Panels folder, e.g. `Layer Tools.jsx`)} → opens it as a dockable panel",
+  "params": "{name (a script in the ScriptUI Panels folder, e.g. `Layer Tools.jsx`, or `Folder/Panel.jsx` in a subfolder)} → opens it as a dockable panel",
   "enabled": true
  },
  {
   "id": "window.restoreScriptPanels",
   "label": "Restore ScriptUI Panels",
   "params": "{} → reopens the ScriptUI panels open when EffectCraft last quit (frontends call it at launch) → {opened: [name], failed: [{name, error}]}",
+  "enabled": true
+ },
+ {
+  "id": "file.runStartupScripts",
+  "label": "Run Startup Scripts",
+  "params": "{} → runs the scripts in Scripts/Startup in alphabetical order (frontends call it at launch) → {ran: [name], waiting: [name] (in a modal dialog), failed: [{name, error}]}",
+  "enabled": true
+ },
+ {
+  "id": "file.runShutdownScripts",
+  "label": "Run Shutdown Scripts",
+  "params": "{} → closes the project, then runs the scripts in Scripts/Shutdown in alphabetical order (frontends call it as the app quits; their modal dialogs close as if canceled) → {ran: [name], waiting: [name], failed: [{name, error}]}",
   "enabled": true
  },
  {
@@ -4638,6 +5099,12 @@
   "id": "script.settings.save",
   "label": "Save Script Setting",
   "params": "{section, key, value (text)} → kept in the settings store (app.settings.saveSetting)",
+  "enabled": true
+ },
+ {
+  "id": "script.runTasks",
+  "label": "Run Scheduled Script Tasks",
+  "params": "{} → runs the app.scheduleTask tasks that are due (frontends do it every frame) → {ran, output, errors, next (ms until the next task, or null)}",
   "enabled": true
  },
  {
@@ -4662,6 +5129,18 @@
   "id": "scriptui.set",
   "label": "Set Script Window Control",
   "params": "{window?, widget, value: text | number | bool | item index | item text, changing?: bool (a live update: each keystroke / slider step; fires onChanging only)} (edit text, sliders, checkboxes, lists) → fires onChanging / onChange",
+  "enabled": true
+ },
+ {
+  "id": "scriptui.mouse",
+  "label": "Mouse Event on Script Window Control",
+  "params": "{window?, widget, type: mousedown | mouseup | mousemove | mouseover | mouseout | click (default), x?, y? (relative to the control; default its centre), button? (0 left, 1 middle, 2 right), buttons? (held: 1 left, 2 right, 4 middle), detail? (click count), screenX?, screenY?, altKey?, ctrlKey?, metaKey?, shiftKey?} → the script's addEventListener listeners on the control and its containers receive a MouseEvent",
+  "enabled": true
+ },
+ {
+  "id": "scriptui.resize",
+  "label": "Resize Script Window",
+  "params": "{window?, size: [width, height] (pixels)} → the window takes the size, lays itself out again and its onResizing / onResize run (a docked ScriptUI panel gets its dock's size)",
   "enabled": true
  },
  {

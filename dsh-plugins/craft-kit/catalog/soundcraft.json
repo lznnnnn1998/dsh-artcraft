@@ -292,12 +292,24 @@
   "label": "Edit Mode"
  },
  {
+  "id": "edit.snap_to_grid",
+  "label": "Snap to Grid"
+ },
+ {
+  "id": "edit.shuffle_lock",
+  "label": "Shuffle Lock"
+ },
+ {
   "id": "edit.tool",
   "label": "Edit Tool"
  },
  {
   "id": "edit.move_clips",
   "label": "Move Clips"
+ },
+ {
+  "id": "edit.trim_clip",
+  "label": "Trim Clip"
  },
  {
   "id": "edit.consolidate",
@@ -516,6 +528,10 @@
   "label": "Toggle Group Active"
  },
  {
+  "id": "track.group_modify",
+  "label": "Modify Group"
+ },
+ {
   "id": "track.duplicate",
   "label": "Duplicate... Track"
  },
@@ -530,6 +546,14 @@
  {
   "id": "track.move_to_new_folder",
   "label": "Move to New Folder... Track"
+ },
+ {
+  "id": "track.move_to_folder",
+  "label": "Move to Folder"
+ },
+ {
+  "id": "track.remove_from_folder",
+  "label": "Remove from Folder"
  },
  {
   "id": "track.change_width",
@@ -554,6 +578,14 @@
  {
   "id": "track.height",
   "label": "Track Height"
+ },
+ {
+  "id": "track.height_up",
+  "label": "Increase Track Height"
+ },
+ {
+  "id": "track.height_down",
+  "label": "Decrease Track Height"
  },
  {
   "id": "track.view",
@@ -718,6 +750,10 @@
  {
   "id": "clip.identify_sync_point",
   "label": "Identify Sync Point Clip"
+ },
+ {
+  "id": "clip.remove_sync_point",
+  "label": "Remove Sync Point Clip"
  },
  {
   "id": "clip.quantize_to_grid",
@@ -1120,6 +1156,10 @@
   "label": "Transport Status"
  },
  {
+  "id": "edit.tab",
+  "label": "Tab"
+ },
+ {
   "id": "session.inspect",
   "label": "Inspect Session"
  },
@@ -1169,7 +1209,7 @@
  },
  {
   "id": "midi.new_clip",
-  "label": "New MIDI Clip"
+  "label": "New MIDI Clip Clip"
  },
  {
   "id": "midi.note_add",
@@ -1624,6 +1664,10 @@
   "label": "Clear Clips"
  },
  {
+  "id": "clip.auto_rename",
+  "label": "Auto Rename..."
+ },
+ {
   "id": "event.time_ops_window",
   "label": "Time Operations Window Event > Time Operations"
  },
@@ -1858,5 +1902,17 @@
  {
   "id": "video.list",
   "label": "Movies"
+ },
+ {
+  "id": "view.zoom_toggle",
+  "label": "Zoom Toggle"
+ },
+ {
+  "id": "view.zoom_toggle_cancel",
+  "label": "Cancel Zoom Toggle"
+ },
+ {
+  "id": "edit.strip_silence_preview",
+  "label": "Strip Silence Rectangles"
  }
 ]

@@ -2,7 +2,7 @@
 
 # ArtCraft × DSH
 
-**Twelve crafting applications. One agent. Zero source changes.**
+**Fourteen crafting applications. One agent. Zero source changes.**
 
 Every app from the [ArtCraft](https://github.com/storytold) org — CAD, spreadsheets, audio, video,
 photo, vector, PDF, slides, documents — exposed to [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)
@@ -11,8 +11,8 @@ as a first-class plugin.
 [![DSH plugin](https://img.shields.io/badge/DSH-plugin-4D6BFE?style=flat-square)](https://github.com/deepseek-ai/deepseek-harness)
 [![built on Cordis](https://img.shields.io/badge/built%20on-Cordis-6E56CF?style=flat-square)](https://github.com/cordiverse/cordis)
 [![License](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue?style=flat-square)](#license)
-[![Plugins](https://img.shields.io/badge/plugins-12-success?style=flat-square)](#the-twelve)
-[![Tools](https://img.shields.io/badge/tools-92-informational?style=flat-square)](#two-surfaces-per-craft)
+[![Plugins](https://img.shields.io/badge/plugins-14-success?style=flat-square)](#the-fourteen)
+[![Tools](https://img.shields.io/badge/tools-108-informational?style=flat-square)](#two-surfaces-per-craft)
 [![MCP](https://img.shields.io/badge/MCP-bridged-8A2BE2?style=flat-square)](#two-surfaces-per-craft)
 [![Verified](https://img.shields.io/badge/verified-12%2F12-brightgreen?style=flat-square)](#verify-it-yourself)
 [![npm](https://img.shields.io/npm/v/dsh-artcraft-plugin-gridcraft?style=flat-square&label=npm&color=cb3837)](https://www.npmjs.com/package/dsh-artcraft-plugin-gridcraft)
@@ -37,7 +37,7 @@ you › make me a Q3 sales spreadsheet with a chart, save it to ~/Documents
 
 ## What this is
 
-The ArtCraft suite is twelve native Rust applications. Each one already ships a headless CLI and
+The ArtCraft suite is fourteen native Rust applications. Each one already ships a headless CLI and
 its own MCP server — but nothing tells an agent they exist, what they can do, or how to call them.
 
 This repository closes that gap. Each app becomes a **DSH plugin** that registers model-callable
@@ -47,22 +47,24 @@ process.
 **No craft source is ever modified.** Every plugin lives here. The applications are dependencies,
 not forks.
 
-## The twelve
+## The fourteen
 
 | | Craft | What it does | Commands | MCP tools |
 |:--|:--|:--|--:|--:|
-| 📐 | **CADCraft** | CAD and drafting (AutoCAD-style) | 305 | 11 |
-| 📊 | **GridCraft** | Spreadsheets (Excel-style) | 315 | 21 |
-| 🎚️ | **SoundCraft** | Digital audio workstation | 465 | 17 |
-| 🖼️ | **PhotoCraft** | Raster image editing (Photoshop-style) | 858 | 21 |
-| 🌄 | **LightCraft** | Photo library and raw development | 296 | 318 |
-| 📄 | **PdfCraft** | PDF reading and editing | 161 | 161 |
-| 🖋️ | **VectorCraft** | Vector art (Illustrator-style) | 743 | 32 |
-| 🎬 | **EffectCraft** | Motion graphics (After Effects-style) | 669 | 27 |
-| 🎞️ | **FilmCraft** | Non-linear video editing | 693 | 17 |
-| 🎨 | **DesignCraft** | Page and layout design (InDesign-style) | 446 | 25 |
-| 📽️ | **DeckCraft** | Presentations (PowerPoint-style) | 226 | 25 |
-| 📝 | **WordCraft** | Word processing (Word-style) | 460 | 16 |
+| 📐 | **CADCraft** | CAD and drafting (AutoCAD-style) | 449 | 12 |
+| 📊 | **GridCraft** | Spreadsheets (Excel-style) | 364 | 22 |
+| 🎚️ | **SoundCraft** | Digital audio workstation | 479 | 17 |
+| 🖼️ | **PhotoCraft** | Raster image editing (Photoshop-style) | 953 | 26 |
+| 🌄 | **LightCraft** | Photo library and raw development | 375 | 397 |
+| 📄 | **PdfCraft** | PDF reading and editing | 183 | 183 |
+| 🖋️ | **VectorCraft** | Vector art (Illustrator-style) | 906 | 33 |
+| 🎬 | **EffectCraft** | Motion graphics (After Effects-style) | 743 | 27 |
+| 🎞️ | **FilmCraft** | Non-linear video editing | 716 | 17 |
+| 🎨 | **DesignCraft** | Page and layout design (InDesign-style) | 545 | 26 |
+| 📽️ | **DeckCraft** | Presentations (PowerPoint-style) | 331 | 25 |
+| 📝 | **WordCraft** | Word processing (Word-style) | 648 | 17 |
+| ✒️ | **FigCraft** | Interface design and prototyping (Figma-style) | 629 | 19 |
+| 🧶 | **TextureCraft** | 3D texture painting | 135 | 22 |
 
 <sub>Command counts are read live from each binary; MCP counts are what each server declares.</sub>
 
@@ -113,7 +115,7 @@ cd dsh-artcraft
 ```
 
 That finds the Node the harness already ships (no `node`, `npm` or `pnpm` on `PATH`
-needed), downloads every craft CLI for your platform, and installs the twelve plugins
+needed), downloads every craft CLI for your platform, and installs the fourteen plugins
 into your DSH profile. Add `-Crafts gridcraft` for one craft, `-List` for a dry run, or
 `-Verify` to prove it works:
 
@@ -182,21 +184,22 @@ Every craft must locate its binary, load its live catalog, expose the right tool
 MCP handshake, and produce a non-empty artifact from a real headless run:
 
 ```
-craft        binary                       catalog        tools  mcp                     run
-cadcraft     cadcraft-cli 0.5.0           305 (live)     8      11 tools (list_commands ok)  ok → out.dxf (34140 B)
-deckcraft    deckcraft-cli 0.5.0          226 (live)     8      25 tools (list_commands ok)  ok → out.deckcraft (7471 B)
-designcraft  designcraft-cli 0.6.0        446 (live)     6      25 tools (list_commands ok)  ok → out.pdf (2028 B)
-effectcraft  effectcraft-cli 0.8.0        669 (live)     8      27 tools (list_commands ok)  ok → out.ecproj (732438 B)
-filmcraft    filmcraft-cli 0.6.0          693 (live)     8      17 tools (command_list ok)   ok → out.fcproj (3264 B)
-gridcraft    gridcraft-cli 0.5.0          315 (live)     8      21 tools (list_commands ok)  ok → out.xlsx (7682 B)
-lightcraft   lightcraft-cli 0.6.0         296 (live)     7      318 tools (command_list ok) ok → out.bin (108535 B)
-pdfcraft     pdfcraft-cli 0.7.1           161 (live)     8      161 tools (doc_list ok)      ok → out.pdf (802 B)
-photocraft   photocraft-cli 0.7.0         858 (live)     8      21 tools (command_list ok)  ok → out.png (168 B)
-soundcraft   SoundCraft CLI 0.6.1         465 (live)     8      17 tools (list_commands ok)  ok → out.wav (16094696 B)
-vectorcraft  vectorcraft-cli 0.10.0       743 (live)     7      32 tools (command_list ok)  ok → out.svg (251 B)
-wordcraft    wordcraft-cli 0.5.0          460 (live)     8      16 tools (list_commands ok)  ok → out.docx (6286 B)
+cadcraft       v0.16.0   449 commands   12 MCP tools   ok
+gridcraft      v0.15.0   364 commands   22 MCP tools   ok
+soundcraft     v0.16.0   479 commands   17 MCP tools   ok
+photocraft     v0.19.0   953 commands   26 MCP tools   ok
+lightcraft     v0.17.0   375 commands  397 MCP tools   ok
+pdfcraft       v0.17.0   183 commands  183 MCP tools   ok
+vectorcraft    v0.20.0   906 commands   33 MCP tools   ok
+effectcraft    v0.20.0   743 commands   27 MCP tools   ok
+filmcraft      v0.16.0   716 commands   17 MCP tools   ok
+designcraft    v0.16.0   545 commands   26 MCP tools   ok
+deckcraft      v0.14.1   331 commands   25 MCP tools   ok
+wordcraft      v0.14.0   648 commands   17 MCP tools   ok
+figcraft       v0.14.0   629 commands   19 MCP tools   ok
+texturecraft   v0.2.0    135 commands   22 MCP tools   ok
 
-all 12 plugin(s) verified
+all 14 plugin(s) verified
 ```
 
 ## How it works
@@ -227,10 +230,10 @@ dsh-plugins/
 Every fact about the binaries was **measured by running them**, never assumed. Where a craft's real
 CLI contradicted an expectation, the raw output is recorded in [docs/craft-notes/](docs/craft-notes).
 
-## Beyond the twelve
+## Beyond the fourteen
 
 All **23** repositories matching `craft` under `github.com/storytold` were cloned and assessed
-([docs/CRAFT-MATRIX.md](docs/CRAFT-MATRIX.md)). Twelve are applications with a published headless
+([docs/CRAFT-MATRIX.md](docs/CRAFT-MATRIX.md)). Fourteen are applications with a published headless
 CLI and became plugins. The other eleven are libraries, asset bundles, or GUIs without a scriptable
 entry point — including `artcraft`, the umbrella app, whose MCP support is a documented UI stub.
 

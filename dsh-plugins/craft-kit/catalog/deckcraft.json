@@ -2,2290 +2,1600 @@
  {
   "id": "file.new",
   "label": "New Presentation",
-  "params": "{theme?: name, size?: [w,h] pt, blank?: bool}",
-  "menu": [
-   "File"
-  ],
-  "shortcut": "Cmd+N",
-  "enabled": true
+  "params": "{theme?: name, template?: starter name, size?: [w,h] pt, blank?: bool}"
+ },
+ {
+  "id": "file.templates",
+  "label": "Starter Templates"
  },
  {
   "id": "file.open",
   "label": "Open…",
-  "params": "{path}",
-  "menu": [
-   "File"
-  ],
-  "shortcut": "Cmd+O",
-  "enabled": true
+  "params": "{path}"
+ },
+ {
+  "id": "file.adopt",
+  "label": "Open",
+  "params": "{path, token?} (a presentation the host read in the background and staged with Session::stage_loaded; without one, reads path like file.open)"
  },
  {
   "id": "file.openBytes",
   "label": "Open Data",
-  "params": "{name, data: base64}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": true
+  "params": "{name, data: base64}"
  },
  {
   "id": "file.save",
   "label": "Save",
-  "params": "{path?, format?: deckcraft|pptx}",
-  "menu": [
-   "File"
-  ],
-  "shortcut": "Cmd+S",
-  "enabled": false
+  "params": "{path?, format?: deckcraft|pptx}"
  },
  {
   "id": "file.saveAs",
   "label": "Save As…",
-  "params": "{path, format?}",
-  "menu": [
-   "File"
-  ],
-  "shortcut": "Cmd+Shift+S",
-  "enabled": false
+  "params": "{path, format?}"
  },
  {
   "id": "file.saveTemplate",
   "label": "Save as Template…",
-  "params": "{path}",
-  "menu": [
-   "File"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{path}"
  },
  {
   "id": "file.saveBytes",
   "label": "Save to Data",
-  "params": "{format?: deckcraft|pptx} → {data: base64}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{format?: deckcraft|pptx}"
  },
  {
   "id": "file.export",
   "label": "Export…",
-  "params": "{path, format: png|jpeg|pptx|deckcraft|outline|pdf, slide?: index, all?: bool, scale?: px per pt; pdf: layout?: slides|notes|handouts, perPage?: 1|2|3|4|6|9, dpi?, slides?: [index], includeHidden?, textLayer?, frame?}",
-  "menu": [
-   "File"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{path, format?: png|jpeg|pptx|deckcraft|outline|rtf|pdf|gif (else by path), slide?: index, all?: bool, scale?: px per pt, layout?: slides|notes|handouts (pdf), perPage?: 1|2|3|4|6|9, paper?: letter|a4|legal|a3 (pdf), orientation?: portrait|landscape (pdf), dpi?, slides?: [index]|range (\"1-3,5\"), includeHidden?, textLayer?, frame?, transparentBackground?: bool (png: leave the slide background out), width?: px 16-3840|small|medium|large|extraLarge (gif), secondsPerSlide?: 0.1-600 (gif; 5), loop?: bool (gif; true: forever)}"
+ },
+ {
+  "id": "file.info",
+  "label": "Info"
  },
  {
   "id": "file.render",
   "label": "Render Slide",
-  "params": "{slide?: index, scale?, edit?: bool} → {png: base64, width, height}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{slide?: index, scale?, edit?: bool, transparentBackground?: bool}"
+ },
+ {
+  "id": "slide.colorAt",
+  "label": "Color At",
+  "params": "{slide?: index, x, y (slide units), scale?: px per unit (2)}"
  },
  {
   "id": "file.close",
-  "label": "Close",
-  "params": "{}",
-  "menu": [
-   "File"
-  ],
-  "shortcut": "Cmd+W",
-  "enabled": false
+  "label": "Close"
  },
  {
   "id": "file.properties",
   "label": "Properties",
-  "params": "{title?, subject?, author?, keywords?, comments?, category?, company?} → properties",
-  "menu": [
-   "File"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{title?, subject?, author?, keywords?, comments?, category?, company?}"
  },
  {
   "id": "file.recovery.save",
-  "label": "Save AutoRecover Information",
-  "params": "{} → {written}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "label": "Save AutoRecover Information"
  },
  {
   "id": "file.recovery.list",
-  "label": "Recovered Presentations",
-  "params": "{} → [{uid, path, title, saved}]",
-  "menu": [],
-  "shortcut": null,
-  "enabled": true
+  "label": "Recovered Presentations"
  },
  {
   "id": "file.recovery.open",
-  "label": "Open Recovered Presentations",
-  "params": "{} → {opened: [document index]}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": true
+  "label": "Open Recovered Presentations"
  },
  {
   "id": "file.recovery.discard",
   "label": "Discard Recovered Presentations",
-  "params": "{uid?: one entry, else all}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": true
+  "params": "{uid?: one entry (else all)}"
  },
  {
   "id": "file.revert",
-  "label": "Revert",
-  "params": "{}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "label": "Revert"
  },
  {
   "id": "window.next",
   "label": "Next Window",
-  "params": "{index?}",
-  "menu": [
-   "Window"
-  ],
-  "shortcut": "Cmd+`",
-  "enabled": false
+  "params": "{index?}"
  },
  {
   "id": "edit.undo",
-  "label": "Undo",
-  "params": "{}",
-  "menu": [
-   "Edit"
-  ],
-  "shortcut": "Cmd+Z",
-  "enabled": false
+  "label": "Undo"
  },
  {
   "id": "edit.redo",
-  "label": "Redo",
-  "params": "{}",
-  "menu": [
-   "Edit"
-  ],
-  "shortcut": "Cmd+Y",
-  "enabled": false
+  "label": "Redo"
  },
  {
   "id": "edit.cut",
   "label": "Cut",
-  "params": "{scope?: slides}",
-  "menu": [
-   "Home",
-   "Clipboard"
-  ],
-  "shortcut": "Cmd+X",
-  "enabled": false
+  "params": "{scope?: slides}"
  },
  {
   "id": "edit.copy",
   "label": "Copy",
-  "params": "{scope?: slides} → {text}",
-  "menu": [
-   "Home",
-   "Clipboard"
-  ],
-  "shortcut": "Cmd+C",
-  "enabled": false
+  "params": "{scope?: slides}"
  },
  {
   "id": "edit.paste",
   "label": "Paste",
-  "params": "{text?: plain text to paste, scope?: slides}",
-  "menu": [
-   "Home",
-   "Clipboard"
-  ],
-  "shortcut": "Cmd+V",
-  "enabled": false
+  "params": "{text?: plain text to paste, html?: rich text from another app, scope?: slides}"
+ },
+ {
+  "id": "edit.pasteSpecial",
+  "label": "Paste Special",
+  "params": "{as: destinationTheme|keepSource|picture|text} — Use Destination Theme, Keep Source Formatting, Picture (PNG), Keep Text Only"
  },
  {
   "id": "edit.pasteText",
   "label": "Paste and Match Formatting",
-  "params": "{text?}",
-  "menu": [
-   "Edit"
-  ],
-  "shortcut": "Cmd+Shift+V",
-  "enabled": false
+  "params": "{text?}"
  },
  {
   "id": "edit.duplicate",
   "label": "Duplicate",
-  "params": "{ids?}",
-  "menu": [
-   "Edit"
-  ],
-  "shortcut": "Cmd+D",
-  "enabled": false
+  "params": "{ids?}"
  },
  {
   "id": "edit.delete",
   "label": "Delete",
-  "params": "{ids?, scope?: slides}",
-  "menu": [
-   "Edit"
-  ],
-  "shortcut": "Delete",
-  "enabled": false
+  "params": "{ids?, scope?: slides}"
  },
  {
   "id": "edit.selectAll",
   "label": "Select All",
-  "params": "{}",
-  "menu": [
-   "Edit"
-  ],
-  "shortcut": "Cmd+A",
-  "enabled": false
+  "params": "{scope?: slides}"
  },
  {
   "id": "edit.deselect",
-  "label": "Deselect",
-  "params": "{}",
-  "menu": [],
-  "shortcut": "Escape",
-  "enabled": false
+  "label": "Deselect"
  },
  {
   "id": "edit.select",
   "label": "Select Objects",
-  "params": "{ids: [id], add?: bool, toggle?: bool}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{ids: [id], add?: bool, toggle?: bool}"
  },
  {
   "id": "slide.new",
   "label": "New Slide",
-  "params": "{layout?: layout name or kind (title, titleAndContent, sectionHeader, twoContent, comparison, titleOnly, blank, contentWithCaption, pictureWithCaption), at?: index, title?: text, body?: text}",
-  "menu": [
-   "Home",
-   "Slides"
-  ],
-  "shortcut": "Cmd+Shift+N",
-  "enabled": false
+  "params": "{layout?: layout name or kind (title, titleAndContent, sectionHeader, twoContent, comparison, titleOnly, blank, contentWithCaption, pictureWithCaption), at?: index, title?: text, body?: text}"
  },
  {
   "id": "slide.duplicate",
   "label": "Duplicate Slide",
-  "params": "{index?}",
-  "menu": [
-   "Insert"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{index?}"
  },
  {
   "id": "slide.delete",
   "label": "Delete Slide",
-  "params": "{index?, ids?: [slide id]}",
-  "menu": [
-   "Edit"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{index?, ids?: [slide id]}"
  },
  {
   "id": "slide.move",
   "label": "Move Slide",
-  "params": "{from?: index, to: index}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{from?: index, ids?: [slide id], to: index (counted without the moved slides)}"
  },
  {
   "id": "slide.go",
   "label": "Go to Slide",
-  "params": "{index} | {id}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{index} | {id}"
  },
  {
   "id": "slide.next",
-  "label": "Next Slide",
-  "params": "{}",
-  "menu": [],
-  "shortcut": "PageDown",
-  "enabled": false
+  "label": "Next Slide"
  },
  {
   "id": "slide.previous",
-  "label": "Previous Slide",
-  "params": "{}",
-  "menu": [],
-  "shortcut": "PageUp",
-  "enabled": false
+  "label": "Previous Slide"
  },
  {
   "id": "slide.first",
-  "label": "First Slide",
-  "params": "{}",
-  "menu": [],
-  "shortcut": "Home",
-  "enabled": false
+  "label": "First Slide"
  },
  {
   "id": "slide.last",
-  "label": "Last Slide",
-  "params": "{}",
-  "menu": [],
-  "shortcut": "End",
-  "enabled": false
+  "label": "Last Slide"
+ },
+ {
+  "id": "slide.selectRange",
+  "label": "Select Slide Range",
+  "params": "{to: index, from?: index (default the current slide), add?: bool (keep the slides already selected)}"
  },
  {
   "id": "slide.selectSlides",
   "label": "Select Slides",
-  "params": "{ids?: [slide id], indices?: [index], add?: bool}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{ids?: [slide id], indices?: [index], add?: bool}"
  },
  {
   "id": "slide.hide",
   "label": "Hide Slide",
-  "params": "{index?, hidden?: bool}",
-  "menu": [
-   "Slide Show",
-   "Set Up"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{index?, hidden?: bool}"
  },
  {
   "id": "slide.layout",
   "label": "Layout",
-  "params": "{layout: name or kind, index?}",
-  "menu": [
-   "Home",
-   "Slides"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{layout: name or kind, index?}"
  },
  {
   "id": "slide.reset",
   "label": "Reset",
-  "params": "{index?}",
-  "menu": [
-   "Home",
-   "Slides"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{index?}"
  },
  {
   "id": "slide.notes",
   "label": "Notes",
-  "params": "{text, index?}",
-  "menu": [
-   "View"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{text | body: formatted notes (as in slide.inspect's notesBody), index?} (text as typed: untouched notes keep their formatting)"
  },
  {
   "id": "slide.rename",
   "label": "Rename Slide",
-  "params": "{name, index?}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{name, index?}"
  },
  {
   "id": "section.add",
   "label": "Add Section",
-  "params": "{name?, at?: slide index}",
-  "menu": [
-   "Home",
-   "Slides",
-   "Section"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{name?, at?: slide index}"
  },
  {
   "id": "section.rename",
   "label": "Rename Section",
-  "params": "{index, name}",
-  "menu": [
-   "Home",
-   "Slides",
-   "Section"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{index, name}"
  },
  {
   "id": "section.remove",
   "label": "Remove Section",
-  "params": "{index, slides?: bool (also delete its slides)}",
-  "menu": [
-   "Home",
-   "Slides",
-   "Section"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{index, slides?: bool (also delete its slides)}"
  },
  {
   "id": "section.removeAll",
-  "label": "Remove All Sections",
-  "params": "{}",
-  "menu": [
-   "Home",
-   "Slides",
-   "Section"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "label": "Remove All Sections"
  },
  {
   "id": "section.move",
   "label": "Move Section",
-  "params": "{index, to}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{index, to}"
  },
  {
   "id": "slide.fromOutline",
   "label": "Slides from Outline…",
-  "params": "{text}",
-  "menu": [
-   "Insert",
-   "Slides From"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{text, markdown?: bool (headings are slides, list items bullets)}"
+ },
+ {
+  "id": "slide.reuseList",
+  "label": "List Slides to Reuse",
+  "params": "{path | data: base64, name?}"
+ },
+ {
+  "id": "slide.reuse",
+  "label": "Reuse Slides…",
+  "params": "{path? | data: base64, name?, slides?: [index] (0-based, default all), keepFormatting?: bool (default false: use the destination theme), at?: index (default after the current slide)}"
  },
  {
   "id": "shape.insert",
   "label": "Shapes",
-  "params": "{preset: rect|roundRect|ellipse|triangle|rightArrow|star5|… (see shape.presets), rect: [x,y,w,h] pt, text?: string}",
-  "menu": [
-   "Insert",
-   "Illustrations"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{preset: rect|roundRect|ellipse|triangle|rightArrow|star5|… (see shape.presets), rect: [x,y,w,h] pt, text?: string}"
+ },
+ {
+  "id": "insert.icon",
+  "label": "Icons",
+  "params": "{name: star|arrow-right|… (see insert.icons), rect?: [x,y,w,h]}"
+ },
+ {
+  "id": "insert.icons",
+  "label": "Icon Gallery"
  },
  {
   "id": "shape.presets",
-  "label": "Shape Gallery",
-  "params": "{} → [{name, label, category}]",
-  "menu": [],
-  "shortcut": null,
-  "enabled": true
+  "label": "Shape Gallery"
  },
  {
   "id": "insert.textBox",
   "label": "Text Box",
-  "params": "{rect?: [x,y,w,h], text?: string}",
-  "menu": [
-   "Insert",
-   "Text"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{rect?: [x,y,w,h], text?: string}"
  },
  {
   "id": "insert.picture",
   "label": "Picture from File…",
-  "params": "{path? | data: base64, name?, rect?: [x,y,w,h]}",
-  "menu": [
-   "Insert",
-   "Images",
-   "Pictures"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{path? | data: base64, name?, rect?: [x,y,w,h]}"
+ },
+ {
+  "id": "insert.photoAlbum",
+  "label": "Photo Album…",
+  "params": "{pictures?: [{path?|data: base64, name?, rot?: deg, brightness?: -1..1, contrast?: -1..1} | {text}], layout?: fit|1|2|4|1title|2title|4title, frame?: none|rect|rounded|simple, captions?: bool, grayscale?: bool, theme?: name} — omit pictures to open the dialog"
+ },
+ {
+  "id": "insert.photoAlbumEdit",
+  "label": "Edit Photo Album…",
+  "params": "{album?: id, pictures?: same as insert.photoAlbum, layout?, frame?, captions?, grayscale?, theme?} — omit pictures to reopen the dialog on the current album"
  },
  {
   "id": "insert.table",
   "label": "Table…",
-  "params": "{rows, cols, rect?}",
-  "menu": [
-   "Insert",
-   "Tables"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{rows, cols, rect?}"
  },
  {
   "id": "insert.chart",
   "label": "Chart…",
-  "params": "{type?: column|bar|line|pie|doughnut|area|scatter|stackedColumn|…, rect?, categories?: [..], series?: [{name, values}]}",
-  "menu": [
-   "Insert",
-   "Illustrations"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{type?: column|bar|line|pie|doughnut|area|scatter|stackedColumn|…, rect?, categories?: [..], series?: [{name, values}]}"
  },
  {
   "id": "insert.audio",
   "label": "Audio from File…",
-  "params": "{path? | data: base64, name?, rect?}",
-  "menu": [
-   "Insert",
-   "Media",
-   "Audio"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{path? | data: base64, name?, rect?}"
  },
  {
   "id": "insert.video",
   "label": "Video from File…",
-  "params": "{path? | data: base64, name?, rect?}",
-  "menu": [
-   "Insert",
-   "Media",
-   "Video"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{path? | data: base64, name?, rect?}"
  },
  {
   "id": "insert.wordArt",
   "label": "WordArt",
-  "params": "{text?, style?: 0..}",
-  "menu": [
-   "Insert",
-   "Text"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{text?, style?: 0..}"
  },
  {
   "id": "insert.slideNumber",
-  "label": "Slide Number",
-  "params": "{}",
-  "menu": [
-   "Insert",
-   "Text"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "label": "Slide Number"
  },
  {
   "id": "insert.dateTime",
   "label": "Date & Time",
-  "params": "{format?: datetime1..}",
-  "menu": [
-   "Insert",
-   "Text"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{format?: datetime1..datetime13, update?: bool, language?: en-US|en-GB|fr-FR|ja-JP|sv-SE} — no keys opens the dialog; in the Handout or Notes Master view it fills the selected date placeholder (else the master's own) and answers where: \"master\""
  },
  {
   "id": "insert.symbol",
   "label": "Symbol",
-  "params": "{text: character(s)}",
-  "menu": [
-   "Insert",
-   "Symbols"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{text: character(s)}"
+ },
+ {
+  "id": "shape.action",
+  "label": "Action Settings",
+  "params": "{on?: click|hover, action: none|next|previous|first|last|lastViewed|endShow|playMedia|slide|url|customShow|program, slide?: index, url?, show?: custom show name, path?, highlight?: bool, tooltip?, ids?}"
  },
  {
   "id": "insert.hyperlink",
   "label": "Link",
-  "params": "{url? | slide?: index, tooltip?, text?: shown when nothing is selected, ids?}",
-  "menu": [
-   "Insert",
-   "Links"
-  ],
-  "shortcut": "Cmd+K",
-  "enabled": false
+  "params": "{url? | slide?: index, tooltip?, text?: shown when nothing is selected, highlightClick?, ids?}"
  },
  {
   "id": "chart.type",
   "label": "Change Chart Type",
-  "params": "{type, id?}",
-  "menu": [
-   "Chart Design",
-   "Type"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{type, id?}"
  },
  {
   "id": "chart.data",
   "label": "Edit Data",
-  "params": "{categories?: [..], series?: [{name, values}], id?}",
-  "menu": [
-   "Chart Design",
-   "Data"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{categories?: [..], levels?: [[..]] (outer category levels, innermost first), series?: [{name, values}], id?}"
  },
  {
   "id": "chart.options",
   "label": "Chart Elements",
-  "params": "{title?: string|null, legend?: b|t|l|r|null, dataLabels?: bool, gridlines?: bool, palette?, id?}",
-  "menu": [
-   "Chart Design",
-   "Chart Layouts"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{title?: string|null, legend?: b|t|l|r|null, dataLabels?: bool, gridlines?: bool, palette?, binCount?: n|null, binSize?: n|null, subtotals?: [point index], quartiles?: exclusive|inclusive, upDownBars?: bool, textColor?: #RRGGBB|accent1..6|tx1…|null (title, axes, legend and labels; null for PowerPoint's default: the theme's text colour at 65 % plus 35 %, 595959 on a light theme), id?}"
  },
  {
   "id": "insert.smartArt",
   "label": "SmartArt",
-  "params": "{kind: list|process|cycle|hierarchy|pyramid|matrix, items: [text]}",
-  "menu": [
-   "Insert",
-   "Illustrations"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{kind: list|process|cycle|hierarchy|pyramid|matrix, items?: [text] (leading tabs = sub-points), nodes?: [{text, level}]}"
  },
  {
   "id": "insert.actionButton",
   "label": "Action Buttons",
-  "params": "{kind: back|forward|beginning|end|home|information|return|movie|document|sound|help|custom, rect?}",
-  "menu": [
-   "Insert",
-   "Illustrations"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{kind: back|forward|beginning|end|home|information|return|movie|document|sound|help|custom, rect?}"
+ },
+ {
+  "id": "smartArt.nodes",
+  "label": "Text Pane",
+  "params": "{id?}"
+ },
+ {
+  "id": "smartArt.setNodes",
+  "label": "Edit SmartArt Text",
+  "params": "{id?, nodes?: [{text, level}], lines?: [string] (leading tabs set the level), index?, text?, title?} (index + text edits one node; title: its Name and Title box)"
+ },
+ {
+  "id": "smartArt.addNode",
+  "label": "Add Shape",
+  "params": "{id?, index?, position?: after|before|below|above|assistant, text?}"
+ },
+ {
+  "id": "smartArt.removeNode",
+  "label": "Remove Shape",
+  "params": "{id?, index} (its sub-points move up one level)"
+ },
+ {
+  "id": "smartArt.promote",
+  "label": "Promote",
+  "params": "{id?, index}"
+ },
+ {
+  "id": "smartArt.demote",
+  "label": "Demote",
+  "params": "{id?, index}"
+ },
+ {
+  "id": "smartArt.layout",
+  "label": "Change Layout",
+  "params": "{id?, kind: list|blockList|hBulletList|process|chevron|verticalProcess|stepUp|cycle|blockCycle|radial|hierarchy|pyramid|invertedPyramid|matrix|titledMatrix|pictureList|pictureCaption|pictureProcess|pictureHList|timeline|venn|target|textCycle|continuousCycle|horizontalHierarchy|gridMatrix|gear|funnel|segmentedCycle|multidirectionalCycle|orgChart|halfCircleOrgChart|cycleMatrix|segmentedPyramid|pie|nameTitleOrgChart|verticalBoxList|trapezoidList|tableList|accentProcess|continuousBlockProcess|bendingProcess|linearVenn|stackedVenn|nestedTarget}"
+ },
+ {
+  "id": "smartArt.fromText",
+  "label": "Convert to SmartArt",
+  "params": "{id?, kind?}"
+ },
+ {
+  "id": "smartArt.toText",
+  "label": "Convert to Text",
+  "params": "{id?}"
+ },
+ {
+  "id": "smartArt.toShapes",
+  "label": "Convert to Shapes",
+  "params": "{id?} (the graphic becomes a plain group of its shapes; the outline is dropped)"
+ },
+ {
+  "id": "smartArt.picture",
+  "label": "Insert Picture in SmartArt",
+  "params": "{id?, index, data?: base64 | path?: string | reset?: bool} (the node's picture placeholder in picture layouts)"
+ },
+ {
+  "id": "smartArt.style",
+  "label": "SmartArt Styles",
+  "params": "{id?, style: flat|subtle|intense|outline|polished|inset|cartoon|powder|brick}"
+ },
+ {
+  "id": "smartArt.colors",
+  "label": "Change Colors",
+  "params": "{id?, colors: colorful|range23|range34|range45|range56|accent1|…|accent6|accent1Grad|…|accent6Grad}"
  },
  {
   "id": "shape.connect",
   "label": "Connect Shapes",
-  "params": "{from: shape id, to: shape id, fromSite?, toSite?: site index (default: the closest pair), id?: existing line to glue (else a new connector), preset?: straightConnector1|bentConnector3|curvedConnector3} → {id}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{from: shape id, to: shape id, fromSite?, toSite?: site index (default: the closest pair), id?: existing line to glue (else a new connector), preset?: straightConnector1|bentConnector3|curvedConnector3}"
  },
  {
   "id": "shape.freeform",
   "label": "Freeform",
-  "params": "{points: [[x, y], …] slide pt (≥ 2), closed?: bool (filled shape), smooth?: bool (curve through the points)} → {id}",
-  "menu": [
-   "Insert",
-   "Shapes"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{points: [[x, y], …] slide pt (≥ 2), closed?: bool (filled shape), smooth?: bool (curve through the points)}"
+ },
+ {
+  "id": "draw.inkToShape",
+  "label": "Ink to Shape"
  },
  {
   "id": "shape.sites",
   "label": "Connection Sites",
-  "params": "{id} → [[x, y]] connection sites in slide points",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{id}"
  },
  {
   "id": "shape.move",
   "label": "Move",
-  "params": "{dx?, dy?: pt (relative) | x?, y?: pt (absolute), ids?}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{dx?: pt (relative), dy?: pt (relative), ids?} | {x?: pt (absolute), y?: pt (absolute), ids?}"
  },
  {
   "id": "shape.resize",
   "label": "Size",
-  "params": "{w?, h?: pt, lockAspect?: bool, ids?}",
-  "menu": [
-   "Shape Format",
-   "Size"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{w?: pt, h?: pt, lockAspect?: bool, ids?}"
  },
  {
   "id": "shape.setBounds",
   "label": "Position and Size",
-  "params": "{x, y, w, h, ids?}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{x, y, w, h, ids?}"
  },
  {
   "id": "shape.rotate",
   "label": "Rotation",
-  "params": "{deg?: absolute, by?: relative, ids?}",
-  "menu": [
-   "Shape Format",
-   "Arrange",
-   "Rotate"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{deg?: absolute, by?: relative, ids?, gesture?: move|end}"
+ },
+ {
+  "id": "shape.sizePosition",
+  "label": "Size and Position…",
+  "params": "{x?, y?: pt, w?, h?: pt, rot?: deg, scaleW?, scaleH?: percent of the current size (100 = unchanged), lockAspect?: bool, ids?} — with none of those keys, opens the dialog"
  },
  {
   "id": "shape.flip",
   "label": "Flip",
-  "params": "{axis: horizontal|vertical, ids?}",
-  "menu": [
-   "Shape Format",
-   "Arrange",
-   "Rotate"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{axis: horizontal|vertical, ids?}"
  },
  {
   "id": "shape.adjust",
   "label": "Adjust Shape",
-  "params": "{index, value (file units), ids?}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{index, value (file units), ids?}"
  },
  {
   "id": "shape.change",
   "label": "Change Shape",
-  "params": "{preset, ids?}",
-  "menu": [
-   "Shape Format",
-   "Insert Shapes",
-   "Edit Shape"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{preset, ids?}"
+ },
+ {
+  "id": "shape.smoothCorners",
+  "label": "Smooth Corners",
+  "params": "{smoothing: 0..100 (%), radius?: pt (default: the rounded rectangle's own), ids?}"
  },
  {
   "id": "shape.fill",
   "label": "Shape Fill",
-  "params": "{color? | none?: true | gradient?: {stops: [[pos, color]], angle?, kind?: linear|radial} | picture?: base64 | pattern?: {preset, fg, bg} | transparency?: 0..1 | reset?: true, ids?}",
-  "menu": [
-   "Shape Format",
-   "Shape Styles"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{color? | none?: true | background?: true (the slide background shows through; shapes and text boxes only) | gradient?: {stops: [[pos, color]], angle?, kind?: linear|radial} | picture?: base64 | pattern?: {preset, fg, bg} | transparency?: 0..1 | reset?: true, ids?}; pictureProps?: {tile?: bool, offsetX?, offsetY?: pt, scaleX?, scaleY?: 0..10, align?: tl|t|tr|l|ctr|r|bl|b|br, mirror?: none|x|y|xy, stretch?: [l, t, r, b] fractions, rotateWithShape?: bool} adjusts a picture fill; a group also formats its members"
  },
  {
   "id": "shape.line",
   "label": "Shape Outline",
-  "params": "{color?, none?, width?: pt, dash?: solid|dot|dash|lgDash|dashDot|sysDot|sysDash, cap?, join?, head?: none|triangle|stealth|diamond|oval|arrow, tail?, reset?, ids?}",
-  "menu": [
-   "Shape Format",
-   "Shape Styles"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{color?, none?, width?: pt, dash?: solid|dot|dash|lgDash|dashDot|sysDot|sysDash, cap?: flat|round|square, join?: round|bevel|miter, compound?: single|double|thickThin|thinThick|triple, head?: none|triangle|stealth|diamond|oval|arrow, tail?, headSize?: sm|med|lg, tailSize?, reset?, ids?}; a group also formats its members"
  },
  {
   "id": "shape.effects",
   "label": "Shape Effects",
-  "params": "{shadow?: none|outer|inner|perspective|{color, blur, dist, dir}, glow?: none|{color, radius}, softEdges?: pt, reflection?: none|tight|half|full, bevel?: none|circle|…, reset?, ids?}",
-  "menu": [
-   "Shape Format",
-   "Shape Styles"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{shadow?: none|outer|inner|perspective|{color, blur, dist, dir}, glow?: none|{color, radius}, softEdges?: pt, reflection?: none|tight|half|full, bevel?: none|circle|…, threeD?: {camera?: preset, rotX?, rotY?, rotZ?: deg, z?: pt, bevelTop?, bevelBottom?: none|circle|…, bevelTopW?, bevelTopH?, bevelBottomW?, bevelBottomH?, depth?, contour?: pt, material?, lighting?, reset?: true}, shadowProps?: {color?, transparency?: 0..1, size?: 0.01..2 (1 = 100%), blur?: pt, dist?: pt, dir?: deg}, glowProps?: {color?, transparency?, radius?: pt}, reflectionProps?: {transparency?, size?: 0..1, dist?: pt, blur?: pt}, reset?, ids?} (the *Props keys adjust the current effect, adding a default one when there is none)"
  },
  {
   "id": "shape.quickStyle",
   "label": "Quick Styles",
-  "params": "{index: 0..41 (theme style row×accent), ids?}",
-  "menu": [
-   "Home",
-   "Drawing"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{index: 0..41 (theme style row×accent), ids?}"
  },
  {
   "id": "shape.rename",
   "label": "Rename",
-  "params": "{name, id?}",
-  "menu": [
-   "Selection Pane"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{name, id?}"
  },
  {
   "id": "shape.altText",
   "label": "Alt Text",
-  "params": "{text, decorative?: bool, ids?}",
-  "menu": [
-   "Shape Format",
-   "Accessibility"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{text, decorative?: bool, ids?}"
  },
  {
   "id": "shape.visible",
   "label": "Show/Hide",
-  "params": "{visible?: bool, ids?}",
-  "menu": [
-   "Selection Pane"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{visible?: bool, ids?}"
  },
  {
   "id": "shape.lock",
   "label": "Lock",
-  "params": "{locked?: bool, ids?}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{locked?: bool (default: toggle), ids?} (a group locks or unlocks with everything in it)"
  },
  {
   "id": "shape.setDefault",
-  "label": "Set as Default Shape",
-  "params": "{}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "label": "Set as Default Shape"
  },
  {
   "id": "picture.crop",
   "label": "Crop",
-  "params": "{left?, top?, right?, bottom?: fraction 0..1, ids?}",
-  "menu": [
-   "Picture Format",
-   "Size"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{left?: fraction 0..1, top?: fraction 0..1, right?: fraction 0..1, bottom?: fraction 0..1, ids?}"
  },
  {
   "id": "picture.adjust",
   "label": "Corrections",
-  "params": "{brightness?: -1..1, contrast?: -1..1, saturation?: 0..4, grayscale?: bool, transparency?: 0..1, reset?: bool, ids?}",
-  "menu": [
-   "Picture Format",
-   "Adjust"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{brightness?: -1..1, contrast?: -1..1, saturation?: 0..4, grayscale?: bool, transparency?: 0..1, reset?: bool, ids?}"
  },
  {
   "id": "picture.reset",
   "label": "Reset Picture",
-  "params": "{ids?}",
-  "menu": [
-   "Picture Format",
-   "Adjust"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{ids?} (discards the picture's formatting: adjustments, artistic effect, crop, transparency, picture-style effects and outline; the frame shape from Change Shape or Crop to Shape, the size and the position stay)"
  },
  {
   "id": "picture.change",
   "label": "Change Picture",
-  "params": "{path? | data: base64, name?, ids?}",
-  "menu": [
-   "Picture Format",
-   "Adjust"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{path? | data: base64, name?, ids?}"
  },
  {
   "id": "media.options",
   "label": "Playback",
-  "params": "{autoplay?, loop?, rewind?, acrossSlides?, hide?, fullScreen?, volume?: 0..1, trimStart?: ms, trimEnd?: ms, fadeIn?: ms, fadeOut?: ms, ids?}",
-  "menu": [
-   "Playback"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{autoplay?, loop?, rewind?, acrossSlides?, hide?, fullScreen?, volume?: 0..1, trimStart?: ms, trimEnd?: ms, fadeIn?: ms, fadeOut?: ms, ids?}"
+ },
+ {
+  "id": "picture.removeBackground",
+  "label": "Remove Background",
+  "params": "{tolerance?: 0..100 (how different a colour may be from the edge's, default 20), ids?}"
+ },
+ {
+  "id": "picture.style",
+  "label": "Picture Styles",
+  "params": "{style: simpleFrameWhite|dropShadowRectangle|softEdgeOval|… | none (see picture.styles), ids?}"
+ },
+ {
+  "id": "picture.styles",
+  "label": "Picture Style Gallery"
+ },
+ {
+  "id": "picture.recolor",
+  "label": "Recolor",
+  "params": "{preset: none|grayscale|sepia|washout|bw25|bw50|bw75|accent1Dark…accent6Dark|accent1Light…accent6Light|tx2Dark|tx2Light (see picture.recolors), ids?}"
+ },
+ {
+  "id": "picture.recolors",
+  "label": "Recolor Gallery"
+ },
+ {
+  "id": "picture.transparentColor",
+  "label": "Set Transparent Color",
+  "params": "{color: #RRGGBB | at: [x, y] | none: true, ids?} (pixels of that colour become transparent; `at` takes the colour of the picture's own pixel under that slide point, as a click does in PowerPoint)"
+ },
+ {
+  "id": "guide.add",
+  "label": "Add Guide",
+  "params": "{vertical: bool, pos?: pt (default: the slide's centre)}"
+ },
+ {
+  "id": "guide.move",
+  "label": "Move Guide",
+  "params": "{index, pos: pt}"
+ },
+ {
+  "id": "guide.delete",
+  "label": "Delete Guide",
+  "params": "{index}"
+ },
+ {
+  "id": "guide.list",
+  "label": "Guides"
  },
  {
   "id": "arrange.bringToFront",
   "label": "Bring to Front",
-  "params": "{ids?}",
-  "menu": [
-   "Arrange"
-  ],
-  "shortcut": "Cmd+Shift+]",
-  "enabled": false
+  "params": "{ids?}"
  },
  {
   "id": "arrange.bringForward",
   "label": "Bring Forward",
-  "params": "{ids?}",
-  "menu": [
-   "Arrange"
-  ],
-  "shortcut": "Cmd+]",
-  "enabled": false
+  "params": "{ids?}"
  },
  {
   "id": "arrange.sendBackward",
   "label": "Send Backward",
-  "params": "{ids?}",
-  "menu": [
-   "Arrange"
-  ],
-  "shortcut": "Cmd+[",
-  "enabled": false
+  "params": "{ids?}"
  },
  {
   "id": "arrange.sendToBack",
   "label": "Send to Back",
-  "params": "{ids?}",
-  "menu": [
-   "Arrange"
-  ],
-  "shortcut": "Cmd+Shift+[",
-  "enabled": false
+  "params": "{ids?}"
  },
  {
   "id": "arrange.reorder",
   "label": "Reorder Objects",
-  "params": "{id, index: position in the stack (0 = back)}",
-  "menu": [
-   "Arrange"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{id, index: position among its siblings (0 = back; a group's child stays in its group)}"
  },
  {
   "id": "arrange.group",
   "label": "Group",
-  "params": "{ids?}",
-  "menu": [
-   "Arrange"
-  ],
-  "shortcut": "Cmd+Alt+G",
-  "enabled": false
+  "params": "{ids?}"
  },
  {
   "id": "arrange.ungroup",
   "label": "Ungroup",
-  "params": "{ids?}",
-  "menu": [
-   "Arrange"
-  ],
-  "shortcut": "Cmd+Alt+Shift+G",
-  "enabled": false
+  "params": "{ids?}"
  },
  {
   "id": "arrange.regroup",
-  "label": "Regroup",
-  "params": "{}",
-  "menu": [
-   "Arrange"
-  ],
-  "shortcut": "Cmd+Alt+J",
-  "enabled": false
+  "label": "Regroup"
  },
  {
   "id": "arrange.align",
   "label": "Align",
-  "params": "{edge: left|center|right|top|middle|bottom, to?: slide|selection (default: slide for one object), ids?}",
-  "menu": [
-   "Arrange",
-   "Align or Distribute"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{edge: left|center|right|top|middle|bottom, to?: slide|selection (default: slide for one object), ids?}"
  },
  {
   "id": "arrange.distribute",
   "label": "Distribute",
-  "params": "{dir: horizontal|vertical, to?: slide|selection, ids?}",
-  "menu": [
-   "Arrange",
-   "Align or Distribute"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{dir: horizontal|vertical, to?: slide|selection, ids?}"
  },
  {
   "id": "arrange.rotateLeft",
   "label": "Rotate Left 90°",
-  "params": "{ids?}",
-  "menu": [
-   "Arrange",
-   "Rotate or Flip"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{ids?}"
  },
  {
   "id": "arrange.rotateRight",
   "label": "Rotate Right 90°",
-  "params": "{ids?}",
-  "menu": [
-   "Arrange",
-   "Rotate or Flip"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{ids?}"
  },
  {
   "id": "arrange.flipHorizontal",
   "label": "Flip Horizontal",
-  "params": "{ids?}",
-  "menu": [
-   "Arrange",
-   "Rotate or Flip"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{ids?}"
  },
  {
   "id": "arrange.flipVertical",
   "label": "Flip Vertical",
-  "params": "{ids?}",
-  "menu": [
-   "Arrange",
-   "Rotate or Flip"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{ids?}"
  },
  {
   "id": "arrange.nudge",
   "label": "Nudge",
-  "params": "{dx, dy, ids?} (arrow keys: 6 pt, with Alt 1 pt)",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{dx, dy, ids?} (arrow keys: 6 pt, with Alt 1 pt)"
+ },
+ {
+  "id": "selection.select",
+  "label": "Select",
+  "params": "{ids | id, toggle?: bool (Ctrl+click), add?: bool}"
+ },
+ {
+  "id": "selection.showAll",
+  "label": "Show All shows every object on the slide, inside groups too"
+ },
+ {
+  "id": "selection.hideAll",
+  "label": "Hide All hides every top-level object on the slide"
  },
  {
   "id": "shape.merge",
   "label": "Merge Shapes",
-  "params": "{op: union|combine|fragment|intersect|subtract, ids?: shapes in selection order (the first one's formatting is kept)} → {ids}",
-  "menu": [
-   "Shape Format",
-   "Insert Shapes",
-   "Merge Shapes"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{op: union|combine|fragment|intersect|subtract, ids?: shapes in selection order (the first one's formatting is kept)}"
+ },
+ {
+  "id": "shape.editPoints",
+  "label": "Edit Points",
+  "params": "{on?: bool (default: toggle), id?} — enter or leave Edit Points for one selected shape; entering turns a preset into a freeform"
+ },
+ {
+  "id": "shape.points",
+  "label": "Points",
+  "params": "{id?}"
+ },
+ {
+  "id": "shape.movePoint",
+  "label": "Move Point",
+  "params": "{path?: 0, index, x, y: slide pt, id?}"
+ },
+ {
+  "id": "shape.addPoint",
+  "label": "Add Point",
+  "params": "{path?: 0, segment: index of the vertex ending it, t?: 0..1 (0.5), id?}"
+ },
+ {
+  "id": "shape.pointType",
+  "label": "Point Type",
+  "params": "{path?: 0, index, type: smooth|straight|corner, id?} — smooth: handles in line and equal; straight: in line; corner: independent"
+ },
+ {
+  "id": "shape.moveHandle",
+  "label": "Move Handle",
+  "params": "{path?: 0, index, side: in|out, x, y: slide pt, type?: smooth|straight|corner (default: read from the handles), id?}"
+ },
+ {
+  "id": "shape.deletePoint",
+  "label": "Delete Point",
+  "params": "{path?: 0, index, id?}"
+ },
+ {
+  "id": "shape.deleteSegment",
+  "label": "Delete Segment",
+  "params": "{path?: 0, segment: index of the vertex ending it, id?}: removes a segment of a closed outline, which opens there; it starts at the segment's end and ends at its start"
+ },
+ {
+  "id": "shape.segmentType",
+  "label": "Segment Type",
+  "params": "{path?: 0, segment: index of the vertex ending it, type: straight|curved, id?} — straight drops the segment's handles; curved gives it handles at its thirds"
+ },
+ {
+  "id": "shape.openPath",
+  "label": "Open Path",
+  "params": "{path?: 0, index, id?} — break a closed outline at a point, which becomes its two ends"
+ },
+ {
+  "id": "shape.closePath",
+  "label": "Close Path",
+  "params": "{path?: 0, index: any point of the open outline, id?} — join its ends with a straight segment (one point when they meet)"
+ },
+ {
+  "id": "font.used",
+  "label": "Fonts in Presentation"
+ },
+ {
+  "id": "font.replace",
+  "label": "Replace Fonts",
+  "params": "{from, to} — every explicit use of family `from`, theme fonts included"
  },
  {
   "id": "text.edit",
   "label": "Edit Text",
-  "params": "{id?, at?: [paragraph, char], end?: bool, cell?: [row, col], notes?: bool}",
-  "menu": [],
-  "shortcut": "Enter",
-  "enabled": false
+  "params": "{id?, at?: [paragraph, char], end?: bool, cell?: [row, col], notes?: bool}"
  },
  {
   "id": "text.exit",
-  "label": "Stop Editing Text",
-  "params": "{}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "label": "Stop Editing Text"
+ },
+ {
+  "id": "text.autocorrect",
+  "label": "AutoCorrect Options",
+  "params": "{on?, twoInitials?, sentenceCaps?, days?, capsLock?, fractions?, ordinals?, lists?: bool, add?: [from, to], remove?: from}"
  },
  {
   "id": "text.insert",
   "label": "Type Text",
-  "params": "{text} (\\n = new paragraph, \\u000b = line break)",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{text} (\\n = new paragraph, \\u000b = line break)"
+ },
+ {
+  "id": "text.compose",
+  "label": "Compose Text",
+  "params": "{text, active?: [start, end]} — an input method's composition (preedit) at the insertion point; empty text cancels it"
+ },
+ {
+  "id": "text.commit",
+  "label": "Commit Composition",
+  "params": "{text} — the input method's result replaces its composition, as one undo step"
  },
  {
   "id": "text.delete",
   "label": "Delete Text",
-  "params": "{dir?: backward|forward|wordBackward|wordForward}",
-  "menu": [],
-  "shortcut": "Backspace",
-  "enabled": false
+  "params": "{dir?: backward|forward|wordBackward|wordForward} — the word directions are Ctrl+Backspace/Delete: they work from the start of a selection without deleting it"
+ },
+ {
+  "id": "text.deleteSurrounding",
+  "label": "Delete Surrounding Text",
+  "params": "{before, after, bytes?: bool}"
  },
  {
   "id": "text.move",
   "label": "Move Insertion Point",
-  "params": "{to: left|right|up|down|wordLeft|wordRight|lineStart|lineEnd|paraStart|paraEnd|start|end, extend?: bool}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{to: left|right|up|down|wordLeft|wordRight|lineStart|lineEnd|paraStart|paraEnd|paraUp|paraDown|start|end, extend?: bool} — left/right are on screen: in a right-to-left paragraph left goes forward"
  },
  {
   "id": "text.select",
   "label": "Select Text",
-  "params": "{anchor: [p, c], caret: [p, c]}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{anchor: [p, c], caret: [p, c]}"
  },
  {
   "id": "text.selectAll",
-  "label": "Select All Text",
-  "params": "{}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "label": "Select All Text"
  },
  {
   "id": "text.selectWord",
   "label": "Select Word",
-  "params": "{at?: [p, c]}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{at?: [p, c]}"
  },
  {
   "id": "text.selectParagraph",
   "label": "Select Paragraph",
-  "params": "{at?: [p, c]}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{at?: [p, c]}"
  },
  {
   "id": "text.set",
   "label": "Set Text",
-  "params": "{id?, text, cell?: [r, c]} — replaces the whole text, keeping the first run's formatting",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{id?, text, cell?: [r, c]} — replaces the whole text, keeping the first run's formatting"
  },
  {
   "id": "text.get",
   "label": "Get Text",
-  "params": "{id?} → {text, paragraphs}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{id?}"
+ },
+ {
+  "id": "font.add",
+  "label": "Add Font",
+  "params": "{data: base64 TTF/OTF/TTC}"
+ },
+ {
+  "id": "font.rescan",
+  "label": "Rescan Installed Fonts"
  },
  {
   "id": "format.bold",
   "label": "Bold",
-  "params": "{on?: bool}",
-  "menu": [
-   "Home",
-   "Font"
-  ],
-  "shortcut": "Cmd+B",
-  "enabled": false
+  "params": "{on?: bool}"
  },
  {
   "id": "format.italic",
   "label": "Italic",
-  "params": "{on?: bool}",
-  "menu": [
-   "Home",
-   "Font"
-  ],
-  "shortcut": "Cmd+I",
-  "enabled": false
+  "params": "{on?: bool}"
  },
  {
   "id": "format.underline",
   "label": "Underline",
-  "params": "{on?: bool, style?: sng|dbl|heavy|dotted|dash|wavy}",
-  "menu": [
-   "Home",
-   "Font"
-  ],
-  "shortcut": "Cmd+U",
-  "enabled": false
+  "params": "{on?: bool, style?: sng|dbl|heavy|dotted|dash|wavy}"
  },
  {
   "id": "format.strikethrough",
   "label": "Strikethrough",
-  "params": "{on?: bool, double?: bool}",
-  "menu": [
-   "Home",
-   "Font"
-  ],
-  "shortcut": "Cmd+Shift+X",
-  "enabled": false
+  "params": "{on?: bool, double?: bool}"
  },
  {
   "id": "format.superscript",
   "label": "Superscript",
-  "params": "{on?: bool}",
-  "menu": [
-   "Home",
-   "Font"
-  ],
-  "shortcut": "Cmd+Shift+=",
-  "enabled": false
+  "params": "{on?: bool}"
  },
  {
   "id": "format.subscript",
   "label": "Subscript",
-  "params": "{on?: bool}",
-  "menu": [
-   "Home",
-   "Font"
-  ],
-  "shortcut": "Cmd+=",
-  "enabled": false
+  "params": "{on?: bool}"
  },
  {
   "id": "format.font",
   "label": "Font",
-  "params": "{family}",
-  "menu": [
-   "Home",
-   "Font"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{family}"
  },
  {
   "id": "format.size",
   "label": "Font Size",
-  "params": "{size: pt}",
-  "menu": [
-   "Home",
-   "Font"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{size: pt}"
  },
  {
   "id": "format.grow",
-  "label": "Increase Font Size",
-  "params": "{}",
-  "menu": [
-   "Home",
-   "Font"
-  ],
-  "shortcut": "Cmd+Shift+.",
-  "enabled": false
+  "label": "Increase Font Size"
  },
  {
   "id": "format.shrink",
-  "label": "Decrease Font Size",
-  "params": "{}",
-  "menu": [
-   "Home",
-   "Font"
-  ],
-  "shortcut": "Cmd+Shift+,",
-  "enabled": false
+  "label": "Decrease Font Size"
  },
  {
   "id": "format.color",
   "label": "Font Color",
-  "params": "{color: #RRGGBB | accent1..6 | tx1… | {scheme, lumMod…}}",
-  "menu": [
-   "Home",
-   "Font"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{color: #RRGGBB|accent1..6|tx1…|{scheme, lumMod…}}"
+ },
+ {
+  "id": "format.textTransparency",
+  "label": "Text Transparency",
+  "params": "{value: 0..1} — 0 opaque, 1 invisible; keeps the text's colour (inherited colours included)"
+ },
+ {
+  "id": "format.language",
+  "label": "Language",
+  "params": "{lang?, noProof?: bool} (proofing language of the selected text, and Do Not Check Spelling)"
+ },
+ {
+  "id": "format.languageAll",
+  "label": "Language for All Text",
+  "params": "{lang?, noProof?: bool} (proofing language of every text in the presentation: slides, tables, notes, masters and layouts, and the default for new text; one undo step)"
  },
  {
   "id": "format.highlight",
   "label": "Text Highlight Color",
-  "params": "{color? (absent = none)}",
-  "menu": [
-   "Home",
-   "Font"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{color? (absent = none)}"
  },
  {
   "id": "format.case",
   "label": "Change Case",
-  "params": "{mode: sentence|lower|upper|title|toggle}",
-  "menu": [
-   "Home",
-   "Font"
-  ],
-  "shortcut": "Shift+F3",
-  "enabled": false
+  "params": "{mode?: cycle|sentence|lower|upper|title|toggle} — cycle (Shift+F3, the default) goes lowercase"
  },
  {
   "id": "format.caps",
   "label": "Caps",
-  "params": "{caps: none|small|all}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{caps: none|small|all}"
  },
  {
   "id": "format.spacing",
   "label": "Character Spacing",
-  "params": "{pt} (veryTight -3, tight -1.5, normal 0, loose 3, veryLoose 6)",
-  "menu": [
-   "Home",
-   "Font"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{pt} (veryTight -3, tight -1.5, normal 0, loose 3, veryLoose 6)"
  },
  {
   "id": "format.clear",
-  "label": "Clear All Formatting",
-  "params": "{}",
-  "menu": [
-   "Home",
-   "Font"
-  ],
-  "shortcut": "Cmd+Space",
-  "enabled": false
+  "label": "Clear All Formatting"
+ },
+ {
+  "id": "format.fontDialog",
+  "label": "Font…",
+  "params": "{family?, size?: pt, bold?: bool, italic?: bool, underline?: none|sng|dbl|heavy|dotted|dash|wavy, color?, strike?: none|sng|dbl, baseline?: none|super|sub|<fraction>, caps?: none|small|all, spacing?: pt} — with none of these, opens the Font dialog"
  },
  {
   "id": "format.textShadow",
   "label": "Text Shadow",
-  "params": "{on?: bool}",
-  "menu": [
-   "Home",
-   "Font"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{on?: bool}"
  },
  {
   "id": "format.textOutline",
   "label": "Text Outline",
-  "params": "{color?, width?: pt} (no color = none)",
-  "menu": [
-   "Shape Format",
-   "WordArt Styles"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{color?, width?: pt} (no color = none)"
+ },
+ {
+  "id": "format.textWarp",
+  "label": "Text Transform",
+  "params": "{preset: a prstTxWarp name or none, adj?: [finite raw guide values, at most 8]} — none clears the transform; omitted adj uses the preset's defaults"
  },
  {
   "id": "format.align",
   "label": "Align",
-  "params": "{align: left|center|right|justify|justifyLow|distributed}",
-  "menu": [
-   "Home",
-   "Paragraph"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{align: left|center|right|justify|justifyLow|distributed}"
  },
  {
   "id": "format.rtl",
   "label": "Right-to-Left Text Direction",
-  "params": "{on?: bool} (off = left-to-right; switching mirrors left/right alignment)",
-  "menu": [
-   "Home",
-   "Paragraph"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{on?: bool} (off = left-to-right; switching mirrors left/right alignment)"
  },
  {
   "id": "format.alignLeft",
-  "label": "Align Left",
-  "params": "{}",
-  "menu": [
-   "Home",
-   "Paragraph"
-  ],
-  "shortcut": "Cmd+L",
-  "enabled": false
+  "label": "Align Left"
  },
  {
   "id": "format.alignCenter",
-  "label": "Center",
-  "params": "{}",
-  "menu": [
-   "Home",
-   "Paragraph"
-  ],
-  "shortcut": "Cmd+E",
-  "enabled": false
+  "label": "Center"
  },
  {
   "id": "format.alignRight",
-  "label": "Align Right",
-  "params": "{}",
-  "menu": [
-   "Home",
-   "Paragraph"
-  ],
-  "shortcut": "Cmd+R",
-  "enabled": false
+  "label": "Align Right"
  },
  {
   "id": "format.justify",
-  "label": "Justify",
-  "params": "{}",
-  "menu": [
-   "Home",
-   "Paragraph"
-  ],
-  "shortcut": "Cmd+J",
-  "enabled": false
+  "label": "Justify"
  },
  {
   "id": "format.bullets",
   "label": "Bullets",
-  "params": "{on?: bool, char?: •|○|■|□|◆|➢|✓|–, color?, size?: % of text}",
-  "menu": [
-   "Home",
-   "Paragraph"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{on?: bool, char?: •|○|■|□|◆|➢|✓|–, color?, size?: % of text}"
  },
  {
   "id": "format.numbering",
   "label": "Numbering",
-  "params": "{on?: bool, scheme?: arabicPeriod|arabicParenR|romanUcPeriod|romanLcPeriod|alphaUcPeriod|alphaLcParenR|alphaLcPeriod, start?: n}",
-  "menu": [
-   "Home",
-   "Paragraph"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{on?: bool, scheme?: arabicPeriod|arabicParenR|romanUcPeriod|romanLcPeriod|alphaUcPeriod|alphaLcParenR|alphaLcPeriod, start?: n (a numbered paragraph whose start differs from that of the last numbered paragraph at its level begins a new run of numbers at n, as PowerPoint's Start at does), color?, size?: % of text}"
  },
  {
   "id": "format.indent",
-  "label": "Increase List Level",
-  "params": "{}",
-  "menu": [
-   "Home",
-   "Paragraph"
-  ],
-  "shortcut": "Tab",
-  "enabled": false
+  "label": "Increase List Level"
  },
  {
   "id": "format.outdent",
-  "label": "Decrease List Level",
-  "params": "{}",
-  "menu": [
-   "Home",
-   "Paragraph"
-  ],
-  "shortcut": "Shift+Tab",
-  "enabled": false
+  "label": "Decrease List Level"
  },
  {
   "id": "format.lineSpacing",
   "label": "Line Spacing",
-  "params": "{lines?: 1.0|1.5|2.0…, pt?: exactly}",
-  "menu": [
-   "Home",
-   "Paragraph"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{lines?: 1.0|1.5|2.0…, pt?: exactly}"
  },
  {
   "id": "format.paragraph",
   "label": "Paragraph…",
-  "params": "{align?, indentLeft?: pt, indentFirst?: pt (negative = hanging), spaceBefore?: pt, spaceAfter?: pt, lineSpacing?: lines}",
-  "menu": [
-   "Format"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{align?, indentLeft?: pt, indentFirst?: pt (negative = hanging), spaceBefore?: pt, spaceAfter?: pt, lineSpacing?: lines}"
+ },
+ {
+  "id": "format.ruler",
+  "label": "Ruler"
+ },
+ {
+  "id": "format.paragraphDialog",
+  "label": "Paragraph…",
+  "params": "{align?: left|center|right|justify|justLow|distributed, indentLeft?: pt, indentRight?: pt, special?: none|first|hanging, specialBy?: pt, indentFirst?: pt, spaceBefore?: pt, spaceAfter?: pt, spaceBeforeKind?: pts|pct, spaceAfterKind?: pts|pct, lineSpacing?: lines, lineSpacingPt?: pt} — with none of these, opens the Paragraph dialog"
+ },
+ {
+  "id": "format.tabs",
+  "label": "Tabs…",
+  "params": "{set?: [{pos, align?}] (replaces all), add?: {pos, align?: l|ctr|r|dec}, move?: {from, to}, remove?: pos, clear?: bool, defaultTab?: pt} on the selected paragraphs; with none of them, opens the Tabs dialog (pos in pt from the text area's left)"
  },
  {
   "id": "format.anchor",
   "label": "Align Text",
-  "params": "{anchor: top|middle|bottom}",
-  "menu": [
-   "Home",
-   "Paragraph"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{anchor: top|middle|bottom}"
  },
  {
   "id": "format.direction",
   "label": "Text Direction",
-  "params": "{dir: horizontal|rotate90|rotate270|stacked}",
-  "menu": [
-   "Home",
-   "Paragraph"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{dir: horizontal|rotate90|rotate270|stacked}"
  },
  {
   "id": "format.columns",
   "label": "Columns",
-  "params": "{count, spacing?: pt}",
-  "menu": [
-   "Home",
-   "Paragraph"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{count?: 1-16, spacing?: pt between columns}; a key left out keeps the shape's value, and with neither the Columns dialog opens"
  },
  {
   "id": "format.autofit",
   "label": "Autofit",
-  "params": "{mode: none|shrink|resize}",
-  "menu": [
-   "Format Shape",
-   "Text Box"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{mode: none|shrink|resize}"
  },
  {
   "id": "format.wrap",
   "label": "Wrap Text in Shape",
-  "params": "{on: bool}",
-  "menu": [
-   "Format Shape",
-   "Text Box"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{on: bool}"
  },
  {
   "id": "format.margins",
   "label": "Text Box Margins",
-  "params": "{left?, top?, right?, bottom?: pt}",
-  "menu": [
-   "Format Shape",
-   "Text Box"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{left?: pt, top?: pt, right?: pt, bottom?: pt}"
  },
  {
   "id": "format.painter",
   "label": "Format Painter",
-  "params": "{sticky?: bool}",
-  "menu": [
-   "Home",
-   "Clipboard"
-  ],
-  "shortcut": "Cmd+Shift+C",
-  "enabled": false
+  "params": "{sticky?: bool}"
  },
  {
   "id": "format.painterApply",
   "label": "Paste Formatting",
-  "params": "{ids?}",
-  "menu": [],
-  "shortcut": "Cmd+Shift+V",
-  "enabled": false
+  "params": "{ids?}"
  },
  {
   "id": "format.state",
-  "label": "Formatting State",
-  "params": "{} → the effective formatting at the selection (font, size, bold, …)",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "label": "Formatting State"
  },
  {
   "id": "design.theme",
   "label": "Themes",
-  "params": "{name} (see design.themes)",
-  "menu": [
-   "Design",
-   "Themes"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{name} (see design.themes)"
+ },
+ {
+  "id": "design.browseTheme",
+  "label": "Browse for Themes…",
+  "params": "{path} | {name, data: base64} — apply a .pptx or .potx's slide master and layouts (slides move to the matching layouts), or a .thmx's theme"
  },
  {
   "id": "design.themes",
-  "label": "Theme Gallery",
-  "params": "{} → themes, colour schemes and font schemes",
-  "menu": [],
-  "shortcut": null,
-  "enabled": true
+  "label": "Theme Gallery"
  },
  {
   "id": "design.colors",
-  "label": "Colors",
-  "params": "{name} | {colors: {accent1: #RRGGBB, …}}",
-  "menu": [
-   "Design",
-   "Variants"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "label": "Colors opens Create New Theme Colors | {name} | {colors",
+  "params": "{dk1|lt1|dk2|lt2|accent1..6|hlink|folHlink: #RRGGBB}}"
+ },
+ {
+  "id": "design.variant",
+  "label": "Variants",
+  "params": "{index: 0..3} (see design.variants)"
+ },
+ {
+  "id": "design.variants",
+  "label": "Variant Gallery"
  },
  {
   "id": "design.fonts",
-  "label": "Fonts",
-  "params": "{name} | {major, minor}",
-  "menu": [
-   "Design",
-   "Variants"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "label": "Fonts opens Create New Theme Fonts | {name} | {major, minor}"
+ },
+ {
+  "id": "design.effects",
+  "label": "Effects",
+  "params": "{name} (see design.themes)"
  },
  {
   "id": "design.background",
   "label": "Format Background",
-  "params": "{color? | gradient? | picture?: base64 | style?: 1..12 | reset?, all?: bool (apply to all), index?}",
-  "menu": [
-   "Design",
-   "Customize"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{color? | gradient? | picture?: base64 | pattern? | style?: 1..12 | reset?, all?: bool, index?, transparency?: 0..1, pictureProps?: {tile?, offsetX?, offsetY?: pt, scaleX?, scaleY?: 0.01..10, align?, mirror?, stretch?: [l,t,r,b], rotateWithShape?}, copy?: bool}"
  },
  {
   "id": "design.hideBackgroundGraphics",
   "label": "Hide Background Graphics",
-  "params": "{hide?: bool}",
-  "menu": [
-   "Format Background"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{hide?: bool}"
  },
  {
   "id": "design.slideSize",
   "label": "Slide Size",
-  "params": "{preset?: widescreen|standard|… | w, h: pt, scale?: maximize|ensureFit|none}",
-  "menu": [
-   "Design",
-   "Customize"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{preset: widescreen|standard|…, orientation?: portrait|landscape, scale?: maximize|ensureFit|none} | {w: pt, h: pt, orientation?: portrait|landscape, scale?: maximize|ensureFit|none}"
  },
  {
   "id": "design.headerFooter",
   "label": "Header and Footer…",
-  "params": "{date?: bool, dateText?: fixed text, slideNumber?: bool, footer?: bool, footerText?, hideOnTitle?: bool, all?: bool (default true)}",
-  "menu": [
-   "Insert",
-   "Text"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{date?: bool, dateText?: fixed text, slideNumber?: bool, footer?: bool, footerText?, hideOnTitle?: bool, all?: bool (default true)}"
  },
  {
   "id": "view.slideMaster",
   "label": "Slide Master",
-  "params": "{master?: index, layout?: index}",
-  "menu": [
-   "View",
-   "Master Views"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{master?: index, layout?: index}"
+ },
+ {
+  "id": "view.handoutMaster",
+  "label": "Handout Master (creates the handout master with header, date, footer and page number if the deck has none)"
+ },
+ {
+  "id": "handout.placeholders",
+  "label": "Handout Placeholders",
+  "params": "{header?: bool, date?: bool, footer?: bool, pageNumber?: bool} (show or hide each)"
+ },
+ {
+  "id": "view.notesMaster",
+  "label": "Notes Master (creates the notes master with header, date, slide image, notes body, footer and page number if the deck has none)"
+ },
+ {
+  "id": "notes.placeholders",
+  "label": "Notes Placeholders",
+  "params": "{header?, date?, slideImage?, body?, footer?, pageNumber?: bool} (show or hide each)"
  },
  {
   "id": "view.closeMaster",
-  "label": "Close Master View",
-  "params": "{}",
-  "menu": [
-   "Slide Master",
-   "Close"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "label": "Close Master View"
  },
  {
   "id": "master.insertLayout",
   "label": "Insert Layout",
-  "params": "{name?}",
-  "menu": [
-   "Slide Master",
-   "Edit Master"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{name?}"
  },
  {
   "id": "master.renameLayout",
   "label": "Rename Layout",
-  "params": "{name, master?, layout?}",
-  "menu": [
-   "Slide Master",
-   "Edit Master"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{name, master?, layout?}"
  },
  {
   "id": "master.deleteLayout",
   "label": "Delete Layout",
-  "params": "{master?, layout?}",
-  "menu": [
-   "Slide Master",
-   "Edit Master"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{master?, layout?}"
  },
  {
   "id": "master.insertPlaceholder",
   "label": "Insert Placeholder",
-  "params": "{kind: content|text|picture|chart|table|media, rect?: [x,y,w,h]}",
-  "menu": [
-   "Slide Master",
-   "Master Layout"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{kind: content|text|picture|chart|table|media, rect?: [x,y,w,h]}"
+ },
+ {
+  "id": "master.preserve",
+  "label": "Preserve",
+  "params": "{preserve?: bool}"
+ },
+ {
+  "id": "master.placeholders",
+  "label": "Layout Placeholders",
+  "params": "{title?: bool, footers?: bool}"
+ },
+ {
+  "id": "design.ideas",
+  "label": "Design Ideas",
+  "params": "{slide?}"
+ },
+ {
+  "id": "design.applyIdea",
+  "label": "Apply Design Idea",
+  "params": "{id, slide?}"
  },
  {
   "id": "transition.set",
   "label": "Transition",
-  "params": "{kind: none|morph|fade|push|wipe|split|reveal|cut|randomBar|shape|uncover|cover|flash|… (transition.list), option?, duration?: ms, index?}",
-  "menu": [
-   "Transitions",
-   "Transition to This Slide"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{kind: none|morph|fade|push|wipe|split|reveal|cut|randomBar|shape|uncover|cover|flash|… (transition.list), option?, duration?: ms, index?}"
  },
  {
   "id": "transition.options",
   "label": "Effect Options",
-  "params": "{option, index?}",
-  "menu": [
-   "Transitions",
-   "Transition to This Slide"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{option, index?}"
  },
  {
   "id": "transition.timing",
   "label": "Timing",
-  "params": "{duration?: ms, onClick?: bool, after?: ms | null, index?}",
-  "menu": [
-   "Transitions",
-   "Timing"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{duration?: ms, onClick?: bool, after?: ms | null, index?}"
+ },
+ {
+  "id": "transition.sound",
+  "label": "Sound",
+  "params": "{builtin?: chime|click|camera|whoosh|drumRoll|laser | path? | data: base64, name?, none?: true (No Sound), stopPrevious?: true, loop?: bool (Loop Until Next Sound), index?} — the sound plays as the slide comes in"
  },
  {
   "id": "transition.applyAll",
-  "label": "Apply To All",
-  "params": "{}",
-  "menu": [
-   "Transitions",
-   "Timing"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "label": "Apply To All"
  },
  {
   "id": "transition.list",
-  "label": "Transition Gallery",
-  "params": "{} → [{id, label, category, duration, options}]",
-  "menu": [],
-  "shortcut": null,
-  "enabled": true
+  "label": "Transition Gallery"
  },
  {
   "id": "animation.set",
   "label": "Animation Styles",
-  "params": "{effect: fade|fly|zoom|wipe|appear|spin|pulse|fadeOut|lines|… (animation.list), class?: entrance|emphasis|exit|path, option?, ids?} — replaces the shapes' animations",
-  "menu": [
-   "Animations",
-   "Animation"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{effect: fade|fly|zoom|wipe|appear|spin|pulse|fadeOut|lines|… (animation.list), class?: entrance|emphasis|exit|path, option?, path?: [[x,y],…] or OOXML string, closed?: bool, ids?} — replaces the shapes' animations. path (motion paths): points in slide points, as offsets from where the shape sits, or the OOXML path string (slide fractions) animation.get answers"
  },
  {
   "id": "animation.add",
   "label": "Add Animation",
-  "params": "{effect, class?, option?, start?: onClick|withPrevious|afterPrevious, duration?: ms, delay?: ms, ids?}",
-  "menu": [
-   "Animations",
-   "Advanced Animation"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{effect, class?, option?, path?: [[x,y],…] or OOXML string, closed?: bool, start?: onClick|withPrevious|afterPrevious, duration?: ms, delay?: ms, ids?}"
  },
  {
   "id": "animation.remove",
   "label": "Remove Animation",
-  "params": "{index} | {ids?} (all of the shapes' animations)",
-  "menu": [
-   "Animation Pane"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{index} | {ids? (all of the shapes' animations)}"
  },
  {
   "id": "animation.move",
   "label": "Reorder Animation",
-  "params": "{index, to}",
-  "menu": [
-   "Animations",
-   "Timing"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{index, to}"
  },
  {
   "id": "animation.timing",
   "label": "Timing",
-  "params": "{index? (else selected shapes), start?: onClick|withPrevious|afterPrevious, duration?: ms, delay?: ms, repeat?: n, rewind?: bool, trigger?: shape id | null}",
-  "menu": [
-   "Animations",
-   "Timing"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{index? (else selected shapes), start?: onClick|withPrevious|afterPrevious, duration?: ms, delay?: ms, repeat?: n, rewind?: bool, trigger?: shape id | null}"
  },
  {
   "id": "animation.options",
   "label": "Effect Options",
-  "params": "{option?, textBuild?: asOne|byParagraph|byWord|byLetter, index?}",
-  "menu": [
-   "Animations",
-   "Animation"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{option?, textBuild?: asOne|byParagraph|byWord|byLetter, path?: [[x,y],…] or OOXML string, closed?: bool, index?}"
  },
  {
   "id": "animation.clear",
   "label": "Remove All Animations",
-  "params": "{index?: slide}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{index?: slide}"
  },
  {
   "id": "animation.painter",
   "label": "Animation Painter",
-  "params": "{sticky?: bool, id?}",
-  "menu": [
-   "Animations",
-   "Advanced Animation"
-  ],
-  "shortcut": "Alt+Shift+C",
-  "enabled": false
+  "params": "{sticky?: bool, id?}"
  },
  {
   "id": "animation.painterApply",
   "label": "Apply Animation",
-  "params": "{ids?}",
-  "menu": [],
-  "shortcut": "Alt+Shift+V",
-  "enabled": false
+  "params": "{ids?}"
  },
  {
   "id": "animation.list",
-  "label": "Animation Gallery",
-  "params": "{} → [{id, label, class, options}]",
-  "menu": [],
-  "shortcut": null,
-  "enabled": true
+  "label": "Animation Gallery"
  },
  {
   "id": "animation.get",
   "label": "Animations on Slide",
-  "params": "{slide?} → [animation]",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{slide?}"
  },
  {
   "id": "table.insertRowAbove",
   "label": "Insert Above",
-  "params": "{row?, id?}",
-  "menu": [
-   "Table Layout",
-   "Rows & Columns"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{row?, id?}"
  },
  {
   "id": "table.insertRowBelow",
   "label": "Insert Below",
-  "params": "{row?, id?}",
-  "menu": [
-   "Table Layout",
-   "Rows & Columns"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{row?, id?}"
  },
  {
   "id": "table.insertColumnLeft",
   "label": "Insert Left",
-  "params": "{col?, id?}",
-  "menu": [
-   "Table Layout",
-   "Rows & Columns"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{col?, id?}"
  },
  {
   "id": "table.insertColumnRight",
   "label": "Insert Right",
-  "params": "{col?, id?}",
-  "menu": [
-   "Table Layout",
-   "Rows & Columns"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{col?, id?}"
  },
  {
   "id": "table.deleteRow",
   "label": "Delete Rows",
-  "params": "{row?, id?}",
-  "menu": [
-   "Table Layout",
-   "Rows & Columns"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{row?, id?}"
  },
  {
   "id": "table.deleteColumn",
   "label": "Delete Columns",
-  "params": "{col?, id?}",
-  "menu": [
-   "Table Layout",
-   "Rows & Columns"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{col?, id?}"
  },
  {
   "id": "table.merge",
   "label": "Merge Cells",
-  "params": "{from: [r, c], to: [r, c], id?}",
-  "menu": [
-   "Table Layout",
-   "Merge"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{from: [r, c], to: [r, c], id?}"
  },
  {
   "id": "table.split",
   "label": "Split Cells",
-  "params": "{cell: [r, c], id?}",
-  "menu": [
-   "Table Layout",
-   "Merge"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{cell?: [r, c] (else the edited cell), id?} | {row?: index, col?: index, id?}"
  },
  {
   "id": "table.style",
   "label": "Table Styles",
-  "params": "{style: medium2-accent1|light1-accent2|dark1-tx1|grid|none…, id?}",
-  "menu": [
-   "Table Design",
-   "Table Styles"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{style: medium2-accent1|light1-accent2|dark1-tx1|grid|none…, id?}"
  },
  {
   "id": "table.options",
   "label": "Table Style Options",
-  "params": "{headerRow?, totalRow?, bandedRows?, firstColumn?, lastColumn?, bandedColumns?: bool, id?}",
-  "menu": [
-   "Table Design",
-   "Table Style Options"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{headerRow?: bool, totalRow?: bool, bandedRows?: bool, firstColumn?: bool, lastColumn?: bool, bandedColumns?: bool, id?}"
  },
  {
   "id": "table.cellFill",
   "label": "Shading",
-  "params": "{color? | none?, cells?: [[r,c],…] (default: selected cells or all), id?}",
-  "menu": [
-   "Table Design",
-   "Table Styles"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{color? | none?, cells?: [[r,c],…] (default: selected cells or all), id?}"
+ },
+ {
+  "id": "table.borders",
+  "label": "Borders",
+  "params": "{which: all|outside|inside|insideH|insideV|top|bottom|left|right|diagDown|diagUp|none, color?, width?: pt, dash?: solid|dash|dot…, cells?: [[r,c],…] (default: selected cells or all), id?}"
+ },
+ {
+  "id": "table.cellMargins",
+  "label": "Cell Margins",
+  "params": "{preset?: normal|none|narrow|wide, left?, right?, top?, bottom?: pt, cells?, id?}"
+ },
+ {
+  "id": "table.cellAlign",
+  "label": "Align Cell Text",
+  "params": "{anchor?: top|middle|bottom (vertical; top when neither anchor nor align is given), align?: left|center|right|justify (horizontal, applied to every paragraph of the cells), cells?, id?}"
  },
  {
   "id": "table.distributeRows",
   "label": "Distribute Rows",
-  "params": "{id?}",
-  "menu": [
-   "Table Layout",
-   "Cell Size"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{id?}"
  },
  {
   "id": "table.distributeColumns",
   "label": "Distribute Columns",
-  "params": "{id?}",
-  "menu": [
-   "Table Layout",
-   "Cell Size"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{id?}"
  },
  {
   "id": "table.columnWidth",
   "label": "Width",
-  "params": "{col, width: pt, id?}",
-  "menu": [
-   "Table Layout",
-   "Cell Size"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{col, width: pt, keepTotal?: bool (the next column absorbs the change), id?}"
  },
  {
   "id": "table.rowHeight",
   "label": "Height",
-  "params": "{row, height: pt, id?}",
-  "menu": [
-   "Table Layout",
-   "Cell Size"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{row, height: pt, id?}"
+ },
+ {
+  "id": "table.drawLine",
+  "label": "Draw Table",
+  "params": "{from: [x, y], to: [x, y] slide pt, id?: table (default: the one under `from`)} splits the cells the line crosses"
+ },
+ {
+  "id": "table.eraseLine",
+  "label": "Table Eraser",
+  "params": "{at: [x, y] slide pt, id?, tol?: pt (default 6)} merges the two cells on either side of the nearest border"
  },
  {
   "id": "table.selectCells",
   "label": "Select Cells",
-  "params": "{from: [r,c], to: [r,c], id?}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{from: [r,c], to: [r,c], id?}"
+ },
+ {
+  "id": "text.find",
+  "label": "Find",
+  "params": "{text, matchCase?: bool, wholeWords?: bool}"
+ },
+ {
+  "id": "text.replace",
+  "label": "Replace",
+  "params": "{text, with, matchCase?, wholeWords?, at?: a text.find match (replace just that one; default: replace all)}"
  },
  {
   "id": "comment.add",
   "label": "New Comment",
-  "params": "{text, x?, y?, id?: shape}",
-  "menu": [
-   "Review",
-   "Comments"
-  ],
-  "shortcut": "Cmd+Alt+M",
-  "enabled": false
+  "params": "{text, x?, y?, id?: shape}"
  },
  {
   "id": "comment.reply",
   "label": "Reply",
-  "params": "{index, text}",
-  "menu": [
-   "Comments"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{index, text}"
  },
  {
   "id": "comment.delete",
   "label": "Delete Comment",
-  "params": "{index? | all?: bool}",
-  "menu": [
-   "Review",
-   "Comments"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{index? | all?: bool}"
  },
  {
   "id": "comment.resolve",
   "label": "Resolve Thread",
-  "params": "{index, resolved?: bool}",
-  "menu": [
-   "Comments"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{index, resolved?: bool}"
  },
  {
   "id": "comment.list",
   "label": "Comments",
-  "params": "{slide?} → comments",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{slide?}"
+ },
+ {
+  "id": "comment.next",
+  "label": "Next Comment",
+  "params": "{slide?, index?}"
+ },
+ {
+  "id": "comment.prev",
+  "label": "Previous Comment",
+  "params": "{slide?, index?}"
  },
  {
   "id": "review.accessibility",
-  "label": "Check Accessibility",
-  "params": "{} → [{slide, shape, issue}]",
-  "menu": [
-   "Review",
-   "Accessibility"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "label": "Check Accessibility"
  },
  {
   "id": "review.spelling",
   "label": "Spelling",
-  "params": "{} → [{slide, shape, word}] (words not in the built-in list)",
-  "menu": [
-   "Review",
-   "Proofing"
-  ],
-  "shortcut": "F7",
-  "enabled": false
+  "params": "{lang?, ignore?:[word]}"
+ },
+ {
+  "id": "review.spellingChange",
+  "label": "Change Spelling",
+  "params": "{shape, word, to, all?, para?, start?, row?, col?}"
+ },
+ {
+  "id": "review.addToDictionary",
+  "label": "Add to Dictionary",
+  "params": "{word}"
+ },
+ {
+  "id": "review.dictionary",
+  "label": "Spelling Dictionary",
+  "params": "{lang?}"
+ },
+ {
+  "id": "review.thesaurus",
+  "label": "Thesaurus",
+  "params": "{word? (default: the selected word, or the word at the caret)}"
+ },
+ {
+  "id": "review.replaceWord",
+  "label": "Insert Synonym",
+  "params": "{with}: replace the selected word (or the word at the caret) while editing text"
+ },
+ {
+  "id": "review.compare",
+  "label": "Compare",
+  "params": "{path} | {name, data: base64} — compare the open deck with another file"
+ },
+ {
+  "id": "review.revisions",
+  "label": "Revisions"
+ },
+ {
+  "id": "review.accept",
+  "label": "Accept Revision",
+  "params": "{index} | {all: true} — accept the compared file's side of a change (or all): what is only in the file is added, what is only in the open deck is deleted (all: true leaves the deck's last remaining slide in place), a changed slide becomes the file's"
+ },
+ {
+  "id": "review.reject",
+  "label": "Reject Revision",
+  "params": "{index} | {all: true}"
+ },
+ {
+  "id": "review.endCompare",
+  "label": "End Review"
  },
  {
   "id": "show.fromStart",
-  "label": "Play from Start",
-  "params": "{}",
-  "menu": [
-   "Slide Show",
-   "Start Slide Show"
-  ],
-  "shortcut": "Cmd+Shift+Enter",
-  "enabled": false
+  "label": "Play from Start"
  },
  {
   "id": "show.fromCurrent",
-  "label": "Play from Current Slide",
-  "params": "{}",
-  "menu": [
-   "Slide Show",
-   "Start Slide Show"
-  ],
-  "shortcut": "Cmd+Enter",
-  "enabled": false
+  "label": "Play from Current Slide"
  },
  {
   "id": "show.setup",
   "label": "Set Up Slide Show…",
-  "params": "{type?: speaker|browsed|kiosk, loop?: bool, noNarration?, noAnimation?, useTimings?, from?, to?}",
-  "menu": [
-   "Slide Show",
-   "Set Up"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{type?: speaker|browsed|kiosk, loop?: bool, noNarration?, noAnimation?, useTimings?, showMediaControls?, from?, to?, custom?: name}"
  },
  {
   "id": "show.customShow",
   "label": "Custom Slide Show",
-  "params": "{name, slides: [index]} | {name, delete: true}",
-  "menu": [
-   "Slide Show",
-   "Start Slide Show"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{name, slides: [index]} | {name, delete: true}"
  },
  {
   "id": "document.inspect",
-  "label": "Inspect Presentation",
-  "params": "{} → slides with titles, layouts, shape counts; selection; size; theme",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "label": "Inspect Presentation"
  },
  {
   "id": "slide.inspect",
   "label": "Inspect Slide",
-  "params": "{index?} → the slide's shapes with ids, kinds, boxes, text, fills, animations, transition, notes",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{index?}"
+ },
+ {
+  "id": "slide.actions",
+  "label": "Inspect Slide Actions",
+  "params": "{index?}"
  },
  {
   "id": "shape.inspect",
   "label": "Inspect Shape",
-  "params": "{id} → full shape JSON plus its effective box",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{id}"
  },
  {
   "id": "commands.list",
   "label": "List Commands",
-  "params": "{filter?: substring} → [{id, label, params, enabled}]",
-  "menu": [],
-  "shortcut": null,
-  "enabled": true
+  "params": "{filter?: substring}"
  },
  {
   "id": "media.play",
   "label": "Play",
-  "params": "{id?, from?: ms}",
-  "menu": [
-   "Playback",
-   "Preview"
-  ],
-  "shortcut": "Alt+P",
-  "enabled": false
+  "params": "{id?, from?: ms}"
  },
  {
   "id": "media.pause",
   "label": "Pause",
-  "params": "{id?}",
-  "menu": [
-   "Playback",
-   "Preview"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{id?}"
  },
  {
   "id": "media.toggle",
   "label": "Play/Pause",
-  "params": "{id?}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{id?}"
  },
  {
   "id": "media.stop",
   "label": "Stop",
-  "params": "{id?}",
-  "menu": [
-   "Playback",
-   "Preview"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{id?}"
  },
  {
   "id": "media.seek",
   "label": "Seek",
-  "params": "{id?, ms}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{id?, ms}"
  },
  {
   "id": "media.info",
   "label": "Media Info",
-  "params": "{id?} → {id, name, contentType, bytes, durationMs, video, width, height, probe: {container, audio?, video?}, options, status?}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{id?}"
  },
  {
   "id": "media.posterFrame",
   "label": "Poster Frame",
-  "params": "{id?, ms?: frame time (default: current position)}",
-  "menu": [
-   "Video Format",
-   "Adjust"
-  ],
-  "shortcut": null,
-  "enabled": false
+  "params": "{id?, ms?: frame time (default: current position)}"
  },
  {
   "id": "media.gifPlay",
   "label": "Play/Pause GIF",
-  "params": "{id?, play?: bool (default: toggle)} → {id, playing}",
-  "menu": [],
-  "shortcut": null,
-  "enabled": false
+  "params": "{id?, play?: bool (default: toggle)}"
+ },
+ {
+  "id": "picture.artisticEffect",
+  "label": "Artistic Effects",
+  "params": "{effect: none|artisticBlur|artisticPencilGrayscale|artisticLineDrawing|artisticFilmGrain|artisticCutout|artisticGlowEdges|artisticPhotocopy, ids?}"
+ },
+ {
+  "id": "insert.zoom",
+  "label": "Zoom",
+  "params": "{kind?: slide|section|summary (default slide); slides?: [index] (slide and summary zooms); sections?: [index] (section zoom); returnToZoom?: bool (default: on for section and summary, off for slide)}"
+ },
+ {
+  "id": "picture.compress",
+  "label": "Compress Pictures",
+  "params": "{ppi?: 330|220|150|96 (default 220), deleteCropped?: bool (default true), all?: bool (every picture in the presentation; default the selected pictures), ids?}"
  }
 ]

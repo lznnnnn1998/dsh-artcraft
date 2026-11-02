@@ -4,6 +4,13 @@
 [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)
 registry, which dshmarket.com and the in-app market read.
 
+## Status
+
+The first twelve subpackage entries were merged upstream in four pull requests
+(#9374, #9405, #9406, #9408). The 2026-11 release adds two more applications —
+FigCraft and TextureCraft — whose entries are in this directory and are not yet
+submitted; both fit in one pull request under the three-entry cap.
+
 ## Why the first attempt was closed
 
 [PR #7314](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin/pull/7314) submitted the
@@ -43,19 +50,18 @@ are named `lznnnnn1998__dsh-artcraft--dsh-plugins-plugin-<craft>.yml`.
   directory name is fine — the `packages/` · `plugins/` · `apps/` names in the docs are
   examples, not a whitelist.
 
-## Suggested batches
+## Batches
 
-Start with the three most distinct and broadly useful, then follow up once they land:
+The twelve merged entries went in as four batches of three. The current pending
+batch is the two 2026-11 applications:
 
-| Batch | Crafts | Rationale |
+| Batch | Crafts | Status |
 |---|---|---|
-| 1 | gridcraft, cadcraft, soundcraft | spreadsheets, CAD and a DAW: three clearly different applications |
-| 2 | wordcraft, photocraft, vectorcraft | documents, raster and vector editing |
-| 3 | deckcraft, pdfcraft, designcraft | slides, PDF and page layout |
-| 4 | filmcraft, effectcraft, lightcraft | video, motion graphics and photo raw |
-
-Submitting batch 1 alone first is also reasonable: it tests the acceptance bar with the
-strongest entries before spending reviewer time on the rest.
+| 1 | gridcraft, cadcraft, soundcraft | merged (#9374) |
+| 2 | wordcraft, photocraft, vectorcraft | merged (#9405) |
+| 3 | deckcraft, pdfcraft, designcraft | merged (#9406) |
+| 4 | filmcraft, effectcraft, lightcraft | merged (#9408) |
+| 5 | figcraft, texturecraft | prepared, not yet submitted |
 
 ## How to submit
 
