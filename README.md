@@ -117,9 +117,12 @@ then shut down after five idle minutes or when the plugin unloads.
 - **Long jobs run in the background.** A 4K render, a texture bake or an audio bounce outlasts a
   tool timeout; pass `background: true` to `_run` and the process keeps going while the call
   returns a job id, a log path and a `_job` tool to poll, wait on or kill.
-- **A skill, not just tools.** `skills/artcraft/SKILL.md` is installed to `$DSH_HOME/skills` and
-  carries the workflow, per-craft quirks and pitfalls. Tools provide the capability; the skill
-  provides the competence, and costs context only when loaded.
+- **Skills, not just tools.** The workflow knowledge lives in
+  [lznnnnn1998/dsh-artcraft-skills](https://github.com/lznnnnn1998/dsh-artcraft-skills): a family
+  overview plus five end-to-end workflows (report, brand kit, explainer video, drawing set,
+  conversion). `scripts/install-into-profile.mjs` installs them from a checkout beside this
+  repository, or pass `--skills-dir`. Tools provide the capability; the skills provide the
+  competence, and cost context only when loaded.
 
 ## Quick start
 

@@ -25,7 +25,6 @@
  */
 
 import { cpSync, existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
-import { execFileSync } from 'node:child_process'
 import { dirname, join, resolve, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defaultDshHome, packageManager, parseArgv, PM_ENV, readJson, runPackageManager } from './lib/host.mjs'
@@ -229,22 +228,20 @@ try {
   process.exit(1)
 }
 
-// 4. Agent skills: the know-how that makes the tool surface usable. DSH discovers
-// skills under $DSH_HOME/skills, so copies (not links into this checkout) keep
-// working when the repository moves. Every skill directory ships, not just the
-// family overview: a workflow skill is what turns fourteen tools into an job.
-const skillsRoot = join(root, 'skills')
-if (existsSync(skillsRoot)) {
-  // A malformed frontmatter makes a skill disappear from the catalogue without
-  // an error, so validate before copying: a broken skill is worse than a
-  // missing one, because nothing tells the user it is not there.
-  try {
-    execFileSync(process.execPath, [join(root, 'scripts', 'validate-skills.mjs')], { cwd: root, stdio: 'pipe', timeout: 120_000 })
-  } catch (error) {
-    console.error('skill validation failed; nothing installed')
-    console.error(String(error.stdout ?? error.message).slice(0, 800))
-    process.exit(1)
-  }
+// 4. Agent skills live in their own repository (dsh-artcraft-skills). Install
+// them when a checkout is beside this one, or when --skills-dir names one: the
+// plugin repository ships capability, the skills repository ships the method.
+const skillsRoot = (() => {
+  const explicit = args.value('--skills-dir')
+  if (explicit !== undefined) return resolve(explicit)
+  const sibling = join(root, '..', 'dsh-artcraft-skills', 'skills')
+  if (existsSync(join(sibling, 'artcraft', 'SKILL.md'))) return sibling
+  return undefined
+})()
+
+if (skillsRoot === undefined) {
+  console.log('no skills directory: clone lznnnnn1998/dsh-artcraft-skills beside this repository, or pass --skills-dir')
+} else if (existsSync(skillsRoot)) {
   const installed = []
   for (const entry of readdirSync(skillsRoot, { withFileTypes: true })) {
     if (!entry.isDirectory()) continue
@@ -256,7 +253,7 @@ if (existsSync(skillsRoot)) {
     cpSync(source, target, { recursive: true })
     installed.push(entry.name)
   }
-  console.log(`installed ${installed.length} skill(s) into ${join(dshHome, 'skills')}: ${installed.join(', ')}`)
+  console.log(`installed ${installed.length} skill(s) from ${skillsRoot}: ${installed.join(', ')}`)
 }
 
 console.log(`

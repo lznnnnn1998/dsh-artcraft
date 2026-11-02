@@ -108,7 +108,7 @@ MCP server 每个插件只启动一次并保持常驻(启动 GridCraft 引擎要
 - **在打开的应用里工作。** 14 个应用中有 12 个提供控制通道:给 MCP 调用传 `attach: <port>`,智能体就编辑用户已经打开的那份文档,改动在应用里实时可见。LightCraft 与 PdfCraft 仅支持无头模式。
 - **用应用自带的工作流。** `<craft>_mcp_tools` 还会列出 MCP **resources**(当前文档、命令目录、批注)和 **prompts** —— FigCraft 自带 6 个精选工作流,如 `design_system`、`prototype_flow`。
 - **长任务后台运行。** 4K 渲染、贴图烘焙、音频导出都会超过工具超时:给 `_run` 传 `background: true`,进程继续跑,调用立刻返回 job id、日志路径,以及用于查询/等待/终止的 `_job` 工具。
-- **技能,而不只是工具。** `skills/artcraft/SKILL.md` 会安装到 `$DSH_HOME/skills`,里面是工作流、各应用的坑和常见错误。工具给能力,技能给"会用",而且只在加载时占用上下文。
+- **技能,而不只是工具。** 工作流知识放在 [lznnnnn1998/dsh-artcraft-skills](https://github.com/lznnnnn1998/dsh-artcraft-skills):家族总览 + 五个端到端工作流(报告、品牌包、讲解视频、图纸包、格式转换)。`scripts/install-into-profile.mjs` 会从旁边的 checkout 安装,或用 `--skills-dir` 指定。工具给能力,技能给"会用",而且只在加载时占用上下文。
 
 ## 快速开始
 
