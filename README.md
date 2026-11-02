@@ -104,6 +104,20 @@ gridcraft_mcp_status {}
 The MCP server is spawned once per plugin and kept warm — starting GridCraft's engine costs ~600 ms —
 then shut down after five idle minutes or when the plugin unloads.
 
+### What else the bridge gives you
+
+- **Look at the result.** A render, screenshot or page image comes back as a file and a path;
+  the agent opens it with `read_image`, so a visual task is checked instead of assumed.
+- **Work in the open window.** Twelve of the fourteen publish a control channel, so pass
+  `attach: <port>` to an MCP call and the agent edits the document the user already has open,
+  with every change visible in the app. LightCraft and PdfCraft are headless only.
+- **Use the app's own recipes.** `<craft>_mcp_tools` also lists the MCP **resources** (the open
+  document, the command catalogue, comments) and **prompts** — FigCraft ships six curated
+  workflows such as `design_system` and `prototype_flow`.
+- **A skill, not just tools.** `skills/artcraft/SKILL.md` is installed to `$DSH_HOME/skills` and
+  carries the workflow, per-craft quirks and pitfalls. Tools provide the capability; the skill
+  provides the competence, and costs context only when loaded.
+
 ## Quick start
 
 **Windows** — from a fresh clone, in PowerShell:
