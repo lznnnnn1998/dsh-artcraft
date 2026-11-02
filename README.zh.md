@@ -102,6 +102,13 @@ gridcraft_mcp_status {}
 MCP server 每个插件只启动一次并保持常驻(启动 GridCraft 引擎要 ~600ms),空闲五分钟
 或插件卸载时关闭。
 
+### 桥接层还提供什么
+
+- **看得见结果。** 渲染、截图、页面图会落盘并返回路径,智能体用 `read_image` 打开看一眼 —— 视觉任务是被检查过的,而不是假设的。
+- **在打开的应用里工作。** 14 个应用中有 12 个提供控制通道:给 MCP 调用传 `attach: <port>`,智能体就编辑用户已经打开的那份文档,改动在应用里实时可见。LightCraft 与 PdfCraft 仅支持无头模式。
+- **用应用自带的工作流。** `<craft>_mcp_tools` 还会列出 MCP **resources**(当前文档、命令目录、批注)和 **prompts** —— FigCraft 自带 6 个精选工作流,如 `design_system`、`prototype_flow`。
+- **技能,而不只是工具。** `skills/artcraft/SKILL.md` 会安装到 `$DSH_HOME/skills`,里面是工作流、各应用的坑和常见错误。工具给能力,技能给"会用",而且只在加载时占用上下文。
+
 ## 快速开始
 
 **Windows** —— 克隆后在 PowerShell 里执行:

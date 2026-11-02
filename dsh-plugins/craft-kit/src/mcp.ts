@@ -14,6 +14,8 @@
 
 import { spawn } from 'node:child_process'
 import type { ChildProcessWithoutNullStreams } from 'node:child_process'
+import { mkdirSync, writeFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { killTree } from './exec.ts'
 import type { CraftBinary, CraftProfile } from './types.ts'
 
@@ -29,6 +31,33 @@ interface Pending {
   resolve: (value: unknown) => void
   reject: (error: Error) => void
   timer: NodeJS.Timeout
+}
+
+/** Extensions for the image types an MCP tool can return. */
+const IMAGE_EXTENSIONS: Record<string, string> = {
+  'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp', 'image/gif': 'gif', 'image/svg+xml': 'svg',
+}
+
+/**
+ * Write one base64 image from a tool result to disk.
+ * @param data - base64 payload.
+ * @param mimeType - media type the server declared.
+ * @param dir - directory to write into.
+ * @param craft - craft id, used in the file name.
+ * @param tool - tool name, used in the file name.
+ * @returns the absolute path, or `undefined` when the payload cannot be written.
+ */
+function saveImage(data: string, mimeType: string | undefined, dir: string, craft: string, tool: string): string | undefined {
+  try {
+    const extension = IMAGE_EXTENSIONS[mimeType ?? ''] ?? 'png'
+    const safeTool = tool.replace(/[^\w.-]+/g, '-')
+    mkdirSync(dir, { recursive: true })
+    const file = join(dir, `${craft}-${safeTool}-${Date.now()}.${extension}`)
+    writeFileSync(file, Buffer.from(data, 'base64'))
+    return file
+  } catch {
+    return undefined
+  }
 }
 
 /** Default MCP protocol revision; servers negotiate down if they need to. */
@@ -52,6 +81,8 @@ export class CraftMcpClient {
   #idleTimer: NodeJS.Timeout | undefined
   #handshake: Promise<{ name?: string; version?: string }> | undefined
   #tools: McpTool[] | undefined
+  /** Last stderr lines, so a failed attach can say why the app refused. */
+  #stderrTail: string[] = []
   #closed = false
 
   constructor(profile: CraftProfile, binary: CraftBinary, args: readonly string[] = []) {
@@ -91,17 +122,26 @@ export class CraftMcpClient {
     child.stdout.on('data', (chunk: string) => { this.#onData(chunk) })
     child.stderr.setEncoding('utf8')
     // Craft servers announce themselves on stderr; it is not an error stream.
+    // The tail is kept so a refused attach can repeat the app's own reason
+    // ("no control token", "cannot connect to 127.0.0.1:7979") instead of a
+    // bare "server exited".
     child.stderr.on('data', (chunk: string) => {
       const text = chunk.trim()
-      if (text.length > 0 && process.env.DSH_ARTCRAFT_TRACE !== undefined) {
+      if (text.length === 0) return
+      for (const line of text.split('\n')) {
+        this.#stderrTail.push(line.trim())
+        if (this.#stderrTail.length > 8) this.#stderrTail.shift()
+      }
+      if (process.env.DSH_ARTCRAFT_TRACE !== undefined) {
         process.stderr.write(`[${this.#profile.id} mcp] ${text}\n`)
       }
     })
     child.on('exit', () => {
       this.#child = undefined
+      const reason = this.#stderrTail.filter(line => line.length > 0).slice(-2).join(' ')
       for (const [, pending] of this.#pending) {
         clearTimeout(pending.timer)
-        pending.reject(new Error(`${this.#profile.product}: MCP server exited`))
+        pending.reject(new Error(`${this.#profile.product}: MCP server exited${reason.length > 0 ? ` (${reason})` : ''}`))
       }
       this.#pending.clear()
     })
@@ -134,20 +174,58 @@ export class CraftMcpClient {
 
   /**
    * Call one tool.
+   *
+   * Image results — a render, a screenshot, a page thumbnail — are written to
+   * `artifactsDir` and referenced by path instead of being dropped: the caller
+   * can then look at them with `read_image`, which is the only way an agent
+   * verifies what it drew.
    * @param name - tool name as declared by the server.
    * @param args - the tool's JSON arguments.
-   * @returns the concatenated text content of the result.
+   * @param artifactsDir - directory for returned images, when one is configured.
+   * @returns the text content, with any images saved and named by path.
    */
-  async callTool(name: string, args: Record<string, unknown>): Promise<string> {
+  async callTool(name: string, args: Record<string, unknown>, artifactsDir?: string): Promise<string> {
     const result = await this.#request('tools/call', { name, arguments: args }) as {
-      content?: { type?: string; text?: string }[]
+      content?: { type?: string; text?: string; data?: string; mimeType?: string }[]
       isError?: boolean
     }
-    const text = (result.content ?? [])
-      .map(block => (block.type === 'text' ? block.text ?? '' : `[${block.type ?? 'unknown'} content]`))
-      .join('\n')
-      .trim()
+    const parts: string[] = []
+    for (const block of result.content ?? []) {
+      if (block.type === 'text') {
+        parts.push(block.text ?? '')
+        continue
+      }
+      if (block.type === 'image' && typeof block.data === 'string' && artifactsDir !== undefined) {
+        const saved = saveImage(block.data, block.mimeType, artifactsDir, this.#profile.id, name)
+        parts.push(saved === undefined
+          ? '[image content]'
+          : `[image] ${saved}\nUse read_image on that path to look at it.`)
+        continue
+      }
+      parts.push(`[${block.type ?? 'unknown'} content]`)
+    }
+    const text = parts.join('\n').trim()
     return `${text.length > 0 ? text : '(no content)'}${result.isError === true ? '\n[mcp: tool reported an error]' : ''}`
+  }
+
+  /** List the resources the server advertises (documents, command catalogues). */
+  async listResources(): Promise<{ uri?: string; name?: string; description?: string }[]> {
+    try {
+      const result = await this.#request('resources/list', {}) as { resources?: { uri?: string; name?: string; description?: string }[] }
+      return Array.isArray(result.resources) ? result.resources : []
+    } catch {
+      return []
+    }
+  }
+
+  /** List the prompts the server advertises (curated multi-step workflows). */
+  async listPrompts(): Promise<{ name?: string; description?: string }[]> {
+    try {
+      const result = await this.#request('prompts/list', {}) as { prompts?: { name?: string; description?: string }[] }
+      return Array.isArray(result.prompts) ? result.prompts : []
+    } catch {
+      return []
+    }
   }
 
   /** Terminate the server process now. */

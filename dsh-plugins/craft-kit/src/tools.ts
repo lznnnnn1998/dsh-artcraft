@@ -157,23 +157,37 @@ export interface CraftRuntime {
  */
 export function createRuntime(profile: CraftProfile, packageRoot: string, config: CraftPluginConfig = {}): CraftRuntime {
   let catalogCache: { key: string; value: { commands: readonly CraftCommand[]; origin: string; note?: string } } | undefined
-  let mcpClient: CraftMcpClient | undefined
+  const mcpClients = new Map<string, CraftMcpClient>()
+  const artifacts = config.artifactsDir ?? join(tmpdir(), 'dsh-artcraft', profile.id)
   return {
+    artifactsDir(): string {
+      return artifacts
+    },
     profile,
     config,
-    mcp(): CraftMcpClient | undefined {
+    mcp(attach?: number): CraftMcpClient | undefined {
       if (config.enableMcp === false) return undefined
       if (profile.mcpArgs === undefined) return undefined
+      if (attach !== undefined && profile.mcpAttach === undefined) {
+        throw new Error(`${profile.product} cannot attach to a running app: its MCP server is headless only`)
+      }
       const binary = this.binary()
       if (binary === undefined) return undefined
+      const args = [...profile.mcpSessionArgs ?? []]
+      if (attach !== undefined && profile.mcpAttach !== undefined) {
+        args.push(profile.mcpAttach.flag, profile.mcpAttach.format === 'hostPort' ? `127.0.0.1:${attach}` : String(attach))
+      }
+      const key = String(attach ?? '')
+      const existing = mcpClients.get(key)
       // A CLI upgrade mid-session invalidates the running server.
-      if (mcpClient !== undefined && !mcpClient.running && mcpClient.cachedTools !== undefined) mcpClient = undefined
-      mcpClient ??= new CraftMcpClient(profile, binary, profile.mcpSessionArgs ?? [])
-      return mcpClient
+      if (existing !== undefined && !existing.running && existing.cachedTools !== undefined) mcpClients.delete(key)
+      const fresh = mcpClients.get(key) ?? new CraftMcpClient(profile, binary, args)
+      mcpClients.set(key, fresh)
+      return fresh
     },
     dispose(): void {
-      mcpClient?.close()
-      mcpClient = undefined
+      for (const client of mcpClients.values()) client.close()
+      mcpClients.clear()
     },
     binary(): CraftBinary | undefined {
       const found = discoverCraft(profile, config.path, packageRoot)
@@ -666,13 +680,19 @@ export function createToolSet(runtime: CraftRuntime): CraftToolSet {
       `${profile.product}'s own MCP server tools, each with a real JSON Schema. `
       + `These are the modelled operations (think \`write_range\`, \`render\`), whereas \`${profile.id}_run\` takes generic `
       + `command strings. Use this to discover them, then call one with \`${profile.id}_mcp_call\`. `
-      + `Search by name or description; omit \`search\` to list everything.`,
+      + `Search by name or description, page with \`offset\`/\`limit\` (large servers declare hundreds). `
+      + `Also lists the server's MCP resources and prompts when it has them.`,
     parameters: {
       search: { type: 'string', description: 'Case-insensitive filter over tool names and descriptions.' },
-      limit: { type: 'number', description: 'Maximum tools to describe (default 30).' },
+      limit: { type: 'number', description: 'Maximum tools to describe (default 30, at most 200).' },
+      offset: { type: 'number', description: 'Skip this many matches, to page through a long list.' },
+      ...profile.mcpAttach !== undefined
+        ? { attach: { type: 'number', description: `Control-channel port of a running ${profile.product} app, to drive the user's open document instead of a headless one.` } }
+        : {},
     },
     async execute(args) {
-      const client = runtime.mcp()
+      const attach = typeof args.attach === 'number' ? Math.floor(args.attach) : undefined
+      const client = runtime.mcp(attach)
       if (client === undefined) throw new Error(`${profile.product} has no MCP server configured`)
       await client.start(idleMs)
       const all = await client.listTools()
@@ -681,10 +701,11 @@ export function createToolSet(runtime: CraftRuntime): CraftToolSet {
         ? all
         : all.filter(tool => tool.name.toLowerCase().includes(needle) || (tool.description ?? '').toLowerCase().includes(needle))
       const limit = typeof args.limit === 'number' && args.limit > 0 ? Math.min(Math.floor(args.limit), 200) : 30
-      const shown = matched.slice(0, limit)
+      const offset = typeof args.offset === 'number' && args.offset > 0 ? Math.floor(args.offset) : 0
+      const shown = matched.slice(offset, offset + limit)
       const lines = [
         `${profile.product} MCP server — ${matched.length} tool(s)${needle.length > 0 ? ` matching ${JSON.stringify(args.search)}` : ''}`
-        + (matched.length > shown.length ? `, showing ${shown.length}` : ''),
+        + (matched.length > offset + shown.length ? `, showing ${offset}–${offset + shown.length}` : ''),
         `server: ${client.describe()}`,
         '',
       ]
@@ -693,6 +714,17 @@ export function createToolSet(runtime: CraftRuntime): CraftToolSet {
         lines.push(renderSchema(tool.inputSchema))
       }
       if (shown.length === 0) lines.push('(no matching tools)')
+      // Resources and prompts are the parts a tool-only bridge would miss: the
+      // document, the command catalogue, and curated multi-step workflows.
+      const [resources, prompts] = await Promise.all([client.listResources(), client.listPrompts()])
+      if (resources.length > 0) {
+        lines.push('', 'resources:')
+        for (const resource of resources) lines.push(`  ${resource.uri}${resource.name !== undefined ? ` — ${resource.name}` : ''}`)
+      }
+      if (prompts.length > 0) {
+        lines.push('', 'prompts:')
+        for (const prompt of prompts) lines.push(`  ${prompt.name}${prompt.description !== undefined ? ` — ${prompt.description}` : ''}`)
+      }
       return lines.join('\n')
     },
   }
@@ -703,13 +735,18 @@ export function createToolSet(runtime: CraftRuntime): CraftToolSet {
     description:
       `Call one tool on ${profile.product}'s MCP server with JSON arguments. `
       + `Discover names and schemas with \`${profile.id}_mcp_tools\` first. `
-      + `Use this for modelled operations; use \`${profile.id}_run\` for arbitrary command ids.`,
+      + `Use this for modelled operations; use \`${profile.id}_run\` for arbitrary command ids. `
+      + `Images a tool returns (render, screenshot) are saved to disk and named by path — look at them with \`read_image\`.`,
     parameters: {
       tool: { type: 'string', required: true, description: 'MCP tool name, exactly as listed.' },
       arguments: { type: 'object', additionalProperties: true, description: "The tool's arguments object; see its schema in the listing." },
+      ...profile.mcpAttach !== undefined
+        ? { attach: { type: 'number', description: `Control-channel port of a running ${profile.product} app, to drive the user's open document instead of a headless one.` } }
+        : {},
     },
     async execute(args) {
-      const client = runtime.mcp()
+      const attach = typeof args.attach === 'number' ? Math.floor(args.attach) : undefined
+      const client = runtime.mcp(attach)
       if (client === undefined) throw new Error(`${profile.product} has no MCP server configured`)
       const name = String(args.tool ?? '').trim()
       if (name.length === 0) throw new Error('tool is required')
@@ -722,7 +759,7 @@ export function createToolSet(runtime: CraftRuntime): CraftToolSet {
       }
       const raw = args.arguments
       const params = typeof raw === 'object' && raw !== null && !Array.isArray(raw) ? raw as Record<string, unknown> : {}
-      return await client.callTool(name, params)
+      return await client.callTool(name, params, runtime.artifactsDir())
     },
   }
 
@@ -739,6 +776,9 @@ export function createToolSet(runtime: CraftRuntime): CraftToolSet {
         `command: ${client.describe()}`,
         `running: ${client.running}`,
         `tools cached: ${client.cachedTools === undefined ? 'no' : client.cachedTools.length}`,
+        profile.mcpAttach === undefined
+          ? 'attach: not supported (headless MCP server only)'
+          : `attach: pass \`attach: <port>\` to drive a running app (it must be started with its control channel, e.g. \`${profile.bin.replace(/-cli$/, '')} --control <port>\`)`,
       ].join('\n')
     },
   }
@@ -825,11 +865,17 @@ export function applyCraftPlugin(
   }
   ctx.systemPrompt.section({
     name: `artcraft:${profile.id}`,
-    text: `${profile.product} is available through the ${profile.id}_* tools. `
-      + `Documents are ${profile.extensions.join('/')}. `
-      + `Discover operations with \`${profile.id}_commands\` (generic command ids) or `
-      + `\`${profile.id}_mcp_tools\` (modelled operations with JSON schemas), read them back with `
-      + `\`${profile.id}_inspect\`, and apply them with \`${profile.id}_run\` or \`${profile.id}_mcp_call\`.`,
+    text:
+      `${profile.product} is available through the ${profile.id}_* tools; documents are ${profile.extensions.join('/')}. `
+      + `Two surfaces reach the same engine. Use \`${profile.id}_commands\` for the full command registry `
+      + `(every menu action; fetch exact parameter grammar with \`${profile.id}_describe\`) and \`${profile.id}_run\` to apply `
+      + `an ordered list. Use \`${profile.id}_mcp_tools\` for the app's modelled operations with JSON Schemas when you want `
+      + `a safer first call, then \`${profile.id}_mcp_call\`. `
+      + `Read a document back with \`${profile.id}_inspect\` before editing it. `
+      + (profile.mcpAttach === undefined
+        ? ''
+        : `When the user has ${profile.product} open, pass \`attach: <control port>\` to an mcp call to work in their window instead of a headless copy. `)
+      + `Images returned by a render or screenshot are saved and named by path; look at them with \`read_image\`.`,
     order: CRAFT_SECTION_ORDER,
   })
   return () => {

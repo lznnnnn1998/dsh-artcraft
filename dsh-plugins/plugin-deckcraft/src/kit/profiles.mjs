@@ -54,6 +54,7 @@ export const CRAFT_PROFILES = [
     catalogJson: true,
     catalogArgs: ['commands'],
     mcpArgs: ['mcp'],
+    mcpAttach: { flag: '--connect', format: 'hostPort' },
   },
   {
     id: 'gridcraft',
@@ -80,6 +81,7 @@ export const CRAFT_PROFILES = [
     catalogJson: true,
     catalogArgs: ['commands', '--json'],
     mcpArgs: ['mcp'],
+    mcpAttach: { flag: '--connect', format: 'port' },
   },
   {
     id: 'soundcraft',
@@ -107,6 +109,7 @@ export const CRAFT_PROFILES = [
     describeArgs: ['describe'],
     catalogArgs: ['commands'],
     mcpArgs: ['mcp'],
+    mcpAttach: { flag: '--connect', format: 'port' },
   },
   {
     id: 'deckcraft',
@@ -133,6 +136,7 @@ export const CRAFT_PROFILES = [
     catalogJson: true,
     catalogArgs: ['commands'],
     mcpArgs: ['mcp'],
+    mcpAttach: { flag: '--connect', format: 'port' },
   },
   {
     id: 'wordcraft',
@@ -158,6 +162,7 @@ export const CRAFT_PROFILES = [
     catalogJson: true,
     catalogArgs: ['commands', '--json'],
     mcpArgs: ['mcp'],
+    mcpAttach: { flag: '--connect', format: 'hostPort' },
   },
   {
     id: 'photocraft',
@@ -186,6 +191,7 @@ export const CRAFT_PROFILES = [
     catalogJson: true,
     catalogArgs: ['commands', '--json'],
     mcpArgs: ['mcp'],
+    mcpAttach: { flag: '--bridge', format: 'hostPort' },
   },
   {
     id: 'lightcraft',
@@ -272,6 +278,7 @@ export const CRAFT_PROFILES = [
     catalogJson: true,
     catalogArgs: ['commands'],
     mcpArgs: ['mcp'],
+    mcpAttach: { flag: '--connect', format: 'hostPort' },
   },
   {
     id: 'effectcraft',
@@ -297,6 +304,7 @@ export const CRAFT_PROFILES = [
     catalogJson: false,
     catalogArgs: ['commands', '--json'],
     mcpArgs: ['mcp'],
+    mcpAttach: { flag: '--bridge', format: 'port' },
   },
   {
     id: 'filmcraft',
@@ -334,6 +342,7 @@ export const CRAFT_PROFILES = [
     describeArgs: ['describe'],
     catalogArgs: ['commands', '--json'],
     mcpArgs: ['mcp'],
+    mcpAttach: { flag: '--bridge', format: 'hostPort' },
   },
   {
     id: 'designcraft',
@@ -358,6 +367,7 @@ export const CRAFT_PROFILES = [
     catalogJson: true,
     catalogArgs: ['commands'],
     mcpArgs: ['mcp'],
+    mcpAttach: { flag: '--connect', format: 'port' },
   },
   {
     id: 'figcraft',
@@ -385,6 +395,7 @@ export const CRAFT_PROFILES = [
     catalogJson: true,
     catalogArgs: ['commands', '--json'],
     mcpArgs: ['mcp'],
+    mcpAttach: { flag: '--attach', format: 'port' },
   },
   {
     id: 'texturecraft',
@@ -415,6 +426,7 @@ export const CRAFT_PROFILES = [
     catalogJson: false,
     catalogArgs: ['commands'],
     mcpArgs: ['mcp'],
+    mcpAttach: { flag: '--bridge', format: 'port' },
   },
 ]
 

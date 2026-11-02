@@ -24,7 +24,7 @@
  * @module scripts/install-into-profile
  */
 
-import { existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
+import { cpSync, existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defaultDshHome, packageManager, parseArgv, PM_ENV, readJson, runPackageManager } from './lib/host.mjs'
@@ -226,6 +226,18 @@ try {
   console.log('FAILED')
   console.error(String(error.stderr ?? error.message).slice(0, 800))
   process.exit(1)
+}
+
+// 4. Agent skill: the know-how that makes the tool surface usable. DSH discovers
+// skills under $DSH_HOME/skills, so a copy (not a link into this checkout) keeps
+// working when the repository moves.
+const skillSource = join(root, 'skills', 'artcraft')
+const skillTarget = join(dshHome, 'skills', 'artcraft')
+if (existsSync(skillSource)) {
+  rmSync(skillTarget, { recursive: true, force: true })
+  mkdirSync(dirname(skillTarget), { recursive: true })
+  cpSync(skillSource, skillTarget, { recursive: true })
+  console.log(`installed the ArtCraft skill into ${skillTarget}`)
 }
 
 console.log(`
