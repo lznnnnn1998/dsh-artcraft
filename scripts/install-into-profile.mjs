@@ -25,6 +25,7 @@
  */
 
 import { cpSync, existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
+import { execFileSync } from 'node:child_process'
 import { dirname, join, resolve, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defaultDshHome, packageManager, parseArgv, PM_ENV, readJson, runPackageManager } from './lib/host.mjs'
@@ -234,6 +235,16 @@ try {
 // family overview: a workflow skill is what turns fourteen tools into an job.
 const skillsRoot = join(root, 'skills')
 if (existsSync(skillsRoot)) {
+  // A malformed frontmatter makes a skill disappear from the catalogue without
+  // an error, so validate before copying: a broken skill is worse than a
+  // missing one, because nothing tells the user it is not there.
+  try {
+    execFileSync(process.execPath, [join(root, 'scripts', 'validate-skills.mjs')], { cwd: root, stdio: 'pipe', timeout: 120_000 })
+  } catch (error) {
+    console.error('skill validation failed; nothing installed')
+    console.error(String(error.stdout ?? error.message).slice(0, 800))
+    process.exit(1)
+  }
   const installed = []
   for (const entry of readdirSync(skillsRoot, { withFileTypes: true })) {
     if (!entry.isDirectory()) continue
