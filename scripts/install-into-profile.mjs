@@ -228,16 +228,24 @@ try {
   process.exit(1)
 }
 
-// 4. Agent skill: the know-how that makes the tool surface usable. DSH discovers
-// skills under $DSH_HOME/skills, so a copy (not a link into this checkout) keeps
-// working when the repository moves.
-const skillSource = join(root, 'skills', 'artcraft')
-const skillTarget = join(dshHome, 'skills', 'artcraft')
-if (existsSync(skillSource)) {
-  rmSync(skillTarget, { recursive: true, force: true })
-  mkdirSync(dirname(skillTarget), { recursive: true })
-  cpSync(skillSource, skillTarget, { recursive: true })
-  console.log(`installed the ArtCraft skill into ${skillTarget}`)
+// 4. Agent skills: the know-how that makes the tool surface usable. DSH discovers
+// skills under $DSH_HOME/skills, so copies (not links into this checkout) keep
+// working when the repository moves. Every skill directory ships, not just the
+// family overview: a workflow skill is what turns fourteen tools into an job.
+const skillsRoot = join(root, 'skills')
+if (existsSync(skillsRoot)) {
+  const installed = []
+  for (const entry of readdirSync(skillsRoot, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue
+    const source = join(skillsRoot, entry.name)
+    if (!existsSync(join(source, 'SKILL.md'))) continue
+    const target = join(dshHome, 'skills', entry.name)
+    rmSync(target, { recursive: true, force: true })
+    mkdirSync(dirname(target), { recursive: true })
+    cpSync(source, target, { recursive: true })
+    installed.push(entry.name)
+  }
+  console.log(`installed ${installed.length} skill(s) into ${join(dshHome, 'skills')}: ${installed.join(', ')}`)
 }
 
 console.log(`
