@@ -92,7 +92,42 @@ export function parseCatalog(stdout: string, json: boolean): CraftCommand[] {
       // Fall through to the table parser: a CLI may ignore an unknown --json.
     }
   }
+  const emDash = parseEmDash(text)
+  if (emDash.length > 0) return emDash
   return parseTable(text)
+}
+
+/**
+ * Parse an `id — Label: {params}` catalogue (DeckCraft 0.14+).
+ *
+ * One command per line, single-spaced, with an em dash between the id and its
+ * label. `: {…}` introduces the parameter grammar and ` → …` describes what the
+ * command answers, which is not part of the grammar.
+ * @param text - raw `commands` output.
+ * @returns every command whose line has the `id — label` shape.
+ */
+export function parseEmDash(text: string): CraftCommand[] {
+  const out: CraftCommand[] = []
+  for (const raw of text.split('\n')) {
+    const line = raw.trimEnd()
+    if (line.length === 0 || line.startsWith('#')) continue
+    const match = /^([\w.-]+)\s+—\s+(.*)$/.exec(line)
+    if (match === null) continue
+    const id = match[1]
+    const rest = match[2]
+    const returnIndex = rest.indexOf(' → ')
+    const beforeReturn = returnIndex === -1 ? rest : rest.slice(0, returnIndex)
+    const brace = beforeReturn.indexOf(': {')
+    const label = brace === -1 ? beforeReturn.trim() : beforeReturn.slice(0, brace).trim()
+    const params = brace === -1 ? undefined : beforeReturn.slice(brace + 2).trim()
+    out.push({
+      id,
+      ...label.length > 0 ? { label } : {},
+      ...params !== undefined && params.length > 0 ? { params } : {},
+      group: groupOf(id),
+    })
+  }
+  return out
 }
 
 /**
@@ -111,7 +146,14 @@ export function parseTable(text: string): CraftCommand[] {
   const flush = (): void => {
     if (current === undefined) return
     const { id, columns } = current
-    const rest = columns.join(' ').trim()
+    let rest = columns.join(' ').trim()
+    // Some tables end with the grammar as its own column (`{name?, color?}`),
+    // with no `params:` label; take the last column when it is only an object.
+    let columnParams
+    if (columns.length > 1 && /^\{.*\}$/.test(columns[columns.length - 1].trim())) {
+      columnParams = columns[columns.length - 1].trim()
+      rest = columns.slice(0, -1).join(' ').trim()
+    }
     const paramsMatch = /\bparams:\s*(\{.*)$/.exec(rest)
     const labelPart = paramsMatch === null ? rest : rest.slice(0, paramsMatch.index).trim()
     // Trailing `label  [Shortcut]` and an interleaved menu column.
@@ -120,7 +162,9 @@ export function parseTable(text: string): CraftCommand[] {
     out.push({
       id,
       ...label.length > 0 ? { label } : {},
-      ...paramsMatch !== null ? { params: paramsMatch[1].replace(/\s+/g, ' ').trim() } : {},
+      ...columnParams !== undefined
+        ? { params: columnParams.replace(/\s+/g, ' ') }
+        : paramsMatch !== null ? { params: paramsMatch[1].replace(/\s+/g, ' ').trim() } : {},
       ...shortcutMatch !== null ? { shortcut: shortcutMatch[1] } : {},
       group: groupOf(id),
     })
@@ -136,7 +180,8 @@ export function parseTable(text: string): CraftCommand[] {
     }
     flush()
     const columns = raw.trimEnd().split(/\s{2,}/).map(part => part.trim()).filter(part => part.length > 0)
-    const id = columns[0] ?? ''
+    // Rust CLIs mark undoable commands with a trailing `*`; it is not the id.
+    const id = (columns[0] ?? '').replace(/\*$/, '')
     if (id.length === 0 || /\s/.test(id) || !/^[\w.-]+$/.test(id)) continue
     current = { id, columns: columns.slice(1) }
   }

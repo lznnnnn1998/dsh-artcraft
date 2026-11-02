@@ -69,7 +69,7 @@ export interface CraftRunSpec {
    * - `none`: no such flag exists, so the run tool omits `save` entirely and the
    *   craft writes through its own commands (EffectCraft `file.saveAs`, …)
    */
-  readonly saveMode?: 'flag' | 'none'
+  readonly saveMode?: 'flag' | 'none' | 'script'
   /** Flag writing the edited document back out. */
   readonly saveFlag: string
   /** Flag exporting a rendered artifact (png/svg/pdf/image/audio). */

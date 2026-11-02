@@ -1,14 +1,16 @@
 {
-  "cadcraft": "/Users/zhinan/Documents/dsh_workspace/dsh-artcraft/crafts-bin/cadcraft-cli",
-  "gridcraft": "/Users/zhinan/Documents/dsh_workspace/dsh-artcraft/crafts-bin/gridcraft-cli",
-  "soundcraft": "/Users/zhinan/Documents/dsh_workspace/dsh-artcraft/crafts-bin/soundcraft-cli",
-  "deckcraft": "/Users/zhinan/Documents/dsh_workspace/dsh-artcraft/crafts-bin/deckcraft-cli",
-  "wordcraft": "/Users/zhinan/Documents/dsh_workspace/dsh-artcraft/crafts-bin/wordcraft-cli",
-  "photocraft": "/Users/zhinan/Documents/dsh_workspace/dsh-artcraft/crafts-bin/photocraft-cli",
-  "lightcraft": "/Users/zhinan/Documents/dsh_workspace/dsh-artcraft/crafts-bin/lightcraft-cli",
-  "pdfcraft": "/Users/zhinan/Documents/dsh_workspace/dsh-artcraft/crafts-bin/pdfcraft-cli",
-  "vectorcraft": "/Users/zhinan/Documents/dsh_workspace/dsh-artcraft/crafts-bin/vectorcraft-cli",
-  "effectcraft": "/Users/zhinan/Documents/dsh_workspace/dsh-artcraft/crafts-bin/effectcraft-cli",
-  "filmcraft": "/Users/zhinan/Documents/dsh_workspace/dsh-artcraft/crafts-bin/filmcraft-cli",
-  "designcraft": "/Users/zhinan/Documents/dsh_workspace/dsh-artcraft/crafts-bin/designcraft-cli"
+  "cadcraft": "/Users/zhinan/.dsh/crafts/bin/cadcraft-cli",
+  "gridcraft": "/Users/zhinan/.dsh/crafts/bin/gridcraft-cli",
+  "soundcraft": "/Users/zhinan/.dsh/crafts/bin/soundcraft-cli",
+  "deckcraft": "/Users/zhinan/.dsh/crafts/bin/deckcraft-cli",
+  "wordcraft": "/Users/zhinan/.dsh/crafts/bin/wordcraft-cli",
+  "photocraft": "/Users/zhinan/.dsh/crafts/bin/photocraft-cli",
+  "lightcraft": "/Users/zhinan/.dsh/crafts/bin/lightcraft-cli",
+  "pdfcraft": "/Users/zhinan/.dsh/crafts/bin/pdfcraft-cli",
+  "vectorcraft": "/Users/zhinan/.dsh/crafts/bin/vectorcraft-cli",
+  "effectcraft": "/Users/zhinan/.dsh/crafts/bin/effectcraft-cli",
+  "filmcraft": "/Users/zhinan/.dsh/crafts/bin/filmcraft-cli",
+  "designcraft": "/Users/zhinan/.dsh/crafts/bin/designcraft-cli",
+  "figcraft": "/Users/zhinan/Documents/dsh_workspace/dsh-artcraft/crafts-bin/figcraft-cli",
+  "texturecraft": "/Users/zhinan/Documents/dsh_workspace/dsh-artcraft/crafts-bin/texturecraft-cli"
 }

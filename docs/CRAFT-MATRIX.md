@@ -11,22 +11,24 @@ Every claim below is either (a) produced by running the repository's own publish
 
 | Repository | Kind | DSH plugin | Verified |
 |---|---|---|---|
-| `cadcraft` | App (CAD) | ✅ 5 tools | binary 0.5.0, 305 commands, run writes DXF 34140 B |
-| `deckcraft` | App (slides) | ✅ 5 tools | binary 0.5.0, 226 commands, run writes .deckcraft 7471 B |
-| `designcraft` | App (layout) | ✅ 3 tools | binary 0.6.0, 446 commands, run exports PDF 2028 B |
-| `effectcraft` | App (motion graphics) | ✅ 5 tools | binary 0.8.0, 669 commands, run writes .ecproj 732438 B |
-| `filmcraft` | App (video) | ✅ 5 tools | binary 0.6.0, 693 commands, script run writes .fcproj 3264 B |
-| `gridcraft` | App (spreadsheets) | ✅ 5 tools | binary 0.5.0, 315 commands, run writes XLSX 7682 B |
-| `lightcraft` | App (photo/raw) | ✅ 4 tools | binary 0.6.0, 296 commands, run exports JPEG 108535 B |
-| `pdfcraft` | App (PDF) | ✅ 5 tools | binary 0.7.1, 161 tools, script run writes PDF 802 B |
-| `photocraft` | App (raster) | ✅ 5 tools | binary 0.7.0, 858 commands, run writes PNG 168 B |
-| `soundcraft` | App (audio) | ✅ 5 tools | binary 0.6.1, 465 commands, run bounces WAV 16094696 B |
-| `vectorcraft` | App (vector) | ✅ 4 tools | binary 0.10.0, 743 commands, run exports SVG 251 B |
-| `wordcraft` | App (word processing) | ✅ 5 tools | binary 0.5.0, 460 commands, run writes DOCX 6286 B |
+| `cadcraft` | App (CAD) | ✅ | binary 0.16.0, 449 commands, run writes DXF 42754 B |
+| `deckcraft` | App (slides) | ✅ | binary 0.14.1, 331 commands, run writes .deckcraft 7994 B |
+| `designcraft` | App (layout) | ✅ | binary 0.16.0, 545 commands, run writes PDF 2030 B |
+| `effectcraft` | App (motion graphics) | ✅ | binary 0.20.0, 743 commands, run writes .ecproj 746727 B |
+| `figcraft` | App (interface design) | ✅ | binary 0.14.0, 629 commands, run writes .figcraft 2815 B |
+| `filmcraft` | App (video) | ✅ | binary 0.16.0, 716 commands, run writes .fcproj 3265 B |
+| `gridcraft` | App (spreadsheets) | ✅ | binary 0.15.0, 364 commands, run writes XLSX 7784 B |
+| `lightcraft` | App (photo/raw) | ✅ | binary 0.17.0, 375 commands, run writes JPEG 95176 B |
+| `pdfcraft` | App (PDF) | ✅ | binary 0.17.0, 183 commands, run writes PDF 801 B |
+| `photocraft` | App (raster) | ✅ | binary 0.19.0, 953 commands, run writes PNG 593 B |
+| `soundcraft` | App (audio) | ✅ | binary 0.16.0, 479 commands, run writes WAV 16094696 B |
+| `texturecraft` | App (3D texture painting) | ✅ | binary 0.2.0, 135 commands, run writes .tcraft 1296 B |
+| `vectorcraft` | App (vector) | ✅ | binary 0.20.0, 906 commands, run writes SVG 251 B |
+| `wordcraft` | App (word processing) | ✅ | binary 0.14.0, 648 commands, run writes DOCX 6564 B |
 | `artcraft` | Umbrella app (native + web) | ❌ no CLI surface | see [artcraft.md](craft-notes/artcraft.md) |
 | `artcraftx` | Umbrella app (early) | ❌ no releases | zero GitHub releases |
 | `artcraft-services` | Backend/web services | ❌ not a craft app | Rust services + web frontend |
-| `craft-launcher` | GUI installer/updater | ❌ no CLI asset | 12 apps, GUI only |
+| `craft-launcher` | GUI installer/updater | ❌ no CLI asset | 14 apps, GUI only |
 | `craft-repo-status-app` | Tray dashboard | ❌ no published build | internal `craft-fetch` debug CLI only |
 | `craft-libs` | Shared Rust libraries | ❌ library | no binary |
 | `craft-fonts` | Font assets | ❌ assets | no binary |
@@ -34,12 +36,21 @@ Every claim below is either (a) produced by running the repository's own publish
 | `craft-launcher-assets` | Launcher images | ❌ assets | no binary |
 | `photocraft-corpus` | Test data | ❌ data | no binary |
 | `placeholder-artcraft` | Web placeholder | ❌ site | TypeScript site |
+| `craft-anything` | Study/rebuild tool (CLI + MCP) | ❌ not a document app | MCP tools, no document model |
+| `materialcraft` | App (materials) | ❌ no releases yet | in development |
+| `AniCraft` | App (2D animation) | ❌ no releases yet | in development |
+| `craft-ai-integrations` | AI layer library | ❌ library | shared Rust crate |
+| `craft-i18n` | Translation catalogs | ❌ assets | language packs |
+| `craft-skills` | Agent skill corpus | ❌ assets | documentation |
+| `craft-contrib` | Contribution docs | ❌ assets | documentation |
+| `crafthub` | Community hub | ❌ site | — |
+| `craft-pr-review-tool` | PR review CLI | ❌ internal tool | not an authoring app |
 
-## Why exactly these twelve became plugins
+## Why exactly these fourteen became plugins
 
-The twelve apps share one property that makes a DSH plugin both possible and useful: each ships a
+The fourteen apps share one property that makes a DSH plugin both possible and useful: each ships a
 published `*-cli` release asset with a headless `run` verb, a machine-readable command catalog,
-and an MCP server. The other eleven are libraries, asset bundles, or GUIs without a scriptable
+and an MCP server. The other twenty are libraries, asset bundles, or GUIs without a scriptable
 headless entry point — wrapping them would mean inventing a CLI that upstream does not have,
 which is exactly the kind of change this task set out to avoid.
 
@@ -63,6 +74,8 @@ the differences that were discovered by running the binaries, not by reading doc
 | wordcraft | `--file FILE` | `--cmd 'id={json}'` | `--save` |
 | photocraft | `--new JSON` (no file input) | `--cmd ID --params JSON` | `--out` |
 | vectorcraft | `--in FILE` (no sample flag) | `--cmd ID --params JSON` | `--export` |
+| figcraft | `--in FILE` (new document by default) | a generated JSON script: `run script.json` | `--out` |
+| texturecraft | project in the batch script | a generated `{open, steps, save}` script: `batch script.json` | inside the script |
 | lightcraft | `--demo` / `--import PATH` | positional `id key=value` | exports via commands |
 | pdfcraft | none (documents open via tools) | positional `id key=value`, one tool per run | `doc_save` tool, or `--script FILE` |
 | effectcraft | none | positional `id {json}` | `file.saveAs` command |

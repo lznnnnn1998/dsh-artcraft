@@ -46,12 +46,26 @@ function plugins() {
     .sort((a, b) => a.manifest.name.localeCompare(b.manifest.name))
 }
 
-/** The version the registry currently serves, or `undefined`. */
+/**
+ * The version the registry currently serves, or `undefined`.
+ *
+ * The registry connection drops often enough that a single attempt would abort
+ * a whole publish run before it started; after a few tries it reports `unknown`
+ * and the caller publishes anyway, letting npm itself be the judge.
+ */
 async function publishedVersion(name) {
-  const response = await fetch(`https://registry.npmjs.org/${name}`, { headers: { accept: 'application/json' } })
-  if (!response.ok) return undefined
-  const body = await response.json()
-  return body?.['dist-tags']?.latest
+  for (let attempt = 1; attempt <= 4; attempt += 1) {
+    try {
+      const response = await fetch(`https://registry.npmjs.org/${name}`, { headers: { accept: 'application/json' } })
+      if (response.status === 404) return undefined
+      if (!response.ok) throw new Error(`HTTP ${response.status}`)
+      const body = await response.json()
+      return body?.['dist-tags']?.latest ?? 'unknown'
+    } catch {
+      await new Promise(r => setTimeout(r, 1500 * attempt))
+    }
+  }
+  return 'unknown'
 }
 
 const all = plugins()
@@ -65,7 +79,9 @@ const missing = []
 for (const plugin of all) {
   const { name, version } = plugin.manifest
   const live = await publishedVersion(name)
-  const state = live === version ? 'published' : live === undefined ? 'MISSING' : `MISSING (registry has ${live})`
+  const state = live === version ? 'published'
+    : live === undefined ? 'MISSING'
+      : live === 'unknown' ? 'registry unreachable, will try' : `MISSING (registry has ${live})`
   console.log(`  ${name.padEnd(38)} ${version.padEnd(8)} ${state}`)
   if (live !== version) missing.push(plugin)
 }
@@ -100,6 +116,10 @@ for (const [index, plugin] of missing.entries()) {
     ok += 1
   } catch (error) {
     const text = `${error.stdout ?? ''}${error.stderr ?? ''}`
+    if (text.includes('E409') || text.includes('EPUBLISHCONFLICT') || text.includes('previously published')) {
+      console.log('already published')
+      continue
+    }
     if (text.includes('E429') || text.includes('rate limited')) {
       // Throttled: stop rather than burn the remaining attempts, because the
       // quota is per account and further calls only extend the wait.

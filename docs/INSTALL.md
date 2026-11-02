@@ -175,7 +175,7 @@ On Windows the harness's CLI launcher is
 `"%LOCALAPPDATA%\Programs\DeepSeek Harness\resources\runtime\cli\bin\dsh.cmd"` (or
 wherever the harness is installed); restarting the app has the same effect.
 
-Plugin rows are read at boot. The Plugins page then lists all twelve, and the
+Plugin rows are read at boot. The Plugins page then lists all fourteen, and the
 agent gains their tools.
 
 ## Use

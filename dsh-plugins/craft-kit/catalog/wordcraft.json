@@ -2,7 +2,7 @@
  {
   "id": "text.insert",
   "label": "Type Text",
-  "params": "{\"text\": string}",
+  "params": "{\"text\": string, \"raw\"?: bool, \"paragraphs\"?: bool} (paragraphs: each line a paragraph, one undo step, at most 10000 lines)",
   "shortcut": ""
  },
  {
@@ -40,6 +40,12 @@
   "label": "Shift+Tab",
   "params": "{}",
   "shortcut": "Shift+Tab"
+ },
+ {
+  "id": "text.insertTab",
+  "label": "Tab Character",
+  "params": "{}",
+  "shortcut": "Alt+Tab"
  },
  {
   "id": "text.backspace",
@@ -84,6 +90,48 @@
   "shortcut": "Mod+-"
  },
  {
+  "id": "text.toggleUnicode",
+  "label": "Toggle Unicode Character",
+  "params": "{}",
+  "shortcut": ""
+ },
+ {
+  "id": "text.typeCode",
+  "label": "Type Character Code",
+  "params": "{\"code\": string (decimal digits as typed on the keypad, e.g. \"0233\"), \"ansi\"?: 874 | 1250–1258 (the leading-0 code page, default 1252), \"oem\"?: 437 | 737 | 850 | 852 | 857 | 866 (default from the locale)}",
+  "shortcut": ""
+ },
+ {
+  "id": "text.emDash",
+  "label": "Em Dash",
+  "params": "{}",
+  "shortcut": "Mod+Alt+-"
+ },
+ {
+  "id": "text.copyright",
+  "label": "Copyright Sign",
+  "params": "{}",
+  "shortcut": ""
+ },
+ {
+  "id": "text.registered",
+  "label": "Registered Sign",
+  "params": "{}",
+  "shortcut": ""
+ },
+ {
+  "id": "text.trademark",
+  "label": "Trademark Sign",
+  "params": "{}",
+  "shortcut": ""
+ },
+ {
+  "id": "text.ellipsis",
+  "label": "Ellipsis",
+  "params": "{}",
+  "shortcut": ""
+ },
+ {
   "id": "caret.left",
   "label": "Left",
   "params": "{\"extend\"?: bool}",
@@ -111,25 +159,25 @@
   "id": "caret.wordLeft",
   "label": "Word Left",
   "params": "{\"extend\"?: bool}",
-  "shortcut": "Mod+Left / Alt+Left"
+  "shortcut": "Alt+Left"
  },
  {
   "id": "caret.wordRight",
   "label": "Word Right",
   "params": "{\"extend\"?: bool}",
-  "shortcut": "Mod+Right / Alt+Right"
+  "shortcut": "Alt+Right"
  },
  {
   "id": "caret.home",
   "label": "Line Start",
   "params": "{\"extend\"?: bool}",
-  "shortcut": "Home"
+  "shortcut": "Home / Mod+Left"
  },
  {
   "id": "caret.end",
   "label": "Line End",
   "params": "{\"extend\"?: bool}",
-  "shortcut": "End"
+  "shortcut": "End / Mod+Right"
  },
  {
   "id": "caret.paraUp",
@@ -204,9 +252,15 @@
   "shortcut": ""
  },
  {
+  "id": "select.dragUnit",
+  "label": "Extend Selection by Units",
+  "params": "{\"unit\": \"word|sentence|line|paragraph|document\", \"start\": Pos, \"end\": Pos, \"pos\": Pos}",
+  "shortcut": ""
+ },
+ {
   "id": "select.line",
   "label": "Select Line",
-  "params": "{}",
+  "params": "{\"pos\"?: Pos}",
   "shortcut": ""
  },
  {
@@ -234,6 +288,18 @@
   "shortcut": "Mod+Z"
  },
  {
+  "id": "edit.undoTo",
+  "label": "Undo Actions",
+  "params": "{\"count\": n (1 = the newest step, like edit.undo; n undoes the newest n steps at once; at most the undo depth)}",
+  "shortcut": ""
+ },
+ {
+  "id": "edit.undoHistory",
+  "label": "Undo History",
+  "params": "{}",
+  "shortcut": ""
+ },
+ {
   "id": "edit.redo",
   "label": "Redo",
   "params": "{}",
@@ -249,13 +315,25 @@
   "id": "edit.copy",
   "label": "Copy",
   "params": "{}",
-  "shortcut": "Mod+C"
+  "shortcut": "Mod+C / Mod+Insert"
+ },
+ {
+  "id": "edit.spike",
+  "label": "Spike",
+  "params": "{}",
+  "shortcut": "Mod+F3"
+ },
+ {
+  "id": "edit.insertSpike",
+  "label": "Insert Spike",
+  "params": "{}",
+  "shortcut": "Mod+Shift+F3"
  },
  {
   "id": "edit.paste",
   "label": "Paste",
-  "params": "{\"text\"?: string}",
-  "shortcut": "Mod+V"
+  "params": "{\"text\"?: string, \"html\"?: string, \"rtf\"?: string}",
+  "shortcut": "Mod+V / Shift+Insert"
  },
  {
   "id": "edit.pasteText",
@@ -266,7 +344,7 @@
  {
   "id": "edit.pasteMerge",
   "label": "Paste: Merge Formatting",
-  "params": "{\"text\"?: string}",
+  "params": "{\"text\"?: string, \"html\"?: string, \"rtf\"?: string}",
   "shortcut": ""
  },
  {
@@ -308,44 +386,56 @@
  {
   "id": "edit.find",
   "label": "Find",
-  "params": "{\"text\": string, \"matchCase\"?: bool, \"wholeWord\"?: bool, \"regex\"?: bool}",
+  "params": "{\"text\": string, \"matchCase\"?: bool, \"wholeWord\"?: bool, \"matchPrefix\"?: bool, \"matchSuffix\"?: bool, \"ignorePunct\"?: bool, \"ignoreSpace\"?: bool, \"wildcards\"?: bool, \"special\"?: bool (^p ^t ^# … codes, default true), \"regex\"?: bool}",
   "shortcut": "Mod+F"
  },
  {
   "id": "edit.advancedFind",
   "label": "Advanced Find",
-  "params": "{\"text\"?: string, \"matchCase\"?: bool, \"wholeWord\"?: bool, \"regex\"?: bool, \"in\"?: \"main|selection\", \"highlight\"?: bool}",
+  "params": "{\"text\"?: string, …options of edit.find, \"in\"?: \"main|selection\", \"highlight\"?: bool}",
   "shortcut": ""
  },
  {
   "id": "edit.findNext",
   "label": "Find Next",
-  "params": "{}",
-  "shortcut": "Mod+G / F3"
+  "params": "{\"text\"?: string, \"matchCase\"?: bool, \"wholeWord\"?: bool, \"regex\"?: bool}",
+  "shortcut": "Mod+G / F3 / Shift+F4 / Mod+PageDown"
  },
  {
   "id": "edit.findPrevious",
   "label": "Find Previous",
-  "params": "{}",
-  "shortcut": "Mod+Shift+G"
+  "params": "{\"text\"?: string, \"matchCase\"?: bool, \"wholeWord\"?: bool, \"regex\"?: bool}",
+  "shortcut": "Mod+Shift+G / Mod+PageUp"
  },
  {
   "id": "edit.replace",
   "label": "Replace",
-  "params": "{\"text\": string, \"with\": string}",
-  "shortcut": "Mod+H"
+  "params": "{\"text\": string, \"with\": string, …options of edit.replaceAll}",
+  "shortcut": ""
+ },
+ {
+  "id": "edit.findReplace",
+  "label": "Find and Replace",
+  "params": "{\"tab\"?: \"find|replace|goto\" (default replace)}",
+  "shortcut": "Mod+H / Ctrl+H"
  },
  {
   "id": "edit.replaceAll",
   "label": "Replace All",
-  "params": "{\"text\": string, \"with\": string, \"matchCase\"?: bool, \"wholeWord\"?: bool, \"regex\"?: bool}",
+  "params": "{\"text\": string, \"with\": string (^p ^t ^& ^c …; \\\\1 with wildcards; with regex also $1 ${n} ${name} $0 $$ \\\\1 \\\\n (paragraph mark) \\\\t), …options of edit.find}",
   "shortcut": ""
  },
  {
   "id": "edit.goto",
   "label": "Go To",
-  "params": "{\"page\"?: n, \"bookmark\"?: string, \"paragraph\"?: n}",
+  "params": "{\"page\"?: n, \"pageBy\"?: int (pages forward, negative back, from the caret's page), \"bookmark\"?: string (selects its text), \"paragraph\"?: n}; none opens Find and Replace on its Go To tab",
   "shortcut": "Mod+Alt+G / F5"
+ },
+ {
+  "id": "edit.goBack",
+  "label": "Go Back",
+  "params": "{}",
+  "shortcut": "Shift+F5 / Mod+Alt+Z"
  },
  {
   "id": "edit.formatPainter",
@@ -368,7 +458,7 @@
  {
   "id": "edit.pasteSpecial",
   "label": "Paste Special",
-  "params": "{\"as\"?: \"formatted\"|\"rtf\"|\"html\"|\"text\", \"text\"?: string, \"html\"?: string, \"rtf\"?: string}",
+  "params": "{\"as\"?: \"formatted\"|\"rtf\"|\"html\"|\"picture\"|\"text\", \"text\"?: string, \"html\"?: string, \"rtf\"?: string, \"picture\"?: base64}",
   "shortcut": "Mod+Alt+V"
  },
  {
@@ -405,7 +495,7 @@
   "id": "format.strikethrough",
   "label": "Strikethrough",
   "params": "{\"value\"?: bool}",
-  "shortcut": ""
+  "shortcut": "Mod+Shift+X"
  },
  {
   "id": "format.border",
@@ -476,7 +566,7 @@
  {
   "id": "format.font",
   "label": "Font",
-  "params": "{\"name\": string}",
+  "params": "{\"name\"?: string, \"eastAsia\"?: string}",
   "shortcut": "Mod+Shift+F"
  },
  {
@@ -516,9 +606,15 @@
   "shortcut": ""
  },
  {
+  "id": "format.underlineColor",
+  "label": "Underline Color",
+  "params": "{\"color\": \"RRGGBB\" | \"auto\"} (the underline's own colour; \"auto\" follows the text colour)",
+  "shortcut": ""
+ },
+ {
   "id": "format.highlight",
   "label": "Text Highlight Color",
-  "params": "{\"color\": \"yellow|brightGreen|turquoise|pink|blue|red|darkBlue|teal|green|violet|darkRed|darkYellow|gray50|gray25|black|none\"}",
+  "params": "{\"color\"?: \"yellow|brightGreen|turquoise|pink|blue|red|darkBlue|teal|green|violet|darkRed|darkYellow|gray50|gray25|black|none\"} (explicit colour sets it; omitted toggles the last chosen colour, initially yellow)",
   "shortcut": ""
  },
  {
@@ -537,7 +633,13 @@
   "id": "format.clear",
   "label": "Clear All Formatting",
   "params": "{}",
-  "shortcut": "Mod+Space"
+  "shortcut": ""
+ },
+ {
+  "id": "format.resetChar",
+  "label": "Reset Character Formatting",
+  "params": "{}",
+  "shortcut": "Ctrl+Space"
  },
  {
   "id": "format.spacing",
@@ -576,9 +678,45 @@
   "shortcut": "Mod+D"
  },
  {
+  "id": "format.enclose",
+  "label": "Enclose Characters",
+  "params": "{\"shape\": \"circle|square|triangle|diamond\" | null, \"style\"?: \"shrink|enlarge\", \"text\"?: string}",
+  "shortcut": ""
+ },
+ {
   "id": "format.state",
   "label": "Formatting at Selection",
   "params": "{}",
+  "shortcut": ""
+ },
+ {
+  "id": "font.add",
+  "label": "Add Font…",
+  "params": "{\"path\"?: string, \"data\"?: base64, \"name\"?: string (file name for \"data\")} — a TTF, OTF, TTC, WOFF or WOFF2 file; none: pick a file",
+  "shortcut": ""
+ },
+ {
+  "id": "font.list",
+  "label": "Added Fonts",
+  "params": "{\"all\"?: bool (also every available family)}",
+  "shortcut": ""
+ },
+ {
+  "id": "font.remove",
+  "label": "Remove Added Font",
+  "params": "{\"family\": string}",
+  "shortcut": ""
+ },
+ {
+  "id": "font.loadSystem",
+  "label": "Load System Installed Fonts…",
+  "params": "{}",
+  "shortcut": ""
+ },
+ {
+  "id": "format.phonetic",
+  "label": "Phonetic Guide",
+  "params": "{\"ruby\"?: string | null, \"align\"?: \"center|distributeLetter|distributeSpace|left|right|rightVertical\", \"size\"?: number, \"offset\"?: number}",
   "shortcut": ""
  },
  {
@@ -686,7 +824,7 @@
  {
   "id": "para.spacing",
   "label": "Paragraph Spacing",
-  "params": "{\"before\"?: pt, \"after\"?: pt}",
+  "params": "{\"before\"?: pt, \"after\"?: pt, \"beforeAuto\"?: bool, \"afterAuto\"?: bool (automatic, HTML-style spacing: 14 pt)}",
   "shortcut": ""
  },
  {
@@ -700,6 +838,12 @@
   "label": "Remove Space After Paragraph",
   "params": "{}",
   "shortcut": ""
+ },
+ {
+  "id": "para.reset",
+  "label": "Reset Paragraph Formatting",
+  "params": "{}",
+  "shortcut": "Ctrl+Q"
  },
  {
   "id": "para.style",
@@ -762,6 +906,30 @@
   "shortcut": ""
  },
  {
+  "id": "para.moveUp",
+  "label": "Move Paragraph Up",
+  "params": "{}",
+  "shortcut": "Ctrl+Shift+Up"
+ },
+ {
+  "id": "para.moveDown",
+  "label": "Move Paragraph Down",
+  "params": "{}",
+  "shortcut": "Ctrl+Shift+Down"
+ },
+ {
+  "id": "para.promote",
+  "label": "Promote",
+  "params": "{}",
+  "shortcut": "Ctrl+Shift+Left"
+ },
+ {
+  "id": "para.demote",
+  "label": "Demote",
+  "params": "{}",
+  "shortcut": "Ctrl+Shift+Right"
+ },
+ {
   "id": "para.shading",
   "label": "Shading",
   "params": "{\"color\": \"RRGGBB\" | null}",
@@ -782,25 +950,25 @@
  {
   "id": "para.keepNext",
   "label": "Keep with Next",
-  "params": "{}",
+  "params": "{\"value\"?: bool}",
   "shortcut": ""
  },
  {
   "id": "para.keepLines",
   "label": "Keep Lines Together",
-  "params": "{}",
+  "params": "{\"value\"?: bool}",
   "shortcut": ""
  },
  {
   "id": "para.pageBreakBefore",
   "label": "Page Break Before",
-  "params": "{}",
+  "params": "{\"value\"?: bool}",
   "shortcut": ""
  },
  {
   "id": "para.widowControl",
   "label": "Widow/Orphan Control",
-  "params": "{}",
+  "params": "{\"value\"?: bool}",
   "shortcut": ""
  },
  {
@@ -824,7 +992,7 @@
  {
   "id": "para.set",
   "label": "Set Paragraph Formatting",
-  "params": "{\"props\": ParaProps}",
+  "params": "{\"props\": ParaProps, \"onPage\"?: {\"align\"?: \"left|center|right|justify|distribute\", \"left\"?: pt, \"right\"?: pt} (alignment and indents as seen on the page: each paragraph's own direction, after `props`, says which edge is its start)}",
   "shortcut": ""
  },
  {
@@ -885,7 +1053,7 @@
   "id": "styles.apply",
   "label": "Apply Styles",
   "params": "{\"style\"?: string (name or id)}",
-  "shortcut": "Mod+Shift+S"
+  "shortcut": ""
  },
  {
   "id": "styles.addToGallery",
@@ -906,10 +1074,16 @@
   "shortcut": ""
  },
  {
+  "id": "list.multilevelPreset",
+  "label": "Multilevel List Library",
+  "params": "{\"preset\": \"headings\" (1 / 1.1 / 1.1.1) | \"article\" (Article I. / Section 1.01 / (a)) | \"outlineHeadings\" (I. / A. / 1.) | \"chapter\" (Chapter 1, lower levels unnumbered)} — a new list whose nine levels are linked to Heading 1–9: every paragraph in those styles is numbered, selected paragraphs already in a Heading style keep it, and any other selected paragraph becomes Heading 1 (the first level)",
+  "shortcut": ""
+ },
+ {
   "id": "styles.inspector",
   "label": "Style Inspector",
   "params": "{\"value\"?: bool (show/hide the pane)}",
-  "shortcut": ""
+  "shortcut": "Shift+F1"
  },
  {
   "id": "styles.inspect",
@@ -933,7 +1107,7 @@
   "id": "view.printLayout",
   "label": "Print Layout",
   "params": "{}",
-  "shortcut": ""
+  "shortcut": "Mod+Alt+P"
  },
  {
   "id": "view.webLayout",
@@ -945,13 +1119,13 @@
   "id": "view.draft",
   "label": "Draft",
   "params": "{}",
-  "shortcut": ""
+  "shortcut": "Mod+Alt+N"
  },
  {
   "id": "view.outline",
   "label": "Outline",
   "params": "{}",
-  "shortcut": ""
+  "shortcut": "Mod+Alt+O"
  },
  {
   "id": "view.readMode",
@@ -960,9 +1134,45 @@
   "shortcut": ""
  },
  {
+  "id": "view.readColumnWidth",
+  "label": "Reading Column Width",
+  "params": "{\"value\": \"auto\" | \"narrow\" | \"medium\" | \"wide\" | \"page\"}",
+  "shortcut": ""
+ },
+ {
+  "id": "view.readTextSize",
+  "label": "Reading Text Size",
+  "params": "{\"value\": percent (75–150)}",
+  "shortcut": ""
+ },
+ {
+  "id": "view.readLineSpacing",
+  "label": "Reading Line Spacing",
+  "params": "{\"value\": \"document\" | 1.0 | 1.25 | 1.5 | 2.0}",
+  "shortcut": ""
+ },
+ {
+  "id": "view.readPageColor",
+  "label": "Reading Page Color",
+  "params": "{\"value\": \"none\" | \"sepia\" | \"inverse\"}",
+  "shortcut": ""
+ },
+ {
+  "id": "view.hideWhiteSpace",
+  "label": "Hide White Space",
+  "params": "{\"value\"?: bool}",
+  "shortcut": ""
+ },
+ {
   "id": "view.focus",
   "label": "Focus",
-  "params": "{}",
+  "params": "{\"value\"?: bool}",
+  "shortcut": ""
+ },
+ {
+  "id": "view.fullScreenView",
+  "label": "Full Screen View",
+  "params": "{\"value\"?: bool}",
   "shortcut": ""
  },
  {
@@ -1038,9 +1248,21 @@
   "shortcut": ""
  },
  {
+  "id": "view.interfaceTheme",
+  "label": "Interface Theme",
+  "params": "{\"value\"?: \"light\" | \"dark\" | \"system\"; without it, toggles light and dark}",
+  "shortcut": ""
+ },
+ {
   "id": "view.stylesPane",
   "label": "Styles Pane",
   "params": "{}",
+  "shortcut": ""
+ },
+ {
+  "id": "view.stylesPaneDock",
+  "label": "Styles Pane Position",
+  "params": "{\"dock\"?: \"left\" | \"right\" | \"float\"}",
   "shortcut": ""
  },
  {
@@ -1050,20 +1272,212 @@
   "shortcut": ""
  },
  {
+  "id": "view.accessibilityPane",
+  "label": "Accessibility Pane",
+  "params": "{\"value\"?: bool}",
+  "shortcut": ""
+ },
+ {
+  "id": "view.altTextPane",
+  "label": "Alt Text Pane",
+  "params": "{\"value\"?: bool}",
+  "shortcut": ""
+ },
+ {
+  "id": "view.formatShapePane",
+  "label": "Format Shape Pane",
+  "params": "{\"value\"?: bool}",
+  "shortcut": ""
+ },
+ {
   "id": "view.newWindow",
   "label": "New Window",
   "params": "{}",
   "shortcut": ""
  },
  {
+  "id": "view.switchWindows",
+  "label": "Switch Windows",
+  "params": "{\"id\"?: n (make this open document the active one)} → {\"documents\": [{\"id\", \"title\", \"path\", \"dirty\", \"active\"}]} in the order they were opened",
+  "shortcut": ""
+ },
+ {
   "id": "view.split",
   "label": "Split",
   "params": "{}",
-  "shortcut": ""
+  "shortcut": "Mod+Alt+S"
+ },
+ {
+  "id": "view.fullScreen",
+  "label": "Full Screen",
+  "params": "{\"value\"?: bool}",
+  "shortcut": "Mod+Ctrl+F / F11"
  },
  {
   "id": "view.state",
   "label": "View State",
+  "params": "{}",
+  "shortcut": ""
+ },
+ {
+  "id": "view.numeral",
+  "label": "Numerals",
+  "params": "{\"value\"?: \"arabic|hindi|context|system\"}",
+  "shortcut": ""
+ },
+ {
+  "id": "outline.promoteToHeading1",
+  "label": "Promote to Heading 1",
+  "params": "{}",
+  "shortcut": ""
+ },
+ {
+  "id": "outline.promote",
+  "label": "Promote",
+  "params": "{}",
+  "shortcut": ""
+ },
+ {
+  "id": "outline.demote",
+  "label": "Demote",
+  "params": "{}",
+  "shortcut": ""
+ },
+ {
+  "id": "outline.demoteToBody",
+  "label": "Demote to Body Text",
+  "params": "{}",
+  "shortcut": ""
+ },
+ {
+  "id": "outline.level",
+  "label": "Outline Level",
+  "params": "{\"level\": 1-9 | \"body\"}",
+  "shortcut": ""
+ },
+ {
+  "id": "outline.moveUp",
+  "label": "Move Up",
+  "params": "{}",
+  "shortcut": ""
+ },
+ {
+  "id": "outline.moveDown",
+  "label": "Move Down",
+  "params": "{}",
+  "shortcut": ""
+ },
+ {
+  "id": "outline.expand",
+  "label": "Expand",
+  "params": "{\"block\"?: body paragraph index (default: the selection)}",
+  "shortcut": "Alt+Shift+="
+ },
+ {
+  "id": "outline.collapse",
+  "label": "Collapse",
+  "params": "{\"block\"?: body paragraph index (default: the selection)}",
+  "shortcut": "Alt+Shift+-"
+ },
+ {
+  "id": "outline.toggle",
+  "label": "Expand or Collapse Heading",
+  "params": "{\"block\"?: body paragraph index (default: the selection)}",
+  "shortcut": ""
+ },
+ {
+  "id": "outline.selectSubtree",
+  "label": "Select Heading and Content",
+  "params": "{\"block\"?: body paragraph index (default: the selection)}",
+  "shortcut": ""
+ },
+ {
+  "id": "outline.showLevel",
+  "label": "Show Level",
+  "params": "{\"level\": 1-9 | \"all\"}",
+  "shortcut": ""
+ },
+ {
+  "id": "outline.showLevel1",
+  "label": "Show Level 1",
+  "params": "{}",
+  "shortcut": "Alt+Shift+1"
+ },
+ {
+  "id": "outline.showLevel2",
+  "label": "Show Level 2",
+  "params": "{}",
+  "shortcut": "Alt+Shift+2"
+ },
+ {
+  "id": "outline.showLevel3",
+  "label": "Show Level 3",
+  "params": "{}",
+  "shortcut": "Alt+Shift+3"
+ },
+ {
+  "id": "outline.showLevel4",
+  "label": "Show Level 4",
+  "params": "{}",
+  "shortcut": "Alt+Shift+4"
+ },
+ {
+  "id": "outline.showLevel5",
+  "label": "Show Level 5",
+  "params": "{}",
+  "shortcut": "Alt+Shift+5"
+ },
+ {
+  "id": "outline.showLevel6",
+  "label": "Show Level 6",
+  "params": "{}",
+  "shortcut": "Alt+Shift+6"
+ },
+ {
+  "id": "outline.showLevel7",
+  "label": "Show Level 7",
+  "params": "{}",
+  "shortcut": "Alt+Shift+7"
+ },
+ {
+  "id": "outline.showLevel8",
+  "label": "Show Level 8",
+  "params": "{}",
+  "shortcut": "Alt+Shift+8"
+ },
+ {
+  "id": "outline.showLevel9",
+  "label": "Show Level 9",
+  "params": "{}",
+  "shortcut": "Alt+Shift+9"
+ },
+ {
+  "id": "outline.showAll",
+  "label": "Show All Levels",
+  "params": "{}",
+  "shortcut": "Alt+Shift+A"
+ },
+ {
+  "id": "outline.firstLineOnly",
+  "label": "Show First Line Only",
+  "params": "{\"value\"?: bool}",
+  "shortcut": ""
+ },
+ {
+  "id": "outline.showFormatting",
+  "label": "Show Text Formatting",
+  "params": "{\"value\"?: bool}",
+  "shortcut": ""
+ },
+ {
+  "id": "outline.close",
+  "label": "Close Outline View",
+  "params": "{}",
+  "shortcut": ""
+ },
+ {
+  "id": "outline.state",
+  "label": "Outline State",
   "params": "{}",
   "shortcut": ""
  },
@@ -1098,9 +1512,15 @@
   "shortcut": ""
  },
  {
+  "id": "insert.icon",
+  "label": "Icons",
+  "params": "{\"id\"?: string (omit to list the library), \"color\"?: \"RRGGBB\", \"size\"?: pt, \"query\"?: string, \"category\"?: string}",
+  "shortcut": ""
+ },
+ {
   "id": "insert.shape",
   "label": "Shapes",
-  "params": "{\"kind\": \"rectangle|roundedRectangle|ellipse|triangle|diamond|line|arrow|star|heart\", \"width\"?: pt, \"height\"?: pt, \"fill\"?: \"RRGGBB\", \"stroke\"?: \"RRGGBB\"}",
+  "params": "{\"kind\": \"rectangle|roundedRectangle|ellipse|triangle|diamond|line|arrow|star|heart|straightConnector|elbowConnector|curvedConnector\", \"width\"?: pt, \"height\"?: pt, \"fill\"?: \"RRGGBB\", \"stroke\"?: \"RRGGBB\", \"arrow\"?: \"none\"|\"start\"|\"end\"|\"both\" (lines and connectors; glue a connector's ends with shape.connect)}",
   "shortcut": ""
  },
  {
@@ -1112,8 +1532,14 @@
  {
   "id": "insert.link",
   "label": "Link",
-  "params": "{\"url\": string, \"text\"?: string}",
+  "params": "{\"url\": string} | {\"bookmark\": name} | {\"heading\": block (see link.targets)} | {\"top\": true}, \"text\"?: string (Place in This Document: a bookmark, a heading or the top of the document)",
   "shortcut": "Mod+K"
+ },
+ {
+  "id": "link.targets",
+  "label": "Link",
+  "params": "{}",
+  "shortcut": ""
  },
  {
   "id": "insert.removeLink",
@@ -1124,6 +1550,12 @@
  {
   "id": "insert.bookmark",
   "label": "Bookmark",
+  "params": "{\"name\": string}",
+  "shortcut": "Mod+Shift+F5"
+ },
+ {
+  "id": "insert.deleteBookmark",
+  "label": "Delete Bookmark",
   "params": "{\"name\": string}",
   "shortcut": ""
  },
@@ -1148,17 +1580,35 @@
  {
   "id": "insert.editHeader",
   "label": "Edit Header",
-  "params": "{}",
+  "params": "{\"page\"?: number (0-based: the header that page shows, created if it has none)}",
   "shortcut": ""
  },
  {
   "id": "insert.editFooter",
   "label": "Edit Footer",
-  "params": "{}",
+  "params": "{\"page\"?: number (0-based: the footer that page shows, created if it has none)}",
+  "shortcut": ""
+ },
+ {
+  "id": "insert.createHeader",
+  "label": "Header",
+  "params": "{\"page\"?: number (0-based; default: the caret's section)} — the header that page shows, created if it has none, with the caret in it",
+  "shortcut": ""
+ },
+ {
+  "id": "insert.createFooter",
+  "label": "Footer",
+  "params": "{\"page\"?: number (0-based; default: the caret's section)} — the footer that page shows, created if it has none, with the caret in it",
   "shortcut": ""
  },
  {
   "id": "insert.closeHeader",
+  "label": "Close Header and Footer",
+  "params": "{}",
+  "shortcut": ""
+ },
+ {
+  "id": "insert.removeEmptyHeaders",
   "label": "Close Header and Footer",
   "params": "{}",
   "shortcut": ""
@@ -1194,20 +1644,32 @@
   "shortcut": "Mod+F9"
  },
  {
+  "id": "insert.dateField",
+  "label": "Insert Date Field",
+  "params": "{}",
+  "shortcut": "Ctrl+Shift+D"
+ },
+ {
+  "id": "insert.timeField",
+  "label": "Insert Time Field",
+  "params": "{}",
+  "shortcut": "Ctrl+Shift+T"
+ },
+ {
+  "id": "insert.pageField",
+  "label": "Insert Page Field",
+  "params": "{}",
+  "shortcut": "Ctrl+Shift+P"
+ },
+ {
   "id": "insert.dropCap",
   "label": "Drop Cap",
-  "params": "{\"lines\"?: n (0 = none)}",
+  "params": "{\"position\"?: \"none\"|\"dropped\"|\"margin\" (default dropped), \"lines\"?: 1..10 (default 3; 0 = none), \"distance\"?: pt from the text (0..1584, default 0), \"font\"?: family (omit for the text's font)}",
   "shortcut": ""
  },
  {
   "id": "insert.horizontalLine",
   "label": "Horizontal Line",
-  "params": "{}",
-  "shortcut": ""
- },
- {
-  "id": "insert.wordArt",
-  "label": "WordArt",
   "params": "{}",
   "shortcut": ""
  },
@@ -1269,6 +1731,12 @@
   "id": "equation.delete",
   "label": "Delete in Equation",
   "params": "{}",
+  "shortcut": ""
+ },
+ {
+  "id": "equation.deleteSurrounding",
+  "label": "Delete Around Caret in Equation",
+  "params": "{\"before\": n, \"after\": n}",
   "shortcut": ""
  },
  {
@@ -1346,7 +1814,7 @@
  {
   "id": "layout.margins",
   "label": "Margins",
-  "params": "{\"preset\"?: \"normal|narrow|moderate|wide|mirrored|office2003\", \"top\"?: pt, \"bottom\"?: pt, \"left\"?: pt, \"right\"?: pt, \"gutter\"?: pt}",
+  "params": "{\"preset\"?: \"normal|narrow|moderate|wide|mirrored|office2003\", \"top\"?: pt, \"bottom\"?: pt, \"left\"?: pt, \"right\"?: pt, \"gutter\"?: pt, \"mirror\"?: bool}",
   "shortcut": ""
  },
  {
@@ -1358,13 +1826,13 @@
  {
   "id": "layout.size",
   "label": "Size",
-  "params": "{\"name\"?: \"Letter|Legal|A4|…\", \"width\"?: pt, \"height\"?: pt}",
+  "params": "{\"name\"?: \"Letter|Legal|A4|…\", \"width\"?: pt, \"height\"?: pt} (each side clamped to 7.2–1584 pt, 0.1–22 in; the section keeps its orientation)",
   "shortcut": ""
  },
  {
   "id": "layout.columns",
   "label": "Columns",
-  "params": "{\"count\": 1-12, \"space\"?: pt, \"separator\"?: bool, \"preset\"?: \"left|right\", \"widths\"?: [[width pt, space after pt], …] (unequal columns; sets the count), \"apply\"?: \"section|document|forward\"}",
+  "params": "{\"count\": 1-12, \"space\"?: pt, \"separator\"?: bool, \"preset\"?: \"left|right\", \"widths\"?: [[width pt, space after pt], …] (unequal columns; sets the count), \"apply\"?: \"section|document|forward|selection\"} (default: selection when text is selected in the main text — section breaks around it — else section)",
   "shortcut": ""
  },
  {
@@ -1376,25 +1844,43 @@
  {
   "id": "layout.lineNumbers",
   "label": "Line Numbers",
-  "params": "{\"value\": \"none|continuous|restartPage|restartSection\"}",
+  "params": "{\"value\"?: \"none|continuous|restartPage|restartSection\", \"start\"?: 1-32767, \"countBy\"?: 1-100, \"distance\"?: pt (0 = auto)}",
   "shortcut": ""
  },
  {
   "id": "layout.hyphenation",
   "label": "Hyphenation",
-  "params": "{}",
+  "params": "{\"value\"?: bool (automatic; toggles when nothing is given), \"zone\"?: pt, \"caps\"?: bool (hyphenate words in capitals), \"limit\"?: n (consecutive hyphens, 0 = no limit)}",
+  "shortcut": ""
+ },
+ {
+  "id": "layout.manualHyphenation",
+  "label": "Manual Hyphenation",
+  "params": "{\"from\"?: Pos (default: the caret)} → the next word at a line end that could be hyphenated: {\"word\", \"pos\", \"points\": [char index], \"suggest\": char index} or {\"done\": true}",
   "shortcut": ""
  },
  {
   "id": "layout.pageSetup",
   "label": "Page Setup",
-  "params": "{\"section\"?: SectionProps}",
+  "params": "{\"section\"?: SectionProps} (replaces the whole section, headers and footers included; checked like Size, Margins, Columns, Line Numbers, Footnotes and Page Borders: non-finite numbers and margins that leave no room for text are refused; page sides 7.2–1584 pt, 1–12 columns with 0–300 pt gaps, header/footer/gutter 0–1584 pt, page border width 0.25–6 pt and distance 0–31 pt, note start 1–32767, line numbers start 1–32767, countBy 1–100, distance 0–1584 pt are clamped)",
   "shortcut": ""
  },
  {
   "id": "layout.verticalAlign",
   "label": "Vertical Alignment",
-  "params": "{}",
+  "params": "{\"value\": \"top|center|justify|bottom\"} (also both|justified; anything else is top). Justified shares each page's spare room between its paragraphs and tables",
+  "shortcut": ""
+ },
+ {
+  "id": "layout.sectionRtl",
+  "label": "Right-to-Left Section",
+  "params": "{\"value\"?: bool} (true: the section's columns run right to left; without a value it toggles)",
+  "shortcut": ""
+ },
+ {
+  "id": "layout.textDirection",
+  "label": "Text Direction",
+  "params": "{\"value\"?: \"horizontal|down|up\"} (also lrTb|tbRl|btLr; down: rotate all text 90°, lines top to bottom stacking right to left; up: 270°; default: the next after the current). In a table cell it turns the selected cells, in a text box the box; anywhere else the section(s) of the selection",
   "shortcut": ""
  },
  {
@@ -1412,7 +1898,13 @@
  {
   "id": "layout.pageNumberFormat",
   "label": "Format Page Numbers",
-  "params": "{\"format\"?: \"decimal|lowerRoman|upperRoman|lowerLetter|upperLetter\", \"start\"?: n}",
+  "params": "{\"format\"?: \"decimal|lowerRoman|upperRoman|lowerLetter|upperLetter\", \"start\"?: n | null} (\"start\" left out: the numbering keeps its start; null: the pages number on from the section before; a number: numbering starts there)",
+  "shortcut": ""
+ },
+ {
+  "id": "layout.documentGrid",
+  "label": "Document Grid",
+  "params": "{\"type\"?: \"none|lines|linesAndChars|snapToChars\", \"linesPerPage\"?: n (sets the line pitch from the text height), \"charsPerLine\"?: n (sets the character pitch from the text width), \"linePitch\"?: pt, \"charSpace\"?: n (4096ths of a point added to the default font size: the character pitch)} — left out stays as it is; returns the grid with its lines per page and characters per line",
   "shortcut": ""
  },
  {
@@ -1478,7 +1970,7 @@
  {
   "id": "table.split",
   "label": "Split Cells",
-  "params": "{\"columns\"?: n}",
+  "params": "{\"columns\"?: n (2), \"rows\"?: n (1), \"mergeFirst\"?: bool (true: several selected cells are merged first)}",
   "shortcut": ""
  },
  {
@@ -1544,19 +2036,25 @@
  {
   "id": "table.columnWidth",
   "label": "Table Column Width",
-  "params": "{\"width\": pt} (the caret cell's column; the table's preferred width is cleared so the column gets exactly this)",
+  "params": "{\"width\": pt} (every column the selection covers, the caret cell's without one; the table's preferred width is cleared so the columns get exactly this)",
   "shortcut": ""
  },
  {
   "id": "table.rowHeight",
   "label": "Table Row Height",
-  "params": "{\"height\": pt, \"rule\"?: \"atLeast|exact\"}",
+  "params": "{\"height\": pt, \"rule\"?: \"atLeast|exact\"} (every row the selection covers, the caret's without one)",
   "shortcut": ""
  },
  {
   "id": "table.repeatHeader",
   "label": "Repeat Header Rows",
   "params": "{}",
+  "shortcut": ""
+ },
+ {
+  "id": "table.altText",
+  "label": "Alt Text",
+  "params": "{\"text\"?: string, \"title\"?: string} (empty clears)",
   "shortcut": ""
  },
  {
@@ -1568,7 +2066,7 @@
  {
   "id": "table.toText",
   "label": "Convert to Text",
-  "params": "{\"separator\"?: \"tab|comma|paragraph\"}",
+  "params": "{\"separator\"?: \"tab|comma|paragraph|other\", \"char\"?: string (with other)} (the selected rows, or the whole table)",
   "shortcut": ""
  },
  {
@@ -1590,21 +2088,33 @@
   "shortcut": ""
  },
  {
+  "id": "table.selectColumn",
+  "label": "Select Column",
+  "params": "{}",
+  "shortcut": ""
+ },
+ {
   "id": "table.selectCell",
   "label": "Select Cell",
   "params": "{}",
   "shortcut": ""
  },
  {
+  "id": "table.rtl",
+  "label": "Right-to-Left Table",
+  "params": "{\"value\"?: bool} (true: the first column stands at the right; without a value it toggles)",
+  "shortcut": ""
+ },
+ {
   "id": "table.properties",
   "label": "Properties",
-  "params": "{\"align\"?: \"left|center|right\", \"width\"?: pt|null, \"widthPct\"?: percent, \"indent\"?: pt, \"rowHeight\"?: pt|null, \"rowHeightRule\"?: \"atLeast|exact\", \"allowBreak\"?: bool, \"headerRow\"?: bool, \"columnWidth\"?: pt, \"cellWidth\"?: pt|null, \"valign\"?: \"top|center|bottom\"} (row, column and cell settings apply to the caret's; without settings it returns the current ones)",
+  "params": "{\"align\"?: \"left|center|right\", \"rtl\"?: bool, \"width\"?: pt|null, \"widthPct\"?: percent, \"indent\"?: pt, \"rowHeight\"?: pt|null, \"rowHeightRule\"?: \"atLeast|exact\", \"allowBreak\"?: bool, \"headerRow\"?: bool, \"columnWidth\"?: pt, \"cellWidth\"?: pt|null, \"valign\"?: \"top|center|bottom\"} (row, column and cell settings apply to the selected rows, columns and cells, or the caret's; without settings it returns the caret's current ones)",
   "shortcut": ""
  },
  {
   "id": "table.fromText",
   "label": "Convert Text to Table",
-  "params": "{\"separator\"?: \"tab|comma\"}",
+  "params": "{\"separator\"?: \"tab|comma|paragraph|other\", \"char\"?: string (with other), \"columns\"?: n, \"autofit\"?: \"initial|fixed|contents|window\", \"width\"?: pt (initial column width, 0 = Auto, at most 1584)}",
   "shortcut": ""
  },
  {
@@ -1616,13 +2126,13 @@
  {
   "id": "table.newStyle",
   "label": "New Table Style",
-  "params": "{\"name\": string, \"basedOn\"?: string, \"wholeTable\"?: Region, \"headerRow\"?: Region, \"lastRow\"?: Region (total row), \"firstColumn\"?: Region, \"lastColumn\"?: Region, \"bandedRows\"?: Region, \"bandedColumns\"?: Region, \"bandSize\"?: n (rows per band), \"para\"?: ParaProps, \"apply\"?: bool} where Region = {\"borders\"?: bool | null (true: single lines, false: none, null: inherit), \"borderColor\"?: \"RRGGBB\", \"borderWidth\"?: pt, \"fill\"?: \"RRGGBB\" | null, \"bold\"?: bool, \"italic\"?: bool, \"color\"?: \"RRGGBB\" | null, \"size\"?: pt, \"font\"?: string}",
+  "params": "{\"name\": string, \"basedOn\"?: string, \"<part>\"?: Part for each part name (wholeTable, headerRow|firstRow, lastRow|totalRow, firstColumn|firstCol, lastColumn|lastCol, bandedRows|band1Horz, band2Horz, bandedColumns|band1Vert, band2Vert, nwCell, neCell, swCell, seCell), \"part\"?: part name (the Part fields then sit at the top level), \"parts\"?: [Part & {\"part\": name}], \"bandSize\"?: n (rows per band), \"para\"?: ParaProps, \"apply\"?: bool} where Part = {\"fill\"?: \"RRGGBB\" | null, \"font\"?: string | null (null or \"\": inherited), \"size\"?: pt, \"bold\"?: bool, \"italic\"?: bool, \"underline\"?: bool | \"single\" | \"double\" | \"thick\" | \"words\" | \"dotted\" | \"dash\" | \"wave\" | \"none\", \"color\"?: \"RRGGBB\" | null, \"align\"?: \"left\" | \"center\" | \"right\" | \"justify\" | null, \"vAlign\"?: \"top\" | \"center\" | \"bottom\" | null, \"cellAlign\"?: \"topLeft\" | \"topCenter\" | \"topRight\" | \"centerLeft\" | \"center\" | \"centerRight\" | \"bottomLeft\" | \"bottomCenter\" | \"bottomRight\" | null (both alignments), \"borders\"?: bool | null (true: single lines on every edge, false: none, null: inherit) | Edges | [Edges], \"borderColor\"?: \"RRGGBB\", \"borderWidth\"?: pt} and Edges = {\"edges\"?: \"all\" | \"none\" | \"outside\" | \"inside\" | \"top\" | \"bottom\" | \"left\" | \"right\" | \"insideH\" | \"insideV\" (default all), \"style\"?: \"single\" | \"double\" | \"dotted\" | \"dashed\" | \"dotDash\" | \"thick\" | \"triple\" | \"wave\" | \"none\", \"width\"?: pt, \"color\"?: \"RRGGBB\" | null}",
   "shortcut": ""
  },
  {
   "id": "table.modifyStyle",
   "label": "Modify Table Style",
-  "params": "{\"style\"?: string (default: the current table's), \"name\"?: string, \"basedOn\"?: string, \"wholeTable\"?: Region, \"headerRow\"?: Region, \"lastRow\"?: Region (total row), \"firstColumn\"?: Region, \"lastColumn\"?: Region, \"bandedRows\"?: Region, \"bandedColumns\"?: Region, \"bandSize\"?: n (rows per band), \"para\"?: ParaProps, \"apply\"?: bool} where Region = {\"borders\"?: bool | null (true: single lines, false: none, null: inherit), \"borderColor\"?: \"RRGGBB\", \"borderWidth\"?: pt, \"fill\"?: \"RRGGBB\" | null, \"bold\"?: bool, \"italic\"?: bool, \"color\"?: \"RRGGBB\" | null, \"size\"?: pt, \"font\"?: string}",
+  "params": "{\"style\"?: string (default: the current table's), \"name\"?: string, \"basedOn\"?: string, \"<part>\"?: Part for each part name (wholeTable, headerRow|firstRow, lastRow|totalRow, firstColumn|firstCol, lastColumn|lastCol, bandedRows|band1Horz, band2Horz, bandedColumns|band1Vert, band2Vert, nwCell, neCell, swCell, seCell), \"part\"?: part name (the Part fields then sit at the top level), \"parts\"?: [Part & {\"part\": name}], \"bandSize\"?: n (rows per band), \"para\"?: ParaProps, \"apply\"?: bool} where Part = {\"fill\"?: \"RRGGBB\" | null, \"font\"?: string | null (null or \"\": inherited), \"size\"?: pt, \"bold\"?: bool, \"italic\"?: bool, \"underline\"?: bool | \"single\" | \"double\" | \"thick\" | \"words\" | \"dotted\" | \"dash\" | \"wave\" | \"none\", \"color\"?: \"RRGGBB\" | null, \"align\"?: \"left\" | \"center\" | \"right\" | \"justify\" | null, \"vAlign\"?: \"top\" | \"center\" | \"bottom\" | null, \"cellAlign\"?: \"topLeft\" | \"topCenter\" | \"topRight\" | \"centerLeft\" | \"center\" | \"centerRight\" | \"bottomLeft\" | \"bottomCenter\" | \"bottomRight\" | null (both alignments), \"borders\"?: bool | null (true: single lines on every edge, false: none, null: inherit) | Edges | [Edges], \"borderColor\"?: \"RRGGBB\", \"borderWidth\"?: pt} and Edges = {\"edges\"?: \"all\" | \"none\" | \"outside\" | \"inside\" | \"top\" | \"bottom\" | \"left\" | \"right\" | \"insideH\" | \"insideV\" (default all), \"style\"?: \"single\" | \"double\" | \"dotted\" | \"dashed\" | \"dotDash\" | \"thick\" | \"triple\" | \"wave\" | \"none\", \"width\"?: pt, \"color\"?: \"RRGGBB\" | null}",
   "shortcut": ""
  },
  {
@@ -1640,37 +2150,67 @@
  {
   "id": "table.eraser",
   "label": "Eraser",
-  "params": "{\"page\": n, \"x\": pt, \"y\": pt} (removes the border between two cells within 4 pt of the point by merging them. In the app the button turns the eraser on.)",
+  "params": "{\"page\": n, \"x\": pt, \"y\": pt} (removes the border between two cells within 4 pt of the point: cells that make one rectangle merge, including cells merged down the same rows; otherwise the border is hidden along the whole edge. In the app the button turns the eraser on.)",
+  "shortcut": ""
+ },
+ {
+  "id": "table.resizeDrag",
+  "label": "Resize Table by Dragging",
+  "params": "{\"page\": n, \"x\": pt, \"y\": pt, \"toX\": pt, \"toY\": pt, \"shift\"?: bool, \"ctrl\"?: bool, \"reach\"?: pt} (a mouse drag in page points, 0-based page, starting on a table border or the resize handle: a column border moves (the column to its right gives or takes the difference, so the table keeps its width; with ctrl the columns right of it share it in proportion; with shift, or on the table's right edge, only the column left of it changes); the table's left edge moves a left-aligned table's indent, the first column making up the difference (a centred or right-aligned table keeps its alignment: only the first column changes); with cells of the table selected, a border of theirs moves only in their rows; a row's bottom border sets that row's height; the handle just outside the bottom-right corner scales every column and the rows on that page. `reach` (default 3) is how near the start has to be.)",
+  "shortcut": ""
+ },
+ {
+  "id": "table.selectAt",
+  "label": "Select Table Cells by Clicking",
+  "params": "{\"page\": n, \"x\": pt, \"y\": pt, \"toX\"?: pt, \"toY\"?: pt, \"reach\"?: pt, \"extend\"?: bool, \"anchorRow\"?: n} (a click in page points, 0-based page, on a selection area of a table in the caret's story: just above a column selects the column, left of a row the row, along a cell's left edge inside it the cell, the move handle past the top-left corner the table; with toX/toY (a drag) every column, row or cell from there to that point; the page margin beside a table (its leading side: right for a right-to-left table) is a row area too, and `extend` (Shift+click) on one takes the rows from the selected ones' anchor, or from row `anchorRow` (0-based) when given, so a drag keeps its press's anchor. `reach` (default 3) is the column borders' resize reach, which the cell areas keep clear of.)",
+  "shortcut": ""
+ },
+ {
+  "id": "table.insertAt",
+  "label": "Insert Row or Column by Clicking",
+  "params": "{\"page\": n, \"x\": pt, \"y\": pt, \"reach\"?: pt} (a click on a table's insert button: left of a row border adds a row there, above a column border a column; the new row or column is selected, as in Word)",
+  "shortcut": ""
+ },
+ {
+  "id": "table.moveDrag",
+  "label": "Move Table by Dragging",
+  "params": "{\"page\": n, \"x\": pt, \"y\": pt, \"toX\": pt, \"toY\": pt, \"reach\"?: pt} (a drag from the move handle past a table's top-left corner: the table floats where it's dropped, the text wrapping around it; tables in the main text only)",
+  "shortcut": ""
+ },
+ {
+  "id": "table.fitColumn",
+  "label": "AutoFit Column by Double-Clicking",
+  "params": "{\"page\": n, \"x\": pt, \"y\": pt, \"reach\"?: pt} (a double-click on a column border: the column left of it fits its contents and the columns right of it keep their widths, moving with the border, so the table narrows or widens (up to the right margin), as in Word)",
   "shortcut": ""
  },
  {
   "id": "review.newComment",
   "label": "New Comment",
   "params": "{\"text\": string}",
-  "shortcut": "Mod+Alt+M"
+  "shortcut": "Mod+Alt+A / Mod+Alt+M"
  },
  {
   "id": "review.reply",
   "label": "Reply",
-  "params": "{\"id\": n, \"text\": string}",
+  "params": "{\"id\": non-negative JSON integer, \"text\": string}",
   "shortcut": ""
  },
  {
   "id": "review.editComment",
   "label": "Edit Comment",
-  "params": "{\"id\": n, \"text\": string}",
+  "params": "{\"id\": non-negative JSON integer, \"text\": string}",
   "shortcut": ""
  },
  {
   "id": "review.deleteComment",
   "label": "Delete",
-  "params": "{\"id\"?: n, \"all\"?: bool}",
+  "params": "{\"id\"?: non-negative JSON integer (omit to use the caret), \"all\"?: bool}",
   "shortcut": ""
  },
  {
   "id": "review.resolveComment",
   "label": "Resolve",
-  "params": "{}",
+  "params": "{\"id\"?: non-negative JSON integer (omit to use the caret), \"value\"?: bool (omit to toggle)}",
   "shortcut": ""
  },
  {
@@ -1700,25 +2240,25 @@
  {
   "id": "review.acceptAll",
   "label": "Accept All Changes",
-  "params": "{}",
+  "params": "{\"stopTracking\"?: bool (also turn Track Changes off)}",
   "shortcut": ""
  },
  {
   "id": "review.rejectAll",
   "label": "Reject All Changes",
-  "params": "{}",
+  "params": "{\"stopTracking\"?: bool (also turn Track Changes off)}",
   "shortcut": ""
  },
  {
   "id": "review.accept",
   "label": "Accept",
-  "params": "{}",
+  "params": "{\"next\"?: bool (then select the next change)}",
   "shortcut": ""
  },
  {
   "id": "review.reject",
   "label": "Reject",
-  "params": "{}",
+  "params": "{\"next\"?: bool (then select the next change)}",
   "shortcut": ""
  },
  {
@@ -1742,7 +2282,7 @@
  {
   "id": "review.trackingOptions",
   "label": "Track Changes Options",
-  "params": "{\"comments\"?: bool, \"ink\"?: bool, \"insertionsDeletions\"?: bool, \"formatting\"?: bool, \"balloons\"?: \"revisions|inline|commentsAndFormatting\", \"insertMark\"?: \"underline|doubleUnderline|bold|italic|strikethrough|colorOnly|none\", \"insertColor\"?: \"byAuthor\" | \"RRGGBB\", \"deleteMark\"?: \"strikethrough|doubleStrikethrough|hidden|caret|hash|underline|colorOnly\", \"deleteColor\"?: \"byAuthor\" | \"RRGGBB\", \"changedLines\"?: \"outside|left|right|none\", \"changedLinesColor\"?: \"auto\" | \"RRGGBB\", \"trackFormatting\"?: bool} → the options (omit all to read them)",
+  "params": "{\"comments\"?: bool, \"ink\"?: bool, \"insertionsDeletions\"?: bool, \"formatting\"?: bool, \"balloons\"?: \"revisions|inline|commentsAndFormatting\", \"commentDisplay\"?: \"margin|selected\", \"insertMark\"?: \"underline|doubleUnderline|bold|italic|strikethrough|colorOnly|none\", \"insertColor\"?: \"byAuthor\" | \"RRGGBB\", \"deleteMark\"?: \"strikethrough|doubleStrikethrough|hidden|caret|hash|underline|doubleUnderline|bold|italic|colorOnly|none\", \"deleteColor\"?: \"byAuthor\" | \"RRGGBB\", \"changedLines\"?: \"outside|left|right|none\", \"changedLinesColor\"?: \"auto\" | \"RRGGBB\", \"trackFormatting\"?: bool, \"moveFromMark\"?: (as deleteMark; none = plain text, no colour), \"moveFromColor\"?: \"byAuthor\" | \"RRGGBB\", \"moveToMark\"?: (as insertMark; none = plain text, no colour), \"moveToColor\"?: \"byAuthor\" | \"RRGGBB\", \"trackMoves\"?: bool (the document's setting; off = a cut and paste is a deletion and an insertion, not a move)} → the options (omit all to read them)",
   "shortcut": ""
  },
  {
@@ -1761,7 +2301,7 @@
   "id": "review.spelling",
   "label": "Spelling & Grammar",
   "params": "{}",
-  "shortcut": "F7"
+  "shortcut": "F7 / Alt+F7 / Mod+Alt+L"
  },
  {
   "id": "review.issues",
@@ -1806,6 +2346,12 @@
   "shortcut": "Shift+F7"
  },
  {
+  "id": "file.rename",
+  "label": "Rename Document",
+  "params": "{\"name\": string (document name; its extension is kept, so the name may be given with or without it)}",
+  "shortcut": ""
+ },
+ {
   "id": "file.new",
   "label": "New",
   "params": "{\"template\"?: \"blank|sample|letter|resume|report\"}",
@@ -1815,19 +2361,19 @@
   "id": "file.open",
   "label": "Open",
   "params": "{\"path\": string, \"data\"?: base64 (the file's bytes; `path` then only names it), \"password\"?: string (for a password-protected Word document)}",
-  "shortcut": "Mod+O"
+  "shortcut": "Mod+O / Mod+F12 / Mod+Alt+F2"
  },
  {
   "id": "file.save",
   "label": "Save",
-  "params": "{\"path\"?: string, \"password\"?: string (encrypt this and later saves with it, as file.encrypt does)}",
-  "shortcut": "Mod+S"
+  "params": "{\"path\"?: string, \"password\"?: string (encrypt this and later saves with it, as file.encrypt does), \"markup\"?: bool (Print Markup for a PDF, PNG, HTML, Markdown or text copy: comments shown; default file.printMarkup), \"format\"?: \"wordml2003\" (an .xml file as a Word 2003 XML Document) | \"flatopc\" (as a Word XML Document, the default; saving over a Word 2003 XML file keeps that format)}",
+  "shortcut": "Mod+S / Shift+F12 / Alt+Shift+F2"
  },
  {
   "id": "file.saveAs",
   "label": "Save As",
-  "params": "{\"path\": string, \"password\"?: string}",
-  "shortcut": "F12"
+  "params": "{\"path\": string, \"password\"?: string, \"markup\"?: bool, \"format\"?: string (as file.save)}",
+  "shortcut": "F12 / Mod+Shift+S"
  },
  {
   "id": "file.encrypt",
@@ -1838,31 +2384,49 @@
  {
   "id": "file.exportPdf",
   "label": "Export PDF",
-  "params": "{\"path\": string}",
+  "params": "{\"path\": string, \"markup\"?: bool (Print Markup: tracked changes marked up and each page scaled down beside the comments in balloons; default file.printMarkup)}",
   "shortcut": ""
  },
  {
   "id": "file.exportPng",
   "label": "Export Page as PNG",
-  "params": "{\"path\": string, \"page\"?: n (1-based), \"scale\"?: px per pt}",
+  "params": "{\"path\": string, \"page\"?: n (1-based), \"scale\"?: px per pt, \"markup\"?: bool (the page with its comments in balloons beside it; default file.printMarkup)}",
+  "shortcut": ""
+ },
+ {
+  "id": "file.printMarkup",
+  "label": "Print Markup",
+  "params": "{\"value\"?: bool (omit to toggle)} — PDFs, prints and copies show comments (balloons beside each page; a list at the end of HTML, Markdown and text) and tracked changes",
+  "shortcut": ""
+ },
+ {
+  "id": "file.printPdf",
+  "label": "Print to PDF",
+  "params": "{\"path\": string, \"range\"?: \"all\" | \"current\" | \"selection\" (the pages the selection touches) | \"custom\", \"pages\"?: \"1-3,5\" (implies custom), \"parity\"?: \"all\" | \"odd\" | \"even\", \"copies\"?: 1-999, \"collate\"?: bool (default true), \"paper\"?: \"none\" | \"Letter\" | \"Legal\" | \"A4\" | … (a Layout › Size name: scale every page to this paper, centred; the document keeps its size)}",
   "shortcut": ""
  },
  {
   "id": "file.print",
   "label": "Print",
   "params": "{}",
-  "shortcut": "Mod+P"
+  "shortcut": "Mod+P / Mod+Shift+F12 / Mod+F2 / Mod+Alt+I"
  },
  {
   "id": "file.close",
   "label": "Close",
-  "params": "{}",
-  "shortcut": "Mod+W"
+  "params": "{\"force\"?: bool (desktop app's control channel and MCP bridge only: without it a document with unsaved changes is an error and stays open; with it the changes are discarded. Headless sessions never ask; file.closeDocument closes a document there)}",
+  "shortcut": "Mod+W / Mod+F4"
+ },
+ {
+  "id": "file.closeDocument",
+  "label": "Close Document",
+  "params": "{\"id\"?: n (an open document, see view.switchWindows; default the active one), \"force\"?: bool (discard unsaved changes; without it a document with unsaved changes is an error and stays open)} → {\"closed\": id, \"active\": id, \"documents\": [{\"id\", \"title\", \"path\", \"dirty\", \"active\"}]}; closing the last document leaves a new blank one",
+  "shortcut": ""
  },
  {
   "id": "file.properties",
   "label": "Properties",
-  "params": "{\"title\"?, \"subject\"?, \"author\"?, \"keywords\"?, \"comments\"?, \"category\"?, \"custom\"?: {name: string | null (removes)}}",
+  "params": "{\"title\"?, \"subject\"?, \"author\"?, \"keywords\"?, \"comments\"?, \"category\"?, \"custom\"?: {name: string | {\"value\": string, \"linkTarget\"?: string | null} | null (removes)}}; text values and bookmark targets are at most 1 MiB; a string keeps an existing target, an object replaces it (omitted/null target unlinks)",
   "shortcut": ""
  },
  {
@@ -1872,15 +2436,21 @@
   "shortcut": ""
  },
  {
-  "id": "file.options",
-  "label": "Options",
-  "params": "{}",
-  "shortcut": ""
- },
- {
   "id": "file.setAuthor",
   "label": "User Name",
   "params": "{\"name\": string (author of new tracked changes and comments)}",
+  "shortcut": ""
+ },
+ {
+  "id": "file.privacyOptions",
+  "label": "Privacy Options",
+  "params": "{\"removePersonalInfo\"?: bool (save comment and revision authors as \"Author\", no creator or last-modified-by), \"removeDateTime\"?: bool (save comments and tracked changes without dates)} — at least one; the open document keeps its real names and dates",
+  "shortcut": ""
+ },
+ {
+  "id": "file.privacy",
+  "label": "Privacy Settings",
+  "params": "{} → {\"removePersonalInfo\": bool, \"removeDateTime\": bool} (file.privacyOptions changes them)",
   "shortcut": ""
  },
  {
@@ -1920,6 +2490,18 @@
   "shortcut": ""
  },
  {
+  "id": "file.options",
+  "label": "Options",
+  "params": "{\"pane\"?: \"general|display|proofing|save|language|accessibility|advanced|agents\", \"author\"?: string, \"initials\"?: string, \"units\"?: \"inches|centimeters|millimeters|points|picas|auto\" (auto: the region's), \"region\"?: string (a locale tag like pl-PL, saved: the paper File › New starts on, the default units and the decimal separator; auto: the system's), \"typingReplacesSelection\"?: bool, \"insertKeyOvertype\"?: bool, \"overtype\"?: bool, \"marks\"?: {\"tabs\"?: bool, \"spaces\"?: bool, \"paragraphs\"?: bool, \"hidden\"?: bool}, \"checkSpelling\"?: bool, \"markGrammar\"?: bool, \"ignoreUppercase\"?: bool, \"ignoreNumbers\"?: bool, \"ignoreInternet\"?: bool, \"dictionariesFolder\"?: string (a folder of Hunspell .aff/.dic files searched first, saved; auto: the system locations only), \"userTemplatesFolder\"?: string (the folder File › New lists personal templates from, saved; auto: the app's own Templates folder; not a network folder), \"addWords\"?: [string], \"removeWords\"?: [string]} — with any setting it changes them and opens nothing; without, it opens File › Options (at `pane`). Returns the settings.",
+  "shortcut": ""
+ },
+ {
+  "id": "text.overtype",
+  "label": "Overtype",
+  "params": "{\"value\"?: bool (default: toggle)}",
+  "shortcut": ""
+ },
+ {
   "id": "design.theme",
   "label": "Themes",
   "params": "{\"name\": string}",
@@ -1947,6 +2529,12 @@
   "id": "design.paragraphSpacing",
   "label": "Paragraph Spacing",
   "params": "{\"value\": \"default|none|compact|tight|open|relaxed|double\"}",
+  "shortcut": ""
+ },
+ {
+  "id": "design.scaleFontSizes",
+  "label": "Scale Font Sizes",
+  "params": "{\"delta\": pt (-1638..1638, not 0) | \"percent\": number (-99..1000, not 0; 10 = +10%)} (exactly one)",
   "shortcut": ""
  },
  {
@@ -1982,7 +2570,7 @@
  {
   "id": "references.toc",
   "label": "Table of Contents",
-  "params": "{\"levels\"?: 1-9, \"title\"?: string}",
+  "params": "{\"levels\"?: 1-9, \"title\"?: string, \"pageNumbers\"?: bool, \"rightAlign\"?: bool, \"tabLeader\"?: \"dot|hyphen|underscore|none\", \"hyperlinks\"?: bool, \"headingStyles\"?: bool, \"outlineLevels\"?: bool, \"tcFields\"?: bool, \"styleLevels\"?: {style name: 1-9}} (replaces an existing table; {} updates it)",
   "shortcut": ""
  },
  {
@@ -2006,14 +2594,20 @@
  {
   "id": "references.footnote",
   "label": "Insert Footnote",
-  "params": "{\"text\"?: string}",
+  "params": "{\"text\"?: string, \"mark\"?: string (a custom mark instead of the number)}",
   "shortcut": "Mod+Alt+F"
  },
  {
   "id": "references.endnote",
   "label": "Insert Endnote",
-  "params": "{\"text\"?: string}",
-  "shortcut": "Mod+Alt+D"
+  "params": "{\"text\"?: string, \"mark\"?: string (a custom mark instead of the number)}",
+  "shortcut": "Mod+Alt+E"
+ },
+ {
+  "id": "references.convertNotes",
+  "label": "Convert Notes",
+  "params": "{\"to\": \"endnote\" (footnotes become endnotes) | \"footnote\" (endnotes become footnotes) | \"swap\"}",
+  "shortcut": ""
  },
  {
   "id": "references.nextFootnote",
@@ -2030,14 +2624,68 @@
  {
   "id": "references.caption",
   "label": "Insert Caption",
-  "params": "{\"label\"?: \"Figure|Table|Equation\", \"text\"?: string}",
+  "params": "{\"label\"?: \"Figure|Table|Equation|any label\", \"text\"?: string, \"position\"?: \"below|above\", \"excludeLabel\"?: bool, \"format\"?: \"ARABIC|alphabetic|ALPHABETIC|roman|ROMAN\", \"chapter\"?: heading level 1-9, \"separator\"?: \"-|.|:|—|–\"}",
   "shortcut": ""
  },
  {
   "id": "references.updateFields",
   "label": "Update Field",
-  "params": "{}",
+  "params": "{\"all\"?: bool (the body and every header, footer, note and text box, wherever the caret is; default: the story the caret is in)}",
   "shortcut": "F9"
+ },
+ {
+  "id": "view.fieldCodes",
+  "label": "Field Codes",
+  "params": "{\"value\"?: bool}",
+  "shortcut": "Alt+F9"
+ },
+ {
+  "id": "fields.toggleCode",
+  "label": "Toggle Field Codes",
+  "params": "{}",
+  "shortcut": "Shift+F9"
+ },
+ {
+  "id": "fields.setCode",
+  "label": "Edit Field Code",
+  "params": "{\"code\": string}",
+  "shortcut": ""
+ },
+ {
+  "id": "fields.unlink",
+  "label": "Unlink Fields",
+  "params": "{}",
+  "shortcut": "Mod+Shift+F9"
+ },
+ {
+  "id": "fields.lock",
+  "label": "Lock Fields",
+  "params": "{}",
+  "shortcut": "Mod+F11"
+ },
+ {
+  "id": "fields.unlock",
+  "label": "Unlock Fields",
+  "params": "{}",
+  "shortcut": "Mod+Shift+F11"
+ },
+ {
+  "id": "fields.next",
+  "label": "Next Field",
+  "params": "{}",
+  "shortcut": "Alt+F1"
+ },
+ {
+  "id": "fields.previous",
+  "label": "Previous Field",
+  "params": "{}",
+  "shortcut": "Shift+F11 / Alt+Shift+F1"
+ },
+ {
+  "id": "fields.selected",
+  "label": "Selected Fields",
+  "params": "{}",
+  "shortcut": ""
  },
  {
   "id": "mailings.start",
@@ -2048,13 +2696,25 @@
  {
   "id": "mailings.recipients",
   "label": "Select Recipients",
-  "params": "{\"csv\"?: string, \"path\"?: string, \"rows\"?: [{field: value}] | [[value]], \"fields\"?: [string] (column order; required with array rows)}",
+  "params": "{\"csv\"?: string, \"path\"?: string (.csv/.tsv/.txt, or a .xlsx/.xlsm/.xls/.ods workbook), \"data\"?: base64 (a file's bytes, as for path), \"encoding\"?: string (a text list's encoding, e.g. \"gbk\", \"big5\", \"shift_jis\", \"utf-16le\"; default: detected), \"sheet\"?: name | number (1 = first; a workbook with several sheets and no sheet answers {\"sheets\": [...], \"chooseSheet\": true} and loads nothing), \"headers\"?: bool (default true: the first non-blank row names the fields; false: fields are Column 1…N), \"rows\"?: [{field: value}] | [[value]], \"fields\"?: [string] (column order; required with array rows)}",
   "shortcut": ""
  },
  {
   "id": "mailings.editRecipients",
   "label": "Edit Recipient List",
-  "params": "{\"rows\"?: [{field: value}] | [[value]], \"fields\"?: [string]}",
+  "params": "{\"rows\"?: [{field: value}] | [[value]], \"fields\"?: [string]} (no params: the list as {headers, rows (every record), records (how many merge), rules, sort})",
+  "shortcut": ""
+ },
+ {
+  "id": "mailings.filterRecipients",
+  "label": "Filter Recipients",
+  "params": "{\"rules\"?: [{\"field\": string, \"op\": \"equal|notEqual|less|greater|lessOrEqual|greaterOrEqual|blank|notBlank|contains|notContains\", \"value\"?: string, \"join\"?: \"and|or\" (with the rule before; And binds tighter)}], \"sort\"?: [{\"field\": string, \"descending\"?: bool}]} (replaces the filter; `sort` too when given; {} clears both). Preview, Finish & Merge and labels use only the matching records, in sort order",
+  "shortcut": ""
+ },
+ {
+  "id": "mailings.sortRecipients",
+  "label": "Sort Recipients",
+  "params": "{\"sort\"?: [{\"field\": string, \"descending\"?: bool}]} | {\"field\": string, \"descending\"?: bool} (no params: the list's own order)",
   "shortcut": ""
  },
  {
@@ -2078,7 +2738,7 @@
  {
   "id": "mailings.rules",
   "label": "Rules",
-  "params": "{\"rule\": \"IF|SKIPIF|NEXT|MERGEREC\", \"field\"?, \"value\"?, \"then\"?, \"else\"?}",
+  "params": "{\"rule\": \"IF|SKIPIF|NEXTIF|NEXT|MERGEREC\", \"field\"?, \"value\"?, \"then\"?, \"else\"?}",
   "shortcut": ""
  },
  {
@@ -2112,6 +2772,24 @@
   "shortcut": ""
  },
  {
+  "id": "mailings.first",
+  "label": "First Record",
+  "params": "{}",
+  "shortcut": ""
+ },
+ {
+  "id": "mailings.last",
+  "label": "Last Record",
+  "params": "{}",
+  "shortcut": ""
+ },
+ {
+  "id": "mailings.goToRecord",
+  "label": "Go to Record",
+  "params": "{\"record\": n (1 = the first; past either end goes to the first or last record)}",
+  "shortcut": ""
+ },
+ {
   "id": "mailings.findRecipient",
   "label": "Find Recipient",
   "params": "{}",
@@ -2126,25 +2804,31 @@
  {
   "id": "mailings.finish",
   "label": "Finish & Merge",
-  "params": "{\"path\"?: string (save the merged document), \"from\"?: n, \"to\"?: n}",
+  "params": "{\"path\"?: string (save the merged document), \"records\"?: \"all|current\" (current: the previewed record; default all, or from/to), \"from\"?: n, \"to\"?: n (record numbers, 1 = the first)}",
+  "shortcut": ""
+ },
+ {
+  "id": "mailings.printDocuments",
+  "label": "Print Documents",
+  "params": "{\"records\"?: \"all|current\", \"from\"?: n, \"to\"?: n} (merges into a new document, as Finish & Merge does, and opens Print for it)",
   "shortcut": ""
  },
  {
   "id": "mailings.envelopes",
   "label": "Envelopes",
-  "params": "{\"delivery\": string, \"return\"?: string, \"size\"?: \"Envelope #10|Envelope DL\"}",
+  "params": "{\"delivery\": string, \"return\"?: string, \"size\"?: \"Envelope #10|#9|Monarch|DL|C4|C5|C6|B5\", \"width\"?: pt, \"height\"?: pt, \"add\"?: bool (add to this document instead of a new one)}",
   "shortcut": ""
  },
  {
   "id": "mailings.labels",
   "label": "Labels",
-  "params": "{\"text\"?: string, \"rows\"?: n, \"cols\"?: n, \"fromRecipients\"?: bool}",
+  "params": "{\"text\"?: string, \"product\"?: \"letter-3x10|letter-2x10|letter-2x7|letter-2x5|letter-4x20|a4-3x7|a4-2x7|a4-3x8|a4-2x4\", \"rows\"?: n, \"cols\"?: n, \"fromRecipients\"?: bool (one label per selected recipient, continuing across sheets), \"single\"?: {\"row\": n, \"col\": n}}",
   "shortcut": ""
  },
  {
   "id": "references.sources",
   "label": "Manage Sources",
-  "params": "{\"add\"?: Source, \"remove\"?: tag} → list",
+  "params": "{\"add\"?: Source, \"remove\"?: tag, \"import\"?: path (a Word bibliography file, `b:Sources` / `Sources.xml`)} → list",
   "shortcut": ""
  },
  {
@@ -2156,7 +2840,7 @@
  {
   "id": "references.citationStyle",
   "label": "Style",
-  "params": "{\"style\": \"APA|MLA|Chicago|IEEE\"}",
+  "params": "{\"style\": \"APA|Chicago|GB/T 7714|GOST (name sort)|GOST (title sort)|Harvard (Anglia)|IEEE|ISO 690 (author-date)|ISO 690 (numerical)|MLA|SIST02|Turabian\" (Word's style names work too)}",
   "shortcut": ""
  },
  {
@@ -2168,30 +2852,12 @@
  {
   "id": "references.tableOfFigures",
   "label": "Insert Table of Figures",
-  "params": "{\"label\"?: \"Figure|Table|Equation\"}",
+  "params": "{\"label\"?: \"Figure|Table|Equation\" or a caption label of your own, \"includeLabel\"?: bool, \"pageNumbers\"?: bool, \"rightAlign\"?: bool, \"tabLeader\"?: \"dot|hyphen|underscore|none\"}",
   "shortcut": ""
  },
  {
   "id": "references.updateFigures",
   "label": "Update Table",
-  "params": "{}",
-  "shortcut": ""
- },
- {
-  "id": "references.markEntry",
-  "label": "Mark Entry",
-  "params": "{\"entry\"?: string}",
-  "shortcut": ""
- },
- {
-  "id": "references.index",
-  "label": "Insert Index",
-  "params": "{}",
-  "shortcut": ""
- },
- {
-  "id": "references.updateIndex",
-  "label": "Update Index",
   "params": "{}",
   "shortcut": ""
  },
@@ -2208,15 +2874,21 @@
   "shortcut": ""
  },
  {
+  "id": "references.updateAuthorities",
+  "label": "Update Table",
+  "params": "{}",
+  "shortcut": ""
+ },
+ {
   "id": "insert.crossReference",
   "label": "Cross-reference",
-  "params": "{\"to\": \"heading|bookmark|figure|table\", \"target\": string (text / name / number), \"show\"?: \"text|page|number|aboveBelow\"} or {} to list targets",
+  "params": "{\"to\": \"heading|bookmark|figure|table|equation|label:<Name> (a caption label of your own)\", \"target\": string (text / name / number), \"show\"?: \"text|page|number|aboveBelow\"} or {} to list targets",
   "shortcut": ""
  },
  {
   "id": "references.noteOptions",
   "label": "Footnote and Endnote",
-  "params": "{\"footnoteFormat\"?: \"decimal|lowerRoman|upperRoman|lowerLetter|upperLetter\", \"endnoteFormat\"?: …}",
+  "params": "{\"kind\"?: \"footnote|endnote\", \"pos\"?: \"pageBottom|beneathText\" (footnotes) | \"sectEnd|docEnd\" (endnotes), \"numFmt\"?: \"decimal|lowerRoman|upperRoman|lowerLetter|upperLetter|…\", \"numStart\"?: 1-32767, \"numRestart\"?: \"continuous|eachSect|eachPage\" (each page: footnotes only), \"scope\"?: \"document|section\", \"footnoteFormat\"?: …, \"endnoteFormat\"?: …} — no settings: the options in effect at the caret",
   "shortcut": ""
  },
  {
@@ -2226,21 +2898,45 @@
   "shortcut": ""
  },
  {
+  "id": "references.markEntry",
+  "label": "Mark Entry",
+  "params": "{\"entry\"?: string (the selection), \"subentry\"?: string, \"crossReference\"?: \"See …\", \"bookmark\"?: page-range bookmark, \"bold\"?: bool, \"italic\"?: bool, \"all\"?: bool (Mark All: every paragraph's first match of \"text\" or the selection)}",
+  "shortcut": ""
+ },
+ {
+  "id": "references.index",
+  "label": "Insert Index",
+  "params": "{\"type\"?: \"indented|runIn\", \"columns\"?: 1-4, \"rightAlign\"?: bool, \"tabLeader\"?: \"dot|hyphen|underscore|none\", \"headings\"?: bool (letter headings)} (replaces an existing index's settings)",
+  "shortcut": ""
+ },
+ {
+  "id": "references.updateIndex",
+  "label": "Update Index",
+  "params": "{}",
+  "shortcut": ""
+ },
+ {
   "id": "picture.size",
   "label": "Size",
-  "params": "{\"width\"?: pt, \"height\"?: pt, \"lockAspect\"?: bool, \"scale\"?: percent}",
+  "params": "{\"width\"?: pt, \"height\"?: pt, \"lockAspect\"?: bool, \"scale\"?: percent, \"original\"?: bool} (scale: of the current size, or with original of the picture's original size, its pixels at 96 ppi less what is cropped; original alone restores that size; one side alone keeps the proportions unless lockAspect is false; 1–4000 pt: when the proportions are kept, a side past 4000 pt shrinks the other with it)",
   "shortcut": ""
  },
  {
   "id": "picture.crop",
   "label": "Crop",
-  "params": "{\"left\"?, \"top\"?, \"right\"?, \"bottom\"? (fractions 0–0.45)}",
+  "params": "{\"left\"?, \"top\"?, \"right\"?, \"bottom\"? (fractions of the source 0–0.95; the two sides of an axis keep at least 5% between them; a side left out is uncropped), \"width\"?: pt, \"height\"?: pt (the new display size, in the same undo step; a floating picture also moves by what a left/top crop trims, so the visible part stays put)}",
   "shortcut": ""
  },
  {
   "id": "picture.altText",
   "label": "Alt Text",
-  "params": "{\"text\": string}",
+  "params": "{\"text\": string, \"title\"?: string, \"decorative\"?: bool}",
+  "shortcut": ""
+ },
+ {
+  "id": "object.altText",
+  "label": "Alt Text",
+  "params": "{\"text\"?: string, \"title\"?: string, \"decorative\"?: bool} (the selected picture, shape, text box, group or chart)",
   "shortcut": ""
  },
  {
@@ -2256,9 +2952,15 @@
   "shortcut": ""
  },
  {
+  "id": "picture.iconColor",
+  "label": "Icon Color",
+  "params": "{\"color\": \"RRGGBB\"}",
+  "shortcut": ""
+ },
+ {
   "id": "picture.effects",
   "label": "Artistic Effects",
-  "params": "{\"effect\": \"blur|sharpen|invert|posterize|pixelate\"}",
+  "params": "{\"effect\": \"blur|sharpen|invert|posterize|pixelate|none\"} (replaces the picture's effect)",
   "shortcut": ""
  },
  {
@@ -2294,13 +2996,13 @@
  {
   "id": "picture.style",
   "label": "Picture Styles",
-  "params": "{\"style\": \"simpleFrame|thickFrame|rounded|softEdge|shadow\"}",
+  "params": "{\"style\": \"simpleFrame|thickFrame|rounded|softEdge|shadow\"} (replaces the picture's style and border)",
   "shortcut": ""
  },
  {
   "id": "picture.border",
   "label": "Picture Border",
-  "params": "{\"color\"?: \"RRGGBB\", \"width\"?: px}",
+  "params": "{\"color\"?: \"RRGGBB\", \"width\"?: px} (replaces the picture's border)",
   "shortcut": ""
  },
  {
@@ -2319,6 +3021,18 @@
   "id": "arrange.wrap",
   "label": "Wrap Text",
   "params": "{\"wrap\": \"inline|square|tight|through|topAndBottom|behindText|inFrontOfText\"}",
+  "shortcut": ""
+ },
+ {
+  "id": "arrange.wrapText",
+  "label": "Wrap Text Sides",
+  "params": "{\"side\": \"bothSides|left|right|largest\"}  (the sides of the selected Square, Tight or Through object text flows on; largest: the wider side, line by line)",
+  "shortcut": ""
+ },
+ {
+  "id": "arrange.moveWithText",
+  "label": "Move with Text",
+  "params": "{\"value\": bool}  (true: Move with Text, the floating object's vertical position follows its paragraph; false: Fix Position on Page. It stays where it is)",
   "shortcut": ""
  },
  {
@@ -2354,7 +3068,13 @@
  {
   "id": "arrange.bounds",
   "label": "Move or Resize",
-  "params": "{\"width\"?: pt, \"height\"?: pt, \"x\"?: pt, \"y\"?: pt, \"page\"?: n}  (x/y: the top-left on page `page` (0-based, default its page); moving an inline object floats it)",
+  "params": "{\"width\"?: pt, \"height\"?: pt, \"x\"?: pt, \"y\"?: pt, \"page\"?: n, \"to\"?: Pos}  (x/y: the top-left on page `page` (0-based, default its page); moving an inline object by x/y floats it. to: an In Line with Text object moves to that text position and stays inline, as a drag does)",
+  "shortcut": ""
+ },
+ {
+  "id": "arrange.copyTo",
+  "label": "Copy to",
+  "params": "{\"x\": pt, \"y\": pt, \"page\"?: n} | {\"to\": Pos}  (Ctrl+drag: a copy of the selected object lands with its top-left there, or an In Line with Text one at the text position `to`, and is selected; the original and the clipboard stay as they were)",
   "shortcut": ""
  },
  {
@@ -2388,15 +3108,9 @@
   "shortcut": ""
  },
  {
-  "id": "shape.fill",
-  "label": "Shape Fill",
-  "params": "{\"color\": \"RRGGBB\" | null}",
-  "shortcut": ""
- },
- {
   "id": "shape.outline",
   "label": "Shape Outline",
-  "params": "{\"color\": \"RRGGBB\" | null, \"width\"?: pt}",
+  "params": "{\"color\": \"RRGGBB\" | null, \"width\"?: pt}  (a selected drawing canvas: its border)",
   "shortcut": ""
  },
  {
@@ -2412,9 +3126,153 @@
   "shortcut": ""
  },
  {
+  "id": "shape.textDirection",
+  "label": "Text Direction",
+  "params": "{\"dir\": \"horz|vert|vert270|wordArtVert\"}  (horizontal, rotate all text 90°, 270°, stacked; the selected text box or the one the caret is in)",
+  "shortcut": ""
+ },
+ {
+  "id": "shape.alignText",
+  "label": "Align Text",
+  "params": "{\"anchor\": \"t|ctr|b\"}  (top, middle, bottom of the box: for turned text, from the side its lines start on)",
+  "shortcut": ""
+ },
+ {
+  "id": "shape.link",
+  "label": "Create Link",
+  "params": "{\"target\": Pos | n}  (the empty text box the selected box's text continues in: its position, or its Selection Pane index)",
+  "shortcut": ""
+ },
+ {
+  "id": "shape.breakLink",
+  "label": "Break Link",
+  "params": "{}  (the text stops at the end of the selected box; the boxes after it go back to their own text)",
+  "shortcut": ""
+ },
+ {
+  "id": "shape.fill",
+  "label": "Shape Fill",
+  "params": "{\"color\": \"RRGGBB\" | null, \"transparency\"?: %} | {\"gradient\": {\"stops\": [{\"pos\": %, \"color\": \"RRGGBB\", \"transparency\"?: %}], \"type\"?: \"linear|radial|rectangular|path\", \"angle\"?: deg, \"focus\"?: [l, t, r, b], \"tile\"?: [l, t, r, b], \"scaled\"?: bool, \"rotateWithShape\"?: bool}}  (tile: percent insets of the gradient's area; scaled: a linear angle scaled with the shape; a colour alone keeps the shape's transparency; angle: linear only, 0 = left to right, 90 = top to bottom; focus: percent insets of where a radial, rectangular or path gradient starts; applies to every selected shape, text box and canvas background)",
+  "shortcut": ""
+ },
+ {
+  "id": "insert.smartArt",
+  "label": "SmartArt",
+  "params": "{\"layout\"?: \"basicList|process|cycle|hierarchy|pyramid|radial|matrix|venn\", \"items\"?: [string | {\"text\": string, \"level\"?: 0-7}], \"colors\"?: \"accent1…accent6|colorful\", \"width\"?: pt, \"height\"?: pt} (no items: sample items for the layout)",
+  "shortcut": ""
+ },
+ {
+  "id": "smartArt.items",
+  "label": "Edit Items",
+  "params": "{\"items\": [string | {\"text\": string, \"level\"?: 0-7}]} (replaces the outline)",
+  "shortcut": ""
+ },
+ {
+  "id": "smartArt.textPane",
+  "label": "Text Pane",
+  "params": "{\"value\"?: bool} (no value: show or hide the Text Pane)",
+  "shortcut": ""
+ },
+ {
+  "id": "smartArt.addShape",
+  "label": "Add Shape",
+  "params": "{\"after\"?: item index (default: the last), \"text\"?: string, \"below\"?: bool (a sub-item instead of the next item)}",
+  "shortcut": ""
+ },
+ {
+  "id": "smartArt.promote",
+  "label": "Promote",
+  "params": "{\"index\"?: item index (default: the last)} (the item and the items under it move up a level)",
+  "shortcut": ""
+ },
+ {
+  "id": "smartArt.demote",
+  "label": "Demote",
+  "params": "{\"index\"?: item index (default: the last)} (the item and the items under it move down a level)",
+  "shortcut": ""
+ },
+ {
+  "id": "smartArt.layout",
+  "label": "Change Layout",
+  "params": "{\"layout\": \"basicList|process|cycle|hierarchy|pyramid|radial|matrix|venn\"}",
+  "shortcut": ""
+ },
+ {
+  "id": "smartArt.colors",
+  "label": "Change Colors",
+  "params": "{\"variant\": \"accent1|accent2|accent3|accent4|accent5|accent6|colorful\"}",
+  "shortcut": ""
+ },
+ {
+  "id": "smartArt.reset",
+  "label": "Reset Graphic",
+  "params": "{} (back to the default colours; the items and layout stay)",
+  "shortcut": ""
+ },
+ {
+  "id": "insert.chart",
+  "label": "Chart",
+  "params": "{\"type\"?: \"column|columnStacked|bar|barStacked|line|area|pie|doughnut|scatter\", \"data\"?: {\"categories\": [string], \"series\": [{\"name\": string, \"values\": [number|null]}]}, \"title\"?: string, \"legend\"?: \"right|left|top|bottom|none\", \"dataLabels\"?: bool, \"width\"?: pt, \"height\"?: pt} (no params: the chart type picker)",
+  "shortcut": ""
+ },
+ {
+  "id": "chart.type",
+  "label": "Change Chart Type",
+  "params": "{\"type\": \"column|columnStacked|bar|barStacked|line|area|pie|doughnut|scatter\"}",
+  "shortcut": ""
+ },
+ {
+  "id": "chart.editData",
+  "label": "Edit Data",
+  "params": "{\"data\": {\"categories\"?: [string], \"series\"?: [{\"name\": string, \"values\": [number|null]}]}}",
+  "shortcut": ""
+ },
+ {
+  "id": "chart.title",
+  "label": "Chart Title",
+  "params": "{\"text\"?: string|null} (no text: switch the title on or off)",
+  "shortcut": ""
+ },
+ {
+  "id": "chart.legend",
+  "label": "Legend",
+  "params": "{\"pos\"?: \"right|left|top|bottom|none\"} (no pos: switch the legend on or off)",
+  "shortcut": ""
+ },
+ {
+  "id": "chart.dataLabels",
+  "label": "Data Labels",
+  "params": "{\"on\"?: bool} (no value: switch the data labels on or off)",
+  "shortcut": ""
+ },
+ {
   "id": "draw.select",
   "label": "Select",
   "params": "{}",
+  "shortcut": ""
+ },
+ {
+  "id": "draw.lasso",
+  "label": "Lasso Select",
+  "params": "{\"page\"?: n, \"points\"?: [[x, y], …], \"clear\"?: bool}  (no points: use the lasso; points: select the ink inside that loop; clear: drop the selection)",
+  "shortcut": ""
+ },
+ {
+  "id": "draw.lassoMove",
+  "label": "Move Selected Ink",
+  "params": "{\"dx\": pt, \"dy\": pt}",
+  "shortcut": ""
+ },
+ {
+  "id": "draw.lassoDelete",
+  "label": "Delete Selected Ink",
+  "params": "{}",
+  "shortcut": ""
+ },
+ {
+  "id": "draw.lassoColor",
+  "label": "Recolor Selected Ink",
+  "params": "{\"color\": \"RRGGBB\"}",
   "shortcut": ""
  },
  {
@@ -2442,6 +3300,18 @@
   "shortcut": ""
  },
  {
+  "id": "draw.addPen",
+  "label": "Add Pen",
+  "params": "{\"kind\"?: \"pen|pencil|highlighter\", \"color\"?: \"RRGGBB\", \"width\"?: pt}  (adds the pen to the gallery and picks it up)",
+  "shortcut": ""
+ },
+ {
+  "id": "draw.removePen",
+  "label": "Remove Pen",
+  "params": "{\"index\": n}",
+  "shortcut": ""
+ },
+ {
   "id": "draw.stroke",
   "label": "Draw Ink",
   "params": "{\"page\": n, \"points\": [[x, y], …] (page points, at most 5000), \"tool\"?: \"pen|pencil|highlighter\", \"color\"?: \"RRGGBB\", \"width\"?: pt}",
@@ -2454,9 +3324,99 @@
   "shortcut": ""
  },
  {
+  "id": "draw.inkToShape",
+  "label": "Ink to Shape",
+  "params": "{\"value\"?: bool}  (no value: convert the lasso-selected strokes, or turn Ink to Shape on or off)",
+  "shortcut": ""
+ },
+ {
+  "id": "draw.convertInk",
+  "label": "Convert to Shapes",
+  "params": "{}",
+  "shortcut": ""
+ },
+ {
+  "id": "draw.replay",
+  "label": "Ink Replay",
+  "params": "{\"value\"?: bool}  (starts or stops Ink Replay; returns the strokes in the order they were drawn)",
+  "shortcut": ""
+ },
+ {
   "id": "review.hideInk",
   "label": "Hide Ink",
   "params": "{\"value\"?: bool}",
+  "shortcut": ""
+ },
+ {
+  "id": "insert.canvas",
+  "label": "Drawing Canvas",
+  "params": "{\"width\"?: pt (default 432 = 6\"), \"height\"?: pt (default 216 = 3\"), \"fill\"?: \"RRGGBB\", \"outline\"?: \"RRGGBB\"}  (in line with text at the caret; it stays selected, so the next Pictures, Shapes or Text Box goes inside it)",
+  "shortcut": ""
+ },
+ {
+  "id": "canvas.fit",
+  "label": "Fit",
+  "params": "{}  (shrinks the selected canvas's frame to its drawing: the members move to its top-left corner)",
+  "shortcut": ""
+ },
+ {
+  "id": "canvas.expand",
+  "label": "Expand",
+  "params": "{\"by\"?: pt (default 36)}  (grows the frame right and down; at least enough to show every member)",
+  "shortcut": ""
+ },
+ {
+  "id": "canvas.scale",
+  "label": "Scale Drawing",
+  "params": "{\"factor\": number (0.1–10)}  (scales the frame and every member together)",
+  "shortcut": ""
+ },
+ {
+  "id": "canvas.member",
+  "label": "Canvas Member",
+  "params": "{\"index\": n, \"x\"?: pt, \"y\"?: pt, \"width\"?: pt, \"height\"?: pt, \"delete\"?: bool}  (moves, resizes or removes member `index` of the selected canvas; x/y from the canvas's top-left; with no change, returns the members)",
+  "shortcut": ""
+ },
+ {
+  "id": "insert.wordArt",
+  "label": "WordArt",
+  "params": "{\"text\"?: string, \"style\"?: WordArt style id (see format.textEffects), \"transform\"?: \"textArchUp\"|\"textArchDown\"|\"textCircle\"|\"textWave1\"|… (a DrawingML preset text warp)}",
+  "shortcut": ""
+ },
+ {
+  "id": "format.textEffects",
+  "label": "Text Effects",
+  "params": "{\"style\"?: \"solid\"|\"outlined\"|\"hollow\"|\"gradient\"|\"shadowed\"|\"glowing\"|\"reflected\"|\"sunset\", \"clear\"?: bool, \"fill\"?: \"RRGGBB\"|\"none\" (hollow)|{\"color\": \"RRGGBB\", \"transparency\"?: %}|{\"gradient\": [\"RRGGBB\", …], \"angle\"?: deg}|null (the run's colour), \"outline\"?: \"RRGGBB\"|\"none\"|{\"color\"?: \"RRGGBB\"|null, \"width\"?: pt, \"transparency\"?: %}|null, \"shadow\"?: preset|{\"color\"?, \"transparency\"?, \"blur\"?, \"distance\"?, \"angle\"?}|null, \"glow\"?: pt|{\"color\"?, \"size\"?, \"transparency\"?}|null, \"reflection\"?: bool|\"none\"|{\"transparency\"?: %, \"size\"?: %, \"distance\"?: pt}|null}  (an omitted key is left as it is; with a shape selected or the caret in a text box, the box's whole text)",
+  "shortcut": ""
+ },
+ {
+  "id": "wordArt.style",
+  "label": "WordArt Styles",
+  "params": "{\"style\": \"solid\"|\"outlined\"|\"hollow\"|\"gradient\"|\"shadowed\"|\"glowing\"|\"reflected\"|\"sunset\"}",
+  "shortcut": ""
+ },
+ {
+  "id": "wordArt.textFill",
+  "label": "Text Fill",
+  "params": "{\"fill\": \"RRGGBB\"|\"none\"|{\"gradient\": [\"RRGGBB\", …], \"angle\"?: deg}|null}",
+  "shortcut": ""
+ },
+ {
+  "id": "wordArt.textOutline",
+  "label": "Text Outline",
+  "params": "{\"color\"?: \"RRGGBB\"|null, \"width\"?: pt} or {\"outline\": \"none\"|null}",
+  "shortcut": ""
+ },
+ {
+  "id": "wordArt.transform",
+  "label": "Transform",
+  "params": "{\"preset\": \"textArchUp\"|\"textArchDown\"|\"textCircle\"|\"textWave1\"|\"textSlantUp\"|\"textSlantDown\"|\"textInflate\"|\"textDeflate\"|\"textChevron\"|\"textChevronInverted\"|\"textTriangle\"|\"textTriangleInverted\"|… (any DrawingML preset text warp)|\"none\", \"adj\"?: n (the preset's adjust value)}",
+  "shortcut": ""
+ },
+ {
+  "id": "shape.connect",
+  "label": "Connect Shapes",
+  "params": "{\"start\"?: end, \"end\"?: end}  end: {\"path\": [..], \"off\": n, \"site\"?: n} (glue to that body shape's connection site; nearest one when omitted) | {\"x\": pt, \"y\": pt, \"page\"?: n} (drag the end there: it glues to a shape's site within 12 pt, else stays free there) | null (unglue)",
   "shortcut": ""
  },
  {
@@ -2475,24 +3435,42 @@
   "id": "tools.macros",
   "label": "Macros",
   "params": "{\"run\"?: name, \"define\"?: {\"name\": string, \"steps\": [{\"command\", \"params\"}]}, \"delete\"?: name}",
-  "shortcut": ""
+  "shortcut": "Alt+F8"
  },
  {
   "id": "tools.autocorrect",
   "label": "AutoCorrect Options",
-  "params": "{\"enabled\"?: bool, \"add\"?: {\"from\": string, \"to\": string}}",
+  "params": "{\"enabled\"?: bool (all of AutoCorrect), \"replaceText\"|\"twoInitialCaps\"|\"capSentences\"|\"capCells\"|\"capDays\"|\"capsLock\"|\"smartQuotes\"|\"fractions\"|\"ordinals\"|\"dashes\"|\"links\"|\"bullets\"|\"numbering\"|\"borderLines\"?: bool, \"boldItalic\"?: bool (*bold* and _italic_ with real formatting; default false), \"tabIndent\"?: bool (Set left- and first-indent with tabs and backspaces; default false), \"headingStyles\"?: bool (Built-in Heading styles; default false), \"doubleSpacePeriod\"?: bool (Add a period with double-space; default false), \"autoAddFirstLetter\"|\"autoAddInitialCaps\"?: bool (Automatically add words to the exception lists when an automatic capital is undone; default true), \"add\"?: {\"from\": string, \"to\": string} (adds or replaces an entry), \"delete\"?: string (an entry's \"from\", built in or added), \"addException\"?: string, \"deleteException\"?: string, \"addInitialCapsException\"?: string (keeps TWo INitial CApitals, like \"IDs\"), \"deleteInitialCapsException\"?: string} → options, entries and exceptions",
+  "shortcut": ""
+ },
+ {
+  "id": "tools.customizeKeyboard",
+  "label": "Customize Keyboard",
+  "params": "{\"command\"?: id (its keys), \"key\"?: \"Mod+Shift+K\" (the command it runs), \"assign\"?: {\"command\": id, \"key\": string}, \"remove\"?: {\"command\": id, \"key\": string}, \"reset\"?: true (built-in keys only)} → {custom: {assigned: {key: id}, removed: [key]}, …}; no params opens the dialog",
+  "shortcut": ""
+ },
+ {
+  "id": "tools.customizeRibbon",
+  "label": "Customize Ribbon",
+  "params": "{\"hide\"?: tab, \"show\"?: tab, \"newTab\"?: {\"name\"?, \"after\"?: tab}, \"newGroup\"?: {\"tab\", \"name\"?}, \"add\"?: {\"tab\", \"group\", \"command\", \"after\"?: id}, \"remove\"?: {\"tab\", \"group\"?, \"command\"?}, \"rename\"?: {\"tab\", \"group\"?, \"to\"}, \"move\"?: {\"tab\", \"group\"?, \"command\"?, \"by\": int}, \"qatAdd\"?: id, \"qatRemove\"?: id, \"qatMove\"?: {\"command\", \"by\": int}, \"reset\"?: true | \"ribbon\" | \"qat\", \"layout\"?: object} → {tabs: [{name, custom?, hidden?, groups?: [{name, commands}]}], qat: [id]}; only custom tabs and groups can be renamed or removed (built-in tabs can be hidden and moved); no params opens the dialog",
+  "shortcut": ""
+ },
+ {
+  "id": "tools.search",
+  "label": "Search",
+  "params": "{\"query\"?: string} → {matches: [{id, label, location, shortcut}]} (every word of the query in the label, location or id; at most 50); no query opens the Search box",
   "shortcut": ""
  },
  {
   "id": "review.compare",
   "label": "Compare",
-  "params": "{\"path\"?: string, \"text\"?: string (revised version)}",
+  "params": "{\"path\"?: string (revised document), \"text\"?: string (revised text), \"original\"?: string (original document; default: this one), \"author\"?: string (label changes with), \"caseChanges\"?: bool, \"whiteSpace\"?: bool, \"formatting\"?: bool (default true: differences count), \"level\"?: \"word|character\", \"showIn\"?: \"original|revised|new\" (revised/new: an untitled document), \"moves\"|\"comments\"|\"tables\"|\"headersFooters\"|\"footnotes\"|\"textBoxes\"|\"fields\"?: bool (accepted; not honoured yet except tables, always compared)}",
   "shortcut": ""
  },
  {
   "id": "review.combine",
   "label": "Combine",
-  "params": "{\"path\"?: string}",
+  "params": "{\"path\"?: string (revised document), \"text\"?: string (revised text), \"original\"?: string (original document; default: this one), \"author\"?: string (label changes with), \"caseChanges\"?: bool, \"whiteSpace\"?: bool, \"formatting\"?: bool (default true: differences count), \"level\"?: \"word|character\", \"showIn\"?: \"original|revised|new\" (revised/new: an untitled document), \"moves\"|\"comments\"|\"tables\"|\"headersFooters\"|\"footnotes\"|\"textBoxes\"|\"fields\"?: bool (accepted; not honoured yet except tables, always compared)}",
   "shortcut": ""
  },
  {
@@ -2504,19 +3482,13 @@
  {
   "id": "file.inspect",
   "label": "Inspect Document",
-  "params": "{\"remove\"?: [\"comments\", \"revisions\", \"properties\", \"hidden\", \"headers\"]}",
-  "shortcut": ""
- },
- {
-  "id": "review.restrict",
-  "label": "Restrict Editing",
-  "params": "{\"mode\": \"none|readOnly|comments|trackedChanges|forms\"}",
+  "params": "{\"remove\"?: [\"comments\", \"revisions\", \"properties\", \"hidden\", \"headers\"]} → {found: {comments, revisions, properties, hiddenText, hiddenCount, hidden: [{story: \"body|header|footer|footnote|endnote|comment|textBox\", part?, text}] (at most 1000), truncated, unsupported: [{story, object: \"table|opaque\", ..}] (hidden text not inspected: table styles, verbatim objects), headers}, removed, residual: [..] (hidden text a removal couldn't reach), removedNotes: [{kind, part, text}] (notes whose hidden reference was removed)}; whole hidden paragraphs go with their marks; the removals are refused while the document tracks changes",
   "shortcut": ""
  },
  {
   "id": "file.protect",
   "label": "Protect Document",
-  "params": "{\"mode\": \"none|readOnly|comments|trackedChanges\"}",
+  "params": "{\"mode\": \"none|readOnly|comments|trackedChanges\"} (starting enforcement; \"none\" doesn't stop a protected document — use review.restrict {\"stop\": true})",
   "shortcut": ""
  },
  {
@@ -2528,13 +3500,13 @@
  {
   "id": "file.recover",
   "label": "Recover Unsaved Documents",
-  "params": "{}",
+  "params": "{\"restore\"?: recoveryId, \"discard\"?: recoveryId, \"refresh\"?: true}; desktop only; returns {enabled,busy,documents,error}; restore loads asynchronously without a file path",
   "shortcut": ""
  },
  {
   "id": "file.newFromTemplate",
   "label": "New from Template",
-  "params": "{\"path\": string}",
+  "params": "{\"path\": string} → a new, untitled document from the template, attached to it",
   "shortcut": ""
  },
  {
@@ -2564,13 +3536,13 @@
  {
   "id": "insert.quickParts",
   "label": "Quick Parts",
-  "params": "{\"save\"?: name (from the selection), \"insert\"?: name, \"delete\"?: name} → list",
+  "params": "{\"save\"?: name (from the selection), \"in\"?: \"document\" (save into the document's own building blocks, kept in its file; else this session's), \"insert\"?: name, \"delete\"?: name} → {\"parts\": names (this session's, then the document's Quick Parts), \"document\": the document's Quick Parts}",
   "shortcut": ""
  },
  {
   "id": "insert.autoText",
   "label": "AutoText",
-  "params": "{\"save\"?: name, \"insert\"?: name}",
+  "params": "{\"save\"?: name, \"in\"?: \"document\", \"insert\"?: name, \"delete\"?: name} → {\"parts\": names, \"document\": the document's AutoText}",
   "shortcut": ""
  },
  {
@@ -2654,7 +3626,7 @@
  {
   "id": "review.language",
   "label": "Language",
-  "params": "{\"lang\": \"en-US|en-GB|fr-FR|…\", \"noProof\"?: bool}",
+  "params": "{\"lang\"?: \"en-US|en-GB|pl-PL|fr-FR|…\" (BCP 47; default en-US), \"noProof\"?: bool, \"detect\"?: bool (detect language automatically, a preference), \"default\"?: bool (also the document's default and the saved language for future blank documents)}",
   "shortcut": ""
  },
  {
@@ -2703,6 +3675,66 @@
   "id": "view.sideToSide",
   "label": "Side to Side",
   "params": "{}",
+  "shortcut": ""
+ },
+ {
+  "id": "tools.templates",
+  "label": "Templates and Add-ins",
+  "params": "{} → {\"template\": path|null, \"linkStyles\": bool} (from the ribbon, the app shows the dialog)",
+  "shortcut": ""
+ },
+ {
+  "id": "tools.attachTemplate",
+  "label": "Attach Template",
+  "params": "{\"path\": string, \"linkStyles\"?: bool, \"update\"?: bool (update the styles from it now), \"data\"?: base64 (the template's bytes, for \"update\")}",
+  "shortcut": ""
+ },
+ {
+  "id": "tools.detachTemplate",
+  "label": "Detach Template",
+  "params": "{}",
+  "shortcut": ""
+ },
+ {
+  "id": "tools.linkStyles",
+  "label": "Automatically Update Document Styles",
+  "params": "{\"value\"?: bool (default: toggle)}",
+  "shortcut": ""
+ },
+ {
+  "id": "tools.updateStyles",
+  "label": "Update Styles from Template",
+  "params": "{\"path\"?: string (default: the attached template), \"data\"?: base64 (the file's bytes; `path` then only names it)} → {\"added\", \"replaced\"}",
+  "shortcut": ""
+ },
+ {
+  "id": "styles.organizer",
+  "label": "Organizer",
+  "params": "{\"path\"?: string, \"data\"?: base64} → {\"document\": [style], \"file\"?: {\"path\", \"styles\": [style]}}",
+  "shortcut": ""
+ },
+ {
+  "id": "styles.copyFrom",
+  "label": "Copy Styles",
+  "params": "{\"path\": string, \"data\"?: base64, \"styles\": [name or id]} → {\"added\", \"replaced\", \"skipped\"}",
+  "shortcut": ""
+ },
+ {
+  "id": "styles.rename",
+  "label": "Rename Style",
+  "params": "{\"style\": string (name or id; custom styles only), \"name\": string}",
+  "shortcut": ""
+ },
+ {
+  "id": "file.listTemplates",
+  "label": "Personal Templates",
+  "params": "{\"dir\"?: string (the user templates folder; default: the one saved in File › Options)} → {\"dir\", \"templates\": [{\"label\" (the file name without its extension), \"title\": string|null (dc:title), \"path\", \"category\" (\"\" at the top level, else the subfolder's name), \"modified\": ISO-8601|null}] (.dotx and .dotm, at most 500, by category then label), \"truncated\": bool}; a network folder is refused",
+  "shortcut": ""
+ },
+ {
+  "id": "review.restrict",
+  "label": "Restrict Editing",
+  "params": "{\"mode\"?: \"none|readOnly|comments|trackedChanges|forms\" (start enforcing; \"none\" stops), \"formatting\"?: bool (limit formatting to unlocked styles), \"lockedStyles\"?: [style id or name] (the styles that can't be applied; every other style is unlocked), \"password\"?: string (set when enforcing; required to stop a password-protected document), \"stop\"?: bool, \"exception\"?: \"add\" (the selection stays editable for everyone) | \"remove\" (exceptions touching the selection) | \"removeAll\"} → state",
   "shortcut": ""
  },
  {
@@ -2757,6 +3789,102 @@
   "id": "caret.pastCitation",
   "label": "Move Past Citation",
   "params": "{}",
+  "shortcut": ""
+ },
+ {
+  "id": "developer.richText",
+  "label": "Rich Text Content Control",
+  "params": "{\"title\"?: string, \"tag\"?: string}",
+  "shortcut": ""
+ },
+ {
+  "id": "developer.plainText",
+  "label": "Plain Text Content Control",
+  "params": "{\"title\"?: string, \"tag\"?: string}",
+  "shortcut": ""
+ },
+ {
+  "id": "developer.picture",
+  "label": "Picture Content Control",
+  "params": "{\"title\"?: string, \"tag\"?: string}",
+  "shortcut": ""
+ },
+ {
+  "id": "developer.buildingBlock",
+  "label": "Building Block Gallery Content Control",
+  "params": "{\"title\"?: string, \"tag\"?: string}",
+  "shortcut": ""
+ },
+ {
+  "id": "developer.checkBox",
+  "label": "Check Box Content Control",
+  "params": "{\"title\"?: string, \"tag\"?: string, \"checked\"?: bool}",
+  "shortcut": ""
+ },
+ {
+  "id": "developer.comboBox",
+  "label": "Combo Box Content Control",
+  "params": "{\"title\"?: string, \"tag\"?: string, \"items\"?: [string | {\"display\": string, \"value\"?: string}]}",
+  "shortcut": ""
+ },
+ {
+  "id": "developer.dropDown",
+  "label": "Drop-Down List Content Control",
+  "params": "{\"title\"?: string, \"tag\"?: string, \"items\"?: [string | {\"display\": string, \"value\"?: string}]}",
+  "shortcut": ""
+ },
+ {
+  "id": "developer.datePicker",
+  "label": "Date Picker Content Control",
+  "params": "{\"title\"?: string, \"tag\"?: string, \"format\"?: \"M/d/yyyy\", \"date\"?: \"YYYY-MM-DD\"}",
+  "shortcut": ""
+ },
+ {
+  "id": "developer.repeatingSection",
+  "label": "Repeating Section Content Control",
+  "params": "{\"title\"?: string, \"tag\"?: string}",
+  "shortcut": ""
+ },
+ {
+  "id": "developer.designMode",
+  "label": "Design Mode",
+  "params": "{\"value\"?: bool}",
+  "shortcut": ""
+ },
+ {
+  "id": "developer.properties",
+  "label": "Properties",
+  "params": "{\"control\"?: tag or title, \"title\"?: string, \"tag\"?: string, \"lockDelete\"?: bool, \"lockEdit\"?: bool, \"temporary\"?: bool, \"multiLine\"?: bool, \"placeholder\"?: string, \"items\"?: [string | {\"display\", \"value\"}], \"format\"?: \"M/d/yyyy\", \"checkedSymbol\"?: char, \"uncheckedSymbol\"?: char}",
+  "shortcut": ""
+ },
+ {
+  "id": "developer.control",
+  "label": "Content Control at Selection",
+  "params": "{\"control\"?: tag or title, \"at\"?: pos}",
+  "shortcut": ""
+ },
+ {
+  "id": "developer.toggleCheckBox",
+  "label": "Toggle Check Box",
+  "params": "{\"control\"?: tag or title, \"at\"?: pos, \"value\"?: bool}",
+  "shortcut": ""
+ },
+ {
+  "id": "developer.chooseItem",
+  "label": "Choose List Item",
+  "params": "{\"control\"?: tag or title, \"at\"?: pos, \"index\"?: number, \"value\"?: string, \"text\"?: string}",
+  "shortcut": ""
+ },
+ {
+  "id": "developer.setDate",
+  "label": "Set Date",
+  "params": "{\"control\"?: tag or title, \"at\"?: pos, \"date\": \"YYYY-MM-DD\"}",
+  "shortcut": ""
+ },
+ {
+  "id": "developer.removeControl",
+  "label": "Remove Content Control",
+  "params": "{\"control\"?: tag or title, \"at\"?: pos}",
   "shortcut": ""
  }
 ]

@@ -24,7 +24,7 @@
  {
   "id": "file.newSequence",
   "label": "Sequence…",
-  "params": "{\"name\":str,\"width\":u32=1920,\"height\":u32=1080,\"fps\":f64=23.976,\"sampleRate\":u32=48000,\"video\":n=3,\"audio\":n=3,\"mix\":\"Stereo|Mono|5.1|Adaptive\"?,\"trackType\":\"Standard|Mono|5.1|Adaptive\"?,\"fromItem\":itemId?}",
+  "params": "{\"name\":str,\"width\":u32=1920,\"height\":u32=1080,\"fps\":f64=23.976,\"sampleRate\":u32=48000,\"video\":n=3,\"audio\":n=3,\"mix\":\"Stereo|Mono|5.1|Adaptive\"?,\"trackType\":\"Standard|Mono|5.1|Adaptive\"?,\"fromItem\":itemId?,\"fromItems\":[itemId]?}",
   "menu": [
    "File",
    "New"
@@ -123,7 +123,7 @@
  {
   "id": "file.newColorMatte",
   "label": "Color Matte…",
-  "params": "{\"color\":\"#rrggbb\",\"seconds\":f64}",
+  "params": "{\"color\":\"#rrggbb\"?,\"seconds\":f64=5}",
   "menu": [
    "File",
    "New"
@@ -271,7 +271,7 @@
  {
   "id": "file.importAaf",
   "label": "Import AAF…",
-  "params": "{\"path\":str}",
+  "params": "{\"path\":str,\"bin\":binId?}",
   "menu": [],
   "shortcut": null,
   "enabled": true
@@ -463,7 +463,7 @@
  {
   "id": "file.exportMedia",
   "label": "Media…",
-  "params": "{\"path\":str,\"preset\":str?,\"settings\":ExportSettings?,\"format\":\"h264|hevc|prores|dnxhr|apv|mjpeg|mxf-op1a|mxf-opatom|png|tiff|bmp|jpg|tga|dpx|exr|gif|wav|aiff|aac\"?,\"width\":u32?,\"height\":u32?,\"fps\":f64?,\"bitrateKbps\":u32?,\"bitrateMode\":\"cbr|vbr1Pass|vbr2Pass|crf\"?,\"crf\":0..51=23,\"hardwareEncoding\":\"off|auto\"?,\"scale\":f32=1,\"audio\":bool=true,\"quality\":0..100,\"burnCaptions\":bool=false,\"alpha\":bool=false,\"captionSidecar\":\"srt|vtt\"?,\"loudnessLufs\":f64?,\"proresProfile\":\"proxy|lt|standard|hq|4444|4444xq\"?,\"dnxProfile\":\"lb|sq|hq|hqx\"?,\"apvProfile\":\"422-10|422-12|444-10|444-12\"?,\"mxfVideoCodec\":\"dnxhr|proRes|h264\"?,\"sequence\":id?,\"range\":\"entire|inOut|workArea|custom\"?,\"startSeconds\":f64?,\"endSeconds\":f64?,\"wait\":bool=false}",
+  "params": "{\"path\":str,\"preset\":str?,\"settings\":ExportSettings?,\"format\":\"h264|hevc|prores|dnxhr|apv|mjpeg|mxf-op1a|mxf-opatom|png|tiff|bmp|jpg|tga|dpx|exr|gif|wav|aiff|aac|flac\"?,\"audioCodec\":\"auto|aac|pcm|flac\"?,\"flacLevel\":0..8=5,\"width\":u32?,\"height\":u32?,\"fps\":f64?,\"bitrateKbps\":u32?,\"bitrateMode\":\"cbr|vbr1Pass|vbr2Pass|crf\"?,\"crf\":0..51=23,\"hardwareEncoding\":\"off|auto\"?,\"scale\":f32=1,\"audio\":bool=true,\"quality\":0..100,\"burnCaptions\":bool=false,\"alpha\":bool=false,\"exrCompression\":\"none|rle|zips|zip\"?,\"captionSidecar\":\"srt|vtt\"?,\"loudnessLufs\":f64?,\"proresProfile\":\"proxy|lt|standard|hq|4444|4444xq\"?,\"dnxProfile\":\"lb|sq|hq|hqx\"?,\"apvProfile\":\"422-10|422-12|444-10|444-12\"?,\"mxfVideoCodec\":\"dnxhr|proRes|h264\"?,\"sequence\":id?,\"range\":\"entire|inOut|workArea|custom\"?,\"startSeconds\":f64?,\"endSeconds\":f64?,\"wait\":bool=false}",
   "menu": [
    "File",
    "Export"
@@ -513,6 +513,22 @@
    "Edit"
   ],
   "shortcut": "Cmd+Shift+Z",
+  "enabled": false
+ },
+ {
+  "id": "history.deleteRedoable",
+  "label": "Delete Redoable Actions",
+  "params": "{}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "history.clear",
+  "label": "Clear History",
+  "params": "{}",
+  "menu": [],
+  "shortcut": null,
   "enabled": false
  },
  {
@@ -578,7 +594,7 @@
  {
   "id": "edit.clear",
   "label": "Clear",
-  "params": "{\"clips\":[id]?}",
+  "params": "{\"clips\":[id]?,\"clip\":id?} (explicit clips work without a selection)",
   "menu": [
    "Edit"
   ],
@@ -588,11 +604,21 @@
  {
   "id": "edit.rippleDelete",
   "label": "Ripple Delete",
-  "params": "{\"clips\":[id]?}",
+  "params": "{\"clips\":[id]?,\"clip\":id?} (explicit clips work without a selection)",
   "menu": [
    "Edit"
   ],
   "shortcut": "Shift+Delete",
+  "enabled": false
+ },
+ {
+  "id": "edit.rippleDeleteHead",
+  "label": "Ripple Delete Head Frame",
+  "params": "{\"clips\":[id]?,\"clip\":id?}",
+  "menu": [
+   "Edit"
+  ],
+  "shortcut": null,
   "enabled": false
  },
  {
@@ -875,7 +901,7 @@
  {
   "id": "edit.label",
   "label": "Label",
-  "params": "{\"label\":\"Violet|Iris|…\"}",
+  "params": "{\"label\":\"preset|#RRGGBB\",\"clips\":[id]?,\"items\":[id]?,\"sequence\":id?,\"saveColor\":bool?}",
   "menu": [],
   "shortcut": null,
   "enabled": true
@@ -883,7 +909,7 @@
  {
   "id": "clip.rename",
   "label": "Rename…",
-  "params": "{\"clip\":id?,\"item\":id?,\"name\":str}",
+  "params": "{\"clip\":id?,\"clips\":[id]?,\"item\":id?,\"name\":str?}",
   "menu": [
    "Clip"
   ],
@@ -966,7 +992,7 @@
  {
   "id": "clip.frameHoldOptions",
   "label": "Frame Hold Options…",
-  "params": "{\"clips\":[id]?,\"enabled\":bool=true,\"holdOn\":\"sourceTimecode|sequenceTime|in|out|playhead\",\"time\":ticks?,\"timecode\":str?,\"holdFilters\":bool=false}",
+  "params": "{\"clips\":[id]?,\"enabled\":bool=true,\"holdOn\":\"sourceTimecode|sequenceTime|in|out|playhead\"?,\"time\":ticks?,\"timecode\":str?,\"holdFilters\":bool=false}",
   "menu": [
    "Clip",
    "Video Options"
@@ -999,7 +1025,7 @@
  {
   "id": "clip.fieldOptions",
   "label": "Field Options…",
-  "params": "{\"clips\":[id]?,\"reverseFieldDominance\":bool=false,\"processing\":\"none|alwaysDeinterlace|flickerRemoval\"}",
+  "params": "{\"clips\":[id]?,\"reverseFieldDominance\":bool=false,\"processing\":\"none|alwaysDeinterlace|flickerRemoval\"?}",
   "menu": [
    "Clip",
    "Video Options"
@@ -1180,7 +1206,7 @@
  {
   "id": "clip.nest",
   "label": "Nest…",
-  "params": "{\"name\":str}",
+  "params": "{\"name\":str?}",
   "menu": [
    "Clip"
   ],
@@ -1216,7 +1242,7 @@
   "label": "Close Sequence",
   "params": "{\"item\":id?}",
   "menu": [],
-  "shortcut": null,
+  "shortcut": "Cmd+W",
   "enabled": false
  },
  {
@@ -1358,7 +1384,7 @@
  {
   "id": "sequence.applyVideoTransition",
   "label": "Apply Video Transition",
-  "params": "{\"clip\":id?,\"effect\":\"cross_dissolve|Cross Dissolve|…\"?,\"frames\":i64?,\"edge\":\"in\"|\"out\"?,\"params\":{param:value}?,\"reverse\":bool?}",
+  "params": "{\"clip\":id?,\"effect\":\"cross_dissolve|Cross Dissolve|…\"?,\"frames\":i64?,\"edge\":\"in\"|\"out\"?,\"align\":\"center\"|\"start\"|\"end\"?,\"params\":{param:value}?,\"reverse\":bool?}",
   "menu": [
    "Sequence"
   ],
@@ -1368,7 +1394,7 @@
  {
   "id": "sequence.applyAudioTransition",
   "label": "Apply Audio Transition",
-  "params": "{\"clip\":id?,\"effect\":str?,\"frames\":i64?}",
+  "params": "{\"clip\":id?,\"effect\":\"constant_power|Constant Power|…\"?,\"frames\":i64?,\"edge\":\"in\"|\"out\"?,\"align\":\"center\"|\"start\"|\"end\"?,\"params\":{param:value}?,\"reverse\":bool?}",
   "menu": [
    "Sequence"
   ],
@@ -1408,7 +1434,7 @@
  {
   "id": "sequence.closeGap",
   "label": "Close Gap",
-  "params": "{\"track\":\"V1\"|id,\"time\":ticks}",
+  "params": "{\"track\":\"V1\"|id?,\"time\":ticks?}",
   "menu": [
    "Sequence"
   ],
@@ -1532,7 +1558,7 @@
  {
   "id": "sequence.simplify",
   "label": "Simplify Sequence…",
-  "params": "{\"name\":str?,\"removeDisabled\":bool=true,\"removeEmptyTracks\":bool=true,\"closeGaps\":bool=false,\"moveClipsDown\":bool=false,\"removeVideoEffects\":bool=false,\"removeAudioEffects\":bool=false,\"removeText\":bool=false,\"keep\":\"both|video|audio\"}",
+  "params": "{\"name\":str?,\"removeDisabled\":bool=true,\"removeEmptyTracks\":bool=true,\"closeGaps\":bool=false,\"moveClipsDown\":bool=false,\"removeVideoEffects\":bool=false,\"removeAudioEffects\":bool=false,\"removeText\":bool=false,\"keep\":\"both|video|audio\"?}",
   "menu": [
    "Sequence"
   ],
@@ -1596,6 +1622,22 @@
   "enabled": false
  },
  {
+  "id": "sequence.showDuplicateFrameMarkers",
+  "label": "Show Duplicate Frame Markers",
+  "params": "{\"on\":bool?}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "sequence.duplicateFrames",
+  "label": "List Duplicate Frames",
+  "params": "{}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
   "id": "sequence.joinThroughEdits",
   "label": "Join Through Edits",
   "params": "{\"clips\":[id]?,\"cut\":[id,id]?,\"all\":bool?}",
@@ -1636,9 +1678,41 @@
   "enabled": true
  },
  {
+  "id": "sequence.workAreaBar",
+  "label": "Work Area Bar",
+  "params": "{\"show\":bool?}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "sequence.setWorkAreaIn",
+  "label": "Set Work Area Bar In Point",
+  "params": "{\"time\":ticks?,\"frame\":i64?,\"seconds\":f64?,\"timecode\":str?}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "sequence.setWorkAreaOut",
+  "label": "Set Work Area Bar Out Point",
+  "params": "{\"time\":ticks?,\"frame\":i64?,\"seconds\":f64?,\"timecode\":str?}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "sequence.setWorkArea",
+  "label": "Set Work Area",
+  "params": "{\"start\":ticks,\"end\":ticks}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
   "id": "markers.markIn",
   "label": "Mark In",
-  "params": "{\"time\":ticks?,\"target\":\"program|source\"}",
+  "params": "{\"time\":ticks?,\"frame\":i64?,\"seconds\":f64?,\"timecode\":str?,\"target\":\"program|source\"}",
   "menu": [
    "Markers"
   ],
@@ -1648,7 +1722,7 @@
  {
   "id": "markers.markOut",
   "label": "Mark Out",
-  "params": "{\"time\":ticks?,\"target\":\"program|source\"}",
+  "params": "{\"time\":ticks?,\"frame\":i64?,\"seconds\":f64?,\"timecode\":str?,\"target\":\"program|source\"}",
   "menu": [
    "Markers"
   ],
@@ -1678,7 +1752,7 @@
  {
   "id": "markers.markSplitVideoIn",
   "label": "Video In",
-  "params": "{\"time\":ticks?,\"target\":\"program|source\"}",
+  "params": "{\"time\":ticks?,\"frame\":i64?,\"seconds\":f64?,\"timecode\":str?,\"target\":\"program|source\"}",
   "menu": [
    "Markers",
    "Mark Split"
@@ -1689,7 +1763,7 @@
  {
   "id": "markers.markSplitVideoOut",
   "label": "Video Out",
-  "params": "{\"time\":ticks?,\"target\":\"program|source\"}",
+  "params": "{\"time\":ticks?,\"frame\":i64?,\"seconds\":f64?,\"timecode\":str?,\"target\":\"program|source\"}",
   "menu": [
    "Markers",
    "Mark Split"
@@ -1700,7 +1774,7 @@
  {
   "id": "markers.markSplitAudioIn",
   "label": "Audio In",
-  "params": "{\"time\":ticks?,\"target\":\"program|source\"}",
+  "params": "{\"time\":ticks?,\"frame\":i64?,\"seconds\":f64?,\"timecode\":str?,\"target\":\"program|source\"}",
   "menu": [
    "Markers",
    "Mark Split"
@@ -1711,7 +1785,7 @@
  {
   "id": "markers.markSplitAudioOut",
   "label": "Audio Out",
-  "params": "{\"time\":ticks?,\"target\":\"program|source\"}",
+  "params": "{\"time\":ticks?,\"frame\":i64?,\"seconds\":f64?,\"timecode\":str?,\"target\":\"program|source\"}",
   "menu": [
    "Markers",
    "Mark Split"
@@ -1814,9 +1888,17 @@
   "enabled": true
  },
  {
+  "id": "colors.addCustom",
+  "label": "Add Custom Color",
+  "params": "{\"color\":hex,\"name\":str?}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
   "id": "markers.add",
   "label": "Add Marker",
-  "params": "{\"target\":\"program|source\",\"time\":ticks?,\"name\":str?,\"comment\":str?,\"color\":label?,\"durationFrames\":i64?}",
+  "params": "{\"target\":\"program|source\",\"time\":ticks?,\"name\":str?,\"comment\":str?,\"color\":label_or_hex?,\"author\":str?,\"durationFrames\":i64?}",
   "menu": [
    "Markers"
   ],
@@ -1826,7 +1908,7 @@
  {
   "id": "markers.addRange",
   "label": "Add Range Marker",
-  "params": "{\"time\":ticks?,\"durationFrames\":i64=1s,\"duration\":ticks?,\"name\":str?,\"comment\":str?,\"color\":label?}",
+  "params": "{\"time\":ticks?,\"durationFrames\":i64=1s,\"duration\":ticks?,\"name\":str?,\"comment\":str?,\"color\":label_or_hex?,\"author\":str?}",
   "menu": [
    "Markers"
   ],
@@ -1836,7 +1918,7 @@
  {
   "id": "markers.addRangeInOut",
   "label": "Add Range Marker to In and Out",
-  "params": "{\"name\":str?,\"comment\":str?,\"color\":label?}",
+  "params": "{\"name\":str?,\"comment\":str?,\"color\":label_or_hex?,\"author\":str?}",
   "menu": [
    "Markers"
   ],
@@ -1906,7 +1988,7 @@
  {
   "id": "markers.filterColors",
   "label": "Marker Colour Filter",
-  "params": "{\"hidden\":[label]}|{\"color\":label,\"visible\":bool?}",
+  "params": "{\"hidden\":[label_or_hex]}|{\"color\":label_or_hex,\"visible\":bool?}",
   "menu": [],
   "shortcut": null,
   "enabled": true
@@ -1914,7 +1996,7 @@
  {
   "id": "markers.edit",
   "label": "Edit Marker…",
-  "params": "{\"target\":\"program|source\",\"marker\":id,\"name\":str?,\"comment\":str?,\"color\":label?,\"durationFrames\":i64?}",
+  "params": "{\"target\":\"program|source\",\"sequence\":id?,\"item\":id?,\"marker\":id|\"markers\":[id],\"time\":ticks?,\"frame\":i64?,\"durationFrames\":i64?,\"name\":str?,\"comment\":str?,\"author\":str?,\"url\":str?,\"color\":label_or_hex?,\"kind\":\"comment|chapter|segmentation|webLink|flashCue\"?}",
   "menu": [],
   "shortcut": null,
   "enabled": true
@@ -1922,7 +2004,7 @@
  {
   "id": "markers.addChapter",
   "label": "Add Chapter Marker…",
-  "params": "{\"time\":ticks?,\"name\":str?,\"comment\":str?,\"color\":label?}",
+  "params": "{\"time\":ticks?,\"name\":str?,\"comment\":str?,\"color\":label_or_hex?,\"author\":str?}",
   "menu": [
    "Markers"
   ],
@@ -1932,7 +2014,7 @@
  {
   "id": "markers.addFlashCue",
   "label": "Add Flash Cue Marker…",
-  "params": "{\"time\":ticks?,\"name\":str?,\"comment\":str?,\"color\":label?}",
+  "params": "{\"time\":ticks?,\"name\":str?,\"comment\":str?,\"color\":label_or_hex?,\"author\":str?}",
   "menu": [
    "Markers"
   ],
@@ -1956,6 +2038,30 @@
   "menu": [
    "Markers"
   ],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "markers.delete",
+  "label": "Delete Markers",
+  "params": "{\"target\":\"program|source\",\"sequence\":id?,\"item\":id?,\"marker\":id|\"markers\":[id]}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "colors.updateCustom",
+  "label": "Edit Custom Color",
+  "params": "{\"color\":hex,\"replacement\":hex?,\"name\":str?}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "colors.removeCustom",
+  "label": "Remove Custom Color",
+  "params": "{\"color\":hex}",
+  "menu": [],
   "shortcut": null,
   "enabled": true
  },
@@ -2082,7 +2188,7 @@
  {
   "id": "source.insert",
   "label": "Insert",
-  "params": "{}",
+  "params": "{\"matchSequence\":bool=false}",
   "menu": [
    "Clip"
   ],
@@ -2092,7 +2198,7 @@
  {
   "id": "source.overwrite",
   "label": "Overwrite",
-  "params": "{}",
+  "params": "{\"matchSequence\":bool=false}",
   "menu": [
    "Clip"
   ],
@@ -2165,7 +2271,7 @@
  {
   "id": "clip.automateToSequence",
   "label": "Automate to Sequence…",
-  "params": "{\"items\":[id]?,\"ordering\":\"sort|selection\",\"placement\":\"sequentially|unnumberedMarkers\",\"method\":\"insert|overwrite\",\"overlapFrames\":n=30,\"stillFrames\":n?,\"videoTransition\":bool=true,\"audioTransition\":bool=true,\"ignoreAudio\":bool=false,\"ignoreVideo\":bool=false}",
+  "params": "{\"items\":[id]?,\"ordering\":\"sort|selection\"?,\"placement\":\"sequentially|unnumberedMarkers\"?,\"method\":\"insert|overwrite\"?,\"overlapFrames\":n=30,\"stillFrames\":n?,\"videoTransition\":bool=true,\"audioTransition\":bool=true,\"ignoreAudio\":bool=false,\"ignoreVideo\":bool=false}",
   "menu": [
    "Clip"
   ],
@@ -2175,7 +2281,15 @@
  {
   "id": "timeline.place",
   "label": "Place Clip",
-  "params": "{\"item\":id,\"track\":\"V1\"|id|\"A1\" (sound only)|\"new\" (a video track after the last)?,\"audioTrack\":\"A1\"|id|\"new\"?,\"time\":ticks|\"frame\":i64|\"seconds\":f64,\"insert\":bool,\"sourceIn\":ticks?,\"duration\":ticks?,\"video\":bool=true,\"audio\":bool=true}",
+  "params": "{\"item\":id|\"items\":[id] (back to back, one undo step),\"track\":\"V1\"|id|\"A1\" (sound only)|\"new\" (a video track after the last)?,\"audioTrack\":\"A1\"|id|\"new\"?,\"time\":ticks|\"frame\":i64|\"seconds\":f64,\"insert\":bool,\"sourceIn\":ticks|{\"frame\"|\"seconds\"|\"timecode\"}?,\"duration\":ticks|{\"frame\"|\"seconds\"|\"timecode\"}?,\"video\":bool=true,\"audio\":bool=true,\"matchSequence\":bool=false (an empty sequence first takes the clip's frame size and rate)}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "timeline.delete",
+  "label": "Delete Clips",
+  "params": "{\"clips\":[id]?,\"clip\":id?,\"ripple\":bool?} (deletes the named clips, else the selection; ripple closes the gap)",
   "menu": [],
   "shortcut": null,
   "enabled": false
@@ -2183,7 +2297,7 @@
  {
   "id": "timeline.select",
   "label": "Select Clips",
-  "params": "{\"clips\":[id],\"transitions\":[id]?,\"add\":bool,\"toggle\":bool}",
+  "params": "{\"clips\":[id],\"transitions\":[id]?,\"add\":bool,\"toggle\":bool,\"linked\":bool?}",
   "menu": [],
   "shortcut": null,
   "enabled": false
@@ -2199,7 +2313,7 @@
  {
   "id": "timeline.move",
   "label": "Move Clips",
-  "params": "{\"moves\":[{\"clip\":id,\"track\":id|\"V2\",\"time\":ticks}],\"insert\":bool,\"linked\":bool?,\"copy\":bool?}",
+  "params": "{\"moves\":[{\"clip\":id,\"track\":id|\"V2\"|\"new\" (after the last of its kind),\"time\":ticks}],\"insert\":bool,\"linked\":bool?,\"copy\":bool?,\"captions\":[id]?}",
   "menu": [],
   "shortcut": null,
   "enabled": false
@@ -2207,7 +2321,7 @@
  {
   "id": "timeline.trim",
   "label": "Trim Edit",
-  "params": "{\"clip\":id,\"edge\":\"in|out\",\"mode\":\"regular|ripple\",\"delta\":ticks|\"deltaFrames\":i64}",
+  "params": "{\"clip\":id,\"edge\":\"in|out\",\"mode\":\"regular|ripple\",\"delta\":ticks|\"deltaFrames\":i64,\"linked\":bool?}",
   "menu": [],
   "shortcut": null,
   "enabled": false
@@ -2375,7 +2489,7 @@
  {
   "id": "timeline.roll",
   "label": "Rolling Edit",
-  "params": "{\"left\":id,\"right\":id,\"delta\":ticks|\"deltaFrames\":i64}",
+  "params": "{\"left\":id,\"right\":id,\"delta\":ticks|\"deltaFrames\":i64,\"followLinks\"?:bool}",
   "menu": [],
   "shortcut": null,
   "enabled": false
@@ -2399,7 +2513,7 @@
  {
   "id": "timeline.rateStretch",
   "label": "Rate Stretch",
-  "params": "{\"clip\":id,\"edge\":\"in|out\",\"delta\":ticks}",
+  "params": "{\"clip\":id,\"edge\":\"in|out\",\"delta\":ticks,\"linked\":bool?}",
   "menu": [],
   "shortcut": null,
   "enabled": false
@@ -2415,7 +2529,7 @@
  {
   "id": "timeline.setTrack",
   "label": "Track Settings",
-  "params": "{\"track\":\"V1\"|id,\"locked\":bool?,\"syncLock\":bool?,\"enabled\":bool?,\"muted\":bool?,\"solo\":bool?,\"name\":str?,\"volumeDb\":f64?,\"pan\":f64?}",
+  "params": "{\"track\":\"V1\"|id,\"locked\":bool?,\"syncLock\":bool?,\"enabled\":bool?,\"muted\":bool?,\"solo\":bool?,\"name\":str?,\"volumeDb\":f64?,\"pan\":f64?,\"label\":\"Violet|Iris|…\"|\"\"|null?}",
   "menu": [],
   "shortcut": null,
   "enabled": false
@@ -2445,9 +2559,17 @@
   "enabled": false
  },
  {
+  "id": "effects.select",
+  "label": "Select Effect",
+  "params": "{\"clip\":id,\"effect\":index|id}|{\"none\":true}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
   "id": "effects.setParam",
   "label": "Set Effect Parameter",
-  "params": "{\"clip\":id,\"effect\":\"motion\"|index,\"param\":str,\"mask\":n?,\"value\":num|[x,y]|\"#rrggbb\"|bool|path|\"option name\" (a choice takes its index or its name),\"time\":ticks? (where the keyframe goes when the parameter is animated; a parameter that is not animated gets a new static value whatever the time),\"keyframe\":bool? (true: write a keyframe at `time` and animate the parameter),\"merge\":bool?,\"begin\":bool?}",
+  "params": "{\"clip\":id,\"effect\":\"motion\"|index,\"param\":str,\"mask\":n?,\"value\":num|[x,y]|\"#rrggbb\"|bool|path|\"option name\" (a choice takes its index or its name),\"time\":ticks? (where the keyframe goes when the parameter is animated, kept there even outside the clip; default: the playhead, pinned to the clip; a parameter that is not animated gets a new static value whatever the time),\"keyframe\":bool? (true: write a keyframe at `time` and animate the parameter),\"merge\":bool|key?,\"begin\":bool?}",
   "menu": [],
   "shortcut": null,
   "enabled": false
@@ -2509,9 +2631,17 @@
   "enabled": false
  },
  {
+  "id": "effects.moveKeyframes",
+  "label": "Move Keyframes",
+  "params": "{\"keyframes\":[{\"clip\":id,\"effect\":index,\"param\":str,\"mask\":n?,\"time\":mediaTicks}],\"delta\":timelineTicks}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
   "id": "effects.setInterpolation",
   "label": "Keyframe Interpolation",
-  "params": "{\"clip\":id,\"effect\":str|index,\"param\":str,\"mediaTime\":ticks,\"interpolation\":\"linear|bezier|autoBezier|continuousBezier|hold|easeIn|easeOut\"}",
+  "params": "{\"clip\":id,\"effect\":str|index,\"param\":str,\"mediaTime\":ticks,\"interpolation\":\"linear|bezier|autoBezier|continuousBezier|hold|easeIn|easeOut\"}|{\"keyframes\":[{\"clip\":id,\"effect\":index,\"param\":str,\"mask\":n?,\"time\":mediaTicks}],\"interpolation\":str}",
   "menu": [],
   "shortcut": null,
   "enabled": false
@@ -2634,7 +2764,7 @@
  {
   "id": "captions.setStyle",
   "label": "Caption Track Style",
-  "params": "{\"track\":id|\"C1\",\"font\":str?,\"size\":f32?,\"color\":\"#rrggbb[aa]\"?,\"background\":bool?,\"backgroundColor\":\"#rrggbbaa\"?,\"align\":\"left|center|right\"?,\"anchor\":\"top|middle|bottom\"?,\"margin\":0..0.45 (fraction of frame height)?,\"lineSpacing\":f32?,\"outline\":f32?,\"outlineColor\":str?,\"reset\":bool?}",
+  "params": "{\"track\":id|\"C1\",\"font\":str?,\"fontStyle\":str=\"SemiBold\" (Regular, Medium, Bold…)?,\"size\":f32?,\"color\":\"#rrggbb[aa]\"?,\"background\":bool?,\"backgroundColor\":\"#rrggbbaa\"?,\"align\":\"left|center|right\"?,\"anchor\":\"top|middle|bottom\"?,\"margin\":0..0.45 (fraction of frame height)?,\"lineSpacing\":f32?,\"outline\":f32?,\"outlineColor\":str?,\"reset\":bool?}",
   "menu": [],
   "shortcut": null,
   "enabled": false
@@ -2693,6 +2823,14 @@
  {
   "id": "captions.move",
   "label": "Move Captions",
+  "params": "{\"captions\":[id]?,\"delta\":ticks|\"deltaFrames\":i64}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "captions.duplicate",
+  "label": "Duplicate Captions",
   "params": "{\"captions\":[id]?,\"delta\":ticks|\"deltaFrames\":i64}",
   "menu": [],
   "shortcut": null,
@@ -2824,6 +2962,38 @@
   "id": "mediaCache.clean",
   "label": "Delete Media Cache Files",
   "params": "{\"all\":bool?}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "labels.presets",
+  "label": "Label Color Presets",
+  "params": "{}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "labels.importPreset",
+  "label": "Import Label Color Preset",
+  "params": "{\"path\":str}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "labels.exportPreset",
+  "label": "Export Label Color Preset",
+  "params": "{\"path\":str}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": true
+ },
+ {
+  "id": "labels.deletePreset",
+  "label": "Delete Label Color Preset",
+  "params": "{\"name\":str}",
   "menu": [],
   "shortcut": null,
   "enabled": true
@@ -3558,7 +3728,7 @@
  {
   "id": "graphics.set",
   "label": "Set Graphic Properties",
-  "params": "{\"clip\":id?,\"layer\":n|name?,\"props\":{\"font\":\"Inter\",\"font_style\":\"Bold\",\"size\":120,\"align\":\"center\",\"tracking\":50,\"leading\":0,\"fill_color\":\"#ffcc00\",\"stroke\":true,\"stroke_width\":6,\"background\":true,\"shadow\":true,\"position\":[x,y],\"scale\":100,\"rotation\":0,\"opacity\":100,…},\"time\":ticks?,\"merge\":bool?,\"begin\":bool?}",
+  "params": "{\"clip\":id?,\"layer\":n|name?,\"props\":{\"font\":\"Inter\",\"font_style\":\"Bold\",\"size\":120,\"align\":\"center\",\"tracking\":50,\"leading\":0,\"fill_color\":\"#ffcc00\",\"stroke\":true,\"stroke_width\":6,\"background\":true,\"shadow\":true,\"position\":[x,y],\"scale\":100,\"rotation\":0,\"opacity\":100,…},\"time\":ticks? (timeline time, default the playhead: a property that is already animated gets or changes a keyframe there, any other changes its fixed value),\"keyframe\":bool? (true: every property in `props` gets a keyframe at `time` and becomes animated; the result lists each one's keyframe count),\"merge\":bool?,\"begin\":bool?}",
   "menu": [],
   "shortcut": null,
   "enabled": false
@@ -3567,6 +3737,14 @@
   "id": "graphics.setTextType",
   "label": "Text Layer Type",
   "params": "{\"clip\":id?,\"layer\":n|name?,\"type\":\"point|paragraph\" (point: no box, handles scale the text; paragraph: the text wraps in a box that handles resize)}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
+ },
+ {
+  "id": "graphics.moveLayers",
+  "label": "Move Graphic Layers",
+  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers),\"delta\":[dx,dy] (graphic pixels)}",
   "menu": [],
   "shortcut": null,
   "enabled": false
@@ -3685,7 +3863,7 @@
  {
   "id": "graphics.alignFrame.left",
   "label": "Left",
-  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers)}",
+  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers; selected video clips move by Motion Position)}",
   "menu": [
    "Graphics and Titles",
    "Align to Video Frame"
@@ -3696,7 +3874,7 @@
  {
   "id": "graphics.alignFrame.hcenter",
   "label": "Center Horizontally",
-  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers)}",
+  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers; selected video clips move by Motion Position)}",
   "menu": [
    "Graphics and Titles",
    "Align to Video Frame"
@@ -3707,7 +3885,7 @@
  {
   "id": "graphics.alignFrame.right",
   "label": "Right",
-  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers)}",
+  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers; selected video clips move by Motion Position)}",
   "menu": [
    "Graphics and Titles",
    "Align to Video Frame"
@@ -3718,7 +3896,7 @@
  {
   "id": "graphics.alignFrame.top",
   "label": "Top",
-  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers)}",
+  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers; selected video clips move by Motion Position)}",
   "menu": [
    "Graphics and Titles",
    "Align to Video Frame"
@@ -3729,7 +3907,7 @@
  {
   "id": "graphics.alignFrame.vcenter",
   "label": "Center Vertically",
-  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers)}",
+  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers; selected video clips move by Motion Position)}",
   "menu": [
    "Graphics and Titles",
    "Align to Video Frame"
@@ -3740,7 +3918,7 @@
  {
   "id": "graphics.alignFrame.bottom",
   "label": "Bottom",
-  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers)}",
+  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers; selected video clips move by Motion Position)}",
   "menu": [
    "Graphics and Titles",
    "Align to Video Frame"
@@ -3751,7 +3929,7 @@
  {
   "id": "graphics.alignGroup.left",
   "label": "Left",
-  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers)}",
+  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers; selected video clips move by Motion Position)}",
   "menu": [
    "Graphics and Titles",
    "Align to Video Frame as Group"
@@ -3762,7 +3940,7 @@
  {
   "id": "graphics.alignGroup.hcenter",
   "label": "Center Horizontally",
-  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers)}",
+  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers; selected video clips move by Motion Position)}",
   "menu": [
    "Graphics and Titles",
    "Align to Video Frame as Group"
@@ -3773,7 +3951,7 @@
  {
   "id": "graphics.alignGroup.right",
   "label": "Right",
-  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers)}",
+  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers; selected video clips move by Motion Position)}",
   "menu": [
    "Graphics and Titles",
    "Align to Video Frame as Group"
@@ -3784,7 +3962,7 @@
  {
   "id": "graphics.alignGroup.top",
   "label": "Top",
-  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers)}",
+  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers; selected video clips move by Motion Position)}",
   "menu": [
    "Graphics and Titles",
    "Align to Video Frame as Group"
@@ -3795,7 +3973,7 @@
  {
   "id": "graphics.alignGroup.vcenter",
   "label": "Center Vertically",
-  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers)}",
+  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers; selected video clips move by Motion Position)}",
   "menu": [
    "Graphics and Titles",
    "Align to Video Frame as Group"
@@ -3806,7 +3984,7 @@
  {
   "id": "graphics.alignGroup.bottom",
   "label": "Bottom",
-  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers)}",
+  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers; selected video clips move by Motion Position)}",
   "menu": [
    "Graphics and Titles",
    "Align to Video Frame as Group"
@@ -3817,7 +3995,7 @@
  {
   "id": "graphics.alignSelection.left",
   "label": "Left",
-  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers)}",
+  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers; selected video clips move by Motion Position)}",
   "menu": [
    "Graphics and Titles",
    "Align to Selection"
@@ -3828,7 +4006,7 @@
  {
   "id": "graphics.alignSelection.hcenter",
   "label": "Center Horizontally",
-  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers)}",
+  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers; selected video clips move by Motion Position)}",
   "menu": [
    "Graphics and Titles",
    "Align to Selection"
@@ -3839,7 +4017,7 @@
  {
   "id": "graphics.alignSelection.right",
   "label": "Right",
-  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers)}",
+  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers; selected video clips move by Motion Position)}",
   "menu": [
    "Graphics and Titles",
    "Align to Selection"
@@ -3850,7 +4028,7 @@
  {
   "id": "graphics.alignSelection.top",
   "label": "Top",
-  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers)}",
+  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers; selected video clips move by Motion Position)}",
   "menu": [
    "Graphics and Titles",
    "Align to Selection"
@@ -3861,7 +4039,7 @@
  {
   "id": "graphics.alignSelection.vcenter",
   "label": "Center Vertically",
-  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers)}",
+  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers; selected video clips move by Motion Position)}",
   "menu": [
    "Graphics and Titles",
    "Align to Selection"
@@ -3872,7 +4050,7 @@
  {
   "id": "graphics.alignSelection.bottom",
   "label": "Bottom",
-  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers)}",
+  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers; selected video clips move by Motion Position)}",
   "menu": [
    "Graphics and Titles",
    "Align to Selection"
@@ -3883,7 +4061,7 @@
  {
   "id": "graphics.distributeVertically",
   "label": "Distribute Vertically",
-  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers)}",
+  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers; selected video clips move by Motion Position)}",
   "menu": [
    "Graphics and Titles",
    "Distribute"
@@ -3894,7 +4072,7 @@
  {
   "id": "graphics.distributeSpaceVertically",
   "label": "Distribute Space Vertically",
-  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers)}",
+  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers; selected video clips move by Motion Position)}",
   "menu": [
    "Graphics and Titles",
    "Distribute"
@@ -3905,7 +4083,7 @@
  {
   "id": "graphics.distributeHorizontally",
   "label": "Distribute Horizontally",
-  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers)}",
+  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers; selected video clips move by Motion Position)}",
   "menu": [
    "Graphics and Titles",
    "Distribute"
@@ -3916,7 +4094,7 @@
  {
   "id": "graphics.distributeSpaceHorizontally",
   "label": "Distribute Space Horizontally",
-  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers)}",
+  "params": "{\"clip\":id?,\"layers\":[n]? (default: the selected layers; selected video clips move by Motion Position)}",
   "menu": [
    "Graphics and Titles",
    "Distribute"
@@ -4138,7 +4316,7 @@
  {
   "id": "graphics.setCharStyle",
   "label": "Character Style",
-  "params": "{\"clip\":id?,\"layer\":n|name?,\"start\":char=0,\"end\":char=len,\"style\":{\"font\":str,\"fontStyle\":str,\"size\":px,\"color\":\"#rrggbb\",\"bold\":bool,\"italic\":bool,\"underline\":bool,\"tracking\":n,\"baselineShift\":px,\"caps\":\"normal|all caps|small caps\"},\"clear\":bool? (remove styles from the range)}",
+  "params": "{\"clip\":id?,\"layer\":n|name?,\"start\":char=0,\"end\":char=len,\"style\":{\"font\":str,\"fontStyle\":str,\"size\":px,\"color\":\"#rrggbb\",\"bold\":bool,\"italic\":bool,\"underline\":bool,\"strikethrough\":bool,\"tracking\":n,\"baselineShift\":px,\"caps\":\"normal|all caps|small caps\"},\"clear\":bool? (remove styles from the range),\"merge\":bool?,\"begin\":bool? (start a new undo gesture)}",
   "menu": [],
   "shortcut": null,
   "enabled": false
@@ -4418,7 +4596,7 @@
  {
   "id": "media.offlineAll",
   "label": "Offline All",
-  "params": "{}  (leave every missing file offline and close the Link Media dialog)",
+  "params": "{}  (mark every missing file offline, saved with the project, and close the Link Media dialog)",
   "menu": [],
   "shortcut": null,
   "enabled": true
@@ -4426,7 +4604,7 @@
  {
   "id": "media.createProxies",
   "label": "Create Proxies…",
-  "params": "{\"items\":[id]?,\"preset\":\"prores_proxy_quarter|prores_proxy_half|prores_lt_half|h264_quarter|h264_half\",\"destination\":str?,\"attach\":bool=true,\"wait\":bool=false}",
+  "params": "{\"items\":[id]?,\"preset\":\"prores_proxy_quarter|prores_proxy_half|prores_lt_half|h264_quarter|h264_half\"?,\"destination\":str?,\"attach\":bool=true,\"wait\":bool=false}",
   "menu": [
    "Clip",
    "Proxy"
@@ -4577,7 +4755,7 @@
  {
   "id": "masks.moveVertex",
   "label": "Move Mask Vertex",
-  "params": "{\"clip\":id?,\"effect\":index|id?,\"mask\":n?,\"vertex\":n,\"handle\":\"point\"|\"in\"|\"out\"?,\"to\":[x,y]?|\"delta\":[dx,dy]?,\"breakHandles\":bool?,\"merge\":key?}",
+  "params": "{\"clip\":id?,\"effect\":index|id?,\"mask\":n?,\"vertex\":n|\"vertices\":[n],\"handle\":\"point\"|\"in\"|\"out\"?,\"to\":[x,y]?|\"delta\":[dx,dy]?,\"breakHandles\":bool?,\"merge\":key?}",
   "menu": [],
   "shortcut": null,
   "enabled": false
@@ -6097,7 +6275,7 @@
  {
   "id": "mediaBrowser.settings",
   "label": "Media Browser Settings",
-  "params": "{\"fileTypes\":\"all|video|audio|image|project|caption|<ext>\"?,\"view\":\"list|thumbnails\"?,\"columns\":[str]?,\"importAsImageSequence\":bool?,\"hoverScrub\":bool?,\"thumbnailSize\":f32?}",
+  "params": "{\"fileTypes\":\"all|video|audio|image|project|caption|<ext>\"?,\"view\":\"list|thumbnails\"?,\"columns\":[str]?,\"columnWidths\":{str:f32}?,\"importAsImageSequence\":bool?,\"hoverScrub\":bool?,\"thumbnailSize\":f32?}",
   "menu": [],
   "shortcut": null,
   "enabled": true
@@ -6181,6 +6359,14 @@
   "menu": [],
   "shortcut": null,
   "enabled": true
+ },
+ {
+  "id": "file.reveal",
+  "label": "Reveal in Finder",
+  "params": "{\"items\":[id]?}",
+  "menu": [],
+  "shortcut": null,
+  "enabled": false
  },
  {
   "id": "help.systemReport",

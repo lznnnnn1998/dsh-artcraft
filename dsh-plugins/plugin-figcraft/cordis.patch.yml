@@ -1,0 +1,5 @@
+# Installed by `dsh plugin add dsh-artcraft-plugin-figcraft`.
+# One row: the plugin package that provides the FigCraft tools.
+- insert:
+    - id: artcraft-figcraft
+      name: "dsh-artcraft-plugin-figcraft"

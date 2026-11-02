@@ -2,7 +2,7 @@
  {
   "id": "new",
   "label": "New Drawing...",
-  "params": "{metric?: bool}",
+  "params": "{metric?: bool (default MEASUREINIT), template?: path to a .dwt/.dxf template (\".\" for none; default QNEWTEMPLATE)}",
   "menu": [
    "File",
    "New Drawing..."
@@ -16,7 +16,7 @@
  {
   "id": "open",
   "label": "Open...",
-  "params": "{path} | {data: base64, name}",
+  "params": "{path} | {data: base64, name} → {index, entities?, warnings: what reading left out}",
   "menu": [
    "File",
    "Open..."
@@ -65,7 +65,7 @@
  {
   "id": "saveas",
   "label": "Save As...",
-  "params": "{path, format?: dxf|dwg}",
+  "params": "{path, version?: 2000|2004|2007|2010|2013|2018, binary?: bool}",
   "menu": [
    "File",
    "Save As..."
@@ -86,8 +86,83 @@
  {
   "id": "document.bytes",
   "label": "Drawing as bytes",
-  "params": "{format?: dxf} → {data: base64}",
+  "params": "{format?: dxf, version?: 2000…2018, binary?: bool} → {data: base64}",
   "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "script",
+  "label": "Run Script...",
+  "params": "{path: script (.scr) file} | {data: base64} → {lines}",
+  "menu": [
+   "Tools",
+   "Run Script..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "scr"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "aliasedit",
+  "label": "Command Aliases",
+  "params": "{file?: path to a .pgp alias file | text?: its contents, set?: {alias: command}, remove?: [alias], clear?: bool} → {aliases, file, loaded, warnings}",
+  "menu": [
+   "Tools",
+   "Customize",
+   "Edit Command Aliases (PGP)..."
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "reinit",
+  "label": "Reinitialize",
+  "params": "{file? | text?} (default: the alias file loaded last)",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "audit",
+  "label": "Audit",
+  "params": "{fix?: bool} → {errors, fixed, issues: [{kind, location, handle?, message, fix}], message}",
+  "menu": [
+   "File",
+   "Drawing Utilities",
+   "Audit"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "recover",
+  "label": "Recover...",
+  "params": "{path, copy?: bool (an unsaved copy without a file name), title?} | {data: base64, name} → {index, uid, errors, fixed, issues, message}",
+  "menu": [
+   "File",
+   "Drawing Utilities",
+   "Recover..."
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "drawingrecovery",
+  "label": "Drawing Recovery Manager...",
+  "params": "{action?: list|open|discard (default list), path? (one of the listed files)} → {files: [{path, drawing, modified, bytes}]} | (open: as RECOVER)",
+  "menu": [
+   "File",
+   "Drawing Utilities",
+   "Drawing Recovery Manager..."
+  ],
   "shortcut": null,
   "aliases": [],
   "enabled": true
@@ -107,7 +182,7 @@
  {
   "id": "undo",
   "label": "Undo",
-  "params": "{count?: n}",
+  "params": "{count?: n} | {mode: mark|begin|end} | {mode: back, confirm?: bool (no mark: undo everything; default true)} | {mode: auto, on: bool} | {mode: control, control: all|none|one|combine|layer, on?: bool (combine/layer)}",
   "menu": [],
   "shortcut": null,
   "aliases": [],
@@ -122,9 +197,16 @@
    "Redo"
   ],
   "shortcut": "Cmd+Shift+Z",
-  "aliases": [
-   "mredo"
-  ],
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "mredo",
+  "label": "Redo",
+  "params": "{count?: n} | {all: true}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
   "enabled": true
  },
  {
@@ -136,6 +218,18 @@
    "Cut"
   ],
   "shortcut": "Cmd+X",
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "cutbase",
+  "label": "Cut with Base Point",
+  "params": "{handles?, base: [x,y]}",
+  "menu": [
+   "Edit",
+   "Cut with Base Point"
+  ],
+  "shortcut": null,
   "aliases": [],
   "enabled": true
  },
@@ -266,18 +360,88 @@
   "enabled": true
  },
  {
+  "id": "selectsimilar",
+  "label": "Select Similar",
+  "params": "{handles? (default the selection), mode?: SELECTSIMILARMODE bits (1 colour, 2 layer, 4 linetype, 8 linetype scale, 16 lineweight, 32 plot style, 64 object style, 128 name; default the variable, 130)} → selects every visible object in the current space of the same type with those properties: {selected, handles}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "isolateobjects",
+  "label": "Isolate Objects",
+  "params": "{handles? (default the selection)} → hides every other object of the current space for this session: {hidden}",
+  "menu": [
+   "Tools",
+   "Isolate",
+   "Isolate Objects"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "hideobjects",
+  "label": "Hide Objects",
+  "params": "{handles? (default the selection)} → hides these objects for this session: {hidden}",
+  "menu": [
+   "Tools",
+   "Isolate",
+   "Hide Objects"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "unisolateobjects",
+  "label": "End Object Isolation",
+  "params": "{} → shows every object ISOLATEOBJECTS or HIDEOBJECTS hid: {shown}",
+  "menu": [
+   "Tools",
+   "Isolate",
+   "End Object Isolation"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
   "id": "zoom",
   "label": "Zoom",
-  "params": "{mode: extents|all|window|previous|in|out|center|scale|object, p1?, p2?, center?, height?, factor?, xp?: bool (scale relative to paper space: in a viewport, `factor` paper units per model unit), limits?: bool (scale relative to the limits)} (center: `height`, or `factor` with `xp`/`limits`)",
+  "params": "{mode: extents|all|window|previous|in|out|center|dynamic|scale|realtime|object, p1?, p2?, center?, height?, factor?, xp?: bool (scale relative to paper space: in a viewport, `factor` paper units per model unit), limits?: bool (scale relative to the limits)} (center/dynamic: `center` + `height`, or `factor` with `xp`/`limits`; realtime: `factor` about the view centre; typed: Enter at the first prompt starts Realtime)",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [
+   "z"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "zoom.realtime",
+  "label": "Zoom Realtime",
+  "params": "{factor} (> 1 zooms in, about the view centre); interactive: drag up to zoom in, down to zoom out, Esc or Enter ends",
   "menu": [
    "View",
    "Zoom",
    "Realtime"
   ],
   "shortcut": null,
-  "aliases": [
-   "z"
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "zoom.dynamic",
+  "label": "Zoom Dynamic",
+  "params": "{center, height}; interactive: a view box over the drawing extents, a point places it, the next sizes it, Enter accepts",
+  "menu": [
+   "View",
+   "Zoom",
+   "Dynamic"
   ],
+  "shortcut": null,
+  "aliases": [],
   "enabled": true
  },
  {
@@ -495,6 +659,51 @@
   "enabled": true
  },
  {
+  "id": "view",
+  "label": "Named Views...",
+  "params": "{option: save|window|restore|delete|list|settings, name? (save/window/restore), names?: \"a,b*\" | [names] (delete/list; wildcards), p1?, p2? (window), layerSnapshot?: bool (save: default the Layer snapshot setting; settings: change it)} (typed VIEW / -VIEW: option prompts)",
+  "menu": [
+   "View",
+   "Named Views..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "v"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "-vports",
+  "label": "Viewports",
+  "params": "{option: single|2|3|4|join|save|restore|delete|list, arrangement?: horizontal|vertical (2) | horizontal|vertical|above|below|left|right (3; default right), applyTo?: current|display (default current: split the current tile), name? (save/restore), names? (delete/list; wildcards), dominant?, join? (tile numbers from 1; dominant defaults to the current tile)} (model space; in a layout: MVIEW)",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "vports.activate",
+  "label": "Set Current Viewport",
+  "params": "{index: tile number from 1}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "vports.named",
+  "label": "Named Viewports...",
+  "params": "{name?: a saved viewport configuration, delete?: bool, p1?, p2?, layout?} (no name: → {current, configurations: [{name, viewports}]}; the Model tab shows the configuration's tiles, a layout gets one viewport per tile over p1-p2 or the printable area; typed or from the menu: the Named Viewports dialog)",
+  "menu": [
+   "View",
+   "Viewports",
+   "Named Viewports..."
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
   "id": "line",
   "label": "Line",
   "params": "{points: [[x,y],...], closed?: bool}",
@@ -555,7 +764,7 @@
  {
   "id": "rectang",
   "label": "Rectangle",
-  "params": "{p1, p2 | dimensions: [l, w] (p2 picks the quadrant) | area + length|breadth, rotation? (deg), fillet?, chamfer?: [d1, d2], width?, elevation?, thickness?}",
+  "params": "{p1, p2 | dimensions: [l, w] (p2 picks the quadrant) | area + length|breadth, rotation? (deg), fillet?, chamfer?: [d1, d2], width?, elevation?, thickness?, center?: bool (p1 is the centre, not a corner; the size spans it evenly)}",
   "menu": [
    "Draw",
    "Rectangle"
@@ -584,7 +793,7 @@
  {
   "id": "ellipse",
   "label": "Ellipse",
-  "params": "{center, major: [dx,dy], ratio, start?, end? (degrees)}",
+  "params": "{center, major: [dx,dy], ratio, start?, end? (degrees)} | {isocircle: {center, radius | diameter, plane?}}",
   "menu": [
    "Draw",
    "Ellipse",
@@ -653,7 +862,7 @@
  {
   "id": "spline",
   "label": "Spline",
-  "params": "{fit: [[x,y],...]} | {control: [...], degree?}",
+  "params": "{fit: [[x,y],...], closed?, knots?: chord|sqrt|uniform, startTangent?, endTangent? ([dx,dy]), tolerance?} | {control: [...], degree?} | {object: handle|true, handles?} (polyline to spline)",
   "menu": [
    "Draw",
    "Spline",
@@ -681,6 +890,20 @@
   "enabled": true
  },
  {
+  "id": "solid",
+  "label": "2D Solid",
+  "params": "{points: [[x,y],...]} (three or four for the first solid, two more for each next one, chained on its last two corners)",
+  "menu": [
+   "Draw",
+   "2D Solid"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "so"
+  ],
+  "enabled": true
+ },
+ {
   "id": "text",
   "label": "Single Line Text",
   "params": "{at, text, height?, rotation? (degrees), justify?: L|C|R|M|TL|TC|TR|ML|MC|MR|BL|BC|BR}",
@@ -699,7 +922,7 @@
  {
   "id": "mtext",
   "label": "Multiline Text",
-  "params": "{at, text, height?, width?, attach?: 1..9, rotation?}",
+  "params": "{at, text, height?, width?, attach?: 1..9 | justify?: TL..BR, rotation?, style?, lineSpacing?, lineSpacingExact?, list?: bullet|number|lower|upper, indent?, firstIndent?, rightIndent?, tabs?: [..], align?: left|center|right|justify|distributed, columns?: {type: static|dynamic, count?, gutter?, height, heights?, reversed?}} (indents and tabs in text heights; width = one column)",
   "menu": [
    "Draw",
    "Text",
@@ -910,7 +1133,7 @@
  {
   "id": "ellipse.axis",
   "label": "Axis, End",
-  "params": "{p1, p2, distance} | {p1, p2, p3} (axis endpoints, then half the other axis)",
+  "params": "{p1, p2, distance} | {p1, p2, p3} (axis endpoints, then half the other axis: a distance, or a point that far from the center)",
   "menu": [
    "Draw",
    "Ellipse",
@@ -1029,23 +1252,9 @@
   "enabled": true
  },
  {
-  "id": "mline",
-  "label": "Multiline",
-  "params": "{points, scale?, justification?: top|zero|bottom, closed?} (two offset polylines)",
-  "menu": [
-   "Draw",
-   "Multiline"
-  ],
-  "shortcut": null,
-  "aliases": [
-   "ml"
-  ],
-  "enabled": true
- },
- {
   "id": "helix",
   "label": "Helix",
-  "params": "{center, baseRadius, topRadius?, height?, turns?, ccw?} (3D polyline approximation)",
+  "params": "{center, baseRadius, topRadius?, height?, turns?, ccw?, startAngle? (degrees)} → {handle}",
   "menu": [
    "Draw",
    "Helix"
@@ -1086,6 +1295,60 @@
   "menu": [
    "Draw",
    "Center Line"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "mline",
+  "label": "Multiline",
+  "params": "{points, scale?, justification?: top|zero|bottom, style?, closed?} → {handle}",
+  "menu": [
+   "Draw",
+   "Multiline"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "ml"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "mlstyle",
+  "label": "Multiline Style...",
+  "params": "{} → styles | {name, description?, elements?: [{offset, color?, linetype?}], fill?: color|false, joints?, startCaps?/endCaps?: {line?, outerArc?, innerArcs?, angle? (degrees)}, copyFrom?, current? (default true)} | {delete: name} | {name, rename: newName}",
+  "menu": [
+   "Format",
+   "Multiline Style..."
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "mledit",
+  "label": "Multiline...",
+  "params": "{tool: cc|oc|mc|ct|ot|cj, first, p1, second, p2} | {tool: av|dv, handle, point} | {tool: cs|ca|wa, handle, p1, p2} (handles of multilines; points pick segments and sides)",
+  "menu": [
+   "Modify",
+   "Object",
+   "Multiline..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "-mledit"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "breakline",
+  "label": "Break-line Symbol",
+  "params": "{p1, p2, at?: [x,y] (symbol location; default the midpoint), size? (default 1, times DIMSCALE), extension? (past both points; default 0), block? (a block with two points on Defpoints; default the built-in symbol)} → {handle}",
+  "menu": [
+   "Tools",
+   "Express Tools",
+   "Break-line Symbol"
   ],
   "shortcut": null,
   "aliases": [],
@@ -1228,7 +1491,7 @@
  {
   "id": "qdim",
   "label": "Quick Dimension",
-  "params": "{handles?, at: [x,y], vertical?: bool}",
+  "params": "{handles?, at: [x,y] (dimension line position), mode?: continuous|staggered|baseline|ordinate|radius|diameter (default continuous), vertical?: bool (default: from `at`), datum?: [x,y] (baseline and ordinate; default the first point, or the origin for ordinate), add?: [[x,y]], remove?: [[x,y]] (dimension points; removes those within `tolerance`)}",
   "menu": [
    "Dimension",
    "Quick Dimension"
@@ -1252,7 +1515,7 @@
  {
   "id": "mleader",
   "label": "Multileader",
-  "params": "{points: [[arrow], ..., [landing]], text}",
+  "params": "{points: [[arrow], ..., [landing]] ([location] with leaderType none), text?, leaderType?: straight|spline|none, block?: name, blockAttach?: center|insertion}",
   "menu": [
    "Dimension",
    "Multileader"
@@ -1415,9 +1678,269 @@
   "enabled": true
  },
  {
+  "id": "dimedit",
+  "label": "Dimension Edit",
+  "params": "{handles?, mode?: home|new|rotate|oblique (default home), text? (new: \"\" or \"<>\" = the measurement), angle?: degrees (rotate: text angle; oblique: extension line angle, absent = none)}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [
+   "ded",
+   "dimed"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "dimedit.oblique",
+  "label": "Oblique",
+  "params": "{handles?, angle?: degrees}",
+  "menu": [
+   "Dimension",
+   "Oblique"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "dimjogged",
+  "label": "Jogged",
+  "params": "{handle (arc or circle), centerOverride: [x,y], at: [x,y] (dimension line location), jog?: [x,y], text?}",
+  "menu": [
+   "Dimension",
+   "Jogged"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "djo",
+   "jog"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "dimjogline",
+  "label": "Jogged Linear",
+  "params": "{handle (linear or aligned dimension), at?: [x,y] (jog location; default between the text and the first extension line), remove?: bool}",
+  "menu": [
+   "Dimension",
+   "Jogged Linear"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "djl"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "dimbreak",
+  "label": "Dimension Break",
+  "params": "{handles?, mode?: auto|manual|remove (default auto), objects?: [hex] (auto: the objects that break; default all crossing objects), first?/second?: [x,y] (manual), size?: number (default 0.125 × DIMSCALE)}",
+  "menu": [
+   "Dimension",
+   "Dimension Break"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "diminspect",
+  "label": "Inspection",
+  "params": "{handles?, shape?: round|angular|none (default round), label?: string, rate?: string (default \"100%\"), remove?: bool}",
+  "menu": [
+   "Dimension",
+   "Inspection"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "mleaderedit",
+  "label": "Edit Multileader",
+  "params": "{handle, mode?: add|remove (default add), points?: [[x,y]...] (arrowheads to add; with remove, points picking the leaders to remove), index?: number|[number] (remove by position)}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [
+   "mledit"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "mleaderedit.add",
+  "label": "Add Leader",
+  "params": "{handle, points: [[x,y]...] (arrowhead locations)}",
+  "menu": [
+   "Modify",
+   "Object",
+   "Multileader",
+   "Add Leader"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "mleaderedit.remove",
+  "label": "Remove Leader",
+  "params": "{handle, points?: [[x,y]...] (pick the leaders), index?: number|[number]}",
+  "menu": [
+   "Modify",
+   "Object",
+   "Multileader",
+   "Remove Leader"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "mleaderalign",
+  "label": "Align Multileaders",
+  "params": "{handles?, option?: current|distribute|parallel|spacing (default current), spacing?: number, to?: hex (multileader to align to), direction?: [[x,y],[x,y]] | angle?: degrees, points?: [[x,y],[x,y]] (distribute: first and last position)}",
+  "menu": [
+   "Modify",
+   "Object",
+   "Multileader",
+   "Align"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "mleadera"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "mleadercollect",
+  "label": "Collect Multileaders",
+  "params": "{handles?, at: [x,y] (top left of the collected blocks), mode?: horizontal|vertical|wrap (default horizontal), width?: number (wrap), spacing?: number}",
+  "menu": [
+   "Modify",
+   "Object",
+   "Multileader",
+   "Collect"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "mleaderc"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "scalelistedit",
+  "label": "Scale List...",
+  "params": "{add?: {name, ratio: \"paper:drawing\" (e.g. \"1:50\") | paperUnits + drawingUnits}, delete?: name | [names], reset?: true | \"metric\" | \"imperial\"} → scales, current (no parameters: list only)",
+  "menu": [
+   "Format",
+   "Scale List..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "-scalelistedit"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "objectscale",
+  "label": "Add/Delete Scales...",
+  "params": "{handles?, add?: name | [names], delete?: name | [names]} (scales of the drawing's list; an object keeps at least one) → changed, objects",
+  "menu": [
+   "Modify",
+   "Annotative Object Scale",
+   "Add/Delete Scales..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "-objectscale"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "aiobjectscaleadd",
+  "label": "Add Current Scale",
+  "params": "{handles?} (adds the current annotation scale to the annotative objects)",
+  "menu": [
+   "Modify",
+   "Annotative Object Scale",
+   "Add Current Scale"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "aiobjectscaleremove",
+  "label": "Delete Current Scale",
+  "params": "{handles?} (removes the current annotation scale from the annotative objects; an object keeps at least one)",
+  "menu": [
+   "Modify",
+   "Annotative Object Scale",
+   "Delete Current Scale"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "annoreset",
+  "label": "Synchronize Multiple-scale Positions",
+  "params": "{handles?} (every scale of an annotative object shares one position)",
+  "menu": [
+   "Modify",
+   "Annotative Object Scale",
+   "Synchronize Multiple-scale Positions"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "annoupdate",
+  "label": "Annotative Update",
+  "params": "{handles?} (makes text, dimensions, multileaders and block references annotative or not as their style or block is)",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "annovisible.current",
+  "label": "Current Scale Only",
+  "params": "{} (ANNOALLVISIBLE 0: annotative objects show only at scales they support)",
+  "menu": [
+   "View",
+   "Show Annotative Objects",
+   "Current Scale Only"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "annovisible.all",
+  "label": "All Scales",
+  "params": "{} (ANNOALLVISIBLE 1: every annotative object shows)",
+  "menu": [
+   "View",
+   "Show Annotative Objects",
+   "All Scales"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "annovisible.toggle",
+  "label": "Annotation Visibility",
+  "params": "{} (toggles ANNOALLVISIBLE)",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
   "id": "hatch",
   "label": "Hatch...",
-  "params": "{points?: [[x,y]] (internal points) | handles?: [hex] (closed objects), pattern?: \"ANSI31\", scale?, angle? (degrees), associative?}",
+  "params": "{points?: [[x,y]] (internal points) and/or handles?: [hex] (closed objects), pattern?: \"ANSI31\" (built in, or defined by patternFile | patternText), patternFile?: path to a .pat file | patternText?: its contents (loads the patterns it defines), scale?, angle? (degrees), associative? (HPASSOC), separate? (HPSEPARATE: a hatch per point/object), origin?: [x,y] (HPORIGIN) | originMode?: \"current\"|\"bottomLeft\"|\"bottomRight\"|\"topLeft\"|\"topRight\"|\"center\" (HPORIGINMODE), style?: \"normal\"|\"outer\"|\"ignore\" (HPISLANDDETECTION)} — gaps up to HPGAPTOL close",
   "menu": [
    "Draw",
    "Hatch..."
@@ -1433,7 +1956,7 @@
  {
   "id": "gradient",
   "label": "Gradient...",
-  "params": "{points? | handles?, color1?, color2?, angle?}",
+  "params": "{points? and/or handles?, name?: \"LINEAR\"|\"CYLINDER\"|\"CURVED\"|\"SPHERICAL\"|\"HEMISPHERICAL\" or INV… (colours swapped), color1?, color2?, angle? (degrees), centered? (default true)}",
   "menu": [
    "Draw",
    "Gradient..."
@@ -1476,7 +1999,7 @@
  {
   "id": "hatchedit",
   "label": "Hatch Edit",
-  "params": "{handles?, pattern?, scale?, angle?}",
+  "params": "{handles?, pattern?, scale?, angle?, gradient?: {name?, color1?, color2?, angle? (degrees), centered?} (makes or changes a gradient fill; `pattern` turns it back), associative?: bool (false unlinks; true links each loop to a closed object of the same shape, or to `boundary` objects), boundary?: [hex], addPoints?: [[x,y]], addBoundary?: [hex], removeLoops?: [zero-based index] (geometry edits require one hatch), style?, origin? | originMode?, separate?: true, recreate?: \"polyline\"|\"region\", associate?: bool (link to the recreated boundary)}",
   "menu": [
    "Modify",
    "Object",
@@ -1484,14 +2007,38 @@
   ],
   "shortcut": null,
   "aliases": [
-   "he"
+   "he",
+   "-hatchedit"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "hatchpick",
+  "label": "Hatch Pick",
+  "params": "{points?: [[x,y]] (internal points), handles?: [hex] (closed objects)} (typed: Points, Objects, oRigin or Hatch, then the picks): the Hatch and Gradient dialog's picks, kept in the session; changes nothing",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "overkill",
+  "label": "Delete Duplicate Objects",
+  "params": "{handles? (default: the whole current space), tolerance? (0..1e6, default 1e-6), ignore?: [color|layer|linetype|ltscale|lineweight|thickness|transparency|plotStyle], plines?: bool (default true), partialOverlap?: bool (default true), endToEnd?: bool (default false), associativity?: bool (keep associated objects, default true)} → {deleted, duplicates, overlapping, segments}",
+  "menu": [
+   "Modify",
+   "Delete Duplicate Objects"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "-overkill"
   ],
   "enabled": true
  },
  {
   "id": "block",
   "label": "Make...",
-  "params": "{name, base: [x,y], handles?, keep?: \"convert\"|\"retain\"|\"delete\" (default \"convert\"), description?}",
+  "params": "{name, base: [x,y], handles?, keep?: \"convert\"|\"retain\"|\"delete\" (default \"convert\"), description? (up to 255 characters, one line), annotative?}",
   "menu": [
    "Draw",
    "Block",
@@ -1507,7 +2054,7 @@
  {
   "id": "-block",
   "label": "Create Block",
-  "params": "{name, base: [x,y], handles?, keep?: \"delete\"|\"retain\"|\"convert\" (default \"delete\"), description?}",
+  "params": "{name, base: [x,y], handles?, keep?: \"delete\"|\"retain\"|\"convert\" (default \"delete\"), description? (up to 255 characters, one line)}",
   "menu": [],
   "shortcut": null,
   "aliases": [
@@ -1606,6 +2153,51 @@
   "enabled": true
  },
  {
+  "id": "blocks.dynamic",
+  "label": "Dynamic Block Data",
+  "params": "{name (a block, or \"*Model_Space\" for a drawing that is a dynamic block's own)} → {parameters, actions, other} | null (not a dynamic block)",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "blocks.reference",
+  "label": "Dynamic Block Reference",
+  "params": "{handle (a block reference)} → {definition, values (by parameter graph id), properties: [{name, value, choices}]} | null (not a dynamic block reference)",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "blocks.reference.set",
+  "label": "Set Dynamic Property",
+  "params": "{handle (a dynamic block reference), name (a custom property as Properties names it: a visibility state, a lookup, a distance or \"Position1 X\"), value (lengths in drawing units)} → {properties}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "blocks.reference.grips",
+  "label": "Dynamic Block Grips",
+  "params": "{handle} → [{node, part: base|end|at, shape: linear|point|list, at: [x,y], dir: [x,y], property, choices?}] (empty: not a dynamic block reference)",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "blocks.reference.grip",
+  "label": "Drag Dynamic Grip",
+  "params": "{handle, node (the parameter's graph id), part: base|end|at, to: [x,y] (drawing coordinates)} → {properties}: a distance's arrow changes the distance (snapped to its values), a position's square moves it",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
   "id": "purge",
   "label": "Purge",
   "params": "{type?: all|blocks|dimstyles|groups|layers|linetypes|mleaderstyles|tablestyles|textstyles|zerolength|emptytext (default all: every named type), names?: \"A*,B\" (default *)} → purged",
@@ -1628,7 +2220,7 @@
  {
   "id": "battman",
   "label": "Block Attribute Manager...",
-  "params": "{name}",
+  "params": "{name, action?: \"list\" (default) | \"edit\" | \"remove\" | \"up\" | \"down\" | \"order\" | \"sync\", tag? (the definition to edit, remove or move; any case), newTag?, prompt?, default?, invisible?, constant?, height?, layer?, order?: [every tag, in the new order], sync?: bool (default true: existing references follow, as with ATTSYNC)} → {block, attributes: [{tag, prompt, default, invisible, constant, height, layer}], references, synced?}",
   "menu": [
    "Modify",
    "Object",
@@ -1661,6 +2253,260 @@
   "shortcut": null,
   "aliases": [],
   "enabled": true
+ },
+ {
+  "id": "burst",
+  "label": "Explode Attributes to Text",
+  "params": "{handles?} (block references; other objects are left alone) → {handles}",
+  "menu": [
+   "Tools",
+   "Express Tools",
+   "Explode Attributes to Text"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "blockreplace",
+  "label": "Replace Block...",
+  "params": "{block (the block whose references are replaced), with (the replacement block), purge?: bool (default false: remove the replaced block's definition when nothing references it any more)} → {block, with, replaced, purged}",
+  "menu": [
+   "Tools",
+   "Express Tools",
+   "Replace Block..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "-blockreplace"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "dataextraction",
+  "label": "Data Extraction...",
+  "params": "{blocks?: \"A*,B\" (block names, wildcards, default *), tags?: attribute tags to include (wildcards, default *), handles? (default: the block references in model space and every layout), combine?: bool (default true: identical rows once, with a Count column; false: one row per reference with handle, layer, position and rotation), file?: path (.csv; .txt is tab-separated), at?: [x,y] (insert a table there), title?: table title} → {columns, rows, file?, table?}",
+  "menu": [
+   "Tools",
+   "Data Extraction..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "dx"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "eattext",
+  "label": "Data Extraction...",
+  "params": "{blocks?: \"A*,B\" (block names, wildcards, default *), tags?: attribute tags to include (wildcards, default *), handles? (default: the block references in model space and every layout), combine?: bool (default true: identical rows once, with a Count column; false: one row per reference with handle, layer, position and rotation), file?: path (.csv; .txt is tab-separated), at?: [x,y] (insert a table there), title?: table title} → {columns, rows, file?, table?}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "blocks.description",
+  "label": "Block Description...",
+  "params": "{name? (default the block the Block Editor is editing, else the one selected block reference's block), description (up to 255 characters, one line; \"\" clears it)} → {block, description}",
+  "menu": [
+   "Modify",
+   "Object",
+   "Block Description..."
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "attdisp.normal",
+  "label": "Normal",
+  "params": "{} (ATTDISP Normal: ATTMODE 1) → {attmode}",
+  "menu": [
+   "View",
+   "Attribute Display",
+   "Normal"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "attdisp.on",
+  "label": "On",
+  "params": "{} (ATTDISP ON: ATTMODE 2) → {attmode}",
+  "menu": [
+   "View",
+   "Attribute Display",
+   "On"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "attdisp.off",
+  "label": "Off",
+  "params": "{} (ATTDISP OFF: ATTMODE 0) → {attmode}",
+  "menu": [
+   "View",
+   "Attribute Display",
+   "Off"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "xattach",
+  "label": "DWG Reference...",
+  "params": "{path: DWG/DXF file (saved as given; a relative path is relative to this drawing's folder), name? (default: the file name), overlay?: bool, at?: [x,y] (default 0,0), scale?: number | [x, y], rotation? (degrees)} → {name, handle, file}",
+  "menu": [
+   "Insert",
+   "DWG Reference..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "xa"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "xref",
+  "label": "Reference Manager",
+  "params": "{} → {xrefs: [{name, path, foundAt, type: Attach|Overlay, status: Loaded|Unloaded|Not Found|Unresolved|Unreferenced|Not loaded, references, objects}]} (the app opens the External References palette instead)",
+  "menu": [
+   "Window",
+   "Reference Manager"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "xr",
+   "externalreferences"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "-xref",
+  "label": "External References",
+  "params": "{option: \"?\"|bind|detach|path|unload|reload|overlay|attach|type, names?: \"A,B*\" (default *), path? (path, attach, overlay), insert?: bool (bind: Insert type), overlay?: bool (type), at?, scale?, rotation? (attach)}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [
+   "-xr"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "xbind",
+  "label": "Bind...",
+  "params": "{type: block|dimstyle|layer|linetype|style, names: \"XREF|NAME,…\" (wildcards) | [names]} → {bound: [names]}",
+  "menu": [
+   "Modify",
+   "Object",
+   "External Reference",
+   "Bind..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "-xbind",
+   "xb",
+   "-xb"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "xopen",
+  "label": "Open Xref",
+  "params": "{name} | {handles: [xref reference]}",
+  "menu": [
+   "Tools",
+   "Open Xref"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "refedit",
+  "label": "Edit Reference In-Place",
+  "params": "{handle? | handles? | name? (a block reference, default the selection), objects?: [block object handles] (default all)} → {block, insert, working: [handles], faded}",
+  "menu": [
+   "Tools",
+   "Xref and Block In-place Editing",
+   "Edit Reference In-Place"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "refset",
+  "label": "Working Set",
+  "params": "{add?: [handles], remove?: [handles]} (or {handles, mode?: \"add\"|\"remove\"}); with neither: lists the working set → {working: [handles], added, removed}",
+  "menu": [
+   "Tools",
+   "Xref and Block In-place Editing",
+   "Add to Working Set"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": false
+ },
+ {
+  "id": "refclose",
+  "label": "Save Reference Edits",
+  "params": "{option?: \"save\"|\"discard\" | save?: bool (default true)} → {block, saved, objects}",
+  "menu": [
+   "Tools",
+   "Xref and Block In-place Editing",
+   "Save Reference Edits"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": false
+ },
+ {
+  "id": "bedit",
+  "label": "Block Editor",
+  "params": "{name? (\"<Current Drawing>\": the drawing itself, a dynamic block's own drawing) | handle? (a block reference: edits its block); default the one selected block reference, create?: bool (a name no block has yet starts a new block; BSAVE creates it), save?: bool (in the Block Editor, switching to another block: save (true) or discard (false) the changes not saved yet; required when there are some), check?: bool (in the Block Editor: only check that the block can be switched to)} → {block, new, saved?}",
+  "menu": [
+   "Tools",
+   "Block Editor"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "be",
+   "-bedit"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "bsave",
+  "label": "Save Block",
+  "params": "{} → {block}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": false
+ },
+ {
+  "id": "bsaveas",
+  "label": "Save Block As",
+  "params": "{name, replace?: bool (redefine an existing block of that name)} → {block}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": false
+ },
+ {
+  "id": "bclose",
+  "label": "Close Block Editor",
+  "params": "{save?: bool (default true; false discards the changes not saved into the block)} → {block, saved}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": false
  },
  {
   "id": "erase",
@@ -1723,7 +2569,7 @@
  {
   "id": "scale",
   "label": "Scale",
-  "params": "{handles?, base: [x,y], factor, copy?: bool}",
+  "params": "{handles?, base: [x,y] or [x,y,z] (default Z: ELEVATION), factor, copy?: bool}",
   "menu": [
    "Modify",
    "Scale"
@@ -1751,7 +2597,7 @@
  {
   "id": "stretch",
   "label": "Stretch",
-  "params": "{window: [[x,y],[x,y]], delta: [dx,dy]}",
+  "params": "{window: [[x,y],[x,y]] | polygon: [[x,y],...] | fence: [[x,y],...], delta: [dx,dy]}",
   "menu": [
    "Modify",
    "Stretch"
@@ -1847,32 +2693,6 @@
   "enabled": true
  },
  {
-  "id": "draworder.front",
-  "label": "Bring to Front",
-  "params": "{handles?}",
-  "menu": [
-   "Tools",
-   "Draw Order",
-   "Bring to Front"
-  ],
-  "shortcut": null,
-  "aliases": [],
-  "enabled": true
- },
- {
-  "id": "draworder.back",
-  "label": "Send to Back",
-  "params": "{handles?}",
-  "menu": [
-   "Tools",
-   "Draw Order",
-   "Send to Back"
-  ],
-  "shortcut": null,
-  "aliases": [],
-  "enabled": true
- },
- {
   "id": "break",
   "label": "Break",
   "params": "{handle, p1, p2}",
@@ -1901,7 +2721,7 @@
  {
   "id": "join",
   "label": "Join",
-  "params": "{handles?}",
+  "params": "{handles?, close?: bool (a single arc becomes its circle, an elliptical arc its full ellipse)}",
   "menu": [
    "Modify",
    "Join"
@@ -1913,12 +2733,141 @@
   "enabled": true
  },
  {
-  "id": "overkill",
-  "label": "Delete Duplicate Objects",
+  "id": "draworder",
+  "label": "Draw Order",
+  "params": "{handles?, order?: \"front\"|\"back\"|\"above\"|\"under\" (default back), reference?: [hex] (above/under)} → {moved}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [
+   "dr"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "draworder.front",
+  "label": "Bring to Front",
   "params": "{handles?}",
   "menu": [
-   "Modify",
-   "Delete Duplicate Objects"
+   "Tools",
+   "Draw Order",
+   "Bring to Front"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "draworder.back",
+  "label": "Send to Back",
+  "params": "{handles?}",
+  "menu": [
+   "Tools",
+   "Draw Order",
+   "Send to Back"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "draworder.above",
+  "label": "Bring Above Objects",
+  "params": "{handles?, reference: [hex]}",
+  "menu": [
+   "Tools",
+   "Draw Order",
+   "Bring Above Objects"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "draworder.under",
+  "label": "Send Under Objects",
+  "params": "{handles?, reference: [hex]}",
+  "menu": [
+   "Tools",
+   "Draw Order",
+   "Send Under Objects"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "texttofront",
+  "label": "Bring Annotations to Front",
+  "params": "{objects?: \"text\"|\"dimensions\"|\"leaders\"|\"all\" (default all)} → {moved}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "texttofront.text",
+  "label": "Text Objects Only",
+  "params": "{} → {moved}",
+  "menu": [
+   "Tools",
+   "Draw Order",
+   "Bring Annotations to Front",
+   "Text Objects Only"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "texttofront.dimensions",
+  "label": "Dimension Objects Only",
+  "params": "{} → {moved}",
+  "menu": [
+   "Tools",
+   "Draw Order",
+   "Bring Annotations to Front",
+   "Dimension Objects Only"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "texttofront.leaders",
+  "label": "Leaders Only",
+  "params": "{} → {moved}",
+  "menu": [
+   "Tools",
+   "Draw Order",
+   "Bring Annotations to Front",
+   "Leaders Only"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "texttofront.all",
+  "label": "All Annotation Objects",
+  "params": "{} → {moved}",
+  "menu": [
+   "Tools",
+   "Draw Order",
+   "Bring Annotations to Front",
+   "All Annotation Objects"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "hatchtoback",
+  "label": "Send Hatches to Back",
+  "params": "{} → {moved}",
+  "menu": [
+   "Tools",
+   "Draw Order",
+   "Send Hatches to Back"
   ],
   "shortcut": null,
   "aliases": [],
@@ -1938,7 +2887,7 @@
  {
   "id": "arrayrect",
   "label": "Rectangular Array",
-  "params": "{handles?, rows, cols, rowSpacing, colSpacing}",
+  "params": "{handles?, rows, cols, rowSpacing, colSpacing, levels? (1), levelSpacing?, rowElevation?, axisAngle? (degrees), base? ([x, y], default the objects' centre), associative?: bool (default ARRAYASSOCIATIVITY, on)} → {handle (the array, when associative), created (copies)}",
   "menu": [
    "Modify",
    "Array",
@@ -1951,7 +2900,7 @@
  {
   "id": "arraypolar",
   "label": "Polar Array",
-  "params": "{handles?, center, count, angle? (degrees, default 360), rotate?: bool}",
+  "params": "{handles?, center, count, angle? (degrees, default 360), rotate?: bool, rows? (1), rowSpacing?, rowElevation?, levels? (1), levelSpacing?, base? ([x, y], default the first object's centre), associative?: bool (default ARRAYASSOCIATIVITY, on)} → {handle (the array, when associative), created (copies)}",
   "menu": [
    "Modify",
    "Array",
@@ -1962,9 +2911,40 @@
   "enabled": true
  },
  {
+  "id": "-array",
+  "label": "Array",
+  "params": "{handles?, type?: \"rectangular\" (default) | \"polar\", rows? (1), cols? (1), rowSpacing?, colSpacing?, center, count, angle? (degrees, default 360), rotate?: bool (default true), base? ([x, y], default the DXF group 10 point of the last object)} → {created}: separate copies, as the classic -ARRAY makes them",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "arrayedit",
+  "label": "Edit Array",
+  "params": "{handle, cols?, rows?, colSpacing?, rowSpacing?, axisAngle? (degrees), rowElevation?, levels?, levelSpacing?, items?, angle? (fill, degrees), angleBetween?, rotate?: bool, center? ([x, y]), base? ([x, y], the new base point), reset?: bool, replace?: {handles, base? ([x, y], default the objects' centre), items: [[i, j, level]…] | \"source\"}, source?: {item? ([i, j, level], default [0, 0, 0])} (places the source objects for editing; ARRAYCLOSE ends)}",
+  "menu": [
+   "Modify",
+   "Object",
+   "Array"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "arrayclose",
+  "label": "Close Array Editing",
+  "params": "{save?: bool (default true)}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
   "id": "pedit",
   "label": "Polyline",
-  "params": "{handle | handles, option: close|open|join|width|fit|spline|decurve|reverse|ltypegen|vertex, width?, handles2? (join), fuzz?, action?: move|insert|straighten|width, index?, to?, startWidth?, endWidth?, convert?: bool}",
+  "params": "{handle | handles, option: close|open|join|width|fit|spline|decurve|reverse|ltypegen|vertex, width?, handles2? (join), fuzz?, action?: move|insert|straighten|break|width|regen, index?, index2? (straighten, break), to?, startWidth?, endWidth?, tangents?: [{index, angle (deg) | direction}] (fit), convert?: bool}",
   "menu": [
    "Modify",
    "Object",
@@ -1979,7 +2959,7 @@
  {
   "id": "splinedit",
   "label": "Spline",
-  "params": "{handle, option: close|open|reverse|refit|purge|polyline|move, fit?, index?, to?, precision?}",
+  "params": "{handle, option: close|open|join|reverse|refit|purge|polyline|move|fitmove|fitadd|fitdelete|kink|tangents|tolerance|vertexadd|vertexmove|vertexdelete|weight|elevate, handles2? (join), fit?, index?, to?, before?: bool (fitadd), at? (kink, vertexadd), start?, end? (tangent directions; null = default), tolerance?, weight?, order? (elevate), precision?}",
   "menu": [
    "Modify",
    "Object",
@@ -2056,6 +3036,19 @@
   "enabled": true
  },
  {
+  "id": "mocoro",
+  "label": "Move/Copy/Rotate",
+  "params": "{handles?, base: [x,y], ops: [{move: [x,y]} | {copy: [x,y]} | {rotate: degrees} | {scale: factor} | {base: [x,y]}]} → {handles (copies)}",
+  "menu": [
+   "Tools",
+   "Express Tools",
+   "Move/Copy/Rotate"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
   "id": "chspace",
   "label": "Change Space",
   "params": "{handles?, to?: \"model\" | layout name, viewport?: handle}",
@@ -2109,6 +3102,70 @@
   "enabled": true
  },
  {
+  "id": "group",
+  "label": "Group",
+  "params": "{name? (default: an unnamed group *A1, *A2…), description?, handles? (default the selection), selectable?: bool (default true)} → {name, members}",
+  "menu": [
+   "Tools",
+   "Group"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "g"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "ungroup",
+  "label": "Ungroup",
+  "params": "{name?: \"G1\" | \"G1,G2\" | [names]} | {handles?} (default the selection: every group holding one of the objects) → {ungrouped: [names]}",
+  "menu": [
+   "Tools",
+   "Ungroup"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "groupedit",
+  "label": "Group Edit",
+  "params": "{name, add?: [handles], remove?: [handles], rename?: new name} → {name, members}. Removing every member deletes the group.",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "groups.list",
+  "label": "List Groups",
+  "params": "{} → {groups: [{name, description, selectable, unnamed, members: [handles]}]}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "-group",
+  "label": "Group Options",
+  "params": "{option?: \"create\" (default) | \"?\" | \"order\" | \"add\" | \"remove\" | \"explode\" | \"rename\" | \"selectable\", name?, ...}: create {name?, description?, handles?, selectable?}; ? {name?: \"A*,B\" (default *)} → {groups}; order {name, from, to, count?: 1} (0-based positions); add/remove {name, handles? (default the selection)}; explode {name}; rename {name, newName}; selectable {name, selectable?: bool (default: toggle)}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [
+   "-g"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "pickstyle",
+  "label": "Group Selection",
+  "params": "{value?: 0 none | 1 group selection | 2 associative hatch | 3 both} (no value: group selection on/off) → {value, message}",
+  "menu": [],
+  "shortcut": "Cmd+Shift+A",
+  "aliases": [],
+  "enabled": true
+ },
+ {
   "id": "grip.move",
   "label": "Grip Stretch",
   "params": "{handle?, handles?, index, to} (stretch the grip) | {handles?, index, baseHandle?, to, mode: \"move\", copy?} (move about the grip)",
@@ -2120,7 +3177,7 @@
  {
   "id": "grip.stretch",
   "label": "Grip Stretch",
-  "params": "{handle?, handles?, index, to}",
+  "params": "{handle?, handles?, index, to} | {grips: [[handle, index], ...] (several hot grips), delta | to (+ base?), handles?, copy?}",
   "menu": [],
   "shortcut": null,
   "aliases": [],
@@ -2154,6 +3211,72 @@
   "enabled": true
  },
  {
+  "id": "grip.option",
+  "label": "Grip Option",
+  "params": "{handle, index, option: addVertex|removeVertex|toArc|toLine|lengthen|radius, to? (point), value? (lengthen: length change; radius)}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "grip",
+  "label": "Grip Edit",
+  "params": "interactive: select grips, then the grip modes with [Base point/Copy/Undo/Reference/eXit]; JSON: use grip.stretch/move/rotate/scale/mirror",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "compare",
+  "label": "Compare Drawings...",
+  "params": "{path} | {data: base64, name} | {document: index or title} → {other, added: [{handle, type}], removed, changed: [{handle, other, type, what}], counts: {added, removed, changed, common}, regions, truncated, message}",
+  "menu": [
+   "Tools",
+   "Compare Drawings..."
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "compare.next",
+  "label": "Next Change",
+  "params": "→ {region, of}: zoom to the next area with changes",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "compare.previous",
+  "label": "Previous Change",
+  "params": "→ {region, of}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "compareclose",
+  "label": "Close Comparison",
+  "params": "{}: end the comparison and its overlay",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "compareexport",
+  "label": "Export Comparison",
+  "params": "{} → {index, title, current, compared: group names, counts: {current, compared}, truncated, message}: the comparison as a new drawing, opened untitled",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
   "id": "layer",
   "label": "Layers",
   "params": "{} → layers, states (typed -LAYER: option prompts)",
@@ -2181,7 +3304,7 @@
  {
   "id": "layer.set",
   "label": "Set Layer Properties",
-  "params": "{name, on?, frozen?, locked?, plot?, color?, linetype?, lineweight?, transparency?, description?, newVpFreeze?, newName?}",
+  "params": "{name, on?, frozen?, locked?, plot?, color?, linetype?, lineweight?, transparency?, description?, newVpFreeze?, plotStyle? (named plot style), newName?}",
   "menu": [],
   "shortcut": null,
   "aliases": [],
@@ -2428,7 +3551,7 @@
  {
   "id": "layout",
   "label": "Layout",
-  "params": "{option: new|copy|delete|rename|set|list, name?, to?} (typed LAYOUT / -LAYOUT: option prompts)",
+  "params": "{option: new|copy|delete|rename|saveas|set|list, name?, to?, path? (saveas)} (typed LAYOUT / -LAYOUT: option prompts)",
   "menu": [],
   "shortcut": null,
   "aliases": [
@@ -2486,9 +3609,18 @@
   "enabled": true
  },
  {
+  "id": "layout.saveas",
+  "label": "Save Layout as Template",
+  "params": "{name?: layout (default: the current layout, else the first tab), path: .dwt (or .dwg, .dxf; no extension adds .dwt)} → {name, path, bytes, notSaved?}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
   "id": "mview",
   "label": "Viewports",
-  "params": "{p1?, p2? (default: printable area), count?: 1-4, arrangement?: vertical|horizontal|left|right|above|below, layout?}",
+  "params": "{option?: fit|polygonal|object|on|off|lock|restore, p1?, p2? (default: printable area), count?: 1-4, arrangement?: vertical|horizontal|left|right|above|below, points?: [[x,y]…] + bulges? (polygonal), object? (closed object to clip by), handles? + locked? (on/off/lock), name? (restore: a model space viewport configuration, default *Active; its viewports fill p1-p2 or the printable area), layout?}",
   "menu": [],
   "shortcut": null,
   "aliases": [
@@ -2497,9 +3629,35 @@
   "enabled": true
  },
  {
+  "id": "mview.polygonal",
+  "label": "Polygonal Viewport",
+  "params": "{points: [[x,y]…] (at least three), bulges?, layout?}",
+  "menu": [
+   "View",
+   "Viewports",
+   "Polygonal Viewport"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "vpclip",
+  "label": "Clip Viewport",
+  "params": "{handle?: viewport (default: selected or active), object?: closed object | points?: [[x,y]…] + bulges?, delete?: bool, layout?}",
+  "menu": [
+   "Modify",
+   "Clip",
+   "Viewport"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
   "id": "vports",
   "label": "New Viewports...",
-  "params": "{count?: 1-4, arrangement?, p1?, p2?, layout?}",
+  "params": "{count?: 1-4, arrangement?, p1?, p2?, layout?} (typed in the Model tab: tiled viewports; their JSON form is -vports)",
   "menu": [
    "View",
    "Viewports",
@@ -2582,7 +3740,7 @@
  {
   "id": "pagesetup",
   "label": "Page Setup Manager...",
-  "params": "{layout?: current, paper?: \"A4\"|\"A3\"|\"Letter\"|\"ANSI B\"|…, width?, height? (mm), landscape?, margins?: [l,b,r,t] mm, lineweights?, plotArea?, scale?, scaleToFit?, center?, plotStyleTable?}",
+  "params": "{layout?: current, device?: plotter name (PLOTTERMANAGER) | \"None\", paper?: the device's paper | \"A4\"|\"A3\"|\"Letter\"|\"ANSI B\"|…, width?, height? (mm), landscape?, margins?: [l,b,r,t] mm, lineweights?, plotArea?, scale?, scaleToFit?, center?, plotStyleTable?: \"monochrome.ctb\"|\"grayscale.ctb\"|\"default.ctb\"|\"None\"|…, displayPlotStyles?: bool, plotTransparency?: bool}",
   "menu": [
    "File",
    "Page Setup Manager..."
@@ -2594,7 +3752,7 @@
  {
   "id": "plot",
   "label": "Print...",
-  "params": "{path? (else returns base64 `data`), layout?: current|\"Model\", paper?, landscape?, fit?: bool, scale?, lineweights?: bool}",
+  "params": "{path? (else returns base64 `data`), layout?: current|\"Model\", paper?, landscape?, fit?: bool, scale?: number | \"1:50\", center?: bool (Model, default true), offset?: [x,y] mm (Model, when center is false; each within ±100000), lineweights?: bool, plotTransparency?: bool (default: the page setup's; PLOTTRANSPARENCYOVERRIDE 0/2 overrides it), plotArea?: extents|display|limits|window (Model) | layout, window?: [[x1,y1],[x2,y2]]} (typed or from the menu: the Plot dialog)",
   "menu": [
    "File",
    "Print..."
@@ -2608,7 +3766,7 @@
  {
   "id": "exportpdf",
   "label": "Export to PDF...",
-  "params": "{path? (else returns base64 `data`), layout?, paper?, landscape?, fit?, lineweights?}",
+  "params": "{path? (else returns base64 `data`), layout?, paper?, landscape?, fit?, scale?, center?: bool (Model, default true), offset?: [x,y] mm (Model, when center is false; each within ±100000), lineweights?, plotTransparency?, plotArea?, window?} (as PLOT)",
   "menu": [
    "File",
    "Export to PDF..."
@@ -2639,6 +3797,159 @@
   "enabled": true
  },
  {
+  "id": "plotstyle",
+  "label": "Plot Style...",
+  "params": "{name?: \"ByLayer\"|\"ByBlock\"|style name, handles?|handle? (default: the selection; nothing selected sets the current plot style for new objects, CPLOTSTYLE)} (no name: reports the current style and the named styles)",
+  "menu": [
+   "Format",
+   "Plot Style..."
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "stylesmanager",
+  "label": "Plot Style Manager...",
+  "params": "{action?: list (default)|get|new|set|delete|load|save, name?: table (\"x.ctb\"/\"x.stb\"), kind?: colorDependent|named (new), from?: table to copy (new), description?, style?: {name, color?: \"#rrggbb\"|null, grayscale?, screening?: 0-100, linetype?: name|null, lineweight?: mm|null, end?, join?, fill?, description?} (set), removeStyle?: name (set, named tables), path? (load/save; save without one returns `text`), text? (load)}",
+  "menu": [
+   "File",
+   "Plot Styles..."
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "plotwindow",
+  "label": "Plot Window",
+  "params": "{p1: [x,y], p2: [x,y]} (typed: two corners): the window the Plot dialog's \"Window <\" plots, kept in the session",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "plottermanager",
+  "label": "Plotter Manager...",
+  "params": "{action?: list (default)|get|new|set|delete|load|save, name?: device, from?: device to copy (new), output?: pdf|png|svg, description?, resolution?: dpi, orientation?: portrait|landscape, defaultPaper?, paper?: {name, width, height (mm), margins?: [l,b,r,t] mm} (set: add or replace), removePaper?: name (set), text? (load), path? (save: native only; without it returns `text`)} (typed: option prompts)",
+  "menu": [
+   "File",
+   "Plotter Manager..."
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "-plottermanager",
+  "label": "Plotter Manager",
+  "params": "as PLOTTERMANAGER (typed: option prompts)",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "import",
+  "label": "Import...",
+  "params": "{path | data: base64, name?: \"x.dwg\"} (DXF or DWG), at?: [x,y] (default 0,0), scale?: (default 1) → {imported, handles, layers, styles, blocks}",
+  "menu": [
+   "File",
+   "Import..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "imp"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "export",
+  "label": "Export...",
+  "params": "{path? (else returns base64 `data`), format?: dxf|dwg|svg|png|pdf (default: the path's extension)} → {format, bytes, path? | data}",
+  "menu": [
+   "File",
+   "Export..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "exp"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "preview",
+  "label": "Plot Preview",
+  "params": "{layout?: current|\"Model\", paper?, landscape?, fit?, scale?, lineweights?, plotTransparency?, width?: pixels (default 1200)} → {data: base64 PNG, width, height, layout, paper}",
+  "menu": [
+   "File",
+   "Plot Preview"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "pre"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "publish",
+  "label": "Batch Publish...",
+  "params": "{path?: \"NAME.pdf\" (writes NAME-<sheet>.pdf per sheet; else returns base64 `data` per sheet), layouts?: [name | \"Model\"] (default: Model if it has objects, then every layout in tab order)} → {sheets: [{layout, bytes, path? | data}]}",
+  "menu": [
+   "File",
+   "Batch Publish..."
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "pdfbook",
+  "label": "Sheet Books to PDF...",
+  "params": "{path?: \"DIR/NAME^NAME2.pdf\" (default: the drawing's file; a `^` splits the name into one book name per row of frames; else returns base64 `data` per book), names?: [book names], frameHeight?: mm (default 297), unit?: mm per drawing unit (default 1)} → {books: [{name, pages, bytes, path? | data}], skipped}: closed polylines of the frame height in model space are sheet frames; each row (same lower edge, bottom to top) is one PDF, its frames left to right one page each on the paper (ISO A-series, either orientation) they match",
+  "menu": [
+   "File",
+   "Sheet Books to PDF..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "printpdf",
+   "pdfb"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "attach",
+  "label": "Attach",
+  "params": "not available yet",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "share",
+  "label": "Share",
+  "params": "not available yet",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "3dorbit",
+  "label": "Orbit",
+  "params": "not available yet",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [
+   "3do",
+   "orbit"
+  ],
+  "enabled": true
+ },
+ {
   "id": "properties",
   "label": "Properties",
   "params": "{handles?} → properties of the selection",
@@ -2657,16 +3968,36 @@
  {
   "id": "properties.set",
   "label": "Set Properties",
-  "params": "{handles?, layer?, color?, linetype?, lineweight?, ltscale?, transparency?: \"ByLayer\" | \"ByBlock\" | 0..90, visible?, <geometry fields: radius, center, start, end, text, height, rotation…>}",
+  "params": "{handles?, layer?, color?, linetype?, lineweight?, ltscale?, thickness?, transparency?: \"ByLayer\" | \"ByBlock\" | 0..90, visible?, <geometry fields: radius, center, start, end, text, height, rotation…>; dimensions: textOverride, dimStyle, textHeight, arrowSize, dimScale, precision (per-dimension overrides)}",
   "menu": [],
   "shortcut": null,
   "aliases": [],
   "enabled": true
  },
  {
+  "id": "chprop",
+  "label": "Change Properties",
+  "params": "as properties.set, leaving out objects on locked layers → {changed, locked} (the command line asks Color, LAyer, LType, ltScale, LWeight, Thickness and TRansparency in turn)",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "change",
+  "label": "Change",
+  "params": "{handles?, point?: [x, y], elevation?} → {changed, ignored, differingZ, detachedHatches, locked}: the point moves the nearer end of each line to it (level or plumb with the other end under ORTHOMODE) and, when it is the one object, passes a circle through it or places a text, attribute definition or block reference at it (`ignored` otherwise); `elevation` sets the z of objects whose points share one (`differingZ` otherwise); objects on locked layers are left out (the command line asks Specify change point or [Properties], then about each circle, text, attribute definition and block reference in turn)",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [
+   "-ch"
+  ],
+  "enabled": true
+ },
+ {
   "id": "matchprop",
   "label": "Match Properties",
-  "params": "{source, targets: [hex]}",
+  "params": "{source, targets?: [hex] (default: selection), properties?: [name] | {name: bool} (default: all; names: color, layer, linetype, ltscale, lineweight, transparency, thickness, plotStyle, dimension, text, hatch, polyline, viewport, table, multileader)} → {changed}",
   "menu": [
    "Modify",
    "Match Properties"
@@ -2696,7 +4027,7 @@
  {
   "id": "linetype",
   "label": "Linetype...",
-  "params": "{current?: name, load?: name | \"*\"}",
+  "params": "{current?: name, load?: name | \"*\" (with a file: comma-separated names, wildcards), file?: path to a .lin file | text?: its contents, reload?: bool}",
   "menu": [
    "Format",
    "Linetype..."
@@ -2706,6 +4037,24 @@
    "lt",
    "ltype"
   ],
+  "enabled": true
+ },
+ {
+  "id": "hatch.patterns",
+  "label": "Hatch Patterns",
+  "params": "{file?: path to a .pat file | text?: its contents, clear?: bool} → {standard, user, added, warnings} (HATCH also takes patternFile | patternText)",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "-linetype",
+  "label": "Linetype",
+  "params": "{current?, load?, file? | text?, reload?} (as LINETYPE)",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
   "enabled": true
  },
  {
@@ -2746,6 +4095,29 @@
   "aliases": [
    "un"
   ],
+  "enabled": true
+ },
+ {
+  "id": "-units",
+  "label": "Units",
+  "params": "(as UNITS)",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [
+   "-un"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "thickness",
+  "label": "Thickness",
+  "params": "{thickness} (THICKNESS: the 3D thickness given to new lines, arcs, circles, points and polylines; may be negative) → {thickness}",
+  "menu": [
+   "Format",
+   "Thickness"
+  ],
+  "shortcut": null,
+  "aliases": [],
   "enabled": true
  },
  {
@@ -2886,7 +4258,7 @@
  {
   "id": "tablestyle",
   "label": "Table Style...",
-  "params": "{name, textHeight?, margin?, title?, header?, current?} → styles",
+  "params": "{name, textHeight?, margin?, title?, header?, current?, cellStyle?: {name, …} (see tablestyle.cellstyle)} → styles",
   "menu": [
    "Format",
    "Table Style..."
@@ -2900,7 +4272,7 @@
  {
   "id": "mleaderstyle",
   "label": "Multileader Style...",
-  "params": "{name, arrowSize?, textHeight?, landingGap?, dogleg?, textStyle?, current?} → styles",
+  "params": "{name, arrowSize?, textHeight?, landingGap?, dogleg?, textStyle?, annotative?, current?} → styles",
   "menu": [
    "Format",
    "Multileader Style..."
@@ -2920,7 +4292,9 @@
    "Point Style..."
   ],
   "shortcut": null,
-  "aliases": [],
+  "aliases": [
+   "ptype"
+  ],
   "enabled": true
  },
  {
@@ -3033,7 +4407,61 @@
  {
   "id": "entities",
   "label": "Query Entities",
-  "params": "{type?, layer?, window?: [[x,y],[x,y]], crossing?: bool (default true; false = entirely inside), limit?, offset?} → {count (all matches), returned, offset, entities}",
+  "params": "{type?, layer?, selected?: bool (default false; true = current selection in active space), window?: [[x,y],[x,y]], crossing?: bool (default true; false = entirely inside), limit?, offset?} → {count (all matches), returned, offset, entities}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "shapes",
+  "label": "Analyze Shapes",
+  "params": "{type?, layer?, window?: [[x,y],[x,y]], crossing?: bool (default true; false = entirely inside), limit? (default 200), offset?, tolerance?: positive number (default 1e-9 × the extents diagonal; near-duplicate vertices and a first vertex equal to the last)} → {schema: 1, count (all closed shapes), returned, offset, truncated, shapes: [{handle, type, layer, perimeter, area (≥ 0), winding: ccw|cw, centroid: [x,y] | null (zero area), selfIntersection: [x,y] | null (the first crossing of two non-adjacent edges; null past 4000 edges), duplicateVertices: [{index, distance} (vertices index and index+1, wrapping)]}], skipped: {<type>: {count, reason}} (the other matches), selfCheck: {schema, found, analyzed, skipped: {<type>: {count, reason}}, caps: {<name>: <value>}, implausible: [{handle, type, field, value, bound, reason}]} (what the analysis covered, the caps it hit, and values that point at a bug)}: closed polylines, circles, full ellipses and closed splines, arcs and bulges exact",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "usage",
+  "label": "Analyze Usage",
+  "params": "{type?: layers|blocks|textstyles|linetypes|all (default all), limit? (default 200), offset?} → {schema: 1, count (all items of the type), returned, offset, truncated, incomplete (true when the drawing has more objects than one scan reads, so every count, status and summary is partial), incompleteReason? (why), items: [{type: layer|block|textStyle|linetype, name, entities (objects in model space and layouts that use it), blockEntities (objects in block definitions that use it), references (named objects that use it: a layer's linetype, a text style's dimension and multileader styles), used (for a block: reachable from model space, a layout or a dimension), insideBlocksOnly (used, but by block definitions only), empty (nothing refers to it), unused (PURGE would offer it), current? (the current layer, text style or linetype)}], summary: {<kind>: {total, used, insideBlocksOnly, empty, unused}}, unused: {<kind>: {count, returned, truncated, names}} (PURGE's scan, in table order)}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "loops",
+  "label": "Implied Loops",
+  "params": "{tolerance?: positive number (default 1e-9 × the extents diagonal), maxPairs? (endpoint pairs compared, default 1000000, at most 100000000), limit? (default 200), offset?} → {schema: 1, tolerance, pairTests, pairTestsNeeded, pairLimit, capped, count (all closed loops), returned, offset, truncated, loops: [{members: [handle], perimeter, area, winding: ccw|cw}], openChains: {count, truncated, chains: [{members, gap, at: [x, y], ends: [[x, y], [x, y]], length}]}, junctions: {count, truncated, junctions: [{at: [x, y], ends, members}]}, skipped: {<type>: {count, reason}}}: chains LINE and ARC endpoints that meet within the tolerance; junctions (three or more ends meeting) are reported, not resolved",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "texts",
+  "label": "Query Texts",
+  "params": "{contains?: text (any case), layer?, window?: [[x,y],[x,y]] (by insertion point), limit? (default 200), offset?} → {count (all matches), returned, offset, texts: [{handle, type, layer, text, at, height, rotation (degrees), style, tag? (attributes)}]}: the readable text of TEXT, MTEXT (formatting removed), block attributes and multileaders",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "countlist",
+  "label": "Count List",
+  "params": "{space?: all (default)|current|model|<layout>, nested?: bool} → per-block counts, as COUNT",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "counttable",
+  "label": "Count Table",
+  "params": "{at: [x,y], space?: current (default)|model|all|<layout>, nested?: bool} → {handle}: a table of the block counts",
   "menu": [],
   "shortcut": null,
   "aliases": [],
@@ -3042,10 +4470,68 @@
  {
   "id": "count",
   "label": "Count",
-  "params": "{block?} → {blocks: {name: n}} | {block, count}, plus a `message` line",
+  "params": "{block?, object?: handle (count objects like this one), space?: current|model|all|<layout> (default current), handles?: [...] (count in these objects), nested?: bool (default true), highlight?: bool} → {blocks: {name: n}, nested: {name: n}, spaces: {space: {name: n}}, total} | {block, count, nested, handles}, plus `message` and `selfCheck` (found/analyzed/skipped counts with reasons, and the caps hit: work, handles, blockDepth)",
   "menu": [
    "Tools",
    "Count"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "union",
+  "label": "Union",
+  "params": "{handles?} (regions)",
+  "menu": [
+   "Modify",
+   "Solid Editing",
+   "Union"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "uni"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "subtract",
+  "label": "Subtract",
+  "params": "{from: [handles], remove: [handles]} (regions)",
+  "menu": [
+   "Modify",
+   "Solid Editing",
+   "Subtract"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "su"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "intersect",
+  "label": "Intersect",
+  "params": "{handles?} (regions)",
+  "menu": [
+   "Modify",
+   "Solid Editing",
+   "Intersect"
+  ],
+  "shortcut": null,
+  "aliases": [
+   "in"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "massprop",
+  "label": "Region/Mass Properties",
+  "params": "{handles?} (regions) → properties of each, plus `selfCheck` (found/analyzed/skipped with reasons, caps, implausible values)",
+  "menu": [
+   "Tools",
+   "Inquiry",
+   "Region/Mass Properties"
   ],
   "shortcut": null,
   "aliases": [],
@@ -3117,9 +4603,18 @@
  {
   "id": "isodraft",
   "label": "Isometric Drafting",
-  "params": "{on?: bool}",
+  "params": "{on?: bool, plane?: \"left\"|\"top\"|\"right\"|\"orthographic\"} (neither: toggle)",
   "menu": [],
   "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "isoplane",
+  "label": "Isometric Plane",
+  "params": "{plane?: \"left\"|\"top\"|\"right\"} (none: the next plane)",
+  "menu": [],
+  "shortcut": "F5",
   "aliases": [],
   "enabled": true
  },
@@ -3210,9 +4705,24 @@
   "enabled": true
  },
  {
+  "id": "options",
+  "label": "Options...",
+  "params": "{reset?: bool, OSMODE?, PICKBOX?, APERTURE?, GRIPSIZE?, CURSORSIZE?, PICKFIRST?, PICKADD?, PICKDRAG?: 0 (two clicks) | 2 (clicks or drag), …: any profile variable}",
+  "menu": [
+   "Tools",
+   "Options..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "op",
+   "preferences"
+  ],
+  "enabled": true
+ },
+ {
   "id": "cal",
   "label": "QuickCalc",
-  "params": "{expr: \"(3+4)*2^2\", vars?: {x: 1}}",
+  "params": "{expr: \"(3+4)*2^2\" | \"dist([0,0],[3,4])\", vars?: {x: 1, p: [x, y]}} → {value} | {point} | {convert: {type?: length|area|volume|angle, from, to, value}} → {value} | {units: true} → unit lists | {pick: point|distance|angle|intersection, points}",
   "menu": [
    "Tools",
    "Inquiry",
@@ -3223,6 +4733,15 @@
    "quickcalc",
    "qc"
   ],
+  "enabled": true
+ },
+ {
+  "id": "quickcalc.pick",
+  "label": "QuickCalc Pick",
+  "params": "{mode: point|distance|angle|intersection, points: [[x,y],...]} → {value} | {point}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
   "enabled": true
  },
  {
@@ -3238,22 +4757,9 @@
   "enabled": true
  },
  {
-  "id": "massprop",
-  "label": "Region/Mass Properties",
-  "params": "{handles?}",
-  "menu": [
-   "Tools",
-   "Inquiry",
-   "Region/Mass Properties"
-  ],
-  "shortcut": null,
-  "aliases": [],
-  "enabled": true
- },
- {
   "id": "measuregeom",
   "label": "Measure Geometry",
-  "params": "{mode: distance|radius|angle|area, ...}",
+  "params": "{mode: distance|radius|angle|area|volume, ...}",
   "menu": [],
   "shortcut": null,
   "aliases": [],
@@ -3262,7 +4768,7 @@
  {
   "id": "radius.measure",
   "label": "Radius",
-  "params": "{handle}",
+  "params": "{handle, point?}",
   "menu": [
    "Tools",
    "Inquiry",
@@ -3286,6 +4792,19 @@
   "enabled": true
  },
  {
+  "id": "volume.measure",
+  "label": "Volume",
+  "params": "{points: [[x,y],...] (3 or more) | handle (a closed 2D object), height} → {volume, area, height}",
+  "menu": [
+   "Tools",
+   "Inquiry",
+   "Volume"
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
   "id": "table",
   "label": "Table...",
   "params": "{at: [x,y], rows (data rows), cols, rowHeight?, colWidth?, cells?: [[text]], title?: text, header?: [text]}",
@@ -3302,7 +4821,7 @@
  {
   "id": "table.set",
   "label": "Set Table Cell",
-  "params": "{handle, row, col, text}",
+  "params": "{handle, row, col, text? (text starting with = is a formula), formula?: \"=Sum(A2:A5)\"}",
   "menu": [],
   "shortcut": null,
   "aliases": [],
@@ -3358,6 +4877,117 @@
   "label": "Unmerge Cells",
   "params": "{handle, row, col}",
   "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "tablestyle.cellstyle",
+  "label": "Table Cell Style",
+  "params": "{style? (table style; default current), name (cell style: Title, Header, Data or your own), textStyle?, textHeight?, textColor?, fill?: color | \"none\", align?: TL|TC|TR|ML|MC|MR|BL|BC|BR or 1..9, margin?, marginH?, marginV?, borders?: {all|outside|inside|top|insideH|bottom|left|insideV|right: {visible?, color?, lineweight? (mm or ByBlock)}}, format?: general|decimal|percent|text, precision? (0..8), merge?: bool, delete?: bool} → cellStyles",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "table.cellstyle",
+  "label": "Set Table Cell Style",
+  "params": "{handle, style (cell style name; \"\" = by position), row?, col?, rows?, cols?} (rows without col: the row style)",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "table.formula",
+  "label": "Insert Table Formula",
+  "params": "{handle, row, col, function: sum|average|count|min|max|cell|equation, range?: \"A2:B5\" (default: the cells above), cell?: \"A1\", expression?: \"A1*2\"}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "table.recalc",
+  "label": "Recalculate Table Formulas",
+  "params": "{handle?} (default: every table) → {changed}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "tabledit",
+  "label": "Edit Table Cell",
+  "params": "{handle?, at: [x,y] | row+col, text (=… for a formula)}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "tableexport",
+  "label": "Export Table",
+  "params": "{handle, path? (.csv), separator?: \",\" | \"\\t\"} → {csv, rows, cols, path?}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "table.break",
+  "label": "Table Breaks",
+  "params": "{handle, enabled?, direction?: right|left|down, repeatTop?, repeatBottom?, height? (largest part height), heights?: [first parts], spacing?, resetPositions?: bool} → {parts}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "datalink",
+  "label": "Data Link...",
+  "params": "{handle, path (.csv, .txt/.tsv tab-separated), startRow? (default: below the title), remove?: bool} → {rows, cols}",
+  "menu": [
+   "Insert",
+   "Data Link..."
+  ],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "datalinkupdate",
+  "label": "Update Data Links",
+  "params": "{handles?} (default: every linked table) → {updated}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "tolerance",
+  "label": "Tolerance...",
+  "params": "{at: [x,y], symbol?: position|concentricity|symmetry|parallelism|perpendicularity|angularity|cylindricity|flatness|circularity|straightness|surfaceprofile|lineprofile|circularrunout|totalrunout, tol1?: \"%%c0.1(M)\" | {value, diameter?, material?: M|L|S}, tol2?, datums?: [\"A(M)\", \"B\", {letter, material?}] (up to 3), line2?: {symbol?, tol1?, tol2?, datums?}, height? (projected zone), projected?, datumId?, rotation? (degrees), style? (dimension style; default DIMSTYLE), text? (the frame string as in DXF, instead of the fields)}",
+  "menu": [
+   "Dimension",
+   "Tolerance..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "tol"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "txt2mtxt",
+  "label": "Convert Text to Mtext",
+  "params": "{handles? (default the selection; TEXT, and MTEXT when combining), combine? (default true: one MTEXT; false: one per TEXT), sort?: \"topdown\" (default) | \"selection\", wrap? (default false: one line per text)} → {handles}",
+  "menu": [
+   "Tools",
+   "Express Tools",
+   "Convert Text to Mtext"
+  ],
   "shortcut": null,
   "aliases": [],
   "enabled": true
@@ -3754,7 +5384,7 @@
  {
   "id": "parameters",
   "label": "Parameters Manager",
-  "params": "{} lists; {name, expr | value, description?} sets (new name = user parameter) and re-solves; {delete: name}",
+  "params": "{} lists; {name, expr | value, description?} sets (new name = user parameter) and re-solves; {delete: name}; {name, rename: newName} renames it in every expression",
   "menu": [
    "Tools",
    "Parametric",
@@ -3783,9 +5413,50 @@
   "enabled": true
  },
  {
+  "id": "constraintinfer",
+  "label": "Infer Constraints",
+  "params": "{value?: 0|1} sets CONSTRAINTINFER (no value: reports it)",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
   "id": "constraints.inspect",
   "label": "Inspect Constraints",
-  "params": "{} → constraints, glyph anchors, parameters, settings",
+  "params": "{} → constraints, glyph anchors, parameters, settings, dof",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "constraints.dof",
+  "label": "Degrees of Freedom",
+  "params": "{handles? | handle?} (default: the selection, else every constrained object) → {dof, status: unconstrained|under|fully|over|unknown, redundant, constraints, objects: [{handle, type, params, dof, status}], message}",
+  "menu": [],
+  "shortcut": null,
+  "aliases": [],
+  "enabled": true
+ },
+ {
+  "id": "appload",
+  "label": "Load Application...",
+  "params": "{path: .lsp file} | {name, data: base64 | text} → {value?, commands: [commands the file defined], error?}",
+  "menu": [
+   "Tools",
+   "Load Application..."
+  ],
+  "shortcut": null,
+  "aliases": [
+   "ap"
+  ],
+  "enabled": true
+ },
+ {
+  "id": "lisp",
+  "label": "Evaluate LISP",
+  "params": "{code: LISP source, inputs?: [answers to get… calls: numbers, strings, [x,y] points]} → {value (printed as prin1), output: lines printed, error?}",
   "menu": [],
   "shortcut": null,
   "aliases": [],

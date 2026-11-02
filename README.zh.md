@@ -2,7 +2,7 @@
 
 # ArtCraft × DSH
 
-**十二个创作应用,一个智能体,零源码改动。**
+**十四个创作应用,一个智能体,零源码改动。**
 
 [ArtCraft](https://github.com/storytold) 组织的全部应用 —— CAD、表格、音频、视频、照片、矢量、
 PDF、幻灯片、文档 —— 全部以一等插件的形式接入
@@ -11,8 +11,8 @@ PDF、幻灯片、文档 —— 全部以一等插件的形式接入
 [![DSH plugin](https://img.shields.io/badge/DSH-plugin-4D6BFE?style=flat-square)](https://github.com/deepseek-ai/deepseek-harness)
 [![built on Cordis](https://img.shields.io/badge/built%20on-Cordis-6E56CF?style=flat-square)](https://github.com/cordiverse/cordis)
 [![License](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue?style=flat-square)](#许可证)
-[![Plugins](https://img.shields.io/badge/plugins-12-success?style=flat-square)](#十二个应用)
-[![Tools](https://img.shields.io/badge/tools-92-informational?style=flat-square)](#每个应用两个接口)
+[![Plugins](https://img.shields.io/badge/plugins-14-success?style=flat-square)](#十四个应用)
+[![Tools](https://img.shields.io/badge/tools-108-informational?style=flat-square)](#每个应用两个接口)
 [![MCP](https://img.shields.io/badge/MCP-bridged-8A2BE2?style=flat-square)](#每个应用两个接口)
 [![Verified](https://img.shields.io/badge/verified-12%2F12-brightgreen?style=flat-square)](#自己验证)
 [![npm](https://img.shields.io/npm/v/dsh-artcraft-plugin-gridcraft?style=flat-square&label=npm&color=cb3837)](https://www.npmjs.com/package/dsh-artcraft-plugin-gridcraft)
@@ -37,7 +37,7 @@ $ dsh --profile web
 
 ## 这是什么
 
-ArtCraft 套件是十二个原生 Rust 应用。每一个都已经自带无头 CLI 和自己的 MCP server —— 但
+ArtCraft 套件是十四个原生 Rust 应用。每一个都已经自带无头 CLI 和自己的 MCP server —— 但
 没有任何东西告诉智能体它们存在、能做什么、该怎么调用。
 
 这个仓库补上这一环。每个应用变成一个 **DSH 插件**,在 `ctx.tools` 上注册可被模型调用的工具,
@@ -45,22 +45,24 @@ ArtCraft 套件是十二个原生 Rust 应用。每一个都已经自带无头 C
 
 **绝不修改任何 craft 的源码。** 所有插件都住在这个仓库里 —— 那些应用是依赖,不是 fork。
 
-## 十二个应用
+## 十四个应用
 
 | | 应用 | 用途 | 命令数 | MCP 工具数 |
 |:--|:--|:--|--:|--:|
-| 📐 | **CADCraft** | CAD 与制图(AutoCAD 风格) | 305 | 11 |
-| 📊 | **GridCraft** | 电子表格(Excel 风格) | 315 | 21 |
-| 🎚️ | **SoundCraft** | 数字音频工作站 | 465 | 17 |
-| 🖼️ | **PhotoCraft** | 位图编辑(Photoshop 风格) | 858 | 21 |
-| 🌄 | **LightCraft** | 照片库与 RAW 冲图 | 296 | 318 |
-| 📄 | **PdfCraft** | PDF 阅读与编辑 | 161 | 161 |
-| 🖋️ | **VectorCraft** | 矢量绘图(Illustrator 风格) | 743 | 32 |
-| 🎬 | **EffectCraft** | 动态图形与合成(After Effects 风格) | 669 | 27 |
-| 🎞️ | **FilmCraft** | 非线性视频剪辑 | 693 | 17 |
-| 🎨 | **DesignCraft** | 版式与页面设计(InDesign 风格) | 446 | 25 |
-| 📽️ | **DeckCraft** | 演示文稿(PowerPoint 风格) | 226 | 25 |
-| 📝 | **WordCraft** | 文字处理(Word 风格) | 460 | 16 |
+| 📐 | **CADCraft** | CAD 与制图(AutoCAD 风格) | 449 | 12 |
+| 📊 | **GridCraft** | 电子表格(Excel 风格) | 364 | 22 |
+| 🎚️ | **SoundCraft** | 数字音频工作站 | 479 | 17 |
+| 🖼️ | **PhotoCraft** | 位图编辑(Photoshop 风格) | 953 | 26 |
+| 🌄 | **LightCraft** | 照片库与 RAW 冲图 | 375 | 397 |
+| 📄 | **PdfCraft** | PDF 阅读与编辑 | 183 | 183 |
+| 🖋️ | **VectorCraft** | 矢量绘图(Illustrator 风格) | 906 | 33 |
+| 🎬 | **EffectCraft** | 动态图形与合成(After Effects 风格) | 743 | 27 |
+| 🎞️ | **FilmCraft** | 非线性视频剪辑 | 716 | 17 |
+| 🎨 | **DesignCraft** | 版式与页面设计(InDesign 风格) | 545 | 26 |
+| 📽️ | **DeckCraft** | 演示文稿(PowerPoint 风格) | 331 | 25 |
+| 📝 | **WordCraft** | 文字处理(Word 风格) | 648 | 17 |
+| ✒️ | **FigCraft** | 界面设计与原型(Figma 风格) | 629 | 19 |
+| 🧶 | **TextureCraft** | 3D 贴图绘制 | 135 | 22 |
 
 <sub>命令数是从各二进制实时读出来的;MCP 工具数是各 server 自己声明的。</sub>
 
@@ -111,7 +113,7 @@ cd dsh-artcraft
 ```
 
 它会自动找到 harness 自带的 Node(`PATH` 里没有 `node` / `npm` / `pnpm` 也能装),下载本平台
-所需的全部 craft CLI,再把十二个插件装进你的 DSH profile。只想装一个 craft、先试运行、或者
+所需的全部 craft CLI,再把十四个插件装进你的 DSH profile。只想装一个 craft、先试运行、或者
 装完立刻验证:
 
 ```powershell
@@ -210,10 +212,10 @@ dsh-plugins/
 关于这些二进制的每一条事实都是**跑出来的**,不是猜的。当某个 craft 的真实 CLI 与预期不符时,
 原始输出会记录在 [docs/craft-notes/](docs/craft-notes)。
 
-## 十二个之外
+## 十四个之外
 
 `github.com/storytold` 下所有名字含 `craft` 的 **23** 个仓库都被克隆并评估过
-([docs/CRAFT-MATRIX.md](docs/CRAFT-MATRIX.md))。其中十二个是有官方无头 CLI 的应用,做成了插件。
+([docs/CRAFT-MATRIX.md](docs/CRAFT-MATRIX.md))。其中十四个是有官方无头 CLI 的应用,做成了插件。
 另外十一个是库、素材包,或没有可脚本化入口的 GUI —— 包括伞形应用 `artcraft`,它的 MCP 支持是
 文档中明确标注的 UI 桩。
 

@@ -83,6 +83,11 @@ const SCENARIOS = {
   // DesignCraft has no --save on `run` and no document-inspect verb.
   designcraft: { sample: true, commands: [{ id: 'file.new', json: { preset: 'A4', pages: 1 } }], export: 'out.pdf' },
   vectorcraft: { commands: [{ id: 'file.new', json: {} }], save: 'out.svg' },
+  // FigCraft takes a generated script file; `save` is its `--out`.
+  figcraft: { commands: [{ id: 'frame.create', json: { name: 'dsh', width: 200, height: 100 } }], save: 'out.figcraft' },
+  // TextureCraft needs a project first: the kernel creates one, and `save`
+  // rides inside the batch script.
+  texturecraft: { commands: [{ id: 'layer.add.paint', json: { name: 'dsh' } }], save: 'out.tcraft' },
 }
 
 const plugins = readdirSync(pluginsDir, { withFileTypes: true })

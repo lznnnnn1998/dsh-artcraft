@@ -1,0 +1,5 @@
+# Installed by `dsh plugin add dsh-artcraft-plugin-texturecraft`.
+# One row: the plugin package that provides the TextureCraft tools.
+- insert:
+    - id: artcraft-texturecraft
+      name: "dsh-artcraft-plugin-texturecraft"

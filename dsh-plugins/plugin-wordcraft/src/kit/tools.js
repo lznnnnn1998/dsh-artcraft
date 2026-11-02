@@ -39,6 +39,9 @@ function resolveSample(profile              , args                         )    
   const requested = args.sample
   if (typeof requested === 'string' && requested.length > 0) return requested
   if (requested === true) {
+    // A craft that starts a new document by default, or creates one itself,
+    // has nothing to select; asking for the sample is a harmless no-op.
+    if (profile.run.sampleFlag.length === 0 && (profile.run.sampleCreate !== undefined || profile.run.scriptFile !== undefined)) return undefined
     if (profile.run.sampleFlag.length === 0) {
       throw new Error(
         `${profile.product} has no "new document" flag: pass \`input\` to open an existing document, `
@@ -361,7 +364,7 @@ export function createToolSet(runtime              )               {
         description: 'Ordered commands to apply. Each is { "id": "cell.set", "json": { "cell": "A1", "input": "x" } }. An entry may also be a raw CLI string.',
         items: { type: 'json' },
       },
-      ...(profile.run.saveMode ?? 'flag') === 'flag'
+      ...(profile.run.saveMode ?? 'flag') !== 'none'
         ? { save: { type: 'string', description: `Path to write the edited document to (${profile.extensions.join('/')}).` } }
         : {},
       // `export` is always advertised when the craft can render one. Where the
@@ -410,6 +413,48 @@ export function createToolSet(runtime              )               {
       // Crafts whose headless entry point only accepts a script file get one
       // written for this call; the file names the same commands the inline
       // style would have carried.
+      // Crafts whose headless verb takes a generated script file instead of
+      // inline command flags: FigCraft's `run script.json` and TextureCraft's
+      // `batch script.json`. The kernel writes it, so the model still supplies
+      // an ordered list and never has to know the file format.
+      if (profile.run.scriptFile !== undefined) {
+        const spec = profile.run.scriptFile
+        const savePath = typeof args.save === 'string' ? args.save : undefined
+        let effectiveInput = input
+        if (effectiveInput === undefined && profile.run.sampleCreate !== undefined) {
+          const created = join(craftWorkDir(profile), `sample-${Date.now()}${profile.run.sampleCreate.extension}`)
+          mkdirSync(dirname(created), { recursive: true })
+          const createdResult = await runCraft({
+            profile, binary,
+            argv: [profile.run.sampleCreate.verb, ...profile.run.sampleCreate.args, created],
+            cwd: process.cwd(), timeoutMs,
+          })
+          if (!createdResult.ok) return renderRun(createdResult, profile)
+          effectiveInput = created
+        }
+        const steps = commands.map(command => ({ [spec.commandKey]: command.id, [spec.paramsKey]: command.json ?? {} }))
+        const scriptPath = join(craftWorkDir(profile), `run-${Date.now()}.${spec.encoding === 'jsonl' ? 'jsonl' : 'json'}`)
+        mkdirSync(dirname(scriptPath), { recursive: true })
+        const argv = [profile.run.verb]
+        let body
+        if (spec.batch !== undefined) {
+          body = {
+            ...effectiveInput !== undefined ? { [spec.batch.openKey]: effectiveInput } : {},
+            [spec.batch.stepsKey]: steps,
+            ...savePath !== undefined ? { [spec.batch.saveKey]: savePath } : {},
+          }
+          argv.push(scriptPath)
+        } else {
+          body = spec.encoding === 'jsonl' ? steps.map(step => JSON.stringify(step)).join('\n') + '\n' : steps
+          argv.push(scriptPath)
+          if (effectiveInput !== undefined && spec.inputFlag !== undefined) argv.push(spec.inputFlag, effectiveInput)
+          if (savePath !== undefined && spec.saveFlag !== undefined) argv.push(spec.saveFlag, savePath)
+        }
+        writeFileSync(scriptPath, typeof body === 'string' ? body : JSON.stringify(body, null, 2) + '\n')
+        const extra = Array.isArray(args.extraArgs) ? args.extraArgs.filter((a)              => typeof a === 'string') : []
+        const scriptResult = await runCraft({ profile, binary, argv: [...argv, ...extra], cwd: process.cwd(), timeoutMs })
+        return renderRun(scriptResult, profile)
+      }
       if (profile.run.scriptFlag !== undefined) {
         const scriptPath = join(craftWorkDir(profile), `steps-${Date.now()}.json`)
         mkdirSync(dirname(scriptPath), { recursive: true })

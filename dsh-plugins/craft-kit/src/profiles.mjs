@@ -359,6 +359,63 @@ export const CRAFT_PROFILES = [
     catalogArgs: ['commands'],
     mcpArgs: ['mcp'],
   },
+  {
+    id: 'figcraft',
+    product: 'FigCraft',
+    bin: 'figcraft-cli',
+    envVar: 'FIGCRAFT_CLI',
+    searchDirs: [CRAFTS_BIN_DIR],
+    extensions: ['.figcraft', '.penpot', '.fig', '.sketch', '.svg'],
+    blurb: 'Interface design and prototyping (Figma-style): frames, components, auto layout, variables, prototyping and code export.',
+    run: {
+      verb: 'run',
+      inputMode: 'flag',
+      inFlag: '--in',
+      sampleFlag: '',
+      cmdFlag: '',
+      cmdSeparator: ' ',
+      // `run script.json` takes a generated script, one step per command.
+      scriptFile: { encoding: 'json-array', commandKey: 'command', paramsKey: 'params', inputFlag: '--in', saveFlag: '--out' },
+      saveFlag: '--out',
+    },
+    reads: [
+      { name: 'inspect', verb: 'info', summary: 'Summarize a design file: pages, node counts, top-level frames, style and variable counts.' },
+      { name: 'convert', verb: 'convert', summary: 'Convert a design file between .figcraft, .json, .svg, .png, .pdf and more.' },
+    ],
+    catalogJson: true,
+    catalogArgs: ['commands', '--json'],
+    mcpArgs: ['mcp'],
+  },
+  {
+    id: 'texturecraft',
+    product: 'TextureCraft',
+    bin: 'texturecraft-cli',
+    envVar: 'TEXTURECRAFT_CLI',
+    searchDirs: [CRAFTS_BIN_DIR],
+    extensions: ['.tcraft'],
+    blurb: '3D texture painting: texture sets and layers over a mesh, baking, material channels and PBR export.',
+    run: {
+      verb: 'batch',
+      inputMode: 'flag',
+      inFlag: '',
+      sampleFlag: '',
+      cmdFlag: '',
+      cmdSeparator: ' ',
+      // `batch script.json` carries `{ open, steps, save }` in one file.
+      scriptFile: { encoding: 'json-array', commandKey: 'id', paramsKey: 'params', batch: { openKey: 'open', stepsKey: 'steps', saveKey: 'save' } },
+      saveMode: 'script',
+      saveFlag: '',
+      // A project is required before any command, so a bare run makes one.
+      sampleCreate: { verb: 'new', args: ['builtin:crate'], extension: '.tcraft' },
+    },
+    reads: [
+      { name: 'inspect', verb: 'info', summary: 'Summarize a texture project: texture sets, layers, triangles, materials and the UV report.' },
+      { name: 'convert', verb: 'export', summary: 'Export textures from a project: presets, formats, padding and size.' },
+    ],
+    catalogJson: false,
+    catalogArgs: ['commands'],
+    mcpArgs: ['mcp'],
+  },
 ]
 
 /** Profile lookup by craft id. */
