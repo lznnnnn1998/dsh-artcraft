@@ -11,6 +11,15 @@ sidebar. It is the browser half of the three-layer preview contract in
 | B | the local state directory + HTTP server on `127.0.0.1:4177` |
 | **C** | **this package — the in-GUI panel that consumes layer B** |
 
+The package ships both halves of layer C:
+
+- **browser half** (`src/client.tsx` → `lib/client.js`) — the panel;
+- **host half** (`src/index.ts` → `src/index.js`) — an ordinary Loader row that
+  starts the packaged layer-B preview server when nothing is answering on
+  `127.0.0.1:4177`. A profile install has no ArtCraft checkout to run layer B
+  from, so the server and its page travel inside the package (`server/`, copied
+  from `scripts/preview/` at build time). An already-running instance wins.
+
 ![The panel inside the DSH Web GUI](screenshots/panel-in-gui.png)
 
 ## What it shows
@@ -40,21 +49,22 @@ When `/state` cannot be read, the panel says why: the server may be down, or a
 cross-origin read may have been refused for lack of `Access-Control-Allow-Origin`.
 It keeps the last good snapshot through a transient failure and marks it `stale`.
 
-### Layer B requirements
+### Preview server and origin policy
 
-- The custom panel needs the preview server to allow the GUI origin to read
-  `/state` (CORS). The current server grants loopback origins only, so open the
-  GUI on `127.0.0.1`/`localhost`; a non-loopback hostname is refused by design.
-- `Raw page` additionally needs layer B to allow framing (`frame-ancestors`).
-  The current server allows `'self'` plus loopback origins.
-- The preview server is not started by this package. Layer B owns it
-  (`node scripts/preview/server.mjs` in the ArtCraft workspace).
+- The packaged server is the current layer-B implementation: loopback only,
+  read-only, CORS granted to loopback origins, and the panel page frameable by
+  loopback origins.
+- Open the GUI on a loopback hostname (`127.0.0.1`/`localhost`). A GUI served
+  through a LAN hostname is refused by layer B's CORS/framing policy; `Open`
+  still shows the preview in its own tab.
+- The server writes nothing; the craft plugins own the state directory
+  (`$DSH_ARTCRAFT_PREVIEW_DIR`, or `$DSH_HOME/artcraft/preview`).
 
 ## Install
 
-The panel is one browser-side plugin plus a no-op host row. It has no runtime
-dependencies of its own: at runtime it uses only `react` and
-`react/jsx-runtime`, both provided by the Web shell.
+The panel needs no npm runtime dependencies: at runtime the browser side uses
+only `react` and `react/jsx-runtime` (provided by the Web shell), and the host
+side uses Node built-ins plus the packaged server.
 
 ### As a profile bundle (recommended)
 
@@ -101,28 +111,51 @@ one-row insert, used automatically in the bundle route.
 
 Installing this package does not require rebuilding the DSH Web app. The running
 `dsh web` process must be **restarted** (the client module scan composes the
-browser roster at boot), and the page reloaded.
+browser roster at boot, and the host half starts the preview server there), and
+the page reloaded.
+
+## Host half: starting layer B
+
+On Loader activation, `src/index.ts`:
+
+1. probes `GET http://127.0.0.1:4177/state` with a short timeout;
+2. if it answers, does nothing (another instance, e.g. the layer-B agent's own
+   server, keeps ownership);
+3. otherwise spawns the packaged server detached:
+   `node server/server.mjs --port 4177 --dir <preview dir>`, where the directory
+   is `$DSH_ARTCRAFT_PREVIEW_DIR` or `$DSH_HOME/artcraft/preview`.
+
+A failed probe/spawn is swallowed (with a child `error` listener and a rejection
+handler), so a missing preview server can never crash the host; the panel shows
+its “not reachable” notice instead. The spawned process is detached and outlives
+the DSH process on purpose: it is a read-only local service, and the next boot
+reuses it. To stop it, kill the `server/server.mjs` process on port 4177.
 
 ## Build
 
-`src/client.tsx` is the authored browser source; `src/index.ts` is the no-op
-Node loader entry. Both built artifacts are committed, so installing the package
-never needs the compiler:
+`src/client.tsx` is the authored browser source; `src/index.ts` is the host
+entry. Build artifacts and the vendored server are committed, so installing the
+package never needs the compiler:
 
 | Artifact | Source | Shape |
 |---|---|---|
 | `src/index.js` | `src/index.ts` by type-stripping | ESM, `export function apply()` |
 | `lib/client.js` | `src/client.tsx` by TypeScript + CJS wrap | `window.__ModuleLoader__.load({ id, factory })` |
+| `server/server.mjs`, `server/panel.html` | copied from `scripts/preview/` | layer-B server + page |
 
 ```sh
-node scripts/build.mjs             # rebuild both
-node scripts/verify.mjs            # manifest + host import + bundle VM + type-check
+node scripts/build.mjs             # rebuild both entries, refresh server/
+node scripts/verify.mjs            # manifest + host + server + bundle VM + type-check
 ```
 
 `build.mjs` needs a TypeScript compiler. This package has no `node_modules` of
 its own by design, so it looks for the compiler a DSH checkout already carries:
 `DSH_TYPESCRIPT`, then `DSH_HARNESS_ROOT`, then the `<workspace>/deepseek-harness`
 sibling convention, then a normal resolution.
+
+The server copy is refreshed only by `build.mjs`. If `scripts/preview/` changes,
+run the build again, or the vendored copy drifts (the verify script prints a
+`note` when it detects drift against a checkout).
 
 ### Why the bundle is not built with `packages/client/tsdown.client.ts`
 
@@ -176,16 +209,20 @@ because the Web shell seeds it into the frozen module table.
 
 - the manifest declares the required `dsh.client` shape, and the `./client`,
   `.`, and bundle-patch paths exist;
-- the host entry imports as ESM and its `apply()` is a no-op;
+- the host entry imports as ESM and exports `apply()`;
+- the packaged `server/server.mjs` and `server/panel.html` exist, the server
+  parses under the current Node, and the page carries its marker (drift against
+  a checkout is reported as a note);
 - the browser bundle parses, registers **one** factory under the package name,
   materializes with only `react`/`react/jsx-runtime` requested, exports
   `inject = ['slots']`, and `apply()` registers exactly the `main` panel and the
   `sidebar.panellist` launcher and injects one owned stylesheet;
-- both TypeScript sources type-check with zero diagnostics.
+- both TypeScript sources type-check with zero diagnostics (browser program with
+  DOM+React types; host program with Node types).
 
 The screenshots in [`screenshots/`](screenshots) were taken in a real `dsh web`
 instance (harness `0.2.1-rc.3`) with this package installed as a profile bundle
-in a temporary `DSH_HOME`, against the real layer B server and its fixture
+in a temporary `DSH_HOME`, against the real layer-B server and its fixture
 state:
 
 - `panel-in-gui.png` — the whole GUI, WordCraft with 5 steps and a live render;
@@ -197,6 +234,9 @@ The browser run asserted: sidebar launcher present, status `ok`, 5 steps with
 step 5 current, 5 thumbnails with the last active, the render decoded at its real
 size (800×1036), 4 crafts offered, metadata matching the document, the FilmCraft
 timeline with 3 clips, one owned stylesheet, and **no console or page errors**.
+The host half's auto-start also ran in a real profile: its spawned
+`server/server.mjs --port 4177 --dir <DSH_HOME>/artcraft/preview` process was
+observed serving `/state` before the panel connected.
 
 ## Version coupling and risks
 
@@ -223,13 +263,21 @@ Failure modes to know about:
   way. `build.mjs` compiles the bundle once before writing it, and
   `verify.mjs` executes the registration path in a VM, which catches the common
   mistakes before install.
-- **Layer B drift**: the normalizer accepts both a flat `crafts[craft]` state
-  and a `{ index, state }` wrapper, and prefers `imageUrl`/`thumbUrl` when the
-  server publishes them, but a renamed endpoint or field still needs a change
-  here. The panel degrades to the notice/iframe fallback rather than crashing.
+- **Vendored layer B drift**: `server/` is a copy of `scripts/preview/` in this
+  workspace, not an npm dependency. Layer B's owner can change the state
+  contract, headers, or page while this copy stays at its last build. Refresh
+  with `node scripts/build.mjs` and watch the drift note in `verify.mjs`.
+- **Detached server lifecycle**: the host half starts a process that outlives
+  DSH by design (port 4177, loopback only, read-only). A stale build keeps
+  serving until that process is killed; a second DSH instance reuses it instead
+  of starting another.
+- **Layer B drift in the panel**: the normalizer accepts both a flat
+  `crafts[craft]` state and a `{ index, state }` wrapper, and prefers
+  `imageUrl`/`thumbUrl` when published, but a renamed endpoint or field still
+  needs a change here. The panel degrades to the notice/iframe fallback rather
+  than crashing.
 - **Origin policy**: the custom panel only works for a loopback GUI origin
-  against the current layer B; a GUI served through a LAN hostname must use
-  `Open`.
+  against layer B; a GUI served through a LAN hostname must use `Open`.
 
 The package intentionally ships as plain committed JavaScript plus a tiny build
 script, so a future harness can keep it loading even if its build tooling
