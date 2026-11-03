@@ -31,13 +31,13 @@ const CATEGORIES = new Set((
 /** Locate a harness checkout that provides js-yaml. */
 function findYaml() {
   const candidates = [
-    process.env.DSH_HARNESS_DIR,
-    join(root, '..', 'deepseek-harness'),
-    join(homedir(), 'deepseek-harness'),
-    join(homedir(), 'Documents', 'deepseek-harness'),
+    join(root, 'node_modules', 'js-yaml'),
+    process.env.DSH_HARNESS_DIR ? join(process.env.DSH_HARNESS_DIR, 'node_modules', 'js-yaml') : undefined,
+    join(root, '..', 'deepseek-harness', 'node_modules', 'js-yaml'),
+    join(homedir(), 'deepseek-harness', 'node_modules', 'js-yaml'),
+    join(homedir(), 'Documents', 'deepseek-harness', 'node_modules', 'js-yaml'),
   ].filter(Boolean)
-  for (const candidate of candidates) {
-    const moduleDir = join(candidate, 'node_modules', 'js-yaml')
+  for (const moduleDir of candidates) {
     if (existsSync(moduleDir)) return pathToFileURL(join(moduleDir, 'dist', 'js-yaml.mjs')).href
   }
   return undefined
