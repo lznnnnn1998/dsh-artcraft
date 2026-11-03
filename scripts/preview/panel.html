@@ -1,0 +1,850 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>ArtCraft Live Preview</title>
+<style>
+:root{
+  --bg:#0b0d12;--panel:#121620;--line:#222a38;--text:#e8ecf4;--dim:#8794aa;
+  --accent:#5b8cff;--ok:#38c172;--warn:#e0a84a;--err:#e5534b;
+  --mono:"SF Mono",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font:13px/1.5 -apple-system,"SF Pro Text","PingFang SC",system-ui,sans-serif;
+  display:flex;flex-direction:column;overflow:hidden;
+}
+button{font:inherit;color:inherit}
+[hidden]{display:none!important}
+
+header{
+  display:flex;align-items:center;gap:10px;padding:14px 20px;flex:0 0 auto;
+  border-bottom:1px solid var(--line);min-height:51px;
+}
+header b{font-size:14px;font-weight:600;white-space:nowrap;letter-spacing:.01em}
+header .sub{
+  color:var(--dim);font-size:12px;min-width:0;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;
+}
+.grow{flex:1;min-width:10px}
+.dot{
+  width:8px;height:8px;flex:0 0 8px;border-radius:50%;background:#3a4559;
+  transition:background .2s,box-shadow .2s;
+}
+.dot.ok{background:var(--ok);box-shadow:0 0 10px var(--ok)}
+.dot.warn{background:var(--warn);box-shadow:0 0 10px rgba(224,168,74,.75)}
+.tabs{display:flex;gap:6px;flex:0 1 auto;max-width:55%;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  display:inline-flex;align-items:center;gap:6px;padding:4px 9px;border-radius:999px;
+  border:1px solid var(--line);background:#101520;color:var(--dim);font-size:11px;
+  white-space:nowrap;cursor:pointer;
+}
+.tab:hover{border-color:#31405c;color:var(--text)}
+.tab.active{color:var(--text);border-color:#36548e;background:#172033;box-shadow:0 0 0 3px rgba(91,140,255,.08)}
+.tab .cnt{font-size:9.5px;color:var(--dim);background:#1b2331;border-radius:999px;padding:0 5px;line-height:1.5}
+.tab.active .cnt{color:#b9cbed}
+
+.wrap{
+  flex:1;min-height:0;display:grid;grid-template-columns:290px minmax(0,1fr) 220px;
+  gap:14px;padding:14px 18px;
+}
+.card{
+  background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:12px;min-width:0;min-height:0;
+}
+.card h3{
+  margin:0 0 10px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--dim);font-weight:600;line-height:1.4;
+}
+
+/* left: agent steps */
+.steps-card{display:flex;flex-direction:column}
+.steps{flex:1;min-height:0;overflow-y:auto;margin:0 -2px;padding:0 2px;scrollbar-width:thin}
+.steps-hint{color:var(--dim);font-size:11.5px;line-height:1.6;padding:6px 8px}
+.step{
+  display:flex;gap:9px;align-items:flex-start;width:100%;text-align:left;cursor:pointer;
+  padding:8px;border-radius:9px;margin-bottom:5px;border:1px solid transparent;background:transparent;
+}
+.step:hover{background:#151b28}
+.step.active{background:#182031;border-color:#2b3a57}
+.step .n{
+  width:20px;height:20px;flex:0 0 20px;border-radius:50%;background:#1d2534;color:var(--dim);
+  display:grid;place-items:center;font-size:10.5px;font-weight:700;margin-top:1px;
+}
+.step.active .n{background:var(--accent);color:#fff}
+.step .n.ok{color:var(--ok);background:#16241b}
+.step .body{flex:1;min-width:0}
+.step-head{display:flex;align-items:baseline;gap:6px}
+.step .t{
+  flex:1;min-width:0;font-weight:600;font-size:12.5px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;
+}
+.step .dur{font-size:9.5px;line-height:1.7;color:var(--dim);white-space:nowrap;flex:0 0 auto}
+.step .m{
+  display:block;color:var(--dim);font-size:11px;line-height:1.45;
+  margin-top:1px;overflow-wrap:anywhere;
+}
+.tool{
+  display:inline-block;margin-right:4px;padding:0 4px;border-radius:4px;background:#1b2331;
+  color:#9fb3d9;font:9.5px/1.7 var(--mono);text-transform:uppercase;letter-spacing:.04em;
+  vertical-align:1px;
+}
+.foot{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;flex:0 0 auto}
+.chip{
+  display:inline-flex;align-items:center;gap:6px;padding:2px 8px;border-radius:999px;
+  border:1px solid var(--line);font-size:11px;color:var(--dim);white-space:nowrap;
+}
+.chip.on{color:var(--ok);border-color:#22573a}
+.chip.warn{color:var(--warn);border-color:#584320}
+.mini-dot{width:6px;height:6px;border-radius:50%;background:currentColor;box-shadow:0 0 6px currentColor}
+
+/* centre: current render + filmstrip */
+.canvas{display:flex;flex-direction:column}
+.shot{
+  flex:1;min-height:0;position:relative;background:#0d1119;
+  border:1px solid var(--line);border-radius:10px;overflow:hidden;
+}
+.shot-inner{
+  position:absolute;inset:0;display:grid;place-items:center;padding:14px;overflow:hidden;
+}
+.shot-inner img{
+  display:block;border-radius:6px;box-shadow:0 10px 30px rgba(0,0,0,.45);
+}
+.cap{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--dim);
+  font-size:11.5px;margin-top:9px;min-height:19px;
+}
+.cap-left{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cap-right{display:flex;align-items:center;gap:8px;white-space:nowrap;flex:0 0 auto}
+.link{background:none;border:0;padding:0;color:var(--accent);font-size:11px;cursor:pointer}
+.link:hover{text-decoration:underline}
+.filmstrip{
+  display:flex;gap:8px;margin-top:10px;overflow-x:auto;padding-bottom:2px;
+  flex:0 0 auto;scrollbar-width:thin;
+}
+.film-empty{color:var(--dim);font-size:11px;padding:20px 6px}
+.thumb{
+  width:112px;height:63px;flex:0 0 112px;border:1px solid var(--line);border-radius:6px;
+  overflow:hidden;background:#0d1119;display:grid;place-items:center;padding:0;cursor:pointer;
+}
+.thumb:hover{border-color:#31405c}
+.thumb.active{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.thumb img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+.thumb span{font-size:10px;color:var(--dim)}
+
+/* centre: text-only / empty states */
+.empty,.text-only{display:grid;justify-items:center;gap:9px;text-align:center;padding:20px;max-width:540px}
+.empty-title{color:var(--text);font-size:14px;font-weight:600}
+.empty-sub{color:var(--dim);font-size:11.5px;line-height:1.55}
+.empty-sub code,.empty code{font:10.5px var(--mono);color:#aebbd3;word-break:break-all}
+.pulse{
+  width:10px;height:10px;border-radius:50%;background:var(--accent);
+  animation:pulse 1.9s ease-out infinite;
+}
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(91,140,255,.5)}
+  70%{box-shadow:0 0 0 15px rgba(91,140,255,0)}
+  100%{box-shadow:0 0 0 0 rgba(91,140,255,0)}
+}
+.text-icon{
+  width:54px;height:66px;border:1px solid var(--line);border-radius:7px;position:relative;
+  background:linear-gradient(180deg,#151c29,#101621);box-shadow:0 10px 24px rgba(0,0,0,.3);
+}
+.text-icon::before,.text-icon::after{content:"";position:absolute;left:10px;height:2px;border-radius:2px;background:#2b3750}
+.text-icon::before{top:15px;width:32px;box-shadow:0 7px 0 #2b3750,0 14px 0 #2b3750}
+.text-icon::after{top:43px;width:22px;box-shadow:0 7px 0 #2b3750,0 14px 0 #2b3750}
+.text-summary{
+  color:#c3cee1;font-size:12px;line-height:1.55;max-width:460px;word-break:break-word;
+}
+
+/* right: document + video */
+.meta{overflow-y:auto;scrollbar-width:thin}
+.kv{
+  display:flex;justify-content:space-between;align-items:baseline;gap:8px;
+  font-size:11.5px;color:var(--dim);padding:2.5px 0;
+}
+.kv span{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kv b{
+  color:var(--text);font-weight:600;text-align:right;max-width:64%;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.kv b.ok{color:var(--ok)}
+.kv b.warn{color:var(--warn)}
+.kv b.err{color:var(--err)}
+.meta h3.spaced{margin-top:16px}
+.timeline{
+  height:34px;border:1px solid var(--line);border-radius:8px;position:relative;
+  background:#0d1119;overflow:hidden;
+}
+.timeline .seg{
+  position:absolute;top:0;bottom:0;border-right:1px solid #0d1119;
+  background:linear-gradient(180deg,#2a4a8f,#1d3468);
+}
+.timeline .seg.alt{background:linear-gradient(180deg,#3b7d5a,#256045)}
+.timeline .seg.third{background:linear-gradient(180deg,#6b4a8f,#4a2f68)}
+.timeline .ticks{
+  position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:space-between;
+  padding:0 6px 2px;color:var(--dim);font-size:9.5px;pointer-events:none;
+}
+.clips{margin-top:6px}
+.hint{color:var(--dim);font-size:11px;line-height:1.55;padding:2px 0}
+
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-thumb{background:#2a3344;border-radius:8px}
+::-webkit-scrollbar-track{background:transparent}
+
+@media (max-width:1100px){
+  .wrap{grid-template-columns:260px minmax(0,1fr) 200px;gap:10px;padding:10px 12px}
+  header{padding:12px 14px}
+}
+@media (max-width:900px){
+  body{overflow:auto}
+  .wrap{display:flex;flex-direction:column;overflow:visible}
+  .steps-card .steps{max-height:260px}
+  .shot{min-height:320px}
+  header{flex-wrap:wrap}
+  .tabs{max-width:100%}
+}
+</style>
+</head>
+<body>
+<header>
+  <span class="dot" id="liveDot" aria-hidden="true"></span>
+  <b>ArtCraft Live Preview</b>
+  <span class="sub" id="sub">waiting for the agent</span>
+  <span class="grow"></span>
+  <nav class="tabs" id="tabs" aria-label="Crafts"></nav>
+</header>
+
+<main class="wrap">
+  <section class="card steps-card" aria-label="Agent steps">
+    <h3>Agent steps</h3>
+    <div class="steps" id="steps"></div>
+    <div class="foot">
+      <span class="chip warn" id="liveChip"><span class="mini-dot"></span><span id="liveText">connecting…</span></span>
+      <span class="chip" id="modeChip">read-only</span>
+    </div>
+  </section>
+
+  <section class="card canvas" aria-label="Current render">
+    <h3 id="renderTitle">Current render</h3>
+    <div class="shot" id="shot"></div>
+    <div class="cap">
+      <span class="cap-left" id="capLeft">waiting for the first render</span>
+      <span class="cap-right">
+        <span id="capRight">—</span>
+        <button class="link" id="latestBtn" type="button" hidden>back to latest</button>
+      </span>
+    </div>
+    <div class="filmstrip" id="filmstrip" aria-label="Past steps"></div>
+  </section>
+
+  <aside class="card meta" aria-label="Document metadata">
+    <h3>Document</h3>
+    <div id="meta"></div>
+    <div id="video"></div>
+  </aside>
+</main>
+
+<noscript><p style="padding:20px;color:#8794aa">The ArtCraft preview panel needs JavaScript for live state updates.</p></noscript>
+
+<script>
+(() => {
+  'use strict'
+
+  const $ = id => document.getElementById(id)
+  const els = {
+    liveDot: $('liveDot'),
+    sub: $('sub'),
+    tabs: $('tabs'),
+    steps: $('steps'),
+    liveChip: $('liveChip'),
+    liveText: $('liveText'),
+    modeChip: $('modeChip'),
+    renderTitle: $('renderTitle'),
+    shot: $('shot'),
+    capLeft: $('capLeft'),
+    capRight: $('capRight'),
+    latestBtn: $('latestBtn'),
+    filmstrip: $('filmstrip'),
+    meta: $('meta'),
+    video: $('video'),
+  }
+
+  const state = {
+    data: null,
+    selectedCraft: null,
+    selectedStep: null,
+    lastText: null,
+    live: false,
+    refreshTimer: null,
+  }
+
+  // -- tiny DOM helpers ----------------------------------------------------
+
+  function node(tag, className = null, text = null) {
+    const element = document.createElement(tag)
+    if (className !== null) element.className = className
+    if (text !== null && text !== undefined) element.textContent = String(text)
+    return element
+  }
+
+  function clear(element) {
+    while (element.firstChild !== null) element.removeChild(element.firstChild)
+  }
+
+  function basename(file) {
+    if (typeof file !== 'string' || file === '') return null
+    const parts = file.split(/[\\/]/)
+    return parts[parts.length - 1] || null
+  }
+
+  // -- formatting ----------------------------------------------------------
+
+  function fmtAgo(iso) {
+    if (typeof iso !== 'string') return '—'
+    const then = Date.parse(iso)
+    if (!Number.isFinite(then)) return '—'
+    const seconds = (Date.now() - then) / 1000
+    if (seconds < 0) return 'just now'
+    if (seconds < 1) return `${seconds.toFixed(1)}s ago`
+    if (seconds < 60) return `${Math.round(seconds)}s ago`
+    const minutes = Math.floor(seconds / 60)
+    if (minutes < 60) return `${minutes}m ${Math.round(seconds % 60)}s ago`
+    const hours = minutes / 60
+    if (hours < 24) return `${hours.toFixed(1)}h ago`
+    return `${Math.floor(hours / 24)}d ago`
+  }
+
+  function fmtDuration(ms) {
+    if (!Number.isFinite(ms) || ms < 0) return '—'
+    if (ms < 1000) return `${Math.round(ms)} ms`
+    const seconds = ms / 1000
+    if (seconds < 10) return `${seconds.toFixed(1)} s`
+    if (seconds < 60) return `${Math.round(seconds)} s`
+    return `${Math.floor(seconds / 60)}m ${Math.round(seconds % 60)}s`
+  }
+
+  function fmtSeconds(seconds) {
+    if (!Number.isFinite(seconds)) return '—'
+    const rounded = Math.round(seconds * 10) / 10
+    return Number.isInteger(rounded) ? `${rounded}s` : `${rounded.toFixed(1)}s`
+  }
+
+  function plural(count, one, many) {
+    return count === 1 ? one : many
+  }
+
+  // -- data ----------------------------------------------------------------
+
+  function crafts() {
+    if (state.data === null || state.data.crafts === null || typeof state.data.crafts !== 'object') return []
+    return Object.entries(state.data.crafts).map(([key, craft]) => ({
+      key,
+      ...craft,
+      steps: Array.isArray(craft.steps) ? craft.steps : [],
+    }))
+  }
+
+  function latestStep(craft) {
+    if (craft === null || craft === undefined || craft.steps.length === 0) return null
+    const current = craft.steps.find(step => step.n === craft.current)
+    return current ?? craft.steps[craft.steps.length - 1]
+  }
+
+  function currentCraft() {
+    return crafts().find(craft => craft.key === state.selectedCraft) ?? null
+  }
+
+  function currentStep(craft) {
+    if (craft === null) return null
+    if (state.selectedStep !== null) {
+      const pinned = craft.steps.find(step => step.n === state.selectedStep)
+      if (pinned !== undefined) return pinned
+    }
+    return latestStep(craft)
+  }
+
+  function defaultCraftKey(list) {
+    let best = null
+    let bestTime = -Infinity
+    for (const craft of list) {
+      if (craft.steps.length === 0) continue
+      const step = latestStep(craft)
+      const stamp = Date.parse(step?.at ?? craft.updatedAt ?? '')
+      const time = Number.isFinite(stamp) ? stamp : 0
+      if (best === null || time > bestTime) {
+        best = craft
+        bestTime = time
+      }
+    }
+    return (best ?? list[0] ?? null)?.key ?? null
+  }
+
+  function pruneSelection() {
+    const list = crafts()
+    if (!list.some(craft => craft.key === state.selectedCraft)) {
+      state.selectedCraft = defaultCraftKey(list)
+    }
+    const craft = currentCraft()
+    if (state.selectedStep !== null && !(craft?.steps ?? []).some(step => step.n === state.selectedStep)) {
+      state.selectedStep = null
+    }
+  }
+
+  async function refreshState() {
+    try {
+      const response = await fetch('/state', { cache: 'no-store', headers: { accept: 'application/json' } })
+      if (!response.ok) throw new Error(`/state responded ${response.status}`)
+      const text = await response.text()
+      if (text === state.lastText) return
+      state.data = JSON.parse(text)
+      state.lastText = text
+      pruneSelection()
+      render()
+    } catch (error) {
+      // The SSE connection owns the live/reconnecting indicator; a single
+      // failed state read should not claim the stream is down.
+      console.warn('preview: state refresh failed', error)
+    }
+  }
+
+  function scheduleRefresh() {
+    clearTimeout(state.refreshTimer)
+    state.refreshTimer = setTimeout(() => { void refreshState() }, 60)
+  }
+
+  // -- connection ----------------------------------------------------------
+
+  function setLive(live) {
+    state.live = live
+    els.liveDot.className = `dot ${live ? 'ok' : 'warn'}`
+    els.liveChip.className = `chip ${live ? 'on' : 'warn'}`
+    els.liveText.textContent = live ? 'auto-refresh on' : 'reconnecting…'
+  }
+
+  function connectEvents() {
+    if (!('EventSource' in window)) {
+      setLive(false)
+      els.liveText.textContent = 'polling'
+      setInterval(() => { void refreshState() }, 2000)
+      return
+    }
+
+    const events = new EventSource('/events')
+    events.onopen = () => setLive(true)
+    events.onerror = () => setLive(false)
+    events.onmessage = event => {
+      let payload
+      try {
+        payload = JSON.parse(event.data)
+      } catch {
+        return
+      }
+      if (payload.type === 'update' || payload.type === 'hello' || payload.type === 'ready') scheduleRefresh()
+    }
+  }
+
+  // -- render: header + tabs ----------------------------------------------
+
+  function renderTabs(list, active) {
+    clear(els.tabs)
+    els.tabs.hidden = list.length <= 1
+    for (const craft of list) {
+      const button = node('button', `tab${craft.key === active?.key ? ' active' : ''}`)
+      button.type = 'button'
+      button.title = craft.file ?? craft.key
+      button.append(node('span', null, craft.product ?? craft.key))
+      button.append(node('span', 'cnt', craft.steps.length))
+      button.addEventListener('click', () => {
+        state.selectedCraft = craft.key
+        state.selectedStep = null
+        render()
+      })
+      els.tabs.append(button)
+    }
+  }
+
+  function updateTimes() {
+    const craft = currentCraft()
+    const step = currentStep(craft)
+    const dir = state.data?.previewDir ?? '~/.dsh/artcraft/preview'
+
+    if (craft === null) {
+      els.sub.textContent = `waiting for the agent · ${dir}`
+    } else {
+      const file = basename(craft.file) ?? 'no document'
+      const bits = [
+        craft.key,
+        file,
+        `watching ${craft.steps.length} ${plural(craft.steps.length, 'step', 'steps')}`,
+        craft.updatedAt === null || craft.updatedAt === undefined
+          ? 'waiting for the first step'
+          : `updated ${fmtAgo(craft.updatedAt)}`,
+      ]
+      els.sub.textContent = bits.join(' · ')
+    }
+
+    els.capRight.textContent = step === null
+      ? '—'
+      : step.at === undefined || step.at === null
+        ? 'no timestamp'
+        : `rendered ${fmtAgo(step.at)}`
+
+    const updated = els.meta.querySelector('[data-at]')
+    if (updated !== null) updated.textContent = fmtAgo(updated.dataset.at)
+  }
+
+  // -- render: left step list ----------------------------------------------
+
+  function stepMetaText(step) {
+    return step.summary ?? 'no summary recorded'
+  }
+
+  function renderSteps(craft) {
+    const scroll = els.steps.scrollTop
+    clear(els.steps)
+
+    if (craft === null) {
+      els.steps.append(node('div', 'steps-hint', 'No steps yet. The panel updates itself as soon as the agent renders a document.'))
+      els.steps.scrollTop = scroll
+      return
+    }
+    if (craft.steps.length === 0) {
+      els.steps.append(node('div', 'steps-hint', `Waiting for the first step from ${craft.product ?? craft.key}.`))
+      els.steps.scrollTop = scroll
+      return
+    }
+
+    const selected = currentStep(craft)
+    const latest = latestStep(craft)
+    for (const step of craft.steps) {
+      const active = selected !== null && step.n === selected.n
+      const button = node('button', `step${active ? ' active' : ''}`)
+      button.type = 'button'
+      button.title = [step.title, step.summary].filter(Boolean).join('\n')
+
+      const badge = node('span', 'n')
+      if (!active && step.imageUrl !== null && step.imageUrl !== undefined) {
+        badge.classList.add('ok')
+        badge.textContent = '✓'
+      } else {
+        badge.textContent = String(step.n)
+      }
+
+      const summary = stepMetaText(step)
+      const duration = step.durationMs
+      const durationLabel = duration === null || duration === undefined ? null : fmtDuration(duration)
+      const showDuration = durationLabel !== null
+        && !summary.includes(durationLabel)
+        && !summary.includes(`${duration} ms`)
+
+      const body = node('span', 'body')
+      const head = node('span', 'step-head')
+      head.append(node('span', 't', step.title ?? `${craft.product ?? craft.key} · step ${step.n}`))
+      if (showDuration) head.append(node('span', 'dur', durationLabel))
+      const meta = node('span', 'm')
+      if (step.tool !== null && step.tool !== undefined) meta.append(node('span', 'tool', step.tool))
+      meta.append(document.createTextNode(summary))
+      body.append(head, meta)
+
+      button.append(badge, body)
+      if (active) button.setAttribute('aria-current', 'step')
+      button.addEventListener('click', () => {
+        state.selectedStep = latest !== null && step.n === latest.n ? null : step.n
+        render()
+      })
+      els.steps.append(button)
+    }
+
+    els.steps.scrollTop = scroll
+    const activeElement = els.steps.querySelector('.step.active')
+    if (activeElement !== null) activeElement.scrollIntoView({ block: 'nearest' })
+  }
+
+  // -- render: centre canvas -----------------------------------------------
+
+  let imageErrorToken = 0
+  let shotImage = null
+
+  function waitingShot(title, detail) {
+    const box = node('div', 'empty')
+    box.append(node('div', 'pulse'))
+    box.append(node('div', 'empty-title', title))
+    const sub = node('div', 'empty-sub')
+    sub.append(document.createTextNode(detail ?? ''))
+    box.append(sub)
+    return box
+  }
+
+  function directoryShot(title, detail, dir) {
+    const box = waitingShot(title, detail)
+    const sub = node('div', 'empty-sub')
+    sub.append(document.createTextNode('Watching '))
+    sub.append(node('code', null, dir))
+    box.append(sub)
+    return box
+  }
+
+  function noImageShot(step, craft) {
+    const box = node('div', 'text-only')
+    box.append(node('div', 'text-icon'))
+    box.append(node('div', 'empty-title', 'No render for this step'))
+    box.append(node('div', 'text-summary', step.summary ?? step.title ?? `${craft.product ?? craft.key} step ${step.n}`))
+    box.append(node('div', 'empty-sub', `${craft.product ?? craft.key} reported state without an image.`))
+    return box
+  }
+
+  function captionParts(craft, step) {
+    if (step === null) return 'waiting for the first render'
+    const parts = [`step ${step.n} of ${craft.steps.length}`]
+    if (Number.isFinite(craft.pages) && craft.pages > 0) parts.push(`page 1/${craft.pages}`)
+    if (step.width !== null && step.width !== undefined && step.height !== null && step.height !== undefined) {
+      parts.push(`${step.width}×${step.height}`)
+    }
+    if (step.imageUrl === null || step.imageUrl === undefined) parts.push('text-only')
+    return parts.join(' · ')
+  }
+
+  function imageUrl(url, step) {
+    const version = encodeURIComponent(step.at ?? String(step.n))
+    return `${url}?v=${version}`
+  }
+
+  function setShotContent(content) {
+    clear(els.shot)
+    shotImage = null
+    const inner = node('div', 'shot-inner')
+    inner.append(content)
+    els.shot.append(inner)
+  }
+
+  // `max-height: 100%` does not resolve inside the grid item, so fit the
+  // render to the measured canvas box in pixels instead.
+  function fitShotImage() {
+    const image = shotImage
+    if (image === null || !image.isConnected || image.naturalWidth === 0) return
+    const inner = image.parentElement
+    if (inner === null) return
+    const maxWidth = Math.max(40, inner.clientWidth - 28)
+    const maxHeight = Math.max(40, inner.clientHeight - 28)
+    const ratio = image.naturalWidth / image.naturalHeight
+    let width = maxWidth
+    let height = width / ratio
+    if (height > maxHeight) {
+      height = maxHeight
+      width = height * ratio
+    }
+    image.style.width = `${Math.max(1, Math.round(width))}px`
+    image.style.height = `${Math.max(1, Math.round(height))}px`
+  }
+
+  function renderCanvas(craft) {
+    const step = currentStep(craft)
+    const dir = state.data?.previewDir ?? '~/.dsh/artcraft/preview'
+
+    if (craft === null) {
+      els.renderTitle.textContent = 'Current render'
+      setShotContent(directoryShot('Waiting for the agent', 'The preview directory is empty. Every craft render will appear here automatically.', dir))
+      els.capLeft.textContent = 'waiting for the first render'
+      els.latestBtn.hidden = true
+      clear(els.filmstrip)
+      return
+    }
+
+    const pageLabel = Number.isFinite(craft.pages) && craft.pages > 0 ? ' page 1' : ''
+    els.renderTitle.textContent = `Current render · ${craft.product ?? craft.key}${pageLabel}`
+
+    if (step === null) {
+      setShotContent(directoryShot(`Waiting for ${craft.product ?? craft.key}`, 'The craft is known, but has not written its first step yet.', dir))
+    } else if (step.imageUrl === null || step.imageUrl === undefined) {
+      setShotContent(noImageShot(step, craft))
+    } else {
+      const token = ++imageErrorToken
+      const img = node('img')
+      img.alt = `${craft.product ?? craft.key} step ${step.n}`
+      img.src = imageUrl(step.imageUrl, step)
+      img.addEventListener('error', () => {
+        if (token !== imageErrorToken || !img.isConnected) return
+        setShotContent(waitingShot('Render unavailable', `The state points at ${step.image} but the file could not be loaded.`))
+      })
+      img.addEventListener('load', () => {
+        if (token === imageErrorToken && img.isConnected) fitShotImage()
+      })
+      setShotContent(img)
+      shotImage = img
+      if (img.complete) fitShotImage()
+    }
+
+    els.capLeft.textContent = captionParts(craft, step)
+    const latest = latestStep(craft)
+    els.latestBtn.hidden = latest === null || step === null || step.n === latest.n
+
+    clear(els.filmstrip)
+    if (craft.steps.length === 0) {
+      els.filmstrip.append(node('div', 'film-empty', 'No renders yet.'))
+    } else {
+      for (const item of craft.steps) {
+        const active = step !== null && item.n === step.n
+        const button = node('button', `thumb${active ? ' active' : ''}`)
+        button.type = 'button'
+        const label = item.title ?? `step ${item.n}`
+        button.title = `Step ${item.n} · ${label}`
+        button.setAttribute('aria-label', button.title)
+        const source = item.thumbUrl ?? item.imageUrl
+        if (source === null || source === undefined) {
+          button.append(node('span', null, `step ${item.n}`))
+        } else {
+          const img = node('img')
+          img.alt = label
+          img.src = imageUrl(source, item)
+          img.addEventListener('error', () => {
+            button.replaceChildren(node('span', null, `step ${item.n}`))
+          })
+          button.append(img)
+        }
+        button.addEventListener('click', () => {
+          state.selectedStep = latest !== null && item.n === latest.n ? null : item.n
+          render()
+        })
+        els.filmstrip.append(button)
+      }
+      const activeThumb = els.filmstrip.querySelector('.thumb.active')
+      if (activeThumb !== null) activeThumb.scrollIntoView({ inline: 'nearest', block: 'nearest' })
+    }
+  }
+
+  // -- render: right metadata + timeline -----------------------------------
+
+  function kvRow(label, value, options = {}) {
+    const row = node('div', 'kv')
+    row.append(node('span', null, label))
+    const bold = node('b', options.className ?? null, value)
+    if (options.title !== undefined) bold.title = options.title
+    if (options.at !== undefined) {
+      bold.id = 'metaUpdated'
+      bold.dataset.at = options.at
+      bold.textContent = fmtAgo(options.at)
+    }
+    row.append(bold)
+    return row
+  }
+
+  function totalDuration(craft) {
+    let total = 0
+    let seen = false
+    for (const step of craft.steps) {
+      if (Number.isFinite(step.durationMs)) {
+        total += step.durationMs
+        seen = true
+      }
+    }
+    return seen ? total : null
+  }
+
+  function renderMeta(craft) {
+    clear(els.meta)
+    clear(els.video)
+
+    if (craft === null) {
+      els.meta.append(kvRow('craft', '—'))
+      els.meta.append(kvRow('file', '—'))
+      els.meta.append(kvRow('pages', '—'))
+      els.meta.append(kvRow('steps', '—'))
+      els.meta.append(kvRow('last op', '—'))
+      els.meta.append(kvRow('duration', '—'))
+      els.meta.append(kvRow('updated', '—'))
+      els.meta.append(node('div', 'hint', 'Metadata appears when a craft writes state.json.'))
+      return
+    }
+
+    const selected = currentStep(craft)
+    const file = basename(craft.file)
+    els.meta.append(kvRow('craft', craft.product ?? craft.key))
+    els.meta.append(kvRow('file', file ?? '—', { title: craft.file ?? undefined }))
+    els.meta.append(kvRow('pages', Number.isFinite(craft.pages) && craft.pages > 0 ? String(craft.pages) : '—'))
+    els.meta.append(kvRow('steps', String(craft.steps.length)))
+    els.meta.append(kvRow('last op', selected?.tool ?? '—'))
+    els.meta.append(kvRow('duration', totalDuration(craft) === null ? '—' : fmtDuration(totalDuration(craft))))
+    els.meta.append(craft.updatedAt === null || craft.updatedAt === undefined
+      ? kvRow('updated', '—')
+      : kvRow('updated', '', { at: craft.updatedAt }))
+
+    const clips = Array.isArray(craft.timeline) ? craft.timeline.filter(clip =>
+      Number.isFinite(clip.start) && Number.isFinite(clip.duration) && clip.duration > 0) : []
+    if (clips.length === 0) return
+
+    const total = Math.max(...clips.map(clip => clip.start + clip.duration))
+    const heading = node('h3', 'spaced', 'Video mode')
+    const timeline = node('div', 'timeline')
+    clips.forEach((clip, index) => {
+      const segment = node('div', `seg${index % 3 === 1 ? ' alt' : index % 3 === 2 ? ' third' : ''}`)
+      const left = Math.max(0, Math.min(100, (clip.start / total) * 100))
+      const width = Math.max(0, Math.min(100, (clip.duration / total) * 100))
+      segment.style.left = `${left.toFixed(3)}%`
+      segment.style.width = `${width.toFixed(3)}%`
+      segment.title = `${clip.label} · ${fmtSeconds(clip.duration)} · ${fmtSeconds(clip.start)}–${fmtSeconds(clip.start + clip.duration)}`
+      timeline.append(segment)
+    })
+    const ticks = node('div', 'ticks')
+    const tickCount = 5
+    for (let index = 0; index < tickCount; index += 1) {
+      ticks.append(node('span', null, fmtSeconds(total * index / (tickCount - 1))))
+    }
+    timeline.append(ticks)
+
+    els.video.append(heading, timeline)
+    const list = node('div', 'clips')
+    for (const clip of clips) {
+      const row = node('div', 'kv')
+      row.append(node('span', null, `${clip.label} · ${fmtSeconds(clip.duration)}`))
+      const status = clip.status === 'rendering' ? ['…', 'warn'] : clip.status === 'error' ? ['✕', 'err'] : ['✓', 'ok']
+      row.append(node('b', status[1], status[0]))
+      list.append(row)
+    }
+    els.video.append(list)
+  }
+
+  // -- render orchestration ------------------------------------------------
+
+  function render() {
+    const list = crafts()
+    const craft = currentCraft()
+    renderTabs(list, craft)
+    renderSteps(craft)
+    renderCanvas(craft)
+    renderMeta(craft)
+    updateTimes()
+  }
+
+  // -- boot ----------------------------------------------------------------
+
+  els.latestBtn.addEventListener('click', () => {
+    state.selectedStep = null
+    render()
+  })
+
+  if (typeof ResizeObserver === 'function') {
+    new ResizeObserver(() => fitShotImage()).observe(els.shot)
+  } else {
+    window.addEventListener('resize', () => fitShotImage())
+  }
+
+  setLive(false)
+  render()
+  connectEvents()
+  void refreshState()
+  setInterval(updateTimes, 1000)
+  // Safety net for a missed watcher event; SSE remains the primary path.
+  setInterval(() => {
+    if (document.visibilityState === 'visible') void refreshState()
+  }, 15_000)
+})()
+</script>
+</body>
+</html>

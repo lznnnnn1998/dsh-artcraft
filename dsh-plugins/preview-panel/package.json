@@ -1,0 +1,50 @@
+{
+  "name": "dsh-artcraft-preview-panel",
+  "version": "0.1.1",
+  "private": false,
+  "type": "module",
+  "description": "DSH client plugin: the ArtCraft live-preview panel inside the DSH Web GUI (layer C of docs/PREVIEW.md).",
+  "license": "MIT OR Apache-2.0",
+  "exports": {
+    ".": "./src/index.js",
+    "./client": {
+      "default": "./lib/client.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src",
+    "lib",
+    "cordis.patch.yml",
+    "README.md",
+    "server"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "verify": "node scripts/verify.mjs"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-layout",
+        "@deepseek-ai/dsh-client-ui-sidebar"
+      ]
+    }
+  },
+  "keywords": [
+    "dsh-plugin",
+    "dsh",
+    "deepseek-harness",
+    "cordis",
+    "artcraft",
+    "preview",
+    "client-plugin"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,0 +1,6 @@
+# Installed by `dsh plugin add dsh-artcraft-preview-panel`, or applied as this
+# package's bundle patch when it is a declared profile bundle (dsh.profile.bundles).
+# One row: the package whose browser half mounts the ArtCraft live-preview panel.
+- insert:
+    - id: artcraft-preview-panel
+      name: "dsh-artcraft-preview-panel"
