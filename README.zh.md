@@ -111,6 +111,17 @@ MCP server 每个插件只启动一次并保持常驻(启动 GridCraft 引擎要
 - **长任务后台运行。** 4K 渲染、贴图烘焙、音频导出都会超过工具超时:给 `_run` 传 `background: true`,进程继续跑,调用立刻返回 job id、日志路径,以及用于查询/等待/终止的 `_job` 工具。
 - **技能,而不只是工具。** 工作流知识放在 [lznnnnn1998/dsh-artcraft-skills](https://github.com/lznnnnn1998/dsh-artcraft-skills):家族总览 + 五个端到端工作流(报告、品牌包、讲解视频、图纸包、格式转换)。`scripts/install-into-profile.mjs` 会从旁边的 checkout 安装,或用 `--skills-dir` 指定。工具给能力,技能给"会用",而且只在加载时占用上下文。依赖是单向且声明的:skills 仓库带 `compatibility.json`,写明最低插件版本和它调用的每个工具,插件太旧时**拒绝安装**。
 
+## 它会建议补齐工作流
+
+只装一个应用,你得到的是一个工具,不是一条工作流。`scripts/doctor.mjs` 会报告这台机器上有什么,并推荐**你已经开始的那些工作流**还缺哪些伙伴 —— 装个 GridCraft,它会提示做报告还差 WordCraft 和 PdfCraft、做演示还差 DeckCraft;同时检查各应用的 CLI、预览面板和技能。
+
+```sh
+node scripts/doctor.mjs          # 人读的汇总
+node scripts/doctor.mjs --json   # 给工具用
+```
+
+同一份知识在 `dsh-plugins/craft-kit/src/suite.ts` 里:安装脚本会打印建议,每个插件的提示词也会点名它的工作流伙伴,让 agent 能提示补装,而不是在衔接处失败。预览面板和 skills 仓库是两个套件级伙伴。
+
 ## 快速开始
 
 **Windows** —— 克隆后在 PowerShell 里执行:

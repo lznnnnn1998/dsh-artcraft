@@ -26,7 +26,7 @@
 
 import { cpSync, existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve, sep } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 import { defaultDshHome, packageManager, parseArgv, PM_ENV, readJson, runPackageManager } from './lib/host.mjs'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
@@ -266,6 +266,23 @@ if (skillsRoot === undefined) {
     installed.push(entry.name)
   }
   console.log(`installed ${installed.length} skill(s) from ${skillsRoot}: ${installed.join(', ')}`)
+}
+
+// 5. Advice: the workflows these plugins take part in usually need partners.
+try {
+  const suite = await import(pathToFileURL(join(root, 'dsh-plugins', 'craft-kit', 'lib', 'suite.js')).href)
+  const installedCrafts = plugins.map(plugin => plugin.name.replace(/^craft-/, ''))
+  const suggestions = suite.suggestCrafts(installedCrafts)
+  if (suggestions.length > 0) {
+    console.log('\nThese workflows are one plugin short:')
+    for (const suggestion of suggestions.slice(0, 5)) {
+      console.log(`  ${suggestion.craft.padEnd(14)} completes "${suggestion.forWorkflow}" (${suggestion.delivers})`)
+    }
+    console.log(`  install:  dsh plugin --profile ${profileName} add ${suggestions.slice(0, 3).map(s => `dsh-artcraft-plugin-${s.craft}`).join(' ')}`)
+  }
+  console.log(`  companions: dsh-artcraft-preview-panel (live preview) and dsh-artcraft-skills (the workflows)`)
+} catch {
+  // Advice is a convenience; an unbuilt kernel must not fail the install.
 }
 
 console.log(`

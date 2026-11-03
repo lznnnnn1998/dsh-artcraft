@@ -1,6 +1,6 @@
 {
   "name": "dsh-artcraft-plugin-texturecraft",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "private": false,
   "type": "module",
   "description": "DSH plugin: drive TextureCraft (3D texture painting) headlessly through its own CLI and MCP server.",

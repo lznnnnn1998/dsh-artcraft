@@ -132,6 +132,23 @@ then shut down after five idle minutes or when the plugin unloads.
   skills repository carries a `compatibility.json` naming the minimum plugin release and every tool
   it calls, and it refuses to install against older plugins.
 
+## It suggests what completes the workflow
+
+Installing one craft gives you a tool, not the workflow. `scripts/doctor.mjs` reports what this
+machine has and recommends the missing partners of the workflows you have started — install
+GridCraft and it points at WordCraft and PdfCraft for a report, at DeckCraft for a deck; it also
+checks the craft CLIs, the preview panel and the skills.
+
+```sh
+node scripts/doctor.mjs          # human summary
+node scripts/doctor.mjs --json   # for tooling
+```
+
+The same knowledge is in `dsh-plugins/craft-kit/src/suite.ts`: the installer prints the suggestions,
+and each plugin's prompt names its workflow partners so the agent can offer the missing plugin
+instead of failing at the join. The preview panel and the skills repository are the two
+suite-wide companions.
+
 ## Quick start
 
 **Windows** — from a fresh clone, in PowerShell:
