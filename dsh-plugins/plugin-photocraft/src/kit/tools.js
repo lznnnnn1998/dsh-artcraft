@@ -10,6 +10,7 @@
 
 import { craftCallView, craftResultView } from './present.js'
 import { canPreview, nextStepNumber, previewRoot, recordPreview, renderPreview, stepName } from './preview.js'
+import { workflowsOf } from './suite.js'
 import { appendJournal } from './journal.js'
 import { CraftMcpClient, renderSchema } from './mcp.js'
                                        
@@ -1157,7 +1158,14 @@ export function applyCraftPlugin(
       + (profile.mcpAttach === undefined
         ? ''
         : `When the user has ${profile.product} open, pass \`attach: <control port>\` to an mcp call to work in their window instead of a headless copy. `)
-      + `Images returned by a render or screenshot are saved and named by path; look at them with \`read_image\`.`,
+      + `Images returned by a render or screenshot are saved and named by path; look at them with \`read_image\`.`
+      + (() => {
+        const partners = [...new Set(workflowsOf(profile.id).flatMap(workflow => workflow.crafts).filter(craft => craft !== profile.id))]
+        if (partners.length === 0) return ''
+        // A half-installed workflow is the common gap: name the partners so the
+        // agent can offer the missing plugin instead of failing at the join.
+        return ` Workflows that start in ${profile.product} usually also need ${partners.join(', ')}: if one of those tools is unavailable, say which plugin provides it and offer to install it.`
+      })(),
     order: CRAFT_SECTION_ORDER,
   })
   return () => {
