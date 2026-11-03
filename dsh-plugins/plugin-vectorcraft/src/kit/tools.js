@@ -9,6 +9,7 @@
  */
 
 import { craftCallView, craftResultView } from './present.js'
+import { canPreview, nextStepNumber, previewRoot, recordPreview, renderPreview, stepName } from './preview.js'
 import { appendJournal } from './journal.js'
 import { CraftMcpClient, renderSchema } from './mcp.js'
                                        
@@ -161,10 +162,35 @@ export function createRuntime(profile              , packageRoot        , config
   let catalogCache                                                                                                          
   const mcpClients = new Map                        ()
   const artifacts = config.artifactsDir ?? join(tmpdir(), 'dsh-artcraft', profile.id)
+  const previewDir = previewRoot(config.previewDir)
+  let previewStep = 0
   const jobs = new Map                       ()
   const jobChildren = new Map                                                   ()
   let jobCounter = 0
   return {
+    async preview(options) {
+      if (config.preview === 'off') return undefined
+      if (!canPreview(profile)) return undefined
+      const binary = this.binary()
+      if (binary === undefined) return undefined
+      previewStep = nextStepNumber(previewDir, profile.id)
+      const n = previewStep
+      const dir = join(previewDir, profile.id)
+      const out = join(dir, stepName(n))
+      const scale = options.scale ?? config.previewScale ?? 1.5
+      const rendered = await renderPreview(profile, binary, { file: options.file, dir, out, scale })
+      const relative = rendered === undefined ? undefined : stepName(n)
+      recordPreview(previewDir, profile, {
+        n,
+        at: new Date().toISOString(),
+        tool: options.tool,
+        title: options.title,
+        summary: options.summary,
+        ...relative === undefined ? {} : { image: relative, thumb: relative },
+        ...options.durationMs === undefined ? {} : { durationMs: options.durationMs },
+      }, options.file, 1)
+      return rendered
+    },
     startJob(binary, argv) {
       jobCounter += 1
       const id = `j${jobCounter}`
@@ -382,7 +408,13 @@ export function createToolSet(runtime              )               {
    * Renders, bakes and bounces outlast the tool timeout; a job keeps the process
    * alive after the call returns and leaves its output in a log file.
    */
-  const runOrStart = async (binary             , argv                   , background         )                  => {
+  const runOrStart = async (
+    binary             ,
+    argv                   ,
+    background         ,
+    document         ,
+    label         ,
+  )                  => {
     if (background === true) {
       const job = runtime.startJob(binary, argv)
       return [
@@ -392,7 +424,21 @@ export function createToolSet(runtime              )               {
         `or wait with {"action":"wait","job":"${job.id}","timeoutMs":300000}`,
       ].join('\n')
     }
-    return renderRun(await runCraft({ profile, binary, argv, cwd: process.cwd(), timeoutMs }), profile)
+    const result = await runCraft({ profile, binary, argv, cwd: process.cwd(), timeoutMs })
+    let text = renderRun(result, profile)
+    // A render after every write is what turns the transcript into a step-by-step
+    // view of the document; the same image feeds the preview panel.
+    if (result.ok && document !== undefined && config.preview !== 'off') {
+      const rendered = await runtime.preview({
+        file: document,
+        tool: 'run',
+        title: label === undefined || label.length === 0 ? `${profile.id}_run` : label,
+        summary: `exit ${result.exitCode ?? 0} · ${result.durationMs} ms`,
+        durationMs: result.durationMs,
+      })
+      if (rendered !== undefined) text += `\n[preview] ${rendered}`
+    }
+    return text
   }
 
   /** Guard every tool: a missing binary is an answer, never a crash. */
@@ -416,6 +462,32 @@ export function createToolSet(runtime              )               {
       commands,
     })
     return await runOrStart(binary, argv, background)
+  }
+
+  /** A short, human step label: the first command ids, not the tool name. */
+  const labelOf = (args                         )                     => {
+    const raw = args.commands
+    if (!Array.isArray(raw) || raw.length === 0) return undefined
+    const ids = raw.map((entry) => {
+      if (typeof entry === 'string') return entry.trim().split(/\s+/)[0] ?? ''
+      if (typeof entry === 'object' && entry !== null) {
+        const id = (entry                    ).id
+        return typeof id === 'string' ? id : ''
+      }
+      return ''
+    }).filter(id => id.length > 0)
+    if (ids.length === 0) return undefined
+    const shown = ids.slice(0, 3).join(', ')
+    return `${profile.product} · ${ids.length <= 3 ? shown : `${shown} +${ids.length - 3}`}`
+  }
+
+  /** The document this call wrote or opened, when it named one. */
+  const documentOf = (args                         )                     => {
+    for (const key of ['save', 'export', 'input']         ) {
+      const value = args[key]
+      if (typeof value === 'string' && value.length > 0) return value
+    }
+    return undefined
   }
 
   const session               = { commands: [], stale: false }
@@ -541,7 +613,7 @@ export function createToolSet(runtime              )               {
         }
         writeFileSync(scriptPath, typeof body === 'string' ? body : JSON.stringify(body, null, 2) + '\n')
         const extra = Array.isArray(args.extraArgs) ? args.extraArgs.filter((a)              => typeof a === 'string') : []
-        return await runOrStart(binary, [...argv, ...extra], args.background)
+        return await runOrStart(binary, [...argv, ...extra], args.background, documentOf(args), labelOf(args))
       }
       if (profile.run.scriptFlag !== undefined) {
         const scriptPath = join(craftWorkDir(profile), `steps-${Date.now()}.json`)
@@ -556,7 +628,7 @@ export function createToolSet(runtime              )               {
           profile.run.scriptFlag, scriptPath,
           ...Array.isArray(args.extraArgs) ? args.extraArgs.filter((a)              => typeof a === 'string') : [],
         ]
-        return await runOrStart(binary, [profile.run.verb, ...extra], args.background)
+        return await runOrStart(binary, [profile.run.verb, ...extra], args.background, documentOf(args), labelOf(args))
       }
       if (profile.run.scriptMode === true) {
         const scriptPath = join(craftWorkDir(profile), `run-${Date.now()}.jsonl`)
@@ -568,7 +640,7 @@ export function createToolSet(runtime              )               {
           scriptPath,
           ...Array.isArray(args.extraArgs) ? args.extraArgs.filter((a)              => typeof a === 'string') : [],
         ]
-        return await runOrStart(binary, [...globalFlagsFor(profile, args), profile.run.verb, ...extra], args.background)
+        return await runOrStart(binary, [...globalFlagsFor(profile, args), profile.run.verb, ...extra], args.background, documentOf(args), labelOf(args))
       }
       // PdfCraft's `run` accepts exactly one tool per invocation; sending a
       // list would produce "expected key=value" from the CLI, so the extra
@@ -597,7 +669,7 @@ export function createToolSet(runtime              )               {
         ...args.print === true ? { print: true } : {},
         ...Array.isArray(args.extraArgs) ? { extra: args.extraArgs.filter((a)              => typeof a === 'string') } : {},
       })
-      return await runOrStart(binary, argv, args.background)
+      return await runOrStart(binary, argv, args.background, documentOf(args), labelOf(args))
     },
   }
 
@@ -711,7 +783,7 @@ export function createToolSet(runtime              )               {
       else if (argMode === 'section') argv.push(typeof args.section === 'string' && args.section.length > 0 ? args.section : inspectSpec.section ?? 'project')
       if (inspectSpec.projectFlag !== undefined && typeof args.project === 'string') argv.push(inspectSpec.projectFlag, args.project)
       argv.push(...inspectSpec.extraArgs ?? [], ...extra)
-      return await runOrStart(binary, argv, args.background)
+      return await runOrStart(binary, argv, args.background, documentOf(args), labelOf(args))
     },
   }
 
@@ -938,7 +1010,7 @@ export const CRAFT_SECTION_ORDER = 120
                      
            
                    
-                                                                              
+                                                                                     
    
                                                           
                                           
@@ -999,6 +1071,12 @@ export function applyCraftPlugin(
                                        
                                                                                      
                                    
+       
+                                                                                 
+                                                                                
+                                                                              
+       
+                                                                         
    ,
 )             {
   const { profile, packageRoot, config = {}, defineTool } = options
@@ -1012,8 +1090,20 @@ export function applyCraftPlugin(
       description: spec.description,
       parameters: spec.parameters,
       output: {
-        schema: { type: 'string' },
-        render: (_args         , value        ) => [{ type: 'text'         , text: value }],
+        schema: {
+          type: 'object',
+          additionalProperties: false,
+          properties: {
+            text: { type: 'string' },
+            images: { type: 'array', items: { type: 'json' } },
+          },
+        },
+        render: (_args         , value                                      ) => {
+          const blocks            = []
+          if (value.text.length > 0) blocks.push({ type: 'text'         , text: value.text })
+          for (const image of value.images ?? []) if (image !== undefined) blocks.push(image)
+          return blocks.length > 0 ? blocks : [{ type: 'text'         , text: '' }]
+        },
       },
       async execute(args       ) {
         const typed = args                                      
@@ -1021,7 +1111,18 @@ export function applyCraftPlugin(
         try {
           const text = await spec.execute(typed)
           appendJournal(profile, { at: startedAt, kind: spec.kind, summary: journalSummary(spec.kind, typed, text, Date.now() - startedAt) })
-          return text
+          // A preview line becomes a real image block when the plugin can commit
+          // one: that is what makes the transcript show each step of the work.
+          const previewPaths = [...text.matchAll(/^\[preview\] (.+)$/gm)].map(match => match[1].trim())
+          if (previewPaths.length > 0 && options.attachImage !== undefined) {
+            const images            = []
+            for (const path of previewPaths) {
+              const block = await options.attachImage(path)
+              if (block !== undefined) images.push(block)
+            }
+            return { text: text.replace(/^\[preview\] .+$/gm, '').trim(), images }
+          }
+          return { text, images: [] }
         } catch (error) {
           appendJournal(profile, {
             at: startedAt,

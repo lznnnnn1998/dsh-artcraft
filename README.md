@@ -114,6 +114,12 @@ then shut down after five idle minutes or when the plugin unloads.
 - **Use the app's own recipes.** `<craft>_mcp_tools` also lists the MCP **resources** (the open
   document, the command catalogue, comments) and **prompts** — FigCraft ships six curated
   workflows such as `design_system` and `prototype_flow`.
+- **Watch the document change.** After a call writes a document, the plugin renders it with the
+  application's own renderer and returns the image with the result, so each step of the work is
+  visible in the transcript. The same render feeds a local panel (`node scripts/preview/server.mjs`,
+  then open `http://127.0.0.1:4177`) showing the step list, the current page and a filmstrip of the
+  ones before it; `dsh-artcraft-preview-panel` embeds that panel inside the DSH Web GUI.
+  See [docs/PREVIEW.md](docs/PREVIEW.md) for the state contract.
 - **Long jobs run in the background.** A 4K render, a texture bake or an audio bounce outlasts a
   tool timeout; pass `background: true` to `_run` and the process keeps going while the call
   returns a job id, a log path and a `_job` tool to poll, wait on or kill.

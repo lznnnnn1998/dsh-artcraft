@@ -16,6 +16,7 @@ import { defineTool } from '@deepseek-ai/dsh-tools'
 import { applyCraftPlugin, profileOf } from './kit/index.js'
                                                        
 import { PLUGIN_ROOT } from './root.js'
+import { readFileSync } from 'node:fs'
 
 export const name = 'dsh-artcraft-effectcraft'
 export const inject = ['tools', 'systemPrompt']
@@ -26,6 +27,27 @@ export const craft = profileOf('effectcraft')
 /** Configuration is the shared craft config. */
                                       
 
+/**
+ * Commit a rendered preview so the transcript shows the document after the call.
+ * The attachment service is optional: without it the path stays in the text.
+ */
+const attachImage = async (ctx         , path        )                   => {
+  const attachments = ctx.get('attachments')   
+                                                                                                     
+               
+  if (attachments?.saveImage === undefined) return undefined
+  try {
+    const ref = await attachments.saveImage({
+      data: readFileSync(path),
+      mediaType: 'image/png',
+      name: path.split(/[\\/]/).pop(),
+    })
+    return { type: 'image', attachment: ref }
+  } catch {
+    return undefined
+  }
+}
+
 export function apply(ctx         , config         = {})       {
   if (craft === undefined) throw new Error('dsh-artcraft-effectcraft: profile "effectcraft" is missing from the inlined kernel')
   // `ctx.effect` ties the registration and the MCP server to this plugin's fiber.
@@ -34,5 +56,6 @@ export function apply(ctx         , config         = {})       {
     packageRoot: PLUGIN_ROOT,
     config,
     defineTool: defineTool         ,
+    attachImage: (path        ) => attachImage(ctx, path),
   }))
 }

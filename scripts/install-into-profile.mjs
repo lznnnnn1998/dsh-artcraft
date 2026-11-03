@@ -101,10 +101,22 @@ function fileSpecifier(path) {
 }
 
 /** Plugin packages, in stable order. */
+// Every directory under dsh-plugins/ that declares a `dsh.bundle` is a bundle:
+// the fourteen craft plugins (`plugin-<craft>`) and the preview panel
+// (`preview-panel`) are installed the same way. Selecting by the manifest rather
+// than by a name prefix is what keeps a new package from silently not shipping.
 const plugins = readdirSync(pluginsDir, { withFileTypes: true })
-  .filter(entry => entry.isDirectory() && entry.name.startsWith('plugin-'))
+  .filter(entry => entry.isDirectory())
   .map(entry => ({ dir: join(pluginsDir, entry.name), name: entry.name.replace(/^plugin-/, '') }))
-  .filter(plugin => existsSync(join(plugin.dir, 'package.json')))
+  .filter((plugin) => {
+    const manifest = join(plugin.dir, 'package.json')
+    if (!existsSync(manifest)) return false
+    try {
+      return readJson(manifest).dsh?.bundle?.patch !== undefined
+    } catch {
+      return false
+    }
+  })
   .sort((a, b) => a.name.localeCompare(b.name))
 
 const manifestPath = join(profileDir, 'package.json')

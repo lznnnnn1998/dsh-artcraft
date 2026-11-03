@@ -139,8 +139,10 @@ for (const plugin of plugins) {
   const entrySource = readFileSync(entryPath, 'utf8')
   const bareImports = [...entrySource.matchAll(/from '([^.'][^']*)'/g)].map(match => match[1])
   for (const specifier of bareImports) {
-    if (!specifier.startsWith('@deepseek-ai/')) {
-      fail(craft, `installed package cannot resolve ${specifier}: only @deepseek-ai/* is routed to the harness`)
+    // Node builtins are always resolvable; the check exists for npm packages,
+    // which only the harness's own installation routes.
+    if (!specifier.startsWith('@deepseek-ai/') && !specifier.startsWith('node:')) {
+      fail(craft, `installed package cannot resolve ${specifier}: only @deepseek-ai/* and node:* are available`)
     }
   }
   if (!bareImports.some(specifier => specifier === '@deepseek-ai/dsh-tools')) {
