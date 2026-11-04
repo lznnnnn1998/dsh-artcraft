@@ -9,7 +9,7 @@
  */
 
 import { craftCallView, craftResultView } from './present.js'
-import { canPreview, nextStepNumber, previewRoot, recordPreview, renderPreview, stepName } from './preview.js'
+import { canPreview, discardRender, lastStepHash, nextStepNumber, pageCount, previewRoot, recordPreview, renderPreview, stepName } from './preview.js'
 import { workflowsOf } from './suite.js'
 import { appendJournal } from './journal.js'
 import { CraftMcpClient, renderSchema } from './mcp.js'
@@ -179,18 +179,38 @@ export function createRuntime(profile              , packageRoot        , config
       const dir = join(previewDir, profile.id)
       const out = join(dir, stepName(n))
       const scale = options.scale ?? config.previewScale ?? 1.5
-      const rendered = await renderPreview(profile, binary, { file: options.file, dir, out, scale })
-      const relative = rendered === undefined ? undefined : stepName(n)
+      const previous = lastStepHash(previewDir, profile.id)
+
+      // Render the first page, and when it did not change look at the last page:
+      // appending a slide or typing on page 2 leaves page 1 identical, and a wall
+      // of identical thumbnails is worse than no step at all.
+      let rendered = await renderPreview(profile, binary, { file: options.file, dir, out, scale, page: 0 })
+      let pages = 1
+      if (rendered !== undefined && previous !== undefined && rendered.hash === previous) {
+        pages = await pageCount(profile, binary, options.file)
+        rendered = pages > 1
+          ? await renderPreview(profile, binary, { file: options.file, dir, out, scale, page: pages - 1 })
+          : undefined
+        if (rendered !== undefined && rendered.hash === previous) rendered = undefined
+      }
+      if (rendered === undefined) {
+        // Nothing visible changed; keep the step list meaningful by not adding one.
+        discardRender(out)
+        return undefined
+      }
       recordPreview(previewDir, profile, {
         n,
         at: new Date().toISOString(),
         tool: options.tool,
         title: options.title,
         summary: options.summary,
-        ...relative === undefined ? {} : { image: relative, thumb: relative },
+        image: stepName(n),
+        thumb: stepName(n),
+        hash: rendered.hash,
+        page: pages,
         ...options.durationMs === undefined ? {} : { durationMs: options.durationMs },
-      }, options.file, 1)
-      return rendered
+      }, options.file, pages)
+      return rendered.path
     },
     startJob(binary, argv) {
       jobCounter += 1
