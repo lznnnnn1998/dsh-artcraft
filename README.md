@@ -180,6 +180,7 @@ node scripts/install-craft.mjs
 # node scripts/install-craft.mjs --from-source
 
 # 2. install the plugins into a DSH profile, then restart it
+#    (it prints a plan first; running it twice changes nothing)
 node scripts/install-into-profile.mjs --profile web
 
 # 3. optional but recommended: the agent skills, from a separate repository
