@@ -150,6 +150,19 @@ node scripts/install-into-profile.mjs --dry-run          # show what would chang
 node scripts/install-into-profile.mjs --uninstall
 ```
 
+Preflight checks, all of which run before anything is written:
+
+- **DSH compatibility** — every package declares `engines.dsh`; a profile whose runtime is outside
+  that range is refused with the plugin, the range and the running version, because DSH's app-boot
+  would refuse to load it anyway.
+- **Already installed** — a package at the same version is skipped, not repacked; an older one is
+  upgraded; a *newer* one is left alone (a checkout must not silently downgrade a profile) unless
+  `--force` is given.
+- **Leftovers** — packages under `node_modules` that this checkout no longer ships are removed, and
+  duplicated entries in `dsh.profile.bundles` are collapsed.
+- **Duplicate loader rows** — hand-written `artcraft-*` rows in the profile's `cordis.patch.yml`
+  are reported: they duplicate the rows the bundles own.
+
 The bundle set is fifteen packages, not fourteen: the preview panel installs alongside the craft
 plugins and starts its local preview server (port 4177) on load. `--uninstall` removes the bundle
 rows but leaves the packages in `node_modules` and the detached preview server running — prune with

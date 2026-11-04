@@ -24,7 +24,8 @@
  * @module scripts/install-into-profile
  */
 
-import { cpSync, existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
+import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
+import { createRequire } from 'node:module'
 import { dirname, join, resolve, sep } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { defaultDshHome, packageManager, parseArgv, PM_ENV, readJson, runPackageManager } from './lib/host.mjs'
@@ -34,6 +35,7 @@ const pluginsDir = join(root, 'dsh-plugins')
 const args = parseArgv(process.argv.slice(2), ['--profile', '--dsh-home'])
 const dryRun = args.has('--dry-run')
 const uninstall = args.has('--uninstall')
+const force = args.has('--force')
 
 const dshHome = resolve(args.value('--dsh-home', defaultDshHome()))
 
@@ -85,8 +87,6 @@ if (!existsSync(profileDir)) {
   process.exit(2)
 }
 
-console.log(`profile: ${profileName}  (${chosen.source})   home: ${dshHome}`)
-
 /**
  * A `file:` dependency value the profile can resolve on any platform.
  *
@@ -119,6 +119,183 @@ const plugins = readdirSync(pluginsDir, { withFileTypes: true })
   })
   .sort((a, b) => a.name.localeCompare(b.name))
 
+// ── preflight ────────────────────────────────────────────────────────────────
+// Everything below this line answers questions before touching the profile:
+// which DSH is running, what is already installed at which version, what the
+// repository ships, and which of those disagree. The install then executes a
+// decided plan instead of blindly repacking fifteen packages.
+
+const require = createRequire(import.meta.url)
+
+/** The version installed in this profile, or `undefined`. */
+function installedVersion(name) {
+  try {
+    return readJson(join(profileDir, 'node_modules', name, 'package.json')).version
+  } catch {
+    return undefined
+  }
+}
+
+/** Compare dotted versions; a prerelease sorts before its release. */
+function compareVersions(a, b) {
+  const parse = value => {
+    const match = /^(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z.-]+))?/.exec(String(value))
+    return match === null ? [0, 0, 0, ''] : [Number(match[1]), Number(match[2]), Number(match[3]), match[4] ?? '']
+  }
+  const left = parse(a)
+  const right = parse(b)
+  for (let i = 0; i < 3; i += 1) {
+    if (left[i] !== right[i]) return left[i] - right[i]
+  }
+  if (left[3] === right[3]) return 0
+  if (left[3] === '') return 1
+  if (right[3] === '') return -1
+  return left[3] < right[3] ? -1 : 1
+}
+
+/** The DSH version this profile will boot with. */
+function dshRuntimeVersion() {
+  const candidates = [
+    join(profileDir, 'node_modules', '@deepseek-ai', 'dsh-app-boot', 'package.json'),
+    join(root, '..', 'deepseek-harness', 'packages', 'boot', 'app-boot', 'package.json'),
+    join(process.env.HOME ?? process.env.USERPROFILE ?? '', 'deepseek-harness', 'packages', 'boot', 'app-boot', 'package.json'),
+  ]
+  for (const candidate of candidates) {
+    if (!existsSync(candidate)) continue
+    try {
+      return readJson(candidate).version
+    } catch {
+      // Keep looking; a damaged manifest is not a reason to fail here.
+    }
+  }
+  return undefined
+}
+
+/**
+ * Whether a version satisfies an `engines.dsh` range.
+ *
+ * `semver` is used when the profile or a harness checkout provides it. The
+ * fallback covers the one shape this repository ships (`^x.y.z`), and an
+ * unrecognised range never blocks an install: refusing on a range this script
+ * cannot read would be worse than letting app-boot judge it at boot.
+ */
+function satisfies(version, range) {
+  const semverDirs = [
+    join(profileDir, 'node_modules', 'semver'),
+    join(root, '..', 'deepseek-harness', 'node_modules', 'semver'),
+  ]
+  for (const dir of semverDirs) {
+    if (!existsSync(dir)) continue
+    try {
+      const semver = require(dir)
+      return semver.satisfies(version, range, { includePrerelease: true })
+    } catch {
+      break
+    }
+  }
+  const caret = /^\^(\d+)\.(\d+)\.(\d+)/.exec(range)
+  if (caret === null) return true
+  const parsed = /^(\d+)\.(\d+)\.(\d+)/.exec(String(version))
+  if (parsed === null) return false
+  const [major, minor, patch] = caret.slice(1).map(Number)
+  const [haveMajor, haveMinor, havePatch] = parsed.slice(1).map(Number)
+  if (haveMajor !== major) return false
+  if (major > 0) return true
+  if (haveMinor !== minor) return false
+  return havePatch >= patch
+}
+
+const runtimeVersion = dshRuntimeVersion()
+
+/** One row of the plan. */
+const planned = []
+const skipped = []
+const problems = []
+const notes = []
+
+for (const plugin of plugins) {
+  const pluginManifest = readJson(join(plugin.dir, 'package.json'))
+  const name = pluginManifest.name
+  const version = pluginManifest.version
+  const label = `${name}@${version}`
+  const range = pluginManifest.engines?.dsh
+
+  if (typeof range === 'string' && runtimeVersion !== undefined && !satisfies(runtimeVersion, range)) {
+    problems.push(`${label} requires dsh ${range}; this profile boots dsh ${runtimeVersion} (app-boot would refuse it)`)
+    continue
+  }
+
+  const current = installedVersion(name)
+  if (current === undefined) {
+    planned.push({ ...plugin, pluginManifest, current, action: 'install' })
+  } else if (force) {
+    planned.push({ ...plugin, pluginManifest, current, action: 'reinstall' })
+  } else if (current === version) {
+    skipped.push(`${name}@${current} is current`)
+  } else if (compareVersions(version, current) > 0) {
+    planned.push({ ...plugin, pluginManifest, current, action: 'upgrade' })
+  } else {
+    skipped.push(`${name}@${current} is newer than this checkout (${version}); --force downgrades`)
+  }
+}
+
+const desiredNames = new Set(plugins.map(plugin => readJson(join(plugin.dir, 'package.json')).name))
+
+// Packages this profile has that this checkout no longer ships (renamed or
+// dropped). Leaving them makes two copies of one row fight at boot.
+const leftovers = existsSync(join(profileDir, 'node_modules'))
+  ? readdirSync(join(profileDir, 'node_modules'), { withFileTypes: true })
+    .filter(entry => entry.isDirectory() && entry.name.startsWith('dsh-artcraft') && !desiredNames.has(entry.name))
+    .map(entry => entry.name)
+  : []
+
+// A profile patch file with hand-written artcraft rows duplicates the bundle
+// rows: the plugin loads twice or the row is owned by nobody.
+const profilePatch = join(profileDir, 'cordis.patch.yml')
+if (existsSync(profilePatch)) {
+  const rows = [...readFileSync(profilePatch, 'utf8').matchAll(/^\s*-?\s*id:\s*(artcraft[\w-]*)/gm)].map(match => match[1])
+  if (rows.length > 0) notes.push(`profile cordis.patch.yml has ${rows.length} hand-written artcraft row(s) (${rows.slice(0, 3).join(', ')}): remove them, the bundle rows already load these plugins`)
+}
+
+// Duplicate entries in the bundle list are harmless at boot but confusing in
+// the UI; the rewrite below dedupes. Read from disk here: the in-memory
+// manifest is created after this preflight.
+const diskBundles = (() => {
+  try {
+    return readJson(join(profileDir, 'package.json')).dsh?.profile?.bundles ?? []
+  } catch {
+    return []
+  }
+})()
+const bundleDuplicates = diskBundles.filter((entry, index, list) => list.indexOf(entry) !== index)
+
+const header = `profile: ${profileName}  (${chosen.source})   home: ${dshHome}`
+console.log(header)
+console.log(`dsh runtime: ${runtimeVersion ?? 'unknown (no checkout or profile app-boot found)'}   checkout: ${resolve(root)}`)
+
+if (problems.length > 0) {
+  console.error('\nIncompatible with this DSH:')
+  for (const problem of problems) console.error(`  ✗ ${problem}`)
+  console.error('\nNothing was changed. Update the plugins or upgrade/downgrade DSH, then retry.')
+  process.exit(1)
+}
+
+console.log('\nPlan:')
+for (const action of planned) {
+  const line = action.current === undefined
+    ? `install   ${action.pluginManifest.name}@${action.pluginManifest.version}`
+    : `${action.action === 'upgrade' ? 'upgrade  ' : 'reinstall'} ${action.pluginManifest.name}  ${action.current} → ${action.pluginManifest.version}`
+  console.log(`  ${line}`)
+}
+for (const skip of skipped) console.log(`  skip      ${skip}`)
+for (const leftover of leftovers) console.log(`  remove    ${leftover} (no longer shipped by this checkout)`)
+if (bundleDuplicates.length > 0) console.log(`  dedupe    ${bundleDuplicates.length} duplicate bundle entr${bundleDuplicates.length === 1 ? 'y' : 'ies'}`)
+for (const note of notes) console.log(`  warn      ${note}`)
+
+if (planned.length === 0 && leftovers.length === 0 && !uninstall) {
+  console.log('\nEverything is up to date; nothing to install.')
+}
+
 const manifestPath = join(profileDir, 'package.json')
 // A profile created by `dsh plugin init` always has one, but a hand-made
 // directory should be adopted rather than crash the installer.
@@ -137,34 +314,57 @@ if (uninstall) {
     delete manifest.dependencies[name]
     manifest.dsh.profile.bundles = manifest.dsh.profile.bundles.filter(entry => entry !== name)
   }
-  if (!dryRun) writeFileSync(manifestPath, JSON.stringify(manifest, undefined, 2) + '\n')
-  console.log(`${dryRun ? 'would remove' : 'removed'} ${packageNames.length} plugin(s) from ${profileDir}`)
-  if (!dryRun) console.log('run the package manager in the profile to drop the packages, then restart the profile')
+  if (!dryRun) {
+    writeFileSync(manifestPath, JSON.stringify(manifest, undefined, 2) + '\n')
+    // The manifest alone leaves the packages on disk; removing them makes the
+    // uninstall real and a later install start from a known state.
+    for (const name of [...packageNames, ...leftovers]) {
+      rmSync(join(profileDir, 'node_modules', name), { recursive: true, force: true })
+    }
+  }
+  console.log(`${dryRun ? 'would remove' : 'removed'} ${packageNames.length} bundle(s) and their packages from ${profileDir}`)
+  if (!dryRun) {
+    console.log('Restart the profile. If the preview panel was installed, its server may still be')
+    console.log('listening on 127.0.0.1:4177 — stop that process to free the port.')
+  }
   process.exit(0)
 }
 
-// Resolve the installer before doing any work, so a machine with no usable
-// package manager fails with guidance instead of an ENOENT mid-install. On
-// Windows this is the difference between working and not: `npm` and `pnpm` are
-// `.cmd` shims there, and Node cannot spawn one without a shell.
-//
-// Two resolutions on purpose. Installing into a profile is pnpm's job — the
-// profile is a pnpm workspace and DSH manages it that way — while *packing* is
-// an npm operation and npm is what this script used before Windows support. On
-// a machine that has npm (macOS, Linux) packing therefore still goes through
-// npm; on Windows, which has none, both fall back to the pnpm the harness
-// ships, so neither step depends on npm existing.
-const pm = dryRun ? undefined : packageManager()
-const packPm = dryRun ? undefined : packageManager(['npm'])
+// ── output the plan and stop when there is nothing to do ─────────────────────
+// Leftovers and duplicate rows are corrected even when every version matches:
+// they are the residue of earlier installs, not a new install.
+if (!dryRun) {
+  for (const leftover of leftovers) rmSync(join(profileDir, 'node_modules', leftover), { recursive: true, force: true })
+  if (bundleDuplicates.length > 0) manifest.dsh.profile.bundles = [...new Set(manifest.dsh.profile.bundles)]
+  if (leftovers.length > 0 || bundleDuplicates.length > 0) {
+    writeFileSync(manifestPath, JSON.stringify(manifest, undefined, 2) + '\n')
+  }
+}
+
+if (dryRun) {
+  console.log('\n--dry-run: nothing written')
+  process.exit(0)
+}
+
+// from here the plan is authoritative: an empty plan means nothing to pack
+const pm = planned.length === 0 ? undefined : packageManager()
+const packPm = planned.length === 0 ? undefined : packageManager(['npm'])
 if (pm !== undefined) {
   console.log(`package manager: ${pm.label}  (${pm.source})`)
   if (packPm.source !== pm.source) console.log(`packing with:    ${packPm.label}  (${packPm.source})`)
 }
 
+// Installing into a profile is pnpm's job — the profile is a pnpm workspace and
+// DSH manages it that way — while *packing* is an npm operation. On a machine
+// that has npm (macOS, Linux) packing goes through npm; on Windows, which has
+// none, both fall back to the pnpm the harness ships, so neither step depends on
+// npm existing.
 // A stale tarball from an earlier version would otherwise be picked up by the
 // directory fallback below.
-if (!dryRun) rmSync(tarballDir, { recursive: true, force: true })
-mkdirSync(tarballDir, { recursive: true })
+if (planned.length > 0) {
+  rmSync(tarballDir, { recursive: true, force: true })
+  mkdirSync(tarballDir, { recursive: true })
+}
 
 /**
  * Pack one plugin so the profile can install it as a real dependency.
@@ -204,40 +404,37 @@ function packPlugin(manager, plugin, pluginManifest) {
   return join(tarballDir, produced[produced.length - 1])
 }
 
-// 1. Pack every plugin. A `file:` dependency must be a tarball: pnpm will not
-//    link a bare directory, and a tarball is also exactly what npm would hold.
-const tarballs = []
-for (const plugin of plugins) {
-  const manifestForPlugin = readJson(join(plugin.dir, 'package.json'))
-  process.stdout.write(`packing ${manifestForPlugin.name}… `)
-  if (dryRun) { console.log('(dry run)'); tarballs.push({ name: manifestForPlugin.name, path: undefined }); continue }
-  const tarball = packPlugin(packPm, plugin, manifestForPlugin)
-  console.log(tarball.slice(tarballDir.length + 1))
-  tarballs.push({ name: manifestForPlugin.name, path: tarball })
-}
+if (planned.length > 0) {
+  // 1. Pack the packages that are not already current. A `file:` dependency
+  //    must be a tarball: pnpm will not link a bare directory, and a tarball is
+  //    also exactly what npm would hold.
+  const tarballs = []
+  for (const plugin of planned) {
+    const manifestForPlugin = plugin.pluginManifest
+    process.stdout.write(`packing ${manifestForPlugin.name}… `)
+    const tarball = packPlugin(packPm, plugin, manifestForPlugin)
+    console.log(tarball.slice(tarballDir.length + 1))
+    tarballs.push({ name: manifestForPlugin.name, path: tarball })
+  }
 
-// 2. Record them as profile dependencies and bundles.
-for (const tarball of tarballs) {
-  manifest.dependencies[tarball.name] = tarball.path === undefined ? 'file:…' : fileSpecifier(tarball.path)
-  if (!manifest.dsh.profile.bundles.includes(tarball.name)) manifest.dsh.profile.bundles.push(tarball.name)
-}
-if (!dryRun) writeFileSync(manifestPath, JSON.stringify(manifest, undefined, 2) + '\n')
-console.log(`${dryRun ? 'would install' : 'installed'} ${tarballs.length} bundle(s) into ${profileDir}`)
+  // 2. Record them as profile dependencies and bundles.
+  for (const tarball of tarballs) {
+    manifest.dependencies[tarball.name] = fileSpecifier(tarball.path)
+    if (!manifest.dsh.profile.bundles.includes(tarball.name)) manifest.dsh.profile.bundles.push(tarball.name)
+  }
+  writeFileSync(manifestPath, JSON.stringify(manifest, undefined, 2) + '\n')
+  console.log(`installed ${tarballs.length} bundle(s) into ${profileDir}`)
 
-if (dryRun) {
-  console.log('\n--dry-run: nothing written')
-  process.exit(0)
-}
-
-// 3. Let the package manager materialize node_modules so DSH can resolve each package.
-process.stdout.write(`installing packages with ${pm.label}… `)
-try {
-  runPackageManager(pm, ['install', '--silent'], { cwd: profileDir, stdio: 'pipe', timeout: 900_000 })
-  console.log('ok')
-} catch (error) {
-  console.log('FAILED')
-  console.error(String(error.stderr ?? error.message).slice(0, 800))
-  process.exit(1)
+  // 3. Let the package manager materialize node_modules so DSH can resolve each package.
+  process.stdout.write(`installing packages with ${pm.label}… `)
+  try {
+    runPackageManager(pm, ['install', '--silent'], { cwd: profileDir, stdio: 'pipe', timeout: 900_000 })
+    console.log('ok')
+  } catch (error) {
+    console.log('FAILED')
+    console.error(String(error.stderr ?? error.message).slice(0, 800))
+    process.exit(1)
+  }
 }
 
 // 4. Agent skills live in their own repository (dsh-artcraft-skills). Install
