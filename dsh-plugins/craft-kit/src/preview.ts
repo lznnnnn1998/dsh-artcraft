@@ -10,7 +10,8 @@
  * @module @dsh-artcraft/craft-kit/preview
  */
 
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { createHash } from 'node:crypto'
+import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs'
 import { homedir } from 'node:os'
 import { basename, dirname, join } from 'node:path'
 import { runCraft } from './exec.ts'
@@ -32,19 +33,19 @@ export function previewRoot(configured?: string): string {
  * picture (SoundCraft has no page, and the MCP-only crafts need their server).
  */
 interface PreviewRecipe {
-  /** Compose the argv that writes `out` from `file`. */
-  readonly argv: (file: string, out: string, scale: number) => readonly string[]
+  /** Compose the argv that writes `out` from `file`, for a 0-based page or slide. */
+  readonly argv: (file: string, out: string, scale: number, index: number) => readonly string[]
 }
 
 /** Per-craft render recipes, verified against the 2026-11 CLI releases. */
 const RECIPES: Record<string, PreviewRecipe> = {
   // `render FILE OUT [--page N] [--scale S]` draws a page as a PNG.
-  wordcraft: { argv: (file, out, scale) => ['render', file, out, '--page', '1', '--scale', String(scale)] },
+  wordcraft: { argv: (file, out, scale, index) => ['render', file, out, '--page', String(index + 1), '--scale', String(scale)] },
   // `convert` picks the format from the output extension.
   cadcraft: { argv: (file, out) => ['convert', file, out] },
   figcraft: { argv: (file, out) => ['convert', file, out] },
   // `render FILE [--slide N] [--scale S] OUT` draws one slide as a PNG.
-  deckcraft: { argv: (file, out, scale) => ['render', file, '--slide', '0', '--scale', String(scale), out] },
+  deckcraft: { argv: (file, out, scale, index) => ['render', file, '--slide', String(index), '--scale', String(scale), out] },
   // VectorCraft exports the active artboard through `run --export`.
   vectorcraft: { argv: (file, out) => ['run', file, '--export', out] },
   // TextureCraft renders the viewport (2D view; the 3D one needs a GPU).
@@ -73,6 +74,10 @@ export interface PreviewStep {
   readonly thumb?: string
   readonly width?: number
   readonly height?: number
+  /** Content hash of the render, used to skip a step that changed nothing visible. */
+  readonly hash?: string
+  /** 1-based page or slide this render shows. */
+  readonly page?: number
   readonly durationMs?: number
   readonly timeline?: readonly { start: number; duration: number; label: string }[]
 }
@@ -104,6 +109,35 @@ export interface PreviewState {
 }
 
 /**
+ * How many pages or slides a document has, for the crafts that can report it.
+ * @param profile - the craft.
+ * @param binary - its binary.
+ * @param file - the document.
+ * @returns the count, or 1 when unknown (rendering the first page is always safe).
+ */
+export async function pageCount(profile: CraftProfile, binary: CraftBinary, file: string, timeoutMs = 30_000): Promise<number> {
+  if (profile.id !== 'wordcraft' && profile.id !== 'deckcraft') return 1
+  try {
+    const result = await runCraft({ profile, binary, argv: ['info', file], cwd: process.cwd(), timeoutMs })
+    if (!result.ok) return 1
+    const parsed = JSON.parse(result.stdout) as { pages?: number; slides?: number }
+    const count = profile.id === 'wordcraft' ? parsed.pages : parsed.slides
+    return typeof count === 'number' && count > 0 ? count : 1
+  } catch {
+    return 1
+  }
+}
+
+/** Content hash of a rendered image, so an unchanged page is not a new step. */
+export function imageHash(path: string): string | undefined {
+  try {
+    return createHash('sha256').update(readFileSync(path)).digest('hex')
+  } catch {
+    return undefined
+  }
+}
+
+/**
  * Render one document to `<dir>/<craft>/step-NNN.png`.
  *
  * Never throws: a preview is a convenience, and a craft that cannot render must
@@ -116,16 +150,18 @@ export interface PreviewState {
 export async function renderPreview(
   profile: CraftProfile,
   binary: CraftBinary,
-  options: { readonly file: string; readonly dir: string; readonly out: string; readonly scale?: number; readonly timeoutMs?: number },
-): Promise<string | undefined> {
+  options: { readonly file: string; readonly dir: string; readonly out: string; readonly scale?: number; readonly timeoutMs?: number; readonly page?: number },
+): Promise<{ path: string; hash: string } | undefined> {
   const recipe = RECIPES[profile.id]
   if (recipe === undefined) return undefined
   if (!existsSync(options.file)) return undefined
   try {
     mkdirSync(options.dir, { recursive: true })
-    const argv = recipe.argv(options.file, options.out, options.scale ?? 1.5)
+    const argv = recipe.argv(options.file, options.out, options.scale ?? 1.5, options.page ?? 0)
     const result = await runCraft({ profile, binary, argv, cwd: process.cwd(), timeoutMs: options.timeoutMs ?? 60_000 })
-    return result.ok && existsSync(options.out) ? options.out : undefined
+    if (!result.ok || !existsSync(options.out)) return undefined
+    const hash = imageHash(options.out)
+    return hash === undefined ? undefined : { path: options.out, hash }
   } catch {
     return undefined
   }
@@ -147,6 +183,37 @@ export function nextStepNumber(root: string, craft: string): number {
     return state.steps.reduce((highest, step) => Math.max(highest, step.n), 0) + 1
   } catch {
     return 1
+  }
+}
+
+/**
+ * Remove a render that matched the previous step's image.
+ * @param path - the rendered file.
+ * @returns nothing; a missing file is not an error.
+ */
+export function discardRender(path: string): void {
+  try {
+    unlinkSync(path)
+  } catch {
+    // Already gone.
+  }
+}
+
+/**
+ * The hash of the last rendered step, for skipping a render that repeats it.
+ * @param root - preview root.
+ * @param craft - craft id.
+ * @returns the hash, or `undefined` when there is no earlier render.
+ */
+export function lastStepHash(root: string, craft: string): string | undefined {
+  try {
+    const state = JSON.parse(readFileSync(join(root, craft, 'state.json'), 'utf8')) as PreviewState
+    const last = state.steps[state.steps.length - 1]
+    if (last === undefined) return undefined
+    if (last.hash !== undefined) return last.hash
+    return last.image === undefined ? undefined : imageHash(join(root, craft, last.image))
+  } catch {
+    return undefined
   }
 }
 

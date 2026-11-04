@@ -1,6 +1,6 @@
 {
   "name": "dsh-artcraft-plugin-wordcraft",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "private": false,
   "type": "module",
   "description": "DSH plugin: drive WordCraft (word processing) headlessly through its own CLI and MCP server.",

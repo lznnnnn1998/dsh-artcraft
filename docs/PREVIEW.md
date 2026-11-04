@@ -63,7 +63,14 @@ cross-craft races.
 }
 ```
 
-- `steps` is append-only for the session; the panel shows the last `current` as the big render.
+- `steps` records **visual changes**, not calls: a render whose image is byte-identical to the
+  previous step is discarded, so the filmstrip never shows the same page twice. A call that only
+  saved, reformatted metadata or touched another page's hidden state produces no step.
+- The render targets the page that changed. Crafts that report their page count (`wordcraft info`
+  → `pages`, `deckcraft info` → `slides`) are rendered at the first page, and when that is
+  unchanged the last page is tried before the step is dropped — appending a slide leaves page one
+  identical, so a fixed page number would show the same picture forever.
+- `steps` keeps `hash` and `page`; the panel shows the last `current` as the big render.
 - `image`/`thumb` are relative to `<craft>/`. Both may be absent when a craft cannot render
   (SoundCraft has no visual; GridCraft renders only through a converter), and the panel then shows
   the step as text.
