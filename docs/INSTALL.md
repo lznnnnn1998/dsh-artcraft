@@ -150,6 +150,11 @@ node scripts/install-into-profile.mjs --dry-run          # show what would chang
 node scripts/install-into-profile.mjs --uninstall
 ```
 
+The bundle set is fifteen packages, not fourteen: the preview panel installs alongside the craft
+plugins and starts its local preview server (port 4177) on load. `--uninstall` removes the bundle
+rows but leaves the packages in `node_modules` and the detached preview server running — prune with
+the profile's package manager and stop the server if you are removing the suite for good.
+
 With no `--profile`, the installer uses `$DSH_PROFILE` if the harness set it, otherwise
 the only profile present, otherwise `web` — and says which it chose.
 
@@ -165,7 +170,23 @@ the installer prefers the `pnpm.mjs` the harness ships and runs it with the harn
 Node. Set `DSH_ARTCRAFT_PM` to a `pnpm`/`npm` command, or to a path to a `pnpm.mjs`, to
 override that choice.
 
-### 3. Restart the profile
+### 3. Skills (recommended)
+
+The workflows live in a separate repository — the plugins are the capability, the skills are the
+method. Without this step you get fourteen tools and no guidance on how to chain them for a
+report, a brand kit or an explainer video.
+
+```sh
+git clone https://github.com/lznnnnn1998/dsh-artcraft-skills ../dsh-artcraft-skills
+node ../dsh-artcraft-skills/scripts/install.mjs
+```
+
+The skills installer checks the plugin versions first: each skill declares the tools it calls in
+`compatibility.json`, and an older plugin set is refused. Cloning the skills repository **beside**
+the plugin repository also lets `install-into-profile.mjs` install them automatically, so the order
+of the two clones decides whether step 3 is needed.
+
+### 4. Restart the profile
 
 ```sh
 dsh --profile web web
@@ -175,8 +196,8 @@ On Windows the harness's CLI launcher is
 `"%LOCALAPPDATA%\Programs\DeepSeek Harness\resources\runtime\cli\bin\dsh.cmd"` (or
 wherever the harness is installed); restarting the app has the same effect.
 
-Plugin rows are read at boot. The Plugins page then lists all fourteen, and the
-agent gains their tools.
+Plugin rows are read at boot. The Plugins page then lists all fifteen bundles — the fourteen craft
+plugins and the preview panel — and the agent gains their tools.
 
 ## Use
 

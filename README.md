@@ -181,7 +181,16 @@ node scripts/install-craft.mjs
 
 # 2. install the plugins into a DSH profile, then restart it
 node scripts/install-into-profile.mjs --profile web
+
+# 3. optional but recommended: the agent skills, from a separate repository
+git clone https://github.com/lznnnnn1998/dsh-artcraft-skills ../dsh-artcraft-skills
+node ../dsh-artcraft-skills/scripts/install.mjs
 ```
+
+Step 2 installs fifteen packages: the fourteen craft plugins **and the preview panel**. Step 3 is
+separate because the skills live on their own release cycle; without it you get the tools but not
+the workflows. `install-into-profile.mjs` also finds a skills checkout beside this repository, so
+cloning it there first makes step 3 redundant.
 
 Both platforms run the same Node scripts; `install.ps1` only adds Node discovery and
 PowerShell-friendly defaults. Nothing is installed machine-wide and no shell profile is
@@ -190,8 +199,12 @@ modified.
 Or install a single craft from npm, straight into a profile:
 
 ```sh
+# when the `dsh` command is on your PATH (it is not part of the harness checkout)
 dsh plugin --profile web add dsh-artcraft-plugin-gridcraft
 ```
+
+The from-checkout route above needs no `dsh` command at all; this one is for a machine where the
+harness installed its CLI.
 
 Each craft is its own package: `dsh-artcraft-plugin-<craft>` for `cadcraft`, `gridcraft`,
 `soundcraft`, `deckcraft`, `wordcraft`, `photocraft`, `lightcraft`, `pdfcraft`, `vectorcraft`,

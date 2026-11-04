@@ -285,14 +285,20 @@ try {
   // Advice is a convenience; an unbuilt kernel must not fail the install.
 }
 
+const craftCount = plugins.filter(plugin => plugin.name !== 'preview-panel').length
+const cliName = (craft) => process.platform === 'win32' ? `${craft}-cli.exe` : `${craft}-cli`
+const allClisPresent = plugins
+  .filter(plugin => plugin.name !== 'preview-panel')
+  .every(plugin => existsSync(join(dshHome, 'crafts', 'bin', cliName(plugin.name))))
+
 console.log(`
 Next:
   1. restart the profile:   dsh --profile ${profileName} web
   2. the plugins appear on the Web **Plugins** page, and the agent gains
-     ${plugins.map(plugin => `${plugin.name}_run`).slice(0, 3).join(', ')}, … (${plugins.length} crafts)
+     ${plugins.map(plugin => `${plugin.name}_run`).slice(0, 3).join(', ')}, … (${craftCount} crafts${plugins.length > craftCount ? ' and the preview panel' : ''})
 
-The craft CLIs are separate — install them for this machine with:
-  node scripts/install-craft.mjs
+${allClisPresent ? 'All fourteen craft CLIs are already installed for this machine.' : `The craft CLIs are separate — install them for this machine with:
+  node scripts/install-craft.mjs`}
 
 Set ${PM_ENV} to choose the package manager used here.
 `)
