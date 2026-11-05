@@ -1,6 +1,6 @@
 {
   "name": "dsh-artcraft-plugin-deckcraft",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "private": false,
   "type": "module",
   "description": "DSH plugin: drive DeckCraft (presentations) headlessly through its own CLI and MCP server.",
@@ -45,5 +45,11 @@
   },
   "engines": {
     "dsh": "^0.2.1-rc.3"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lznnnnn1998/dsh-artcraft.git",
+    "directory": "dsh-plugins/plugin-deckcraft"
+  },
+  "homepage": "https://github.com/lznnnnn1998/dsh-artcraft/tree/main/dsh-plugins/plugin-deckcraft"
 }
