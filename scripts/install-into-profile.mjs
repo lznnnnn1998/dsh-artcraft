@@ -239,6 +239,29 @@ for (const plugin of plugins) {
   }
 }
 
+// A `file:` dependency must point at a tarball that still exists: the pack
+// directory is scratch space, and an earlier run (or a manual cleanup) may have
+// removed a tarball for a package that is otherwise up to date. Skipping it
+// would leave pnpm with a dependency it cannot resolve.
+const diskDependencies = (() => {
+  try {
+    return readJson(join(profileDir, 'package.json')).dependencies ?? {}
+  } catch {
+    return {}
+  }
+})()
+for (let index = skipped.length - 1; index >= 0; index -= 1) {
+  const name = skipped[index].split('@')[0]
+  const spec = diskDependencies[name]
+  if (typeof spec !== 'string' || !spec.startsWith('file:')) continue
+  if (existsSync(spec.slice('file:'.length))) continue
+  const plugin = plugins.find(candidate => readJson(join(candidate.dir, 'package.json')).name === name)
+  if (plugin === undefined) continue
+  const pluginManifest = readJson(join(plugin.dir, 'package.json'))
+  planned.push({ ...plugin, pluginManifest, current: installedVersion(name), action: 'restore' })
+  skipped.splice(index, 1)
+}
+
 const desiredNames = new Set(plugins.map(plugin => readJson(join(plugin.dir, 'package.json')).name))
 
 // Packages this profile has that this checkout no longer ships (renamed or
@@ -284,7 +307,9 @@ console.log('\nPlan:')
 for (const action of planned) {
   const line = action.current === undefined
     ? `install   ${action.pluginManifest.name}@${action.pluginManifest.version}`
-    : `${action.action === 'upgrade' ? 'upgrade  ' : 'reinstall'} ${action.pluginManifest.name}  ${action.current} → ${action.pluginManifest.version}`
+    : action.action === 'restore'
+      ? `restore   ${action.pluginManifest.name}@${action.pluginManifest.version} (its tarball was cleaned)`
+      : `${action.action === 'upgrade' ? 'upgrade  ' : 'reinstall'} ${action.pluginManifest.name}  ${action.current} → ${action.pluginManifest.version}`
   console.log(`  ${line}`)
 }
 for (const skip of skipped) console.log(`  skip      ${skip}`)
@@ -359,12 +384,10 @@ if (pm !== undefined) {
 // that has npm (macOS, Linux) packing goes through npm; on Windows, which has
 // none, both fall back to the pnpm the harness ships, so neither step depends on
 // npm existing.
-// A stale tarball from an earlier version would otherwise be picked up by the
-// directory fallback below.
-if (planned.length > 0) {
-  rmSync(tarballDir, { recursive: true, force: true })
-  mkdirSync(tarballDir, { recursive: true })
-}
+// The pack directory is kept: packages skipped as current still point at the
+// tarball recorded in the profile. Old ones are pruned after a successful
+// install, never before.
+if (planned.length > 0) mkdirSync(tarballDir, { recursive: true })
 
 /**
  * Pack one plugin so the profile can install it as a real dependency.
@@ -434,6 +457,15 @@ if (planned.length > 0) {
     console.log('FAILED')
     console.error(String(error.stderr ?? error.message).slice(0, 800))
     process.exit(1)
+  }
+
+  // Prune tarballs for versions the profile no longer references.
+  const referenced = new Set(Object.values(manifest.dependencies)
+    .filter(value => typeof value === 'string' && value.startsWith('file:'))
+    .map(value => resolve(value.slice('file:'.length))))
+  for (const file of readdirSync(tarballDir)) {
+    const absolute = join(tarballDir, file)
+    if (!referenced.has(absolute)) rmSync(absolute, { force: true })
   }
 }
 
