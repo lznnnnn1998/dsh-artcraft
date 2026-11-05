@@ -160,6 +160,9 @@ Preflight checks, all of which run before anything is written:
   `--force` is given.
 - **Leftovers** — packages under `node_modules` that this checkout no longer ships are removed, and
   duplicated entries in `dsh.profile.bundles` are collapsed.
+- **Tarballs** — a `file:` dependency must point at a tarball that still exists. A package that is
+  up to date but whose tarball was cleaned is reported as `restore` and repacked, rather than
+  skipped into a broken dependency. The pack directory is pruned only after a successful install.
 - **Duplicate loader rows** — hand-written `artcraft-*` rows in the profile's `cordis.patch.yml`
   are reported: they duplicate the rows the bundles own.
 
