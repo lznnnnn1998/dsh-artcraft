@@ -11,10 +11,13 @@
  */
 
 import { createHash } from 'node:crypto'
-import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs'
+import { copyFileSync, existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs'
 import { homedir } from 'node:os'
 import { basename, dirname, join } from 'node:path'
 import { runCraft } from './exec.ts'
+import { CraftMcpClient } from './mcp.ts'
+import { discoverCraft } from './discover.ts'
+import { PROFILES_BY_ID } from './profiles.mjs'
 import type { CraftBinary, CraftProfile } from './types.ts'
 
 /** Where the previews live when no configuration overrides it. */
@@ -58,9 +61,66 @@ const RECIPES: Record<string, PreviewRecipe> = {
   lightcraft: { argv: (file, out) => ['render', file, '-o', out] },
 }
 
+/**
+ * Crafts whose page only exists through their MCP server.
+ *
+ * PdfCraft has no CLI render verb and FilmCraft renders a sequence frame, not a
+ * file; both answer over MCP, so the preview borrows their own server.
+ */
+const MCP_RENDER: Record<string, 'pdfcraft' | 'filmcraft'> = { pdfcraft: 'pdfcraft', filmcraft: 'filmcraft' }
+
+/**
+ * Crafts that can export a PDF but cannot rasterise one. Their preview exports
+ * a temporary PDF with the craft's own CLI and renders it through PdfCraft —
+ * the alternative is no preview at all for the three most document-shaped apps.
+ */
+const PDF_BRIDGE: Record<string, (file: string, pdf: string) => readonly string[]> = {
+  gridcraft: (file, pdf) => ['convert', file, pdf],
+  designcraft: (file, pdf) => ['run', '--in', file, '--export', pdf],
+}
+
+/** Open one craft's MCP server, run a callback, always close it. */
+async function withMcp<T>(craftId: string, run: (client: CraftMcpClient) => Promise<T>): Promise<T | undefined> {
+  // `PROFILES_BY_ID` is a Map, not a record.
+  const profile = (PROFILES_BY_ID as Map<string, CraftProfile>).get(craftId)
+  if (profile === undefined) return undefined
+  const binary = discoverCraft(profile)
+  if (binary === undefined) return undefined
+  const client = new CraftMcpClient(profile, binary)
+  try {
+    await client.start(60_000)
+    return await run(client)
+  } catch {
+    return undefined
+  } finally {
+    client.close()
+  }
+}
+
+/** Call an MCP tool that answers with an image, and copy it to the step file. */
+async function imageFromCall(
+  client: CraftMcpClient,
+  tool: string,
+  args: Record<string, unknown>,
+  out: string,
+): Promise<{ path: string; hash: string } | undefined> {
+  const text = await client.callTool(tool, args, join(dirname(out), '.mcp-images'))
+  const match = /\[image\]\s+(.+)/.exec(text)
+  if (match === null) return undefined
+  try {
+    copyFileSync(match[1].trim(), out)
+  } catch {
+    return undefined
+  }
+  const hash = imageHash(out)
+  return hash === undefined ? undefined : { path: out, hash }
+}
+
 /** Whether a craft can render a preview at all. */
 export function canPreview(profile: CraftProfile): boolean {
   return RECIPES[profile.id] !== undefined
+    || MCP_RENDER[profile.id] !== undefined
+    || PDF_BRIDGE[profile.id] !== undefined
 }
 
 /** One preview step, as documented in docs/PREVIEW.md. */
@@ -152,11 +212,41 @@ export async function renderPreview(
   binary: CraftBinary,
   options: { readonly file: string; readonly dir: string; readonly out: string; readonly scale?: number; readonly timeoutMs?: number; readonly page?: number },
 ): Promise<{ path: string; hash: string } | undefined> {
+  if (!existsSync(options.file)) return undefined
+  mkdirSync(options.dir, { recursive: true })
+
+  // PdfCraft and FilmCraft render through their own MCP server: PdfCraft has no
+  // CLI render verb, and a FilmCraft frame is a timeline position, not a file.
+  if (MCP_RENDER[profile.id] !== undefined) {
+    if (profile.id === 'pdfcraft') return await renderPdf(options.file, options)
+    return await withMcp('filmcraft', async (client) => {
+      await client.callTool('command_run', { id: 'file.open', params: { path: options.file } })
+      return await imageFromCall(client, 'render_frame', { max_side: 1400 }, options.out)
+    })
+  }
+
+  // GridCraft and DesignCraft export a PDF but cannot rasterise one; PdfCraft
+  // renders the page, so the preview has a picture instead of a step with none.
+  const bridge = PDF_BRIDGE[profile.id]
+  if (bridge !== undefined) {
+    const pdf = join(options.dir, `${profile.id}-preview.pdf`)
+    try {
+      const exported = await runCraft({
+        profile, binary,
+        argv: bridge(options.file, pdf),
+        cwd: process.cwd(),
+        timeoutMs: options.timeoutMs ?? 120_000,
+      })
+      if (!exported.ok || !existsSync(pdf)) return undefined
+    } catch {
+      return undefined
+    }
+    return await renderPdf(pdf, options)
+  }
+
   const recipe = RECIPES[profile.id]
   if (recipe === undefined) return undefined
-  if (!existsSync(options.file)) return undefined
   try {
-    mkdirSync(options.dir, { recursive: true })
     const argv = recipe.argv(options.file, options.out, options.scale ?? 1.5, options.page ?? 0)
     const result = await runCraft({ profile, binary, argv, cwd: process.cwd(), timeoutMs: options.timeoutMs ?? 60_000 })
     if (!result.ok || !existsSync(options.out)) return undefined
@@ -165,6 +255,28 @@ export async function renderPreview(
   } catch {
     return undefined
   }
+}
+
+/** Render one page of a PDF through PdfCraft's MCP server. */
+async function renderPdf(
+  file: string,
+  options: { readonly out: string; readonly page?: number },
+): Promise<{ path: string; hash: string } | undefined> {
+  return await withMcp('pdfcraft', async (client) => {
+    const opened = await client.callTool('doc_open', { path: file })
+    // PdfCraft answers `{doc: 1, pages: 2, …}`; `id` is only a fallback for a
+    // server that renames the field.
+    let docId
+    try {
+      const parsed = JSON.parse(opened) as { doc?: number; id?: number }
+      docId = parsed.doc ?? parsed.id
+    } catch {
+      const match = /"(?:doc|id)"\s*:\s*(\d+)/.exec(opened)
+      docId = match === null ? undefined : Number(match[1])
+    }
+    if (typeof docId !== 'number') return undefined
+    return await imageFromCall(client, 'page_render', { doc: docId, page: (options.page ?? 0) + 1, dpi: 110 }, options.out)
+  })
 }
 
 /**

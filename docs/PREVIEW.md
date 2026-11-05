@@ -72,7 +72,7 @@ cross-craft races.
   identical, so a fixed page number would show the same picture forever.
 - `steps` keeps `hash` and `page`; the panel shows the last `current` as the big render.
 - `image`/`thumb` are relative to `<craft>/`. Both may be absent when a craft cannot render
-  (SoundCraft has no visual; GridCraft renders only through a converter), and the panel then shows
+  (SoundCraft has no image verb; everything else renders), and the panel then shows
   the step as text.
 - `timeline` belongs to the DOCUMENT, not to a step: time-based crafts (FilmCraft, EffectCraft,
   SoundCraft) put it at the top level of `state.json` as
@@ -106,11 +106,17 @@ The kernel owns these; a craft with no recipe writes a state entry without an im
 | TextureCraft | `render FILE OUT --view 2d` | syntax verified |
 | EffectCraft | `render-frame --time 0 --out OUT.png` | syntax verified |
 | LightCraft | `render FILE -o OUT` | syntax verified |
-| PdfCraft | MCP `page_render` (no CLI render verb) | not wired yet |
-| DesignCraft | `file.exportPdf`, then PdfCraft `page_render` | not wired yet |
-| FilmCraft | `file.exportFrame` through its MCP server | not wired yet |
-| GridCraft | no PNG verb (`convert` writes pdf/csv/html) | state-only for now |
-| SoundCraft | no image | state-only |
+| PdfCraft | MCP `doc_open` + `page_render` (no CLI render verb) | wired |
+| DesignCraft | `run --export` to a temporary PDF, then PdfCraft `page_render` | wired |
+| FilmCraft | MCP `command_run file.open` + `render_frame` | wired |
+| GridCraft | `convert` to a temporary PDF, then PdfCraft `page_render` | wired |
+| SoundCraft | no image verb | state-only (the waveform is a view, not an export) |
+
+The PDF bridge exists because a spreadsheet and a page layout have no raster
+verb of their own, while the PFD renderer does: the craft exports a page, and
+PdfCraft draws it. That costs one extra CLI call per step and needs the PdfCraft
+binary, which the installer already puts beside the others. When either half is
+missing the step is recorded without an image rather than failing.
 
 ## Configuration
 

@@ -1,6 +1,6 @@
 {
   "name": "dsh-artcraft-plugin-gridcraft",
-  "version": "0.2.11",
+  "version": "0.2.12",
   "private": false,
   "type": "module",
   "description": "DSH plugin: drive GridCraft (spreadsheets) headlessly through its own CLI and MCP server.",
