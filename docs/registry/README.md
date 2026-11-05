@@ -52,8 +52,7 @@ are named `lznnnnn1998__dsh-artcraft--dsh-plugins-plugin-<craft>.yml`.
 
 ## Batches
 
-The twelve merged entries went in as four batches of three. The current pending
-batch is the two 2026-11 applications:
+All fifteen entries are merged — the fourteen craft plugins and the preview panel:
 
 | Batch | Crafts | Status |
 |---|---|---|
@@ -61,7 +60,15 @@ batch is the two 2026-11 applications:
 | 2 | wordcraft, photocraft, vectorcraft | merged (#9405) |
 | 3 | deckcraft, pdfcraft, designcraft | merged (#9406) |
 | 4 | filmcraft, effectcraft, lightcraft | merged (#9408) |
-| 5 | figcraft, texturecraft | prepared, not yet submitted |
+| 5 | figcraft, texturecraft | merged (#11444) |
+| 6 | preview panel | merged (#11799) |
+
+**Market visibility needs one more thing.** The registry's site builds its market index from
+`data/npm-map.json`, and `scripts/probe-npm.mjs` only links an entry to a package when the npm
+manifest's `repository` URL points back at this repository. Every package therefore carries
+`repository` (with its subdirectory) and `homepage`; without them the entry is listed in the
+registry but silently absent from the market. The probe runs on the registry's schedule, so a new
+package appears after its next pass.
 
 ## How to submit
 
