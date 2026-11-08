@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "cadence": {
+    "time": "09:00",
+    "zone": "Asia/Shanghai",
+    "run": ["auditor", "evaluator"],
+    "conditional": {
+      "improver": "a P0/P1 finding is open",
+      "cleaner": "Monday, or more than 20 stale artifacts"
+    }
+  },
+  "budgetHoursPerRole": 6,
+  "lastRun": null,
+  "findings": [],
+  "recentRuns": [],
+  "scores": null
+}
