@@ -10,7 +10,14 @@
     "conditional": {
       "improver": "a P0/P1 finding is open",
       "cleaner": "Monday, or more than 20 stale artifacts"
-    }
+    },
+    "mode": "serial",
+    "order": [
+      "auditor",
+      "evaluator",
+      "improver",
+      "cleaner"
+    ]
   },
   "budgetHoursPerRole": 6,
   "lastRun": "2026-11-09",

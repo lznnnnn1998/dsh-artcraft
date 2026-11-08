@@ -37,6 +37,9 @@ a ceiling, not a target. If it expires, write the partial report and hand the re
 
 These are not style preferences. A run that breaks one is a failed run.
 
+0. **One role at a time.** The four roles run strictly in series. Never message a second role while
+   one is still working, and never start a role before the previous one has written its report. The
+   order is fixed: Auditor → Evaluator → Improver (if warranted) → Cleaner (if due).
 1. Never rewrite history, never force-push, never delete a branch someone else owns.
 2. Never publish to npm. The Lead publishes, after review, with the human's approval, and only at a
    release point (see the push policy below).
@@ -82,9 +85,11 @@ silently disappears.
 
 ## How a cycle is run
 
-The Lead reads `daily-cycle.md` and follows it: seed the state, run the Auditor and Evaluator (they
-are independent and may run in parallel), decide whether the Improver is warranted, run the Cleaner
-if it is due, then review every diff and push only what survives review.
+The Lead reads `daily-cycle.md` and follows it: seed the state, run the Auditor, then the
+Evaluator, then the Improver if it is warranted, then the Cleaner if it is due — **one role at a
+time, waiting for each report before the next message**. A role's report is the next role's input,
+which only works if the earlier one is finished; concurrent runs also write the same report
+directory and state file. Then review every diff and push only what survives review.
 
 A teammate is addressed by name (`artcraft-auditor`, `artcraft-evaluator`, `artcraft-improver`,
 `artcraft-cleaner`) and is told to read its role file first. The role file is the source of truth;

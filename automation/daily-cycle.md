@@ -21,7 +21,7 @@ that `check-dsh-compat.mjs` regenerates identically. Anything else untracked is 
 
 ## Decide what runs
 
-- **Auditor and Evaluator:** run every day. Send both at once; they are independent and read-only.
+- **Auditor and Evaluator:** run every day, one after the other. Auditor first, then Evaluator.
 - **Improver:** run when the state has a `P0`/`P1` finding, or when yesterday's Auditor/Evaluator
   escalated one. Three fixes maximum.
 - **Cleaner:** run when it is Monday, or when `state.json` counts more than twenty stale artifacts.
@@ -38,8 +38,12 @@ source of truth:
 > `automation/auditor.md` and follow it. Read `automation/state.json` first. Work window: six hours,
 > stop when the exit criteria are met. Do not touch files outside `automation/`.
 
-The Improver runs only after the two read-only reports are in, because it works from their findings.
-The Cleaner is independent and may run beside the Auditor.
+Strictly serial: send one role, wait for it to finish and read its report, then send the next. Never
+have two roles running at once — they share the report directory and `state.json`, and each role's
+report is the next one's input.
+
+Order: **Auditor → Evaluator → Improver (if warranted) → Cleaner (if due).** The Improver needs both
+read-only reports; the Cleaner runs last so it sees the branch the Improver left.
 
 ## Review
 
