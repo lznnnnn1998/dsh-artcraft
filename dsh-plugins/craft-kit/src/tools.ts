@@ -105,6 +105,31 @@ function extractParams(stdout: string): string | undefined {
   return match?.[1]?.trim()
 }
 
+/**
+ * Create the folder an output file lives in.
+ *
+ * A crafting app refuses to write into a directory that does not exist and
+ * reports it as a bare OS error; creating the parent here turns "save to
+ * ~/Documents/2026 Q3/report.docx" into one call instead of two, and the same
+ * behaviour on macOS, Windows and Linux.
+ * @param args - the tool arguments, which may name `save`, `export`, `out` or `output`.
+ */
+function ensureOutputDir(args: Record<string, unknown>): void {
+  for (const key of ['save', 'export', 'out', 'output']) {
+    const value = args[key]
+    if (typeof value !== 'string' || value.length === 0) continue
+    const folder = dirname(value)
+    // A bare filename has no folder part; `dirname('x.xlsx')` is '.', and a
+    // Windows-looking absolute path on POSIX is not ours to create.
+    if (folder === '.' || folder === '' || folder === '/') continue
+    try {
+      mkdirSync(folder, { recursive: true })
+    } catch {
+      // Leave it to the craft to report; a read-only volume should fail there.
+    }
+  }
+}
+
 /** Scratch directory for files the kernel generates per craft (script modes). */
 function craftWorkDir(profile: CraftProfile): string {
   return join(tmpdir(), 'dsh-artcraft', profile.id)
@@ -663,6 +688,7 @@ export function createToolSet(runtime: CraftRuntime): CraftToolSet {
         ]
         return await runOrStart(binary, [...globalFlagsFor(profile, args), profile.run.verb, ...extra], args.background, documentOf(args), labelOf(args))
       }
+      ensureOutputDir(args)
       // PdfCraft's `run` accepts exactly one tool per invocation; sending a
       // list would produce "expected key=value" from the CLI, so the extra
       // commands are reported instead of silently mis-executed.
