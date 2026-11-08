@@ -38,12 +38,31 @@ a ceiling, not a target. If it expires, write the partial report and hand the re
 These are not style preferences. A run that breaks one is a failed run.
 
 1. Never rewrite history, never force-push, never delete a branch someone else owns.
-2. Never publish to npm. The Lead publishes, after review, with the human's approval.
+2. Never publish to npm. The Lead publishes, after review, with the human's approval, and only at a
+   release point (see the push policy below).
+2b. **Push in batches.** A daily run commits locally; it does not push. GitHub is written when a
+   batch is worth pulling — a P0 fix, several days of accumulated changes, a release — or when the
+   human asks. One push per day at most, never one per role per file.
 3. Never modify `repos/` — those are read-only upstream checkouts.
 4. Never change the user's profile (install, uninstall, config) as a side effect of checking it.
 5. Never touch the user's documents; only files this repository produced.
 6. Main is written only by the Lead after reviewing a diff. A role works on a branch.
 7. Every claim in a report carries the command that produced it.
+
+## Push and release policy
+
+The series is live on npm; every publish is a new version users may install. That makes publishing
+a decision, not a step in a checklist.
+
+| Action | When |
+|:--|:--|
+| Local commit | every run, as today |
+| GitHub push | a batch: a P0 fix, ~3+ days of changes, a release, or the human asking. At most once a day |
+| npm publish | only at a release point, with the human's explicit go-ahead, after `verify.mjs` and a fresh install |
+| version bump | in the same commit as the release decision, never per fix |
+
+An unpushed local commit is not a finding. The state file records the last pushed SHA so a batch
+knows what it is carrying.
 
 ## Artifacts
 

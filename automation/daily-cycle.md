@@ -54,9 +54,13 @@ Then decide, per the repository's rule:
 
 | Diff touches | Action |
 |:--|:--|
-| docs, comments, `automation/` | merge after review and `validate-registry-entries.mjs` |
+| docs, comments, `automation/` | commit after review and `validate-registry-entries.mjs`; push only with the batch |
 | tests, build scripts, kernel or plugin sources | run `verify.mjs` + `build-kit.mjs`, then ask the human before merging |
 | versions, npm metadata | human decides; publishing is never automatic |
+
+A finished run ends with a **local commit**, not a push. Pushing is a batch decision: a P0, a few
+days of accumulated work, a release, or the human asking. npm is only written at a release point
+with explicit approval, after a fresh-install check on a disposable profile.
 
 ## Close the day
 
