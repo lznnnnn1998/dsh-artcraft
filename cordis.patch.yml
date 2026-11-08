@@ -1,4 +1,4 @@
-# The root bundle: installs all twelve craft plugins at once.
+# The root bundle: installs all fourteen craft plugins at once.
 #
 # Use this when installing the repository as a whole rather than one craft:
 #
@@ -20,6 +20,8 @@
       name: "dsh-artcraft-plugin-designcraft"
     - id: artcraft-effectcraft
       name: "dsh-artcraft-plugin-effectcraft"
+    - id: artcraft-figcraft
+      name: "dsh-artcraft-plugin-figcraft"
     - id: artcraft-filmcraft
       name: "dsh-artcraft-plugin-filmcraft"
     - id: artcraft-gridcraft
@@ -32,6 +34,8 @@
       name: "dsh-artcraft-plugin-photocraft"
     - id: artcraft-soundcraft
       name: "dsh-artcraft-plugin-soundcraft"
+    - id: artcraft-texturecraft
+      name: "dsh-artcraft-plugin-texturecraft"
     - id: artcraft-vectorcraft
       name: "dsh-artcraft-plugin-vectorcraft"
     - id: artcraft-wordcraft

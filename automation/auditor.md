@@ -18,10 +18,12 @@ Record the command beside every claim. A row without a command is not a finding,
 git -C <repo> log --oneline -1
 git -C <repo> status --porcelain | head -20
 git -C <repo> log --oneline origin/main..HEAD
+python3 -c "import json;print(json.load(open('automation/state.json')).get('lastPushedSha'))"
 ```
 
 - Uncommitted changes that are not `automation/reports/` → P1 finding.
-- Unpushed commits → P1.
+- Unpushed commits are the batch, not a defect: compare `HEAD` with
+  `state.json.lastPushedSha`. Report the batch size; only a missing record is a finding.
 - HEAD on a branch other than `main` → note who left it and why.
 
 ### 2. One version across the series

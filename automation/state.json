@@ -40,6 +40,70 @@
       "evidence": "git status --porcelain -> ?? .github/",
       "status": "open",
       "needs": "human decision (token scope or paste the files)"
+    },
+    {
+      "id": "F-2026-11-09-04",
+      "severity": "decision",
+      "area": "hygiene",
+      "summary": "2.5 MB of tracked greeting-session media at the repo root is unreferenced and unshipped",
+      "evidence": "git grep for the .scraft/wav names -> 0 refs outside the .scraft; npm pack --dry-run -> none of the six shipped; added in 1150fbd (docs: a publish can succeed and still be staged)",
+      "status": "open",
+      "needs": "human decision (keep as a sample, move under docs/, or untrack; the wavs look user-recorded, so the Cleaner did not remove them)"
+    },
+    {
+      "id": "F-2026-11-09-05",
+      "severity": "decision",
+      "area": "docs",
+      "summary": "Four docs/screenshots captures are unreferenced; the newer panel capture is the orphaned one",
+      "evidence": "git grep preview-panel-live/tool-cards-preview/live-preview-panel.html -> 0; fixture.mjs:523 reads the older live-preview-panel.png (2560x1560) while preview-panel-live.png (2880x1800) is newer",
+      "status": "open",
+      "needs": "human decision (repoint docs/fixture at the newer capture, or drop it deliberately)"
+    },
+    {
+      "id": "F-2026-11-09-06",
+      "severity": "decision",
+      "area": "registry",
+      "summary": "docs/registry-entry.yml is the rejected root-bundle submission",
+      "evidence": "0 references; docs/registry/README.md records PR #7314 closed under rule 7; correct entries live in docs/registry/entries/",
+      "status": "open",
+      "needs": "human decision (delete, or mark historical and link it from docs/registry/README.md)"
+    },
+    {
+      "id": "F-2026-11-09-07",
+      "severity": "decision",
+      "area": "scripts",
+      "summary": "Two CLI utilities are unreferenced: download-crafts-parallel.mjs and push-via-api.mjs",
+      "evidence": "0 mentions in docs, scripts, package.json or CI; both ship via files:[scripts]; parallel+resume logic is absent from fetch-binaries/install-craft",
+      "status": "open",
+      "needs": "human decision (document them, or drop them)"
+    },
+    {
+      "id": "F-2026-11-09-08",
+      "severity": "P1",
+      "area": "install",
+      "summary": "Root cordis.patch.yml carried 12 plugin rows while the repository ships 14; figcraft and texturecraft were missing",
+      "evidence": "grep -c 'id: artcraft-' cordis.patch.yml -> 12; ls -d dsh-plugins/plugin-* | wc -l -> 14",
+      "status": "fixed",
+      "fixedBy": "the two rows added; bundle header and root description say fourteen"
+    },
+    {
+      "id": "F-2026-11-09-09",
+      "severity": "P3",
+      "area": "automation",
+      "summary": "The audit procedure called an unpushed commit a P1 while the charter budgets pushes in batches",
+      "evidence": "automation/auditor.md section 1 vs README section 2b",
+      "status": "fixed",
+      "fixedBy": "the procedure compares HEAD with state.lastPushedSha, which is now recorded"
+    },
+    {
+      "id": "F-2026-11-09-10",
+      "severity": "P2",
+      "area": "crafts",
+      "summary": "Every installed craft CLI is two minor versions behind its upstream release; asset naming still matches",
+      "evidence": "cadcraft 0.16.0\u21920.18.0, gridcraft 0.15.0\u21920.17.0, wordcraft 0.14.0\u21920.16.0, ... (all fourteen)",
+      "status": "open",
+      "owner": "improver",
+      "needs": "run install-craft.mjs --force, then verify.mjs; no repository change"
     }
   ],
   "recentRuns": [
@@ -52,6 +116,15 @@
       "outcome": "baseline",
       "openFindings": 1,
       "notes": "market index now lists the series; automation docs corrected after teammate review"
+    },
+    {
+      "date": "2026-11-09",
+      "roles": [
+        "cleaner"
+      ],
+      "outcome": "quiet",
+      "openFindings": 6,
+      "notes": "removed two empty derived preview directories; proposed six items, four recorded as decisions"
     }
   ],
   "scores": {
@@ -68,5 +141,6 @@
     "entries": 4872,
     "mentions": 60,
     "listed": true
-  }
+  },
+  "lastPushedSha": "a69ea4c"
 }
