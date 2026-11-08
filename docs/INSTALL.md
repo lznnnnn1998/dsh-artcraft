@@ -167,7 +167,7 @@ Preflight checks, all of which run before anything is written:
   are reported: they duplicate the rows the bundles own.
 
 The bundle set is fifteen packages, not fourteen: the preview panel installs alongside the craft
-plugins and starts its local preview server (port 4177) on load. `--uninstall` removes the bundle
+plugins and starts its local preview server (port 4177, or `DSH_ARTCRAFT_PREVIEW_PORT`) on load. `--uninstall` removes the bundle
 rows but leaves the packages in `node_modules` and the detached preview server running — prune with
 the profile's package manager and stop the server if you are removing the suite for good.
 
@@ -244,7 +244,8 @@ A typical exchange, and the loop the tools are designed for:
    was produced.
 
 Paths are plain filesystem paths and are passed to the craft process verbatim, so any
-absolute path works — `/tmp/out.xlsx` on macOS or Linux, `C:\Users\you\out.xlsx` on Windows.
+absolute path works — the system temporary directory on any platform, or e.g.
+`%TEMP%\out.xlsx` on Windows.
 Remember to double the backslashes inside JSON.
 
 ### Notes that matter in practice
@@ -278,7 +279,8 @@ Each plugin accepts the same config in `cordis.patch.yml`:
 ```
 
 Binary discovery order, reported in every failure message: `config.path` → `$<CRAFT>_CLI`
-(`GRIDCRAFT_CLI`, `CADCRAFT_CLI`, …) → `craft-kit/catalog/binaries.json` → `crafts-bin/` beside the
+(`GRIDCRAFT_CLI`, `CADCRAFT_CLI`, …) → a per-machine `craft-kit/catalog/binaries.json` you may create
+to pin a path (gitignored; discovery carries on without it) → `crafts-bin/` beside the
 plugins → `PATH`.
 
 With no binary installed the tools stay registered and explain exactly what to install, so the

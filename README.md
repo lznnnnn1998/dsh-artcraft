@@ -117,7 +117,7 @@ then shut down after five idle minutes or when the plugin unloads.
 - **Watch the document change.** After a call writes a document, the plugin renders it with the
   application's own renderer and returns the image with the result, so each step of the work is
   visible in the transcript. The same render feeds a local panel (`node scripts/preview/server.mjs`,
-  then open `http://127.0.0.1:4177`) showing the step list, the current page and a filmstrip of the
+  then open `http://127.0.0.1:4177` (`DSH_ARTCRAFT_PREVIEW_PORT` moves it), showing the step list, the current page and a filmstrip of the
   ones before it; `dsh-artcraft-preview-panel` embeds that panel inside the DSH Web GUI.
   See [docs/PREVIEW.md](docs/PREVIEW.md) for the state contract.
 - **Long jobs run in the background.** A 4K render, a texture bake or an audio bounce outlasts a

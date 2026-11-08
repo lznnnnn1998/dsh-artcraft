@@ -16,11 +16,11 @@ index.json + <craft>/state.json + renders
 ## Run
 
 ```sh
-# real agent output, default ~/.dsh/artcraft/preview on port 4177
+# real agent output, default ~/.dsh/artcraft/preview on port 4177 (override with `DSH_ARTCRAFT_PREVIEW_PORT`)
 node scripts/preview/server.mjs --open
 
 # or point it at any preview root
-node scripts/preview/server.mjs --dir /path/to/preview --port 4177 --open
+node scripts/preview/server.mjs --dir /path/to/preview --port 4177 (override with `DSH_ARTCRAFT_PREVIEW_PORT`) --open
 ```
 
 `--open` prints the URL; it never launches a browser. `DSH_ARTCRAFT_PREVIEW_DIR`
@@ -49,7 +49,7 @@ index entry overlaid with its full state, plus derived URLs:
 ```json
 {
   "version": 1,
-  "previewDir": "/Users/me/.dsh/artcraft/preview",
+  "previewDir": "$HOME/.dsh/artcraft/preview",
   "rootExists": true,
   "updatedAt": "2026-11-03T22:40:12.000Z",
   "crafts": {

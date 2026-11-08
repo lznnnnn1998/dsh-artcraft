@@ -9,6 +9,9 @@ from inventing three formats, everything goes through the state directory and JS
 | **B** | A local panel that watches the state and shows steps, current render, filmstrip, video timeline | `scripts/preview/` + `http://127.0.0.1:4177` |
 | **C** | A DSH client plugin that embeds the same panel inside the GUI | `dsh-plugins/preview-panel/` |
 
+The server listens on `127.0.0.1:4177`; `DSH_ARTCRAFT_PREVIEW_PORT` moves it. Both panels ask the
+server they are served from, so they follow the port without configuration.
+
 ## Directory
 
 ```
@@ -117,6 +120,17 @@ verb of their own, while the PFD renderer does: the craft exports a page, and
 PdfCraft draws it. That costs one extra CLI call per step and needs the PdfCraft
 binary, which the installer already puts beside the others. When either half is
 missing the step is recorded without an image rather than failing.
+
+## Clearing a recorded run
+
+The state is derived data, so it can be thrown away at any time:
+
+```sh
+node scripts/preview/reset.mjs          # say what would be deleted
+node scripts/preview/reset.mjs --yes    # delete $DSH_HOME/artcraft/preview
+```
+
+The next step that renders a document starts a fresh filmstrip.
 
 ## Configuration
 

@@ -30,3 +30,6 @@ node_modules/
 
 # Editor and OS noise
 .DS_Store
+
+# Per-machine binary paths; discovery falls back to env vars and PATH without it.
+dsh-plugins/craft-kit/catalog/binaries.json

@@ -26,7 +26,9 @@ import { fileURLToPath } from 'node:url'
 const HERE = dirname(fileURLToPath(import.meta.url))
 const PANEL_FILE = join(HERE, 'panel.html')
 const HOST = '127.0.0.1'
-const DEFAULT_PORT = 4177
+// 4177 is the convention, not a hard requirement: a machine that already uses
+// it (a second DSH, another preview) can move this server with one variable.
+const DEFAULT_PORT = Number(process.env.DSH_ARTCRAFT_PREVIEW_PORT ?? 4177)
 const STREAM_HEARTBEAT_MS = 20_000
 const WATCH_DEBOUNCE_MS = 80
 

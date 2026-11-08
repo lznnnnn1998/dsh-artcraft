@@ -107,7 +107,7 @@ MCP server 每个插件只启动一次并保持常驻(启动 GridCraft 引擎要
 - **看得见结果。** 渲染、截图、页面图会落盘并返回路径,智能体用 `read_image` 打开看一眼 —— 视觉任务是被检查过的,而不是假设的。
 - **在打开的应用里工作。** 14 个应用中有 12 个提供控制通道:给 MCP 调用传 `attach: <port>`,智能体就编辑用户已经打开的那份文档,改动在应用里实时可见。LightCraft 与 PdfCraft 仅支持无头模式。
 - **用应用自带的工作流。** `<craft>_mcp_tools` 还会列出 MCP **resources**(当前文档、命令目录、批注)和 **prompts** —— FigCraft 自带 6 个精选工作流,如 `design_system`、`prototype_flow`。
-- **看到文档在变。** 每次写入文档后,插件用**应用自己的渲染器**出一张图并随结果返回,所以每一步都能在对话里看到。同一份渲染还喂给本地面板(`node scripts/preview/server.mjs` 后打开 `http://127.0.0.1:4177`):步骤流、当前页、以及之前每一步的胶片条;`dsh-artcraft-preview-panel` 把这个面板嵌进 DSH Web GUI。状态契约见 [docs/PREVIEW.md](docs/PREVIEW.md)。
+- **看到文档在变。** 每次写入文档后,插件用**应用自己的渲染器**出一张图并随结果返回,所以每一步都能在对话里看到。同一份渲染还喂给本地面板(`node scripts/preview/server.mjs` 后打开 `http://127.0.0.1:4177`(端口可用 `DSH_ARTCRAFT_PREVIEW_PORT` 覆盖)):步骤流、当前页、以及之前每一步的胶片条;`dsh-artcraft-preview-panel` 把这个面板嵌进 DSH Web GUI。状态契约见 [docs/PREVIEW.md](docs/PREVIEW.md)。
 - **长任务后台运行。** 4K 渲染、贴图烘焙、音频导出都会超过工具超时:给 `_run` 传 `background: true`,进程继续跑,调用立刻返回 job id、日志路径,以及用于查询/等待/终止的 `_job` 工具。
 - **技能,而不只是工具。** 工作流知识放在 [lznnnnn1998/dsh-artcraft-skills](https://github.com/lznnnnn1998/dsh-artcraft-skills):家族总览 + 五个端到端工作流(报告、品牌包、讲解视频、图纸包、格式转换)。`scripts/install-into-profile.mjs` 会从旁边的 checkout 安装,或用 `--skills-dir` 指定。工具给能力,技能给"会用",而且只在加载时占用上下文。依赖是单向且声明的:skills 仓库带 `compatibility.json`,写明最低插件版本和它调用的每个工具,插件太旧时**拒绝安装**。
 

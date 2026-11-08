@@ -122,14 +122,15 @@ On Loader activation, `src/index.ts`:
 2. if it answers, does nothing (another instance, e.g. the layer-B agent's own
    server, keeps ownership);
 3. otherwise spawns the packaged server detached:
-   `node server/server.mjs --port 4177 --dir <preview dir>`, where the directory
+   `node server/server.mjs --port 4177 --dir <preview dir>` (`DSH_ARTCRAFT_PREVIEW_PORT` changes the port), where the directory
    is `$DSH_ARTCRAFT_PREVIEW_DIR` or `$DSH_HOME/artcraft/preview`.
 
 A failed probe/spawn is swallowed (with a child `error` listener and a rejection
 handler), so a missing preview server can never crash the host; the panel shows
 its “not reachable” notice instead. The spawned process is detached and outlives
 the DSH process on purpose: it is a read-only local service, and the next boot
-reuses it. To stop it, kill the `server/server.mjs` process on port 4177.
+reuses it. To stop it, kill the `server/server.mjs` process on the preview port (4177 by default, or
+`DSH_ARTCRAFT_PREVIEW_PORT`).
 
 ## Build
 
@@ -268,7 +269,7 @@ Failure modes to know about:
   contract, headers, or page while this copy stays at its last build. Refresh
   with `node scripts/build.mjs` and watch the drift note in `verify.mjs`.
 - **Detached server lifecycle**: the host half starts a process that outlives
-  DSH by design (port 4177, loopback only, read-only). A stale build keeps
+  DSH by design (port 4177 or `DSH_ARTCRAFT_PREVIEW_PORT`, loopback only, read-only). A stale build keeps
   serving until that process is killed; a second DSH instance reuses it instead
   of starting another.
 - **Layer B drift in the panel**: the normalizer accepts both a flat

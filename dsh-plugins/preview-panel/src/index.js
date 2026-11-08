@@ -20,7 +20,20 @@ import { homedir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const PORT = 4177;
+/**
+ * The preview server's port.
+ *
+ * 4177 is the default rather than a constant so a second harness (or anything
+ * else already on that port) can move the preview without patching the plugin.
+ * The panel UI asks for `/state` relatively, so it follows automatically.
+ */
+const PORT = (() => {
+    const raw = process.env.DSH_ARTCRAFT_PREVIEW_PORT;
+    if (raw === undefined || raw.trim() === '')
+        return 4177;
+    const parsed = Number(raw);
+    return Number.isInteger(parsed) && parsed >= 0 && parsed <= 65_535 ? parsed : 4177;
+})();
 /** Where the craft plugins write previews; must match the kernel's default. */
 function previewDirectory() {
     if (process.env.DSH_ARTCRAFT_PREVIEW_DIR !== undefined && process.env.DSH_ARTCRAFT_PREVIEW_DIR.length > 0) {
