@@ -33,3 +33,14 @@ node_modules/
 
 # Per-machine binary paths; discovery falls back to env vars and PATH without it.
 dsh-plugins/craft-kit/catalog/binaries.json
+
+# Local capture material, historical screenshots, and CI files stay out of the
+# repository by decision: the audio is not a shipping asset, the screenshots are
+# superseded, and the workflows wait for a token with the workflow scope.
+/.github/
+/Audio Files/
+/voice_raw.wav
+/deepseek_harness_greeting.scraft
+/docs/screenshots/
+/scripts/download-crafts-parallel.mjs
+/scripts/push-via-api.mjs

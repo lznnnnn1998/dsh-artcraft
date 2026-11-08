@@ -47,8 +47,9 @@
       "area": "hygiene",
       "summary": "2.5 MB of tracked greeting-session media at the repo root is unreferenced and unshipped",
       "evidence": "git grep for the .scraft/wav names -> 0 refs outside the .scraft; npm pack --dry-run -> none of the six shipped; added in 1150fbd (docs: a publish can succeed and still be staged)",
-      "status": "open",
-      "needs": "human decision (keep as a sample, move under docs/, or untrack; the wavs look user-recorded, so the Cleaner did not remove them)"
+      "status": "fixed",
+      "needs": "human decision (keep as a sample, move under docs/, or untrack; the wavs look user-recorded, so the Cleaner did not remove them)",
+      "fixedBy": "moved out of the repository to dsh_workspace/artcraft-media and ignored"
     },
     {
       "id": "F-2026-11-09-05",
@@ -56,8 +57,9 @@
       "area": "docs",
       "summary": "Four docs/screenshots captures are unreferenced; the newer panel capture is the orphaned one",
       "evidence": "git grep preview-panel-live/tool-cards-preview/live-preview-panel.html -> 0; fixture.mjs:523 reads the older live-preview-panel.png (2560x1560) while preview-panel-live.png (2880x1800) is newer",
-      "status": "open",
-      "needs": "human decision (repoint docs/fixture at the newer capture, or drop it deliberately)"
+      "status": "fixed",
+      "needs": "human decision (repoint docs/fixture at the newer capture, or drop it deliberately)",
+      "fixedBy": "removed from the repository; they were superseded captures"
     },
     {
       "id": "F-2026-11-09-06",
@@ -74,8 +76,9 @@
       "area": "scripts",
       "summary": "Two CLI utilities are unreferenced: download-crafts-parallel.mjs and push-via-api.mjs",
       "evidence": "0 mentions in docs, scripts, package.json or CI; both ship via files:[scripts]; parallel+resume logic is absent from fetch-binaries/install-craft",
-      "status": "open",
-      "needs": "human decision (document them, or drop them)"
+      "status": "fixed",
+      "needs": "human decision (document them, or drop them)",
+      "fixedBy": "removed from the repository; not part of a published release"
     },
     {
       "id": "F-2026-11-09-08",
@@ -125,6 +128,15 @@
       "outcome": "quiet",
       "openFindings": 6,
       "notes": "removed two empty derived preview directories; proposed six items, four recorded as decisions"
+    },
+    {
+      "date": "2026-11-09",
+      "roles": [
+        "lead"
+      ],
+      "outcome": "repo trimmed",
+      "openFindings": 3,
+      "notes": "decisions applied: no CI workflows, no capture media, no historical screenshots, no unreferenced manual tools"
     }
   ],
   "scores": {
