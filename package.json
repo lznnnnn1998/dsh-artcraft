@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Every ArtCraft (storytold) crafting app as a DSH plugin — twelve Cordis plugins driving CADCraft, GridCraft, SoundCraft and nine more headlessly over each app's own CLI and MCP server.",
+  "description": "Every ArtCraft (storytold) crafting app as a DSH plugin \u2014 twelve Cordis plugins driving CADCraft, GridCraft, SoundCraft and nine more headlessly over each app's own CLI and MCP server.",
   "license": "MIT OR Apache-2.0",
   "dsh": {
     "bundle": {
@@ -27,5 +27,8 @@
     "install-profile": "node scripts/install-into-profile.mjs",
     "build-kit": "node scripts/build-kit.mjs",
     "catalogs": "node scripts/gen-catalogs.mjs"
+  },
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0"
   }
 }

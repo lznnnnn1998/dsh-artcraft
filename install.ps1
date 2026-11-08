@@ -104,10 +104,10 @@ function Resolve-Node {
       ForEach-Object { Join-Path $_.FullName 'dependencies\node\bin\node.exe' }
   }
   $candidates += @(
-    (Join-Path $env:ProgramFiles 'nodejs\node.exe')
-    (Join-Path ${env:ProgramFiles(x86)} 'nodejs\node.exe')
-    (Join-Path $env:LOCALAPPDATA 'Programs\nodejs\node.exe')
-    (Join-Path $env:APPDATA 'npm\node.exe')
+    $(if ($env:ProgramFiles) { Join-Path $env:ProgramFiles 'nodejs\node.exe' })
+    $(if (${env:ProgramFiles(x86)}) { Join-Path ${env:ProgramFiles(x86)} 'nodejs\node.exe' })
+    $(if ($env:LOCALAPPDATA) { Join-Path $env:LOCALAPPDATA 'Programs\nodejs\node.exe' })
+    $(if ($env:APPDATA) { Join-Path $env:APPDATA 'npm\node.exe' })
   )
   foreach ($candidate in $candidates) {
     if ($candidate -and (Test-Path $candidate)) { return $candidate }
@@ -133,9 +133,34 @@ if (-not $node) {
   exit 2
 }
 
+# --- the scripts need a modern Node -----------------------------------------
+# A machine can have an old Node on PATH (18, 20); the scripts use fetch,
+# AbortSignal.timeout and structuredClone, and would fail with a syntax or
+# runtime error rather than a clear message.
+function Get-NodeVersion([string]$exe) {
+  try {
+    $raw = (& $exe --version 2>$null | Select-Object -First 1)
+    if (-not $raw) { return $null }
+    $parts = $raw.Trim().TrimStart('v').Split('.')
+    if ($parts.Count -lt 2) { return $null }
+    return [pscustomobject]@{ Major = [int]$parts[0]; Minor = [int]$parts[1]; Raw = $raw.Trim() }
+  } catch { return $null }
+}
+
+$nodeVersion = Get-NodeVersion $node
+if (-not $nodeVersion -or $nodeVersion.Major -lt 22 -or ($nodeVersion.Major -eq 22 -and $nodeVersion.Minor -lt 19)) {
+  $found = if ($nodeVersion) { $nodeVersion.Raw } else { '(did not answer --version)' }
+  Write-Host ''
+  Write-Host "Node.js $found is too old: the scripts need 22.19 or newer, or 24+." -ForegroundColor Red
+  Write-Host "  found: $node"
+  Write-Host '  install: winget install --id OpenJS.NodeJS.LTS'
+  Write-Host '  or set DSH_NODE to a newer node.exe'
+  exit 3
+}
+
 Write-Host ''
 Write-Host 'ArtCraft x DSH - Windows installer' -ForegroundColor White
-Write-Note "node:  $node"
+Write-Note "node:  $node ($($nodeVersion.Raw))"
 Write-Note "home:  $dshHome"
 if ($Profile) { Write-Note "profile: $Profile" }
 

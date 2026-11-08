@@ -359,7 +359,11 @@ if (uninstall) {
 // Leftovers and duplicate rows are corrected even when every version matches:
 // they are the residue of earlier installs, not a new install.
 if (!dryRun) {
-  for (const leftover of leftovers) rmSync(join(profileDir, 'node_modules', leftover), { recursive: true, force: true })
+  // A Windows antivirus or the indexer can hold a just-removed directory open;
+  // failing the whole install over a leftover is worse than leaving it for next time.
+  for (const leftover of leftovers) {
+    try { rmSync(join(profileDir, 'node_modules', leftover), { recursive: true, force: true }) } catch { /* retried next run */ }
+  }
   if (bundleDuplicates.length > 0) manifest.dsh.profile.bundles = [...new Set(manifest.dsh.profile.bundles)]
   if (leftovers.length > 0 || bundleDuplicates.length > 0) {
     writeFileSync(manifestPath, JSON.stringify(manifest, undefined, 2) + '\n')
@@ -465,7 +469,8 @@ if (planned.length > 0) {
     .map(value => resolve(value.slice('file:'.length))))
   for (const file of readdirSync(tarballDir)) {
     const absolute = join(tarballDir, file)
-    if (!referenced.has(absolute)) rmSync(absolute, { force: true })
+    if (referenced.has(absolute)) continue
+    try { rmSync(absolute, { force: true }) } catch { /* a lock retries next run */ }
   }
 }
 

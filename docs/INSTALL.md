@@ -51,7 +51,8 @@ install.cmd
 ```
 
 It locates a usable Node — a fresh Windows machine usually has none on `PATH`, but the
-harness ships one under `%USERPROFILE%\.dsh\dsh-runtimes\<runtime>\dependencies\node\` —
+harness ships one under `%USERPROFILE%\.dsh\dsh-runtimes\<runtime>\dependencies\node\` — and
+refuses one older than 22.19 with a `winget` hint rather than failing later inside a script —
 then downloads the craft CLIs and installs the plugins into your profile.
 
 | Option | Effect |

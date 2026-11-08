@@ -24,7 +24,7 @@ function findYaml() {
   const candidates = [
     process.env.DSH_HARNESS_DIR,
     join(root, '..', 'deepseek-harness'),
-    join(process.env.HOME ?? '', 'deepseek-harness'),
+    join(homedir(), 'deepseek-harness'),
   ].filter(Boolean)
   for (const candidate of candidates) {
     const moduleDir = join(candidate, 'node_modules', 'js-yaml')

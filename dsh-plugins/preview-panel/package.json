@@ -1,6 +1,6 @@
 {
   "name": "dsh-artcraft-preview-panel",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "private": false,
   "type": "module",
   "description": "DSH client plugin: the ArtCraft live-preview panel inside the DSH Web GUI (layer C of docs/PREVIEW.md).",
@@ -48,7 +48,8 @@
     "access": "public"
   },
   "engines": {
-    "dsh": "^0.2.1-rc.3"
+    "dsh": "^0.2.1-rc.3",
+    "node": "^22.19.0 || >=24.0.0"
   },
   "repository": {
     "type": "git",

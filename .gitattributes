@@ -23,3 +23,9 @@
 *.tar.gz binary
 *.exe   binary
 *.dll   binary
+
+# Windows entry points are stored with LF like everything else, but checked out
+# as CRLF: cmd.exe and PowerShell expect it, and a batch file with LF-only line
+# endings can misread labels. This is a checkout rule, not a content rewrite.
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
