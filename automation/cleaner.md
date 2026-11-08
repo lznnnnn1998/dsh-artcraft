@@ -5,6 +5,10 @@
 Runs on Mondays, or when `state.json` counts more than twenty stale artifacts. Reversible changes
 only; anything ambiguous becomes a proposal, not a deletion.
 
+Before branching, apply the daily-cycle gate: uncommitted changes stop the run, except
+`automation/reports/`, `.github/` (deliberately untracked) and the two panel files the compatibility
+check regenerates identically.
+
 ## Window
 
 Up to six hours, but the job is small: a run that finds nothing tidy to do should say so in one

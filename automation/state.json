@@ -3,15 +3,70 @@
   "cadence": {
     "time": "09:00",
     "zone": "Asia/Shanghai",
-    "run": ["auditor", "evaluator"],
+    "run": [
+      "auditor",
+      "evaluator"
+    ],
     "conditional": {
       "improver": "a P0/P1 finding is open",
       "cleaner": "Monday, or more than 20 stale artifacts"
     }
   },
   "budgetHoursPerRole": 6,
-  "lastRun": null,
-  "findings": [],
-  "recentRuns": [],
-  "scores": null
+  "lastRun": "2026-11-09",
+  "findings": [
+    {
+      "id": "F-2026-11-09-01",
+      "severity": "P2",
+      "area": "automation",
+      "summary": "Portability sweep matched the role file that documents it",
+      "evidence": "git grep /Users/ | wc -l -> 1 (automation/evaluator.md:56)",
+      "status": "fixed",
+      "fixedBy": "exclude automation/ from the documented sweeps"
+    },
+    {
+      "id": "F-2026-11-09-02",
+      "severity": "P3",
+      "area": "preview",
+      "summary": "SoundCraft records steps without an image",
+      "evidence": "13/14 crafts report canPreview; soundcraft exposes no image verb",
+      "status": "wontfix"
+    },
+    {
+      "id": "F-2026-11-09-03",
+      "severity": "decision",
+      "area": "release",
+      "summary": "CI workflows are untracked: .github/workflows/ci.yml waits for a workflow-scoped token",
+      "evidence": "git status --porcelain -> ?? .github/",
+      "status": "open",
+      "needs": "human decision (token scope or paste the files)"
+    }
+  ],
+  "recentRuns": [
+    {
+      "date": "2026-11-09",
+      "roles": [
+        "auditor",
+        "evaluator"
+      ],
+      "outcome": "baseline",
+      "openFindings": 1,
+      "notes": "market index now lists the series; automation docs corrected after teammate review"
+    }
+  ],
+  "scores": {
+    "date": "2026-11-09",
+    "correctness": 5,
+    "coverage": 4,
+    "documentation": 4,
+    "portability": 4,
+    "releaseHygiene": 5
+  },
+  "market": {
+    "checked": "2026-11-09",
+    "url": "https://awesome-dsh-plugin.com/index.json",
+    "entries": 4872,
+    "mentions": 60,
+    "listed": true
+  }
 }

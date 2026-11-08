@@ -15,6 +15,10 @@ ls automation/reports/ | tail -5
 If `main` has uncommitted changes that are not `automation/reports/`, stop: the tree is someone
 else's work in progress. Report that and run nothing else.
 
+Two paths are deliberately untracked and are not a stop sign: `.github/` (the CI workflows wait for
+a token with the `workflow` scope) and the generated `dsh-plugins/preview-panel/{src/index.js,lib/client.js}`
+that `check-dsh-compat.mjs` regenerates identically. Anything else untracked is a real gate.
+
 ## Decide what runs
 
 - **Auditor and Evaluator:** run every day. Send both at once; they are independent and read-only.

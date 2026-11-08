@@ -53,13 +53,18 @@ Never run this against the user's real profile.
 The repository must not regress on Windows or Linux:
 
 ```sh
-git grep -nE "/Users/|/opt/homebrew" -- . ':!repos'
-git grep -n "path.posix"
+git grep -nE "/Users/|/opt/homebrew" -- . ':!repos' ':!automation'
+git grep -n "path.posix" -- . ':!repos' ':!automation'
 git grep -n "spawn(" -- '*.ts' '*.mjs'   # every spawn should carry windowsHide
 git grep -n "chmodSync"                  # each call guarded by isWindows
 ```
 
-- A machine-specific path in the tree → P1.
+- A machine-specific path in the tree → P1. (The sweeps exclude `automation/` on purpose: the
+  role files contain the search patterns themselves.)
+- `check-dsh-compat.mjs` runs the panel's build, which rewrites two tracked generated files
+  (`dsh-plugins/preview-panel/src/index.js`, `lib/client.js`). That is allowed and must be
+  byte-identical: record `git status --porcelain` before and after, and any content change is a P1.
+  Same for `verify.mjs`, which writes only under the git-ignored `.verify/`.
 - A spawn without `windowsHide` → P2.
 - `chmodSync` outside an `isWindows` guard → P2.
 
