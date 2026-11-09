@@ -19,6 +19,13 @@ Two paths are deliberately untracked and are not a stop sign: `.github/` (the CI
 a token with the `workflow` scope) and the generated `dsh-plugins/preview-panel/{src/index.js,lib/client.js}`
 that `check-dsh-compat.mjs` regenerates identically. Anything else untracked is a real gate.
 
+## Already ran today?
+
+Read `state.json.lastRun`. If it is today's date, the cycle already ran: append a one-line entry to
+`recentRuns` saying the scheduled trigger was a no-op, and stop. The schedule fires once a day; a
+manual run earlier the same day satisfies it, and running the roles twice would overwrite the day's
+reports and double the cost.
+
 ## Decide what runs
 
 - **Auditor and Evaluator:** run every day, one after the other. Auditor first, then Evaluator.
