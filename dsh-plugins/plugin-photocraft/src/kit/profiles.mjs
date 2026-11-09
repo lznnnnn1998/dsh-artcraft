@@ -43,7 +43,7 @@ export const CRAFT_PROFILES = [
       inFlag: '',
       sampleFlag: '--sample',
       cmdFlag: '--cmd',
-      cmdSeparator: '=',
+      cmdSeparator: ' ',
       saveFlag: '--save',
       exportFlag: '--export',
     },

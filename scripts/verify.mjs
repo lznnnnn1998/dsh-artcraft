@@ -48,7 +48,14 @@ const fail = (craft, message) => { failures.push(`${craft}: ${message}`); return
  */
 const SCENARIOS = {
   // `run` takes the drawing positionally and has no `--save`-less export.
-  cadcraft: { sample: true, save: 'out.dxf', export: 'out.png' },
+  // A command, not just a save: CADCraft takes the id and the JSON separated by a space, and a
+  // scenario without one never exercised that grammar (issue #2).
+  cadcraft: {
+    sample: true,
+    commands: [{ id: 'circle', json: { center: [10, 10], radius: 5 } }],
+    save: 'out.dxf',
+    export: 'out.png',
+  },
   gridcraft: { sample: 'budget', commands: [{ id: 'cell.set', json: { cell: 'Z1', input: 'dsh' } }], save: 'out.xlsx' },
   soundcraft: { sample: true, commands: [{ id: 'mix.volume', json: { track: 'Kick', db: -6 } }], export: 'out.wav', expect: 'out.wav' },
   deckcraft: { sample: true, commands: [{ id: 'slide.new', json: { layout: 'titleOnly', title: 'dsh' } }], save: 'out.deckcraft' },
